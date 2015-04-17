@@ -1,0 +1,50 @@
+Antonino Fazio fazioa@gmail.com tramite googlegroups.com 
+	
+Allegati13/10/13
+		
+a souliss
+Sarò prolisso....
+
+Le librerie che ho usato sono queste: https://github.com/openenergymonitor/EmonLib
+
+Questi sono i valori calcolati con EmonLib
+  float realPower           ...//extract Real Power
+  float apparentPower  ...//extract Apparent Power
+  float powerFactor     ...//extract Power Factor
+  float supplyVoltage   ...//extract Vrms
+  float Irms                 ...//extract Irms
+
+Il sensore è il SCT013 (YHDC SCT-013-000 CT) ed il trasformatore AC/AC a 9V ha il codice mod.DE-06-09.
+---------
+Vi spiego cosa ho fatto per i miei test.
+Qui c'è tutta la teoria: http://openenergymonitor.org/emon/buildingblocks
+Io, da buon smanettone, l'ho saltata quasi a piè pari, passando alla parte pratica.
+
+Qui http://openenergymonitor.org/emon/buildingblocks/ct-sensors-interface
+ci sono le istruzioni per il collegamento del Current Sensor.
+Per R1 ed R2 ho usato delle resistenze da 10K, mentre per il burden resistor (resistenza di carico applicata al sensore) ho utilizzato due resistenze in serie da 100 ohms. Valore semplice da trovare, che consente di avere il fondoscala a 17.7 A (circa 4000 W)
+
+Qui http://openenergymonitor.org/emon/buildingblocks/measuring-voltage-with-an-acac-power-adapter
+ci sono le istruzioni per il collegamento del trasformatore AC/AC 9V (è un trasformatore che fornisce in uscita 9 V in alternata).
+Non ho usato R3 ed R4 perchè servono solo per creare il "midpoint" (vedere schemi), quindi ho usato lo stesso midpoint creato con le resistenze R1 ed R2 di cui sopra.
+----
+
+Si nel codice di Soulissapp ho visto il tipico "CurrentSensor" ma io volevo leggere solo la potenza ed avevo bisogno del tipico corrispondente "Souliss_Logic_T57".
+Soulissapp rilevava il tipico come "Dispositivo sconosciuto", così ho usato quello della temperatura ed ho visto che funzionava. Non ho fatto altro che copiare tutto il codice, rinominare in "SoulissTypical57PowerSensor.java", cambiare l'unità di misura e fare qualche altra piccolissima modifica negli altri file per "avvisare" della presenza di un tipico nuovo.
+
+----
+
+Poco fa ho provato anche i tipici:
+- Souliss_Logic_T55 - Voltage (0, 400) V
+- Souliss_Logic_T56 - Current (0, 25)
+
+ma ottengo "Dispositivo sconosciuto".
+Forse c'è qualche modifica da fare, oppure sbaglio tipico lato arduino.
+
+----
+Per quanto riguarda l'affidabilità delle misure... più o meno ci siamo.
+La tensione rilevata è esatta, mentre per la potenza ho fatto vari tentativi in modo da avvicinarmi a ciò che indica il contatore di casa. Non sono ancora soddisfatto, voglio assicurami che i valori siano esatti su tutta la scala (da 0 a 3000W). Dovrò provare meglio ed essere più sicuro. Non ho un misuratore di potenza da usare come calibratore quindi ho risolto "a spanne". Per il momento ottengo buoni risultati con queste righe di setup:
+emon1.voltage(15, 224, 1.7);  // Voltage: input pin, calibration, phase_shift
+emon1.current(14, 10);       // Current: input pin, calibration.
+
+Phase_shift è il valore di default, non l'ho cambiato.
