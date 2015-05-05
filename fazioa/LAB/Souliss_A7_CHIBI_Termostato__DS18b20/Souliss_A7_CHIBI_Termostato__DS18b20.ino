@@ -38,12 +38,12 @@ DallasTemperature sensors(&oneWire);
 
 float temperature;
 
-// Define the network configuration according to your router settings
-#define	Gateway_address	0x0069				// The Gateway node has two address, one on the Ethernet side
-// and the other on the wireless one
-#define	Peer_address	0x6512
+// Define the network configuration according to your router settingsuration according to your router settings
+#define	Gateway_address	0x6501				// The Gateway node has two address, one on the Ethernet side69				// The Gateway node has two address, one on the Ethernet side
+											// and the other on the wireless oneless one
+#define	Peer_address	0x6502
 #define	myvNet_subnet	0xFF00
-#define	myvNet_supern	0x6511
+#define	myvNet_supern	Gateway_address
 
 void setup()
 {
@@ -97,8 +97,12 @@ void loop()
 
       }
 
-      FAST_21110ms() {
+      FAST_510ms() {
         Serial.println(temperature);
+        Serial.print("Set Point ");
+        float m_in;
+        float32((U16*)(memory_map + MaCaco_IN_s + SlotThermostat+3), &m_in);
+        Serial.println(m_in);
       }
     }
   }
