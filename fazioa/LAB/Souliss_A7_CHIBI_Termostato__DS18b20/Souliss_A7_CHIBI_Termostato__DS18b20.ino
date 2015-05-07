@@ -74,7 +74,7 @@ void loop()
     UPDATEFAST();
 
     // Process every 510ms the logic that control the curtain
-    FAST_510ms() {
+    FAST_50ms() {
 
 
       Logic_Thermostat(SlotThermostat);
@@ -98,12 +98,38 @@ void loop()
       }
 
       FAST_510ms() {
-        Serial.println(temperature);
-        Serial.print("Set Point ");
-        float m_in;
-        float32((U16*)(memory_map + MaCaco_IN_s + SlotThermostat+3), &m_in);
-        Serial.println(m_in);
+        Serial.print("Heating: ");
+        Serial.print(val(Souliss_T3n_HeatingOn));
+        
+        Serial.print(" Cooling: ");
+        Serial.print(val(Souliss_T3n_CoolingOn));
+        
+        Serial.print(" Fan1: ");
+        Serial.print(val(Souliss_T3n_FanOn1));
+
+        Serial.print(" Fan2: ");
+        Serial.print(val(Souliss_T3n_FanOn2));
+        
+        Serial.print(" Fan3: ");
+        Serial.println(val(Souliss_T3n_FanOn3));
+        
+        Serial.print(" FanAutoState: ");
+        Serial.print(val(Souliss_T3n_FanAutoState));
+
+        Serial.print(" Souliss_T3n_HeatingMode: ");
+        Serial.println(val(Souliss_T3n_HeatingMode));
+
+        Serial.println();
+        
+        
       }
     }
   }
 }
+U8 val(U8 value)
+{
+return memory_map[MaCaco_OUT_s + SlotThermostat] & value;
+} 
+
+
+ 
