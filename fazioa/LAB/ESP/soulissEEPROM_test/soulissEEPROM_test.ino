@@ -18,35 +18,35 @@ void setup() {
    Serial.begin(115200);
    EEPROM.begin(512);
    delay(100);
-   Store_Clear();
-
-   String ssid="myssid";
-   Serial.println(ssid);
-   const char *c_ssid;
-   c_ssid = ssid.c_str();
-   
-   String password="mypwd";
-   Serial.println(password);
-   const char *c_password;
-   c_password = password.c_str();
-         
+//   Store_Clear();
+//
+//   String ssid="myssid";
+//   Serial.println(ssid);
+//   const char *c_ssid;
+//   c_ssid = ssid.c_str();
+//   
+//   String password="mypwd";
+//   Serial.println(password);
+//   const char *c_password;
+//   c_password = password.c_str();
+//         
    uint16_t indiceEEPROM=START_STORE_SSID_PASSWORD;
-   for(int i=0;i<strlen(c_ssid);i++){
-     Serial.println(c_ssid[i]);
-     Store_8bit(indiceEEPROM++, c_ssid[i]);
-   }
-  Serial.print("Stored: ");
-  Serial.println(c_ssid);
-  Store_8bit(indiceEEPROM++, ESCAPE_CHAR); //Escape
-
-  for(int i=0;i<strlen(c_password);i++){
-    Serial.println(c_password[i]);
-     Store_8bit(indiceEEPROM++, c_password[i]);
-  }
-  Serial.print("Stored: ");
-  Serial.println(c_password);
-     Store_8bit(indiceEEPROM++, ESCAPE_CHAR);
-     Store_Commit();
+//   for(int i=0;i<strlen(c_ssid);i++){
+//     Serial.println(c_ssid[i]);
+//     Store_8bit(indiceEEPROM++, c_ssid[i]);
+//   }
+//  Serial.print("Stored: ");
+//  Serial.println(c_ssid);
+//  Store_8bit(indiceEEPROM++, ESCAPE_CHAR); //Escape
+//
+//  for(int i=0;i<strlen(c_password);i++){
+//    Serial.println(c_password[i]);
+//     Store_8bit(indiceEEPROM++, c_password[i]);
+//  }
+//  Serial.print("Stored: ");
+//  Serial.println(c_password);
+//     Store_8bit(indiceEEPROM++, ESCAPE_CHAR);
+//     Store_Commit();
 
   indiceEEPROM=START_STORE_SSID_PASSWORD;
   String sResSSID = read_from_EEPROM(&indiceEEPROM);
