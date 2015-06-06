@@ -162,7 +162,7 @@ void Connection(String ssid, String password) {
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
     Serial.print(".");
-   
+    readGPIO_forReset();
   }
 
   Serial.println("");
@@ -223,7 +223,6 @@ void readGPIO_forReset() {
       Store_Clear();
       Store_Commit();
       Serial.println("EEPROM Cleared.");
-      lastClickTime = millis();
       ESP.reset();
     }
   }
