@@ -28,7 +28,7 @@ String ssid = "";
 String password = "";
 uint16_t indiceEEPROM = START_STORE_SSID_PASSWORD;
 uint8_t GPIO0_PIN = 0; //GPIO0
-boolean flagGateway=true;
+boolean flagGateway = true;
 void setup(void)
 {
   Serial.begin(115200);
@@ -39,23 +39,23 @@ void setup(void)
 
   ssid = read_from_EEPROM(&indiceEEPROM);
   password = read_from_EEPROM(&indiceEEPROM);
-  
-  if(read_from_EEPROM(&indiceEEPROM)=="G"){
-    flagGateway=true;
- } else {
-    flagGateway=false;
+
+  if (read_from_EEPROM(&indiceEEPROM) == "G") {
+    flagGateway = true;
+  } else {
+    flagGateway = false;
   }
-  
+
   if (ssid == "") {
     //No SSID in EEPROM
     Serial.println("Wifi Access Point Mode");
     WiFi.mode(WIFI_AP);
     delay(1000);
     //IPAddress ip = (192, 168, 1, 1);
-   // IPAddress gateway = (192, 168, 1, 1);
-   // IPAddress NMask = (255, 255, 255, 0);
-   // WiFi.softAPConfig(ip, gateway, NMask);
-    
+    // IPAddress gateway = (192, 168, 1, 1);
+    // IPAddress NMask = (255, 255, 255, 0);
+    // WiFi.softAPConfig(ip, gateway, NMask);
+
     WiFi.softAP("SoulissESP");
 
     Serial.println("");
@@ -70,44 +70,44 @@ void setup(void)
 
   server.begin();
   Serial.println("HTTP server started");
-  
-while (WiFi.status() != WL_CONNECTED){
-  server.handleClient();
-}
 
-//**************************
- // Get the IP network parameters
-	IPAddress lIP  = WiFi.localIP();
-	IPAddress sMk  = WiFi.subnetMask();
-	IPAddress gIP  = WiFi.gatewayIP();
-	
+  while (WiFi.status() != WL_CONNECTED) {
+    server.handleClient();
+  }
+
+  //**************************
+  // Get the IP network parameters
+  IPAddress lIP  = WiFi.localIP();
+  IPAddress sMk  = WiFi.subnetMask();
+  IPAddress gIP  = WiFi.gatewayIP();
+
   Serial.print("localIP: ");
   Serial.println(lIP);
   Serial.print("subnetMask: ");
   Serial.println(sMk);
   Serial.print("gatewayIP: ");
   Serial.println(gIP);
-  
-//******************************
- 
-    init_local();
- 
- if(flagGateway){
-  Serial.println("Set Node as Gateway");
-  SetAsGateway(myvNet_dhcp);       // Set this node as gateway for SoulissApp  
-  // This node will serve all the others in the network providing an address
-  SetAddressingServer();
- } else 
- {
-  Serial.println("Set Node as Peer");
-  // Get address dynamically
-  SetDynamicAddressing();
-  GetAddress();
- }                          
+
+  //******************************
+
+  init_local();
+
+  if (flagGateway) {
+    Serial.println("Set Node as Gateway");
+    SetAsGateway(myvNet_dhcp);       // Set this node as gateway for SoulissApp
+    // This node will serve all the others in the network providing an address
+    SetAddressingServer();
+  } else
+  {
+    Serial.println("Set Node as Peer");
+    // Get address dynamically
+    SetDynamicAddressing();
+    GetAddress();
+  }
 
   Set_SimpleLight(MYLEDLOGIC);        // Define a simple LED light logic
   pinMode(5, OUTPUT);                 // Use pin 5 as output
-  
+
 }
 
 void loop(void)
@@ -120,22 +120,31 @@ void loop(void)
       Logic_SimpleLight(MYLEDLOGIC);
       DigOut(5, Souliss_T1n_Coil, MYLEDLOGIC);
     }
-    FAST_70ms() {  
-      server.handleClient();
-      readGPIO_forReset();
+    FAST_70ms() {
+     // 
+      //readGPIO_forReset();
     }
     FAST_110ms() {
-      readGPIO_forReset();
+     // readGPIO_forReset();
     }
 
-   if(flagGateway){
-    // Here we handle here the communication with Android
+    if (flagGateway) {
+      // Here we handle here the communication with Android
       FAST_GatewayComms();
-   } else {
-            // Here we handle here the communication with Android
-      FAST_PeerComms(); 
+    } else {
+      // Here we handle here the communication with Android
+      FAST_PeerComms();
+    }
   }
-}
+
+  EXECUTESLOW() {
+    UPDATESLOW();
+    if (flagGateway) {
+    }
+    else {
+      SLOW_PeerJoin();
+    }
+  }
 }
 
 //HOME PAGE - Used to choise of ssid and password of home wifi
@@ -156,11 +165,11 @@ void handle_response() {
   ssid = server.arg("ssid");
   password = server.arg("password");
   String mode_GW_PEER = server.arg("mode");
-  String sMode_to_write="P";
-  if (mode_GW_PEER=="Gateway") 
-    sMode_to_write="G";
- 
-  
+  String sMode_to_write = "P";
+  if (mode_GW_PEER == "Gateway")
+    sMode_to_write = "G";
+
+
   indiceEEPROM = START_STORE_SSID_PASSWORD;
   EEPROM_Write_SSID_PWD(ssid, password, mode_GW_PEER, &indiceEEPROM);
 
@@ -214,12 +223,12 @@ void EEPROM_Write_SSID_PWD(String ssid, String password, String mode_GW_or_PEER,
   Serial.print("Stored: ");
   Serial.println(c_password);
   Store_8bit((*indiceEEPROM)++, ESCAPE_CHAR);
-  
+
   Serial.print("Stored: ");
   Serial.println(mode_GW_or_PEER);
   Store_8bit((*indiceEEPROM)++, mode_GW_or_PEER[0]);
   Store_8bit((*indiceEEPROM)++, ESCAPE_CHAR);
-  
+
   Store_Commit();
 }
 
@@ -242,11 +251,11 @@ String  read_from_EEPROM(uint16_t *indiceEEPROM) {
 
 long lastClickTime = 0;  // the last time the output pin was toggled
 void readGPIO_forReset() {
-  
+
   long ClickTime = 3000;    // the debounce time; increase if the output flickers
   if (!digitalRead(GPIO0_PIN)) {
     Serial.print("Time: ");
-     Serial.println(millis() - lastClickTime);
+    Serial.println(millis() - lastClickTime);
     if ((millis() - lastClickTime) > ClickTime) {
       Store_Clear();
       Store_Commit();
@@ -257,38 +266,38 @@ void readGPIO_forReset() {
   else lastClickTime = millis();
 }
 
-void init_local(){
+void init_local() {
   // Get the IP network parameters
-	IPAddress lIP  = WiFi.localIP();
-	IPAddress sMk  = WiFi.subnetMask();
-	IPAddress gIP  = WiFi.gatewayIP();
-	
-	uint8_t i;
-	uint8_t ipaddr[4];
-	uint8_t subnet[4];
-	uint8_t gateway[4];
-	
-	for(i=0;i<4;i++)
-	{
-		ipaddr[i]  = lIP[i];
-		subnet[i]  = sMk[i];
-		gateway[i] = gIP[i];
-	}	
+  IPAddress lIP  = WiFi.localIP();
+  IPAddress sMk  = WiFi.subnetMask();
+  IPAddress gIP  = WiFi.gatewayIP();
 
-	// The last byte of the IP address is used as vNet address
-	myvNet_dhcp = ipaddr[3];
-	
-	// Starting from IP configuration define the vNet ones
-	for(i=0; i<4; i++)
-	{
-		if(DEFAULT_BASEIPADDRESS) 	DEFAULT_BASEIPADDRESS[i]=ipaddr[i];
-		if(DEFAULT_SUBMASK) 		DEFAULT_SUBMASK[i] = subnet[i];
-		if(DEFAULT_GATEWAY) 		DEFAULT_GATEWAY[i] = gateway[i];
-	}
-	
-	U16 vNet_address = (U16)ipaddr[i-1];			// The last byte of the IP address is the vNet one
-	DEFAULT_BASEIPADDRESS[i-1]=0;					// The BASEIPADDRESS has last byte always zero
-	
-	// Set the address
-	Souliss_SetAddress(vNet_address, DYNAMICADDR_SUBNETMASK, 0);	
+  uint8_t i;
+  uint8_t ipaddr[4];
+  uint8_t subnet[4];
+  uint8_t gateway[4];
+
+  for (i = 0; i < 4; i++)
+  {
+    ipaddr[i]  = lIP[i];
+    subnet[i]  = sMk[i];
+    gateway[i] = gIP[i];
+  }
+
+  // The last byte of the IP address is used as vNet address
+  myvNet_dhcp = ipaddr[3];
+
+  // Starting from IP configuration define the vNet ones
+  for (i = 0; i < 4; i++)
+  {
+    if (DEFAULT_BASEIPADDRESS) 	DEFAULT_BASEIPADDRESS[i] = ipaddr[i];
+    if (DEFAULT_SUBMASK) 		DEFAULT_SUBMASK[i] = subnet[i];
+    if (DEFAULT_GATEWAY) 		DEFAULT_GATEWAY[i] = gateway[i];
+  }
+
+  U16 vNet_address = (U16)ipaddr[i - 1];			// The last byte of the IP address is the vNet one
+  DEFAULT_BASEIPADDRESS[i - 1] = 0;					// The BASEIPADDRESS has last byte always zero
+
+  // Set the address
+  Souliss_SetAddress(vNet_address, DYNAMICADDR_SUBNETMASK, 0);
 }
