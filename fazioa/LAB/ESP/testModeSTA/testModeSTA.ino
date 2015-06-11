@@ -20,6 +20,7 @@ uint16_t START_STORE_SSID_PASSWORD = 300;
 #define ESCAPE_CHAR 27
 #define CHAR255 255
 
+
 ESP8266WebServer server(80);
 
 const int led = 13;
@@ -27,7 +28,7 @@ String ssid = "";
 String password = "";
 uint16_t indiceEEPROM = START_STORE_SSID_PASSWORD;
 uint8_t GPIO0_PIN = 0; //GPIO0
-
+boolean flagGateway=true;
 void setup(void)
 {
   Serial.begin(115200);
@@ -38,7 +39,13 @@ void setup(void)
 
   ssid = read_from_EEPROM(&indiceEEPROM);
   password = read_from_EEPROM(&indiceEEPROM);
-
+  
+  if(read_from_EEPROM(&indiceEEPROM)=="G"){
+    flagGateway=true;
+ } else {
+    flagGateway=false;
+  }
+  
   if (ssid == "") {
     //No SSID in EEPROM
     Serial.println("Wifi Access Point Mode");
@@ -67,8 +74,7 @@ void setup(void)
 while (WiFi.status() != WL_CONNECTED){
   server.handleClient();
 }
- Serial.println("WiFi.status()");
- Serial.print(WiFi.status());
+
 //**************************
  // Get the IP network parameters
 	IPAddress lIP  = WiFi.localIP();
@@ -83,19 +89,25 @@ while (WiFi.status() != WL_CONNECTED){
   Serial.println(gIP);
   
 //******************************
-
-  Serial.println("Set Node as Gateway");
+ 
     init_local();
-                         
-    SetAsGateway(myvNet_dhcp);       // Set this node as gateway for SoulissApp  
-
-    // This node will serve all the others in the network providing an address
-    SetAddressingServer();
+ 
+ if(flagGateway){
+  Serial.println("Set Node as Gateway");
+  SetAsGateway(myvNet_dhcp);       // Set this node as gateway for SoulissApp  
+  // This node will serve all the others in the network providing an address
+  SetAddressingServer();
+ } else 
+ {
+  Serial.println("Set Node as Peer");
+  // Get address dynamically
+  SetDynamicAddressing();
+  GetAddress();
+ }                          
 
   Set_SimpleLight(MYLEDLOGIC);        // Define a simple LED light logic
   pinMode(5, OUTPUT);                 // Use pin 5 as output
   
-//  server.begin();
 }
 
 void loop(void)
@@ -116,9 +128,14 @@ void loop(void)
       readGPIO_forReset();
     }
 
+   if(flagGateway){
     // Here we handle here the communication with Android
-    FAST_GatewayComms();
+      FAST_GatewayComms();
+   } else {
+            // Here we handle here the communication with Android
+      FAST_PeerComms(); 
   }
+}
 }
 
 //HOME PAGE - Used to choise of ssid and password of home wifi
@@ -131,16 +148,21 @@ void handle_root() {
     Serial.println(WiFi.localIP());
     server.send(200, "text/html", "Connected to ssid: " + ssid);
   }
-  else server.send(200, "text/html", "<form action=""formresponse""> SSID: <input type=""text"" name=""ssid""><br>Password: <input type=""text"" name=""password""><br>  <input type=""submit"" value=""Submit""></form>");
+  else server.send(200, "text/html", "<form action=""formresponse""> SSID: <input type=""text"" name=""ssid""><br>Password: <input type=""text"" name=""password""><br>Mode (Gateway / Peer): <select name=""mode""><option selected>Peer <option>Gateway</select><br> <input type=""submit"" value=""Submit""></form>");
 }
 
 //RESPONSE PAGE - Use to read url and try to connect to home wifi, write on EEPROM SSID and Password
 void handle_response() {
   ssid = server.arg("ssid");
   password = server.arg("password");
-
+  String mode_GW_PEER = server.arg("mode");
+  String sMode_to_write="P";
+  if (mode_GW_PEER=="Gateway") 
+    sMode_to_write="G";
+ 
+  
   indiceEEPROM = START_STORE_SSID_PASSWORD;
-  EEPROM_Write_SSID_PWD(ssid, password, &indiceEEPROM);
+  EEPROM_Write_SSID_PWD(ssid, password, mode_GW_PEER, &indiceEEPROM);
 
   indiceEEPROM = START_STORE_SSID_PASSWORD;
   ssid = read_from_EEPROM(&indiceEEPROM);
@@ -171,7 +193,7 @@ void Connection(String ssid, String password) {
   Serial.println(WiFi.localIP());
 }
 
-void EEPROM_Write_SSID_PWD(String ssid, String password, uint16_t *indiceEEPROM) {
+void EEPROM_Write_SSID_PWD(String ssid, String password, String mode_GW_or_PEER, uint16_t *indiceEEPROM) {
 
   const char *c_ssid;
   c_ssid = ssid.c_str();
@@ -192,6 +214,12 @@ void EEPROM_Write_SSID_PWD(String ssid, String password, uint16_t *indiceEEPROM)
   Serial.print("Stored: ");
   Serial.println(c_password);
   Store_8bit((*indiceEEPROM)++, ESCAPE_CHAR);
+  
+  Serial.print("Stored: ");
+  Serial.println(mode_GW_or_PEER);
+  Store_8bit((*indiceEEPROM)++, mode_GW_or_PEER[0]);
+  Store_8bit((*indiceEEPROM)++, ESCAPE_CHAR);
+  
   Store_Commit();
 }
 
