@@ -120,12 +120,9 @@ void loop(void)
       Logic_SimpleLight(MYLEDLOGIC);
       DigOut(5, Souliss_T1n_Coil, MYLEDLOGIC);
     }
-    FAST_70ms() {
-     // 
-      //readGPIO_forReset();
-    }
     FAST_110ms() {
-     // readGPIO_forReset();
+      server.handleClient();
+      readGPIO_forReset();
     }
 
     if (flagGateway) {
