@@ -1,3 +1,9 @@
+#define  MaCaco_DEBUG_INSKETCH
+#define MaCaco_DEBUG  		1
+
+#define	VNET_DEBUG_INSKETCH
+#define VNET_DEBUG  		1
+
 // Configure the framework
 #include "bconf/MCU_ESP8266.h"              // Load the code directly on the ESP8266
 #include "conf/Gateway.h"                   // The main node is the Gateway, we have just one node
@@ -9,6 +15,7 @@
 #include <ESP8266WiFi.h>
 #include <EEPROM.h>
 #include "Souliss.h"
+
 
 #define SSID_LENGTH 32;
 #define PASSWORD_LENGTH 64;
@@ -122,8 +129,10 @@ void loop(void)
     }
     FAST_110ms() {
       server.handleClient();
-      readGPIO_forReset();
     }
+    FAST_910ms(){
+      readGPIO_forReset();      
+      }
 
     if (flagGateway) {
       // Here we handle here the communication with Android
