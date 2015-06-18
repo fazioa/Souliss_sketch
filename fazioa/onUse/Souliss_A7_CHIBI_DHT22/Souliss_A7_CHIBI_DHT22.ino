@@ -11,7 +11,6 @@ DHT on PIN 2
 ***************************************************************************/
 // Configure the framework
 #include "bconf/Chibiduino_v1.h"			// Use a Chibiduino 2.4 GHz wireless board
-#include "conf/Gateway.h"                   // The main node is the Gateway, we have just one node
 #include "conf/SmallNetwork.h"                   // The main node is the Gateway, we have just one node
 
 #include "Souliss.h"
