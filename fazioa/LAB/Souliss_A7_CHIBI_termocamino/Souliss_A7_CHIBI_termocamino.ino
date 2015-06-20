@@ -26,6 +26,7 @@
 #define PIN_SWITCH_ALLARME_TERMOCAMINO      6
 
 #define DEADBAND_TEMP      0.5
+#define ALARM_TEMP      85
 
 // Define the network configuration according to your router settingsuration according to your router settings
 #define	Gateway_address	0x6511				// The Gateway node has two address, one on the Ethernet side 69				// The Gateway node has two address, one on the Ethernet side
@@ -79,13 +80,13 @@ void loop()
     FAST_2110ms()	{
       sensors.requestTemperatures(); // Send the command to get temperatures
       // SENSORE 1
-      temp_boiler = sensors.getTempCByIndex(0);
+      temp_boiler = sensors.getTempCByIndex(1);
       ImportAnalog(SLOT_TEMPERATURE_BOILER, &temp_boiler);
       Serial.print("temp_boiler ");
       Serial.println(temp_boiler);
 
       // SENSORE 2
-      temp_termocamino = sensors.getTempCByIndex(1);
+      temp_termocamino = sensors.getTempCByIndex(0);
       ImportAnalog(SLOT_TEMPERATURE_TERMOCAMINO, &temp_termocamino);
       Serial.print("temp_termocamino ");
       Serial.println(temp_termocamino);
@@ -96,6 +97,16 @@ void loop()
       if ( abs(temp_boiler - temp_termocamino) > DEADBAND_TEMP) {
         Serial.print("Fuori deadband. Diff temp_boiler - temp_termocamino= ");
         Serial.println(temp_boiler - temp_termocamino);
+        if ((temp_termocamino - ALARM_TEMP)>DEADBAND_TEMP) {
+          //temperatura di allarme - Attivo tutti i relè
+          Serial.println("Allarme ON");
+          setT11_State(SLOT_SWITCH_BOILER_TERMOCAMINO, Souliss_T1n_OnCoil);
+          setT11_State(SLOT_SWITCH_ALLARME_TERMOCAMINO, Souliss_T1n_OnCoil);
+        } else {
+          Serial.println("Allarme OFF");
+          setT11_State(SLOT_SWITCH_ALLARME_TERMOCAMINO, Souliss_T1n_OffCoil);
+        }
+
         if (temp_termocamino > temp_boiler) {
           //azionare RELE'1
           setT11_State(SLOT_SWITCH_BOILER_TERMOCAMINO, Souliss_T1n_OnCoil);
@@ -107,6 +118,7 @@ void loop()
         // Process the communication
         FAST_PeerComms();
       }
+
     }
   }
 }
