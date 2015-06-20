@@ -20,6 +20,7 @@
 #define SLOT_TEMPERATURE_TERMOCAMINO	        2
 #define SLOT_SWITCH_BOILER_TERMOCAMINO       4
 #define SLOT_SWITCH_ALLARME_TERMOCAMINO       5
+#define SLOT_SWITCH_AUTOMODE       6
 
 #define PIN_TEMPERATURE_ONEWIRE        14
 #define PIN_SWITCH_BOILER_TERMOCAMINO       5
@@ -53,10 +54,15 @@ void setup()
   Set_T52(SLOT_TEMPERATURE_TERMOCAMINO);
   Set_T11(SLOT_SWITCH_BOILER_TERMOCAMINO);
   Set_T11(SLOT_SWITCH_ALLARME_TERMOCAMINO);
+  Set_T11(SLOT_SWITCH_AUTOMODE);
+
+  Serial.println("Setup Automode On ");
+  setT11_State(SLOT_SWITCH_AUTOMODE, Souliss_T1n_OnCoil);
 
   pinMode(PIN_TEMPERATURE_ONEWIRE, INPUT);
   pinMode(PIN_SWITCH_BOILER_TERMOCAMINO, OUTPUT);
   pinMode(PIN_SWITCH_ALLARME_TERMOCAMINO, OUTPUT);
+
 
   // Start up the library
   sensors.begin(); // IC Default 9 bit. If you have troubles consider upping it 12.
@@ -75,6 +81,8 @@ void loop()
 
       Logic_T11(SLOT_SWITCH_ALLARME_TERMOCAMINO);
       DigOut(PIN_SWITCH_ALLARME_TERMOCAMINO, Souliss_T1n_Coil, SLOT_SWITCH_ALLARME_TERMOCAMINO);
+
+      Logic_T11(SLOT_SWITCH_AUTOMODE);
     }
 
     FAST_2110ms()	{
@@ -94,34 +102,37 @@ void loop()
 
     FAST_7110ms() {
       //attiva il relè se il termocamino ha temperatura maggiore.
-      if ( abs(temp_boiler - temp_termocamino) > DEADBAND_TEMP) {
-        Serial.print("Fuori deadband. Diff temp_boiler - temp_termocamino= ");
-        Serial.println(temp_boiler - temp_termocamino);
-        if ((temp_termocamino - ALARM_TEMP)>DEADBAND_TEMP) {
-          //temperatura di allarme - Attivo tutti i relè
-          Serial.println("Allarme ON");
-          setT11_State(SLOT_SWITCH_BOILER_TERMOCAMINO, Souliss_T1n_OnCoil);
-          setT11_State(SLOT_SWITCH_ALLARME_TERMOCAMINO, Souliss_T1n_OnCoil);
-        } else {
-          Serial.println("Allarme OFF");
-          setT11_State(SLOT_SWITCH_ALLARME_TERMOCAMINO, Souliss_T1n_OffCoil);
+      if (getT11_State(SLOT_SWITCH_AUTOMODE) == Souliss_T1n_OnCoil) {
+        if ( abs(temp_boiler - temp_termocamino) > DEADBAND_TEMP) {
+          Serial.print("Fuori deadband. Diff temp_boiler - temp_termocamino= ");
+          Serial.println(temp_boiler - temp_termocamino);
+          if (temp_termocamino > temp_boiler) {
+            //azionare RELE'1
+            Serial.println("Temp.termocamino maggiore");
+            setT11_State(SLOT_SWITCH_BOILER_TERMOCAMINO, Souliss_T1n_OnCoil);
+          } else {
+            //rilasciare RELE'1
+            Serial.println("Temp.boiler maggiore");
+            setT11_State(SLOT_SWITCH_BOILER_TERMOCAMINO, Souliss_T1n_OffCoil);
+          }
         }
-
-        if (temp_termocamino > temp_boiler) {
-          //azionare RELE'1
-          setT11_State(SLOT_SWITCH_BOILER_TERMOCAMINO, Souliss_T1n_OnCoil);
-        } else {
-          //rilasciare RELE'1
-          setT11_State(SLOT_SWITCH_BOILER_TERMOCAMINO, Souliss_T1n_OffCoil);
-        }
-
-        // Process the communication
-        FAST_PeerComms();
       }
 
+      if ((temp_termocamino - ALARM_TEMP) > DEADBAND_TEMP) {
+        //temperatura di allarme - Attivo tutti i relè
+        Serial.println("Allarme ON");
+        setT11_State(SLOT_SWITCH_BOILER_TERMOCAMINO, Souliss_T1n_OnCoil);
+        setT11_State(SLOT_SWITCH_ALLARME_TERMOCAMINO, Souliss_T1n_OnCoil);
+      } else {
+        Serial.println("Allarme OFF");
+        setT11_State(SLOT_SWITCH_ALLARME_TERMOCAMINO, Souliss_T1n_OffCoil);
+      }
     }
+    // Process the communication
+    FAST_PeerComms();
   }
 }
+
 void setT11_State(U8 slot, U8 value) {
   if ( memory_map[MaCaco_OUT_s + slot] != value ) {
     memory_map[MaCaco_OUT_s + slot] = value;
@@ -131,4 +142,8 @@ void setT11_State(U8 slot, U8 value) {
     Serial.print("VALUE: ");
     Serial.println(value);
   }
+}
+
+U8 getT11_State(U8 slot) {
+  return memory_map[MaCaco_OUT_s + slot];
 }
