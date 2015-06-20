@@ -29,7 +29,7 @@
 
 // Define the network configuration according to your router settingsuration according to your router settings
 #define	Gateway_address	0x6511				// The Gateway node has two address, one on the Ethernet side 69				// The Gateway node has two address, one on the Ethernet side
-											// and the other on the wireless oneless one
+// and the other on the wireless oneless one
 #define	Peer_address	0x6512
 #define	myvNet_subnet	0xFF00
 #define	myvNet_supern	Gateway_address
@@ -52,58 +52,71 @@ void setup()
   Set_T52(SLOT_TEMPERATURE_TERMOCAMINO);
   Set_T11(SLOT_SWITCH_BOILER_TERMOCAMINO);
   Set_T11(SLOT_SWITCH_ALLARME_TERMOCAMINO);
-  
+
   pinMode(PIN_TEMPERATURE_ONEWIRE, INPUT);
   pinMode(PIN_SWITCH_BOILER_TERMOCAMINO, OUTPUT);
   pinMode(PIN_SWITCH_ALLARME_TERMOCAMINO, OUTPUT);
-  
+
   // Start up the library
   sensors.begin(); // IC Default 9 bit. If you have troubles consider upping it 12.
 }
 
 void loop()
 {
-   EXECUTEFAST() {
+  EXECUTEFAST() {
     UPDATEFAST();
     FAST_50ms() {
       Logic_T52(SLOT_TEMPERATURE_BOILER);
       Logic_T52(SLOT_TEMPERATURE_TERMOCAMINO);
-      
+
       Logic_T11(SLOT_SWITCH_BOILER_TERMOCAMINO);
       DigOut(PIN_SWITCH_BOILER_TERMOCAMINO, Souliss_T1n_Coil, SLOT_SWITCH_BOILER_TERMOCAMINO);
-      
+
       Logic_T11(SLOT_SWITCH_ALLARME_TERMOCAMINO);
       DigOut(PIN_SWITCH_ALLARME_TERMOCAMINO, Souliss_T1n_Coil, SLOT_SWITCH_ALLARME_TERMOCAMINO);
     }
-      
+
     FAST_2110ms()	{
       sensors.requestTemperatures(); // Send the command to get temperatures
       // SENSORE 1
       temp_boiler = sensors.getTempCByIndex(0);
-      ImportAnalog(SLOT_TEMPERATURE_BOILER,&temp_boiler);
+      ImportAnalog(SLOT_TEMPERATURE_BOILER, &temp_boiler);
       Serial.print("temp_boiler ");
       Serial.println(temp_boiler);
 
       // SENSORE 2
       temp_termocamino = sensors.getTempCByIndex(1);
-      ImportAnalog(SLOT_TEMPERATURE_TERMOCAMINO,&temp_termocamino);
+      ImportAnalog(SLOT_TEMPERATURE_TERMOCAMINO, &temp_termocamino);
       Serial.print("temp_termocamino ");
       Serial.println(temp_termocamino);
     }
-    
+
     FAST_7110ms() {
-      if( abs(temp_boiler-temp_termocamino) > DEADBAND_TEMP){
-        if(temp_termocamino>temp_boiler) {
+      //attiva il relè se il termocamino ha temperatura maggiore.
+      if ( abs(temp_boiler - temp_termocamino) > DEADBAND_TEMP) {
+        Serial.print("Fuori deadband. Diff temp_boiler - temp_termocamino= ");
+        Serial.println(temp_boiler - temp_termocamino);
+        if (temp_termocamino > temp_boiler) {
           //azionare RELE'1
-          
-          }else {
-            //rilasciare RELE'1
-            
-            
-            }
-      
-      
-       // Process the communication
-      FAST_PeerComms();
+          setT11_State(SLOT_SWITCH_BOILER_TERMOCAMINO, Souliss_T1n_OnCoil);
+        } else {
+          //rilasciare RELE'1
+          setT11_State(SLOT_SWITCH_BOILER_TERMOCAMINO, Souliss_T1n_OffCoil);
+        }
+
+        // Process the communication
+        FAST_PeerComms();
+      }
+    }
+  }
+}
+void setT11_State(U8 slot, U8 value) {
+  if ( memory_map[MaCaco_OUT_s + slot] != value ) {
+    memory_map[MaCaco_OUT_s + slot] = value;
+    data_changed = Souliss_TRIGGED;
+    Serial.print("SLOT: ");
+    Serial.println(slot);
+    Serial.print("VALUE: ");
+    Serial.println(value);
   }
 }
