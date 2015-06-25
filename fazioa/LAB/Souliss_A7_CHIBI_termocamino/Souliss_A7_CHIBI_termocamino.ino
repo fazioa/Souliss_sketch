@@ -1,3 +1,9 @@
+//NODO per la gestione di un termocamino e di un boiler solare
+//Il nodo è costruito con scheda Chibiduino, con due sonde di temperatura DS18B20 ed una scheda a 2 relè.
+//Il primo relè viene eccitato soltanto quando la temperatura della sonda "termocamino" supera la temperatura della sonda "boiler".
+//Il secondo relè viene eccitato quando la temperatura della sonta "termocamino" supera la temperatura di setpoint, impostata di default a 85°C
+//AUTORE: Antonino Fazio - giugno 2015
+
 // FROM
 // OneWire DS18S20, DS18B20, DS1822 Temperature Example
 //
@@ -129,16 +135,6 @@ void loop()
           }
         }
       }
-
-      //      if ((temp_termocamino - ALARM_TEMP) > DEADBAND_TEMP) {
-      //        //temperatura di allarme - Attivo tutti i relè
-      //        Serial.println("Allarme ON");
-      //        setT11_State(SLOT_SWITCH_BOILER_TERMOCAMINO, Souliss_T1n_OnCoil);
-      //        setT11_State(SLOT_SWITCH_ALLARME_TERMOCAMINO, Souliss_T1n_OnCoil);
-      //      } else {
-      //        Serial.println("Allarme OFF");
-      //        setT11_State(SLOT_SWITCH_ALLARME_TERMOCAMINO, Souliss_T1n_OffCoil);
-      //      }
     }
     // Process the communication
     FAST_PeerComms();
