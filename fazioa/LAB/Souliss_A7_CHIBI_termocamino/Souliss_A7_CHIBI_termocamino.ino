@@ -19,8 +19,9 @@
 #define SLOT_TEMPERATURE_BOILER      	0
 #define SLOT_TEMPERATURE_TERMOCAMINO	        2
 #define SLOT_SWITCH_BOILER_TERMOCAMINO       4
-#define SLOT_SWITCH_ALLARME_TERMOCAMINO       5
+//#define SLOT_SWITCH_ALLARME_TERMOCAMINO       5
 #define SLOT_SWITCH_AUTOMODE       6
+#define SLOT_T31_THERMOSTAT          7
 
 #define PIN_TEMPERATURE_ONEWIRE        14
 #define PIN_SWITCH_BOILER_TERMOCAMINO       5
@@ -53,8 +54,15 @@ void setup()
   Set_T52(SLOT_TEMPERATURE_BOILER);
   Set_T52(SLOT_TEMPERATURE_TERMOCAMINO);
   Set_T11(SLOT_SWITCH_BOILER_TERMOCAMINO);
-  Set_T11(SLOT_SWITCH_ALLARME_TERMOCAMINO);
+  // Set_T11(SLOT_SWITCH_ALLARME_TERMOCAMINO);
   Set_T11(SLOT_SWITCH_AUTOMODE);
+
+  Set_Thermostat(SLOT_T31_THERMOSTAT);
+   
+  U8 setpoint = ALARM_TEMP;
+  set_Setpoint(SLOT_T31_THERMOSTAT, setpoint);
+  set_ThermostatMode(SLOT_T31_THERMOSTAT);
+
 
   Serial.println("Setup Automode On ");
   setT11_State(SLOT_SWITCH_AUTOMODE, Souliss_T1n_OnCoil);
@@ -79,10 +87,13 @@ void loop()
       Logic_T11(SLOT_SWITCH_BOILER_TERMOCAMINO);
       DigOut(PIN_SWITCH_BOILER_TERMOCAMINO, Souliss_T1n_Coil, SLOT_SWITCH_BOILER_TERMOCAMINO);
 
-      Logic_T11(SLOT_SWITCH_ALLARME_TERMOCAMINO);
-      DigOut(PIN_SWITCH_ALLARME_TERMOCAMINO, Souliss_T1n_Coil, SLOT_SWITCH_ALLARME_TERMOCAMINO);
+      // Logic_T11(SLOT_SWITCH_ALLARME_TERMOCAMINO);
+      // DigOut(PIN_SWITCH_ALLARME_TERMOCAMINO, Souliss_T1n_Coil, SLOT_SWITCH_ALLARME_TERMOCAMINO);
 
       Logic_T11(SLOT_SWITCH_AUTOMODE);
+
+      Logic_Thermostat(SLOT_T31_THERMOSTAT);
+      nLowDigOut(PIN_SWITCH_ALLARME_TERMOCAMINO, Souliss_T3n_HeatingOn, SLOT_T31_THERMOSTAT);    // Heater
     }
 
     FAST_2110ms()	{
@@ -96,6 +107,7 @@ void loop()
       // SENSORE 2
       temp_termocamino = sensors.getTempCByIndex(0);
       ImportAnalog(SLOT_TEMPERATURE_TERMOCAMINO, &temp_termocamino);
+      ImportAnalog(SLOT_T31_THERMOSTAT + 1, &temp_termocamino);
       Serial.print("temp_termocamino ");
       Serial.println(temp_termocamino);
     }
@@ -118,15 +130,15 @@ void loop()
         }
       }
 
-      if ((temp_termocamino - ALARM_TEMP) > DEADBAND_TEMP) {
-        //temperatura di allarme - Attivo tutti i relè
-        Serial.println("Allarme ON");
-        setT11_State(SLOT_SWITCH_BOILER_TERMOCAMINO, Souliss_T1n_OnCoil);
-        setT11_State(SLOT_SWITCH_ALLARME_TERMOCAMINO, Souliss_T1n_OnCoil);
-      } else {
-        Serial.println("Allarme OFF");
-        setT11_State(SLOT_SWITCH_ALLARME_TERMOCAMINO, Souliss_T1n_OffCoil);
-      }
+      //      if ((temp_termocamino - ALARM_TEMP) > DEADBAND_TEMP) {
+      //        //temperatura di allarme - Attivo tutti i relè
+      //        Serial.println("Allarme ON");
+      //        setT11_State(SLOT_SWITCH_BOILER_TERMOCAMINO, Souliss_T1n_OnCoil);
+      //        setT11_State(SLOT_SWITCH_ALLARME_TERMOCAMINO, Souliss_T1n_OnCoil);
+      //      } else {
+      //        Serial.println("Allarme OFF");
+      //        setT11_State(SLOT_SWITCH_ALLARME_TERMOCAMINO, Souliss_T1n_OffCoil);
+      //      }
     }
     // Process the communication
     FAST_PeerComms();
@@ -146,4 +158,12 @@ void setT11_State(U8 slot, U8 value) {
 
 U8 getT11_State(U8 slot) {
   return memory_map[MaCaco_OUT_s + slot];
+}
+
+void set_Setpoint(U8 slot, float input) {
+  Souliss_HalfPrecisionFloating((memory_map + MaCaco_OUT_s + slot + 3), &input);
+}
+
+void set_ThermostatMode(U8 slot) {
+  memory_map[MaCaco_OUT_s + slot] |= Souliss_T3n_HeatingMode | Souliss_T3n_SystemOn;
 }
