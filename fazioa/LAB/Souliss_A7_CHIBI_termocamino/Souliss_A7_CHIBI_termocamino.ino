@@ -51,7 +51,7 @@ DallasTemperature sensors(&oneWire);
 float temp_boiler, temp_termocamino;
 void setup()
 {
-  Serial.begin(9600);
+//  Serial.begin(9600);
 
   Initialize();
   // Setup the network configuration
@@ -70,7 +70,7 @@ void setup()
   set_ThermostatMode(SLOT_T31_THERMOSTAT);
 
 
-  Serial.println("Setup Automode On ");
+//  Serial.println("Setup Automode On ");
   setT11_State(SLOT_SWITCH_AUTOMODE, Souliss_T1n_OnCoil);
 
   pinMode(PIN_TEMPERATURE_ONEWIRE, INPUT);
@@ -93,9 +93,6 @@ void loop()
       Logic_T11(SLOT_SWITCH_BOILER_TERMOCAMINO);
       DigOut(PIN_SWITCH_BOILER_TERMOCAMINO, Souliss_T1n_Coil, SLOT_SWITCH_BOILER_TERMOCAMINO);
 
-      // Logic_T11(SLOT_SWITCH_ALLARME_TERMOCAMINO);
-      // DigOut(PIN_SWITCH_ALLARME_TERMOCAMINO, Souliss_T1n_Coil, SLOT_SWITCH_ALLARME_TERMOCAMINO);
-
       Logic_T11(SLOT_SWITCH_AUTOMODE);
 
       Logic_Thermostat(SLOT_T31_THERMOSTAT);
@@ -107,30 +104,30 @@ void loop()
       // SENSORE 1
       temp_boiler = sensors.getTempCByIndex(1);
       ImportAnalog(SLOT_TEMPERATURE_BOILER, &temp_boiler);
-      Serial.print("temp_boiler ");
-      Serial.println(temp_boiler);
+ //     Serial.print("temp_boiler ");
+ //     Serial.println(temp_boiler);
 
       // SENSORE 2
       temp_termocamino = sensors.getTempCByIndex(0);
       ImportAnalog(SLOT_TEMPERATURE_TERMOCAMINO, &temp_termocamino);
       ImportAnalog(SLOT_T31_THERMOSTAT + 1, &temp_termocamino);
-      Serial.print("temp_termocamino ");
-      Serial.println(temp_termocamino);
+ //     Serial.print("temp_termocamino ");
+ //     Serial.println(temp_termocamino);
     }
 
     FAST_7110ms() {
       //attiva il relè se il termocamino ha temperatura maggiore.
       if (getT11_State(SLOT_SWITCH_AUTOMODE) == Souliss_T1n_OnCoil) {
         if ( abs(temp_boiler - temp_termocamino) > DEADBAND_TEMP) {
-          Serial.print("Fuori deadband. Diff temp_boiler - temp_termocamino= ");
-          Serial.println(temp_boiler - temp_termocamino);
+ //         Serial.print("Fuori deadband. Diff temp_boiler - temp_termocamino= ");
+ //         Serial.println(temp_boiler - temp_termocamino);
           if (temp_termocamino > temp_boiler) {
             //azionare RELE'1
-            Serial.println("Temp.termocamino maggiore");
+ //           Serial.println("Temp.termocamino maggiore");
             setT11_State(SLOT_SWITCH_BOILER_TERMOCAMINO, Souliss_T1n_OnCoil);
           } else {
             //rilasciare RELE'1
-            Serial.println("Temp.boiler maggiore");
+ //           Serial.println("Temp.boiler maggiore");
             setT11_State(SLOT_SWITCH_BOILER_TERMOCAMINO, Souliss_T1n_OffCoil);
           }
         }
@@ -145,10 +142,6 @@ void setT11_State(U8 slot, U8 value) {
   if ( memory_map[MaCaco_OUT_s + slot] != value ) {
     memory_map[MaCaco_OUT_s + slot] = value;
     data_changed = Souliss_TRIGGED;
-    Serial.print("SLOT: ");
-    Serial.println(slot);
-    Serial.print("VALUE: ");
-    Serial.println(value);
   }
 }
 
