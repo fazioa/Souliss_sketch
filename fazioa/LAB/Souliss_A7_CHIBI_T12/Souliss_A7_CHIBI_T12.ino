@@ -46,7 +46,7 @@ void loop()
     FAST_50ms() {
       DigIn(PIN_auto,9,SLOT_T12);
       Logic_T12(SLOT_T12);
-      LowDigOut(PIN_OUT, Souliss_T1n_Coil , SLOT_T12);
+      nLowDigOut(PIN_OUT, Souliss_T1n_Coil & Souliss_T1n_AutoOnCoil, SLOT_T12);
 //      LowDigOut(PIN_OUT, Souliss_T1n_AutoOnCoil , SLOT_T12);
   }
     // Process the communication
