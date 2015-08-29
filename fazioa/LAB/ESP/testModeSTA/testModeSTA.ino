@@ -10,7 +10,6 @@
 #include "conf/DynamicAddressing.h"
 
 #include <ESP8266WiFi.h>
-#include <WiFiClient.h>
 #include <ESP8266WebServer.h>
 #include <ESP8266WiFi.h>
 #include <EEPROM.h>
@@ -35,6 +34,7 @@ String ssid = "";
 String password = "";
 uint16_t indiceEEPROM = START_STORE_SSID_PASSWORD;
 uint8_t GPIO0_PIN = 0; //GPIO0
+uint8_t GPIO_POUT = 1; //GPI14
 boolean flagGateway = true;
 void setup(void)
 {
@@ -113,7 +113,7 @@ void setup(void)
   }
 
   Set_SimpleLight(MYLEDLOGIC);        // Define a simple LED light logic
-  pinMode(5, OUTPUT);                 // Use pin 5 as output
+  pinMode(GPIO_POUT, OUTPUT);                 // Use pin GPIO_POUT as output
 
 }
 
@@ -125,7 +125,7 @@ void loop(void)
 
     FAST_50ms() {   // We process the logic and relevant input and output every 50 milliseconds
       Logic_SimpleLight(MYLEDLOGIC);
-      DigOut(5, Souliss_T1n_Coil, MYLEDLOGIC);
+      DigOut(GPIO_POUT, Souliss_T1n_Coil, MYLEDLOGIC);
     }
     FAST_110ms() {
       server.handleClient();
