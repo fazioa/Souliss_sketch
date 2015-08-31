@@ -34,7 +34,7 @@ String ssid = "";
 String password = "";
 uint16_t indiceEEPROM = START_STORE_SSID_PASSWORD;
 uint8_t GPIO0_PIN = 0; //GPIO0
-uint8_t GPIO_POUT = 1; //GPI14
+uint8_t GPIO_POUT = 5; //GPI14
 boolean flagGateway = true;
 void setup(void)
 {
@@ -42,7 +42,7 @@ void setup(void)
   EEPROM.begin(512);
   delay(100);
 
-  pinMode(GPIO0_PIN, INPUT); //GPIO0
+ // pinMode(GPIO0_PIN, INPUT); //GPIO0
 
   ssid = read_from_EEPROM(&indiceEEPROM);
   password = read_from_EEPROM(&indiceEEPROM);

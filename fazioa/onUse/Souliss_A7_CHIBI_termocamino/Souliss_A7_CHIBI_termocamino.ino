@@ -102,13 +102,13 @@ void loop()
     FAST_2110ms()	{
       sensors.requestTemperatures(); // Send the command to get temperatures
       // SENSORE 1
-      temp_boiler = sensors.getTempCByIndex(1);
+      temp_boiler = sensors.getTempCByIndex(0);
       ImportAnalog(SLOT_TEMPERATURE_BOILER, &temp_boiler);
  //     Serial.print("temp_boiler ");
  //     Serial.println(temp_boiler);
 
       // SENSORE 2
-      temp_termocamino = sensors.getTempCByIndex(0);
+      temp_termocamino = sensors.getTempCByIndex(1);
       ImportAnalog(SLOT_TEMPERATURE_TERMOCAMINO, &temp_termocamino);
       ImportAnalog(SLOT_T31_THERMOSTAT + 1, &temp_termocamino);
  //     Serial.print("temp_termocamino ");
