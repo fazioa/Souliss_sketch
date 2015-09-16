@@ -23,6 +23,8 @@
 #include "Souliss.h"
 
 #include "t_encoder.h"
+#include "t_constants.h"
+
 //*************************************************************************
 //*************************************************************************
 DHT dht(DHTPIN, DHTTYPE);
@@ -33,13 +35,13 @@ float setpoint = 0;
  //DISPLAY
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #include <SPI.h>
-#include <Adafruit_GFX.h>
 #include <Arduino.h>
-#include <Adafruit_ILI9341.h>
+#include <Souliss_SmartT_ILI9341_GFX_Library.h>
+#include <Souliss_SmartT_ILI9341.h>
 
 // Use hardware SPI
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
-Adafruit_ILI9341 tft = Adafruit_ILI9341(TFT_CS, TFT_DC);
+Souliss_SmartT_ILI9341 tft = Souliss_SmartT_ILI9341(TFT_CS, TFT_DC);
 
 
 bool dbackLED = 0;
@@ -108,7 +110,11 @@ void loop()
     EXECUTEFAST() {                     
         UPDATEFAST(); 
           
-              
+         FAST_10ms() {
+          tickEncoder();   
+          SERIAL_OUT.print("Encoder: "); SERIAL_OUT.println(getEncoderValue());   
+         }
+         
         FAST_50ms() {   // We process the logic and relevant input and output every 50 milliseconds
           //*************************************************************************
           //*************************************************************************
@@ -158,7 +164,8 @@ void loop()
        SERIAL_OUT.print("Temperature: "); SERIAL_OUT.println(temperature);
        SERIAL_OUT.print("Humidity: "); SERIAL_OUT.println(humidity);
        SERIAL_OUT.print("Set point: "); SERIAL_OUT.println(setpoint);
-      
+       
+
          //*************************************************************************
          //*************************************************************************
         }

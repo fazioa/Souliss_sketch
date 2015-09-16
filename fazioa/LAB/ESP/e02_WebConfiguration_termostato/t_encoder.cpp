@@ -7,9 +7,10 @@
 int encoder0Pos = 220;
 int encoder_PinALast = LOW;
 float encoderValue = 22.0;
+int n;
 
 void tickEncoder() {
-  int n = digitalRead(ENCODER_PIN_A);
+  n = digitalRead(ENCODER_PIN_A);
   if ((encoder_PinALast == LOW) && (n == HIGH)) {
     if (digitalRead(ENCODER_PIN_B) == LOW) {
       //dbackLED=0;
@@ -17,9 +18,9 @@ void tickEncoder() {
     } else {
       encoder0Pos++;
     }
-    encoderValue = encoder0Pos / 10.0;
-    encoder_PinALast = n;
+     encoderValue = encoder0Pos / 10.0;
   }
+    encoder_PinALast = n;
 }
 
 float getEncoderValue() {
