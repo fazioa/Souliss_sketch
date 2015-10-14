@@ -1,16 +1,17 @@
 #include <Arduino.h>
 #include "constants.h"
 #include <MenuSystem.h>
+#include "language.h"
 
 
 // Menu variables
 MenuSystem ms;
-Menu mmRoot("Smart Souliss Thermostat");
-MenuItem mm_miBack("back");
-Menu muMenu("Menu");
-Menu muCrono("Crono");
+Menu mmRoot(MENU_TEXT_ROOT);
+MenuItem mm_miBack(MENU_TEXT_BACK);
+Menu muMenu(MENU_TEXT_MENU);
+Menu muCrono(MENU_TEXT_CRONO_SCREEN);
 
-Menu muMenu_mi_Bright("Luminosita'");
+Menu muMenu_mi_Bright(MENU_TEXT_BRIGHT);
 MenuItem muMenu_mi_Bright_100("100%");
 MenuItem muMenu_mi_Bright_80("80%");
 MenuItem muMenu_mi_Bright_60("60%");
@@ -21,30 +22,22 @@ MenuItem muMenu_mi_Bright_5("5%");
 MenuItem muMenu_mi_Bright_2("2%");
 
 
-Menu muMenu_Clock("Orologio");
-MenuItem muMenu_mi_Clock_ON("ON");
-MenuItem muMenu_mi_Clock_OFF("OFF");
+Menu muMenu_Clock(MENU_TEXT_CLOCK);
+MenuItem muMenu_mi_Clock_ON(MENU_TEXT_ON);
+MenuItem muMenu_mi_Clock_OFF(MENU_TEXT_OFF);
 
-Menu muMenu_Crono("Crono");
-MenuItem muMenu_mi_Crono_ON("ON");
-MenuItem muMenu_mi_Crono_OFF("OFF");
-MenuItem muMenu_mi_Crono_LEARN("Learn Mode");
+Menu muMenu_Crono(MENU_TEXT_CRONO_ENABLE);
+MenuItem muMenu_mi_Crono_ON(MENU_TEXT_ON);
+MenuItem muMenu_mi_Crono_OFF(MENU_TEXT_OFF);
+MenuItem muMenu_mi_Crono_LEARN(MENU_TEXT_LEARN);
 
-Menu muMenu_System("Dispositivo");
-MenuItem muMenu_mi_System_ON("ON");
-MenuItem muMenu_mi_System_OFF("OFF");
+Menu muMenu_System(MENU_TEXT_SYSTEM);
+MenuItem muMenu_mi_System_ON(MENU_TEXT_ON);
+MenuItem muMenu_mi_System_OFF(MENU_TEXT_OFF);
 
-Menu muMenu_Layouts("Layouts");
-MenuItem muMenu_mi_Layouts_1("Lineare");
-MenuItem muMenu_mi_Layouts_2("Rotondo");
-
-
-
-MenuItem mu1_mi1("Level 2 - Item 1 (Item)");
-MenuItem mu1_mi2("Level 2 - Item 2 (Item)");
-MenuItem mu1_mi3("Level 2 - Item 3 (Item)");
-MenuItem mu1_mi4("Level 2 - Item 4 (Item)");
-
+Menu muMenu_Layouts(MENU_TEXT_LAYOUTS);
+MenuItem muMenu_mi_Layouts_1(MENU_TEXT_LAYOUT_1);
+MenuItem muMenu_mi_Layouts_2(MENU_TEXT_LAYOUT_2);
 
 
 MenuSystem* getMenu() {
