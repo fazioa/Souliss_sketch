@@ -2,6 +2,6 @@
   #include <MenuSystem.h>
 
   void initMenu();
-  MenuSystem getMenu();
+  MenuSystem* getMenu();
 
-  void printMenu(MenuSystem);
+  void printMenu();

@@ -6,7 +6,7 @@ float encoderValue_prec = 0;
 #include <Arduino.h>
 
 
-MenuSystem myMenu;
+MenuSystem* myMenu;
 void setup() {
   Serial.begin(9600);
   //ENCODER
@@ -34,20 +34,20 @@ void loop() {
   //SWITCH ENCODER
   if (!digitalRead(ENCODER_SWITCH)) {
     Serial.println("pulsante premuto");
-    myMenu.select(false);
-    printMenu(myMenu);
+    myMenu->select(false);
+    printMenu();
     Serial.println(); Serial.println();
   }
 
   if (getEncoderValue() > encoderValue_prec) {
     encoderValue_prec = getEncoderValue();
-    myMenu.prev();
-    printMenu(myMenu);
+    myMenu->prev();
+    printMenu();
     Serial.println(); Serial.println();
   } else if (getEncoderValue() < encoderValue_prec) {
     encoderValue_prec = getEncoderValue();
-    myMenu.next();
-    printMenu(myMenu);
+    myMenu->next();
+    printMenu();
     Serial.println(); Serial.println();
   }
 
