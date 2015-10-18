@@ -30,7 +30,7 @@ void setup() {
 }
 
 void loop() {
-  delay(250);
+  delay(50);
   //SWITCH ENCODER
   if (!digitalRead(ENCODER_SWITCH)) {
     Serial.println("pulsante premuto");
@@ -52,5 +52,9 @@ void loop() {
   }
 
 
+}
+
+void displayBright(int lum){
+  SERIAL_OUT.print("Luminosità display impostata a ");SERIAL_OUT.println(lum);
 }
 

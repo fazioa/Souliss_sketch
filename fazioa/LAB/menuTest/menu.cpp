@@ -40,6 +40,7 @@ MenuItem muMenu_mi_Layouts_1(MENU_TEXT_LAYOUT_1);
 MenuItem muMenu_mi_Layouts_2(MENU_TEXT_LAYOUT_2);
 
 
+int iDisplayBright = 100;
 MenuSystem* getMenu() {
   return &ms;
 }
@@ -51,35 +52,82 @@ void on_itemBack_selected(MenuItem* p_menu_item)
 
 }
 
-void on_item2_selected(MenuItem* p_menu_item)
+void on_item_perc100_selected(MenuItem* p_menu_item)
 {
-  SERIAL_OUT.println("Item2 Selected");
+
+  iDisplayBright = 100;
+}
+
+void on_item_perc80_selected(MenuItem* p_menu_item)
+{
+  iDisplayBright = 80;
+}
+
+void on_item_perc60_selected(MenuItem* p_menu_item)
+{
+  iDisplayBright = 60;
 
 }
 
-void on_item3_selected(MenuItem* p_menu_item)
+void on_item_perc50_selected(MenuItem* p_menu_item)
 {
-  SERIAL_OUT.println("L2 Item3 Selected");
-
+  iDisplayBright = 50;
 }
 
-void on_item4_selected(MenuItem* p_menu_item)
+void on_item_perc30_selected(MenuItem* p_menu_item)
 {
-  SERIAL_OUT.println("L2 Item4 Selected");
-
+  iDisplayBright = 30;
 }
 
-void on_item5_selected(MenuItem* p_menu_item)
+void on_item_perc5_selected(MenuItem* p_menu_item)
 {
-  SERIAL_OUT.println("L2 Item5 Selected");
-
+  iDisplayBright = 5;
 }
 
-void on_item6_selected(MenuItem* p_menu_item)
+void on_item_perc2_selected(MenuItem* p_menu_item)
 {
-  SERIAL_OUT.println("L2 Item6 Selected");
+  iDisplayBright = 2;
 }
 
+void on_item_clockON_selected(MenuItem* p_menu_item)
+{
+  SERIAL_OUT.println("on_item_clockON_selected");
+}
+void on_item_clockOFF_selected(MenuItem* p_menu_item)
+{
+  SERIAL_OUT.println("on_item_clockOFF_selected");
+}
+void on_item_cronoON_selected(MenuItem* p_menu_item)
+{
+  SERIAL_OUT.println("on_item_cronoON_selected");
+}
+void on_item_cronoOFF_selected(MenuItem* p_menu_item)
+{
+  SERIAL_OUT.println("on_item_cronoOFF_selected");
+}
+void on_item_cronoLEARN_selected(MenuItem* p_menu_item)
+{
+  SERIAL_OUT.println("on_item_cronoLEARN_selected");
+}
+
+void on_item_systemON_selected(MenuItem* p_menu_item)
+{
+  SERIAL_OUT.println("on_item_systemON_selected");
+}
+void on_item_systemOFF_selected(MenuItem* p_menu_item)
+{
+  SERIAL_OUT.println("on_item_systemOFF_selected");
+}
+
+
+void on_item_layout1_selected(MenuItem* p_menu_item)
+{
+  SERIAL_OUT.println("on_item_layout1_selected");
+}
+void on_item_layout2_selected(MenuItem* p_menu_item)
+{
+  SERIAL_OUT.println("on_item_layout2_selected");
+}
 void initMenu() {
 
   // Menu setup
@@ -90,36 +138,36 @@ void initMenu() {
   muMenu.add_item(&mm_miBack, &on_itemBack_selected);
   muMenu.add_menu(&muMenu_mi_Bright);
   muMenu_mi_Bright.add_item(&mm_miBack, &on_itemBack_selected);
-  muMenu_mi_Bright.add_item(&muMenu_mi_Bright_100, &on_item2_selected);
-  muMenu_mi_Bright.add_item(&muMenu_mi_Bright_80, &on_item2_selected);
-  muMenu_mi_Bright.add_item(&muMenu_mi_Bright_60, &on_item2_selected);
-  muMenu_mi_Bright.add_item(&muMenu_mi_Bright_50, &on_item2_selected);
-  muMenu_mi_Bright.add_item(&muMenu_mi_Bright_30, &on_item2_selected);
-  muMenu_mi_Bright.add_item(&muMenu_mi_Bright_5, &on_item2_selected);
-  muMenu_mi_Bright.add_item(&muMenu_mi_Bright_2, &on_item2_selected);
+  muMenu_mi_Bright.add_item(&muMenu_mi_Bright_100, &on_item_perc100_selected);
+  muMenu_mi_Bright.add_item(&muMenu_mi_Bright_80, &on_item_perc80_selected);
+  muMenu_mi_Bright.add_item(&muMenu_mi_Bright_60, &on_item_perc60_selected);
+  muMenu_mi_Bright.add_item(&muMenu_mi_Bright_50, &on_item_perc50_selected);
+  muMenu_mi_Bright.add_item(&muMenu_mi_Bright_30, &on_item_perc30_selected);
+  muMenu_mi_Bright.add_item(&muMenu_mi_Bright_5, &on_item_perc5_selected);
+  muMenu_mi_Bright.add_item(&muMenu_mi_Bright_2, &on_item_perc2_selected);
 
 
   muMenu.add_menu(&muMenu_Clock);
   muMenu_Clock.add_item(&mm_miBack, &on_itemBack_selected);
-  muMenu_Clock.add_item(&muMenu_mi_Clock_ON, &on_item2_selected);
-  muMenu_Clock.add_item(&muMenu_mi_Clock_OFF, &on_item2_selected);
+  muMenu_Clock.add_item(&muMenu_mi_Clock_ON, &on_item_clockON_selected);
+  muMenu_Clock.add_item(&muMenu_mi_Clock_OFF, &on_item_clockOFF_selected);
 
 
   muMenu.add_menu(&muMenu_Crono);
   muMenu_Crono.add_item(&mm_miBack, &on_itemBack_selected);
-  muMenu_Crono.add_item(&muMenu_mi_Crono_ON, &on_item2_selected);
-  muMenu_Crono.add_item(&muMenu_mi_Crono_OFF, &on_item2_selected);
-  muMenu_Crono.add_item(&muMenu_mi_Crono_LEARN, &on_item2_selected);
+  muMenu_Crono.add_item(&muMenu_mi_Crono_ON, &on_item_cronoON_selected);
+  muMenu_Crono.add_item(&muMenu_mi_Crono_OFF, &on_item_cronoOFF_selected);
+  muMenu_Crono.add_item(&muMenu_mi_Crono_LEARN, &on_item_cronoLEARN_selected);
 
   muMenu.add_menu(&muMenu_System);
   muMenu_System.add_item(&mm_miBack, &on_itemBack_selected);
-  muMenu_System.add_item(&muMenu_mi_System_ON, &on_item2_selected);
-  muMenu_System.add_item(&muMenu_mi_System_OFF, &on_item2_selected);
+  muMenu_System.add_item(&muMenu_mi_System_ON, &on_item_systemON_selected);
+  muMenu_System.add_item(&muMenu_mi_System_OFF, &on_item_systemOFF_selected);
 
   muMenu.add_menu(&muMenu_Layouts);
   muMenu_Layouts.add_item(&mm_miBack, &on_itemBack_selected);
-  muMenu_Layouts.add_item(&muMenu_mi_Layouts_1, &on_item2_selected);
-  muMenu_Layouts.add_item(&muMenu_mi_Layouts_2, &on_item2_selected);
+  muMenu_Layouts.add_item(&muMenu_mi_Layouts_1, &on_item_layout1_selected);
+  muMenu_Layouts.add_item(&muMenu_mi_Layouts_2, &on_item_layout2_selected);
 
   ms.set_root_menu(&mmRoot);
 }
