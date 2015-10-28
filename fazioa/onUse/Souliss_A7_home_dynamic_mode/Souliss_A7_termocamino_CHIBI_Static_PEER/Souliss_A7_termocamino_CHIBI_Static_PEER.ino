@@ -13,7 +13,7 @@
 // http://milesburton.com/Dallas_Temperature_Control_Library
 
 #include "bconf/Chibiduino_v1.h"			// Use a Chibiduino 2.4 GHz wireless board
-#include "conf/SmallNetwork.h"                   // The main node is the Gateway, we have just one node
+//#include "conf/SmallNetwork.h"                   // The main node is the Gateway, we have just one node
 
 #include "Souliss.h"
 #include "Typicals.h"
@@ -51,7 +51,7 @@ DallasTemperature sensors(&oneWire);
 float temp_boiler, temp_termocamino;
 void setup()
 {
-//  Serial.begin(9600);
+ // Serial.begin(9600);
 
   Initialize();
   // Setup the network configuration
