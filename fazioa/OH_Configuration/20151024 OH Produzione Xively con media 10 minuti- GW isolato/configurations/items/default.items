@@ -1,0 +1,76 @@
+Group	All
+Group	gGF	(All)	
+Group	Shutters	(All)	
+Group	Interruttori	(All)	
+Group	Luci	(All)	
+Group	TechnicView_Node1	(All)	
+Group	TechnicView_Node1	(All)	
+Group	TechnicView_Node2	(All)	
+Group	TechnicView_Node3	(All)	
+Group	Consumi_Chart	(All)	
+Group	toPersistence	(All)	
+Group	Diagnostic	(All)	
+Group	Health	(All)	
+Group	rientrocasa	(All)	
+Group	network	(All)	
+Group	GraphTemp_accoppiata_interno_esterno	(All)	
+Group	GF_Consumi_Chart	(All)	
+Group	GF_TempTermocaminoBoiler	(All)	
+Group	GF_Soggiorno	"Soggiorno"	<video>	(gGF)	
+Group	Luci	(All)	
+Group	GF_esterno	"Giardino"	<video>	(gGF)	
+Group	GF_Temperature	"Temperatura - Umidità"	<temperature>	(All)	
+Group	G_TemperaturaSoggiorno	"Soggiorno"	<temperature>	(All)	
+Group	G_TemperaturaGiardino	"Giardino"	<temperature>	(All)	
+Group	GF_Consumi_sitemap	"Consumi"	<energy>	(All)	
+
+Number	Chart_Period	"Chart Period"
+Switch	Presence	<house>	(network)	
+Switch	Tonino	"Tonino"	<house>	(network)		{ nh="192.168.1.117" }
+Switch	Cristina	"Cristina"	<house>	(network)		{ nh="192.168.1.119" }
+
+Number	Temperature_GF_Soggiorno	"Temperatura Soggiorno [%.1f °C]"	<temperature>	(GF_Temperature,G_TemperaturaSoggiorno,TechnicView_Node1,GraphTemp_accoppiata_interno_esterno)		{ souliss="T52:1:0" }
+Number	Umidita_GF_Soggiorno	"Umidità Soggiorno [%.1f %%]"	<temperature>	(GF_Temperature,G_TemperaturaSoggiorno,TechnicView_Node1)		{ souliss="T53:1:2" }
+Number	Temperature_GF_Soggiorno_Max	"Oggi massima [%.1f °C]"	<temperature>	(G_TemperaturaSoggiorno)	
+Number	Temperature_GF_Soggiorno_Min	"Oggi minima [%.1f °C]"	<temperature>	(G_TemperaturaSoggiorno)	
+Number	Consumo_GF_Soggiorno	"Consumo [%.1f W]"	<energy>	(GF_Consumi_sitemap,GF_Consumi_Chart,TechnicView_Node1)		{ souliss="T57:1:4" }
+Number	Consumo_GF_Soggiorno_Max	"Oggi massimo [%.1f W]"	<energy>	(GF_Consumi_sitemap)	
+Number	Consumo_GF_Soggiorno_Min	"Oggi minimo [%.1f W]"	<energy>	(GF_Consumi_sitemap)	
+Number	Consumo_medio_x_minuti	"Media 10 minuti [%.1f W]"	<energy>	(GF_Consumi_Chart,GF_Consumi_sitemap)
+
+
+	
+Number	Temperature_GF_Giardino	"Temperatura Giardino [%.1f °C]"	<temperature>	(GF_esterno,TechnicView_Node2,GraphTemp_accoppiata_interno_esterno,GF_Temperature,G_TemperaturaGiardino)		{ souliss="T52:2:0" }
+Number	Umidita_GF_Giardino	"Umidità Giardino [%.1f %%]"	<temperature>	(GF_Temperature,G_TemperaturaGiardino,GF_esterno,TechnicView_Node2)		{ souliss="T53:2:2" }
+Number	Temperature_GF_Giardino_Max	"Oggi massima [%.1f °C]"	<temperature>	(G_TemperaturaGiardino)	
+Number	Temperature_GF_Giardino_Min	"Oggi minima [%.1f °C]"	<temperature>	(G_TemperaturaGiardino)	
+
+Switch	SwitchPortoncino	"Portoncino"	(rientrocasa,GF_Soggiorno,TechnicView_Node1)		{ souliss="T11:1:6", autoupdate="false" }
+Switch	SwitchCancello	"Cancello"	(rientrocasa,GF_Soggiorno,TechnicView_Node1)		{ souliss="T11:1:7", autoupdate="false" }
+
+Number	Temperature_Boiler_Solare_Termico	"Solare [%.1f °C]"	<temperature>	(GF_TempTermocaminoBoiler,TechnicView_Node3)		{ souliss="T52:3:0" }
+Number	Temperature_Termocamino	"Termocamino [%.1f °C]"	<temperature>	(GF_TempTermocaminoBoiler,TechnicView_Node3)		{ souliss="T52:3:2" }
+Switch	SwitchTermocamino	"Acqua Termocamino"	(TechnicView_Node3)		{ souliss="T11:3:4", autoupdate="false" }
+Switch	Boiler_TC_Automode	"Auto: Boiler / Termocamino"	(TechnicView_Node3)		{ souliss="T11:3:6", autoupdate="false" }
+Switch	setasmeasured	"Set as measured"	<temperature>	(T31,TechnicView_Node3)		{ souliss="T31:3:7:setasmeasured" }
+Switch	setpoint65	"Set Point 65 °C"	<temperature>	(T31,TechnicView_Node3)	
+Switch	setpoint70	"Set Point 70 °C"	<temperature>	(T31,TechnicView_Node3)	
+Switch	setpoint80	"Set Point 80 °C"	<temperature>	(T31,TechnicView_Node3)	
+Number	Temperature_Termocamino_SetPoint	"Temp Set Point [%.1f °C]"	<temperature>	(TechnicView_Node3)		{ souliss="T31:3:7:setpoint" }
+Contact	riscaldamento_tutto	"Riscaldamento - Tutto"	(TechnicView_Node3)		{ souliss="T31:3:7:heating" }
+
+
+Switch	milight_switch	"Luci divano"	(Luci)		{ milight="bridge1;0" }
+Dimmer	milight_brightness	"Luci divano - intensità"	<slider>	(Luci,GF_Soggiorno)		{ milight="bridge1;0;brightness", autoupdate="false" }
+Switch	milight_NightMode	"Luci divano - night mode"	(Luci,GF_Soggiorno)		{ milight="bridge1;0;nightMode", autoupdate="false" }
+Dimmer	milight_ColorTemp	"Luci divano - colore"	<slider>	(Luci,GF_Soggiorno)		{ milight="bridge1;0;colorTemperature", autoupdate="false" }
+
+Number	HEALTHNodo1_GF_Servizio	"Health Nodo 1 [%1d]"	<keyring>	(Diagnostic,TechnicView_Node1,Health)		{ souliss="D98:1:998" }
+Number	HEALTHNodo2_GF_Servizio	"Health Nodo 2 [%1d]"	<keyring>	(Diagnostic,TechnicView_Node2,Health)		{ souliss="D98:2:998" }
+Number	HEALTHNodo3_GF_Servizio	"Health Nodo 3 [%1d]"	<keyring>	(Diagnostic,TechnicView_Node3,Health)		{ souliss="D98:3:998" }
+Number	HEALTHNodo4_GF_Servizio	"Health Nodo 4 [%1d]"	<keyring>	(Diagnostic,TechnicView_Node4,Health)		{ souliss="D98:4:998" }
+
+String	TIMESTAMP_Nodo1_GF_Servizio	"Aggiorn.Nodo1 [%1$td.%1$tm.%1$tY %1$tk:%1$tM:%1$tS]"	<keyring>	(Diagnostic,TechnicView_Node1,G_TemperaturaSoggiorno,GF_Consumi_sitemap)		{ souliss="D99:1:999" }
+String	TIMESTAMP_Nodo2_GF_Servizio	"Aggiorn.Nodo2 [%1$td.%1$tm.%1$tY %1$tk:%1$tM:%1$tS]"	<keyring>	(Diagnostic,TechnicView_Node2,G_TemperaturaGiardino)		{ souliss="D99:2:999" }
+String	TIMESTAMP_Nodo3_GF_Servizio	"Aggiorn.Nodo3 [%1$td.%1$tm.%1$tY %1$tk:%1$tM:%1$tS]"	<keyring>	(Diagnostic,TechnicView_Node3)		{ souliss="D99:3:999" }
+String	TIMESTAMP_Nodo4_GF_Servizio	"Aggiorn.Nodo4 [%1$td.%1$tm.%1$tY %1$tk:%1$tM:%1$tS]"	<keyring>	(Diagnostic,TechnicView_Node4)		{ souliss="D99:4:999" }

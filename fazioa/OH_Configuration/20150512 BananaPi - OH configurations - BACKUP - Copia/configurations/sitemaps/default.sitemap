@@ -1,0 +1,84 @@
+﻿sitemap tonino label="Main Menu"
+{
+Frame label="Comandi rietro a casa" {
+		Switch item=SwitchPortoncino mappings=[ON="Apri"]
+		Switch item=SwitchCancello mappings=[ON="Apri"]
+	}
+		
+	Frame label="Illuminazione" {
+		Group item=Luci label="Illuminazione"
+	}
+	
+	Frame label="Presenza"  {
+		Group item=network label="Network" icon="network"
+	}
+	
+	Frame label="Temperature"{
+			Group item=G_TemperaturaSoggiorno  icon="temperature"
+			Group item=G_TemperaturaGiardino icon="temperature"
+	}
+	
+	Frame label="Consumi"{
+	Group item=GF_Consumi_sitemap icon="energy"
+	}
+	
+	
+	Frame label="Grafici" {
+	 Text label="Consumi" icon="energy" {
+	 Switch item=Chart_Period label="" mappings=[0="Hour", 1="Day", 2="Week", 3="Month"] 
+				Chart item=Consumo_GF_Soggiorno period=h refresh=6000 visibility=[Chart_Period==0, Chart_Period=="Uninitialized"]  
+				Chart item=Consumo_GF_Soggiorno period=D refresh=30000 visibility=[Chart_Period==1]  
+				Chart item=Consumo_GF_Soggiorno period=W refresh=21600000 visibility=[Chart_Period==2]  
+				Chart item=Consumo_GF_Soggiorno period=M refresh=21600000 visibility=[Chart_Period==3]  
+			}
+	
+	Text label="Temp int/est" icon="temperature" {
+				Switch item=Chart_Period label="" mappings=[1="Day", 2="Week", 3="Month", 4="4 Months" ] 
+				Chart item=GraphTemp_accoppiata_interno_esterno period=D refresh=30000 visibility=[Chart_Period==1, Chart_Period=="Uninitialized"]  
+				Chart item=GraphTemp_accoppiata_interno_esterno period=W refresh=21600000 visibility=[Chart_Period==2] //6 ore
+				Chart item=GraphTemp_accoppiata_interno_esterno period=M refresh=21600000 visibility=[Chart_Period==3] //6 ore
+				Chart item=GraphTemp_accoppiata_interno_esterno period=4M refresh=86400000 visibility=[Chart_Period==4]//24ore
+			}				
+	Text label="Presenza" icon="parents" {
+				Chart item=network period=D refresh=30000 
+			}		
+	}
+	
+	
+	Frame label="Diagnostica e Vista Tecnica" {
+		Group item=Diagnostic label="Salute ed aggiornamenti" icon="icon16x16"
+		Text label="Struttura Nodi" icon="icon16x16"  {	
+		Group item=TechnicView_Node0 label="Nodo 1" icon="icon16x16"
+		Group item=TechnicView_Node1 label="Nodo 2" icon="icon16x16"
+		Group item=TechnicView_Node2 label="Nodo 3" icon="icon16x16"
+		Group item=TechnicView_Node3 label="Nodo 4" icon="icon16x16"
+	}
+	
+	Text label="Grafici Salute Nodi" icon="icon16x16"  {
+		Chart item=Health label="Nodo 4" period=3D refresh=60000
+	}
+	
+}
+	
+		
+//	Frame label="Luce divano"  {
+//	Slider item=milight sendFrequency=700
+//	Switch item=milight label="Interruttore" mappings=[OFF="Spegni", ON="Accendi"]
+//	Slider item=milight_colorTemp  
+//	Switch item=milight_NightMode mappings=[ON="Night"]
+//	}
+
+	
+	Frame label="Ambienti"{
+		Group item=GF_Soggiorno label="Soggiorno" icon="firstfloor"
+		Group item=GF_esterno label="Giardino" icon="firstfloor"
+		Group item=GF_Temperature label="Temperature, umidità e consumi"   icon="garden"		
+		Switch item=Interruttori label="Luci" mappings=[ON="ON", OFF="OFF"]
+		Switch item=Shutters icon="rollershutter" mappings=[UP="SU", STOP="-", DOWN="GIU"]
+
+	}
+	
+	
+	
+}
+

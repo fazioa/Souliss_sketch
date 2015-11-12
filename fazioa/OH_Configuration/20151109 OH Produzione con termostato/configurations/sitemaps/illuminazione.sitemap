@@ -1,0 +1,12 @@
+sitemap tonino label="Illuminazione"
+{
+Frame label="Divano"  {
+	Switch item=milight_switch label="Interruttore" mappings=[OFF="Spegni", ON="Accendi"]
+	Slider item=milight_brightness sendFrequency=700
+	Slider item=milight_ColorTemp  
+	Switch item=milight_NightMode mappings=[ON="Night"]
+}
+Frame label="Tettoia"  {
+	Switch item=milight_switch_tettoia label="Interruttore" mappings=[OFF="Spegni", ON="Accendi"]
+	Slider item=RGBW_Tettoia_brightness  
+}

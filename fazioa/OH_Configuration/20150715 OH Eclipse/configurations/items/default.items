@@ -1,0 +1,50 @@
+Group All
+Group gGF 		(All)
+
+Group Shutters 	(All)
+Group Interruttori 	(All)
+Group Luci 	(All)
+Group TechnicView_Node0 	(All)
+Group TechnicView_Node1 	(All)
+Group TechnicView_Node2 	(All)
+Group TechnicView_Node3 	(All)
+Group Consumi_Chart	 (All)
+Group toPersistence (All)
+
+Group Diagnostic 	(All)
+Group Health (All)
+Group rientrocasa 	(All)
+Group network 	(All)
+Group GraphTemp_accoppiata_interno_esterno 	(All)
+
+Group GF_Soggiorno 	"Soggiorno" 	<video> 	(gGF)
+Group Luci (All) 	
+Group GF_esterno 	"Giardino" 	<video> 	(gGF)
+Group GF_Temperature 	"Temperatura - Umidità"  <kitchen> (All)
+Group G_TemperaturaSoggiorno 	"Soggiorno"  <kitchen> (All)
+Group G_TemperaturaGiardino 	"Giardino"  <kitchen> (All)
+Group GF_Consumi "Consumi"  <energy> (All)
+Group GF_Consumi_sitemap "Consumi"  <energy> (All)
+Number Chart_Period		"Chart Period"
+
+
+Switch  Presence  <house> (network)  
+Switch  Tonino   "Tonino"  <house> (network)   {nh="192.168.1.117" }
+Switch  Cristina  "Cristina" <house>  (network)   {nh="192.168.1.119" }
+
+//Group:Number:AVG()	temperaturaSoggiorno		"Temperatura media soggiorno [(%.1f)]" <settings>	(GF_Temperature, G_TemperaturaSoggiorno)
+//Group:Number:AVG()	temperaturaEsterna 		"Temperatura media esterna [(%.1f)]" <settings>	(GF_Temperature, G_TemperaturaGiardino)
+/* active groups */
+//Group:Switch:OR(ON, OFF) 		Lights 		"All Lights [(%d)]" 								(All)
+//Group:Switch:OR(ON, OFF) 		Heating 	"No. of Active Heatings [(%d)]" 	<heating> 		(All)
+//Group:Number:AVG 				temperature	"Avg. Room Temperature [%.1f °C]" 	<temperature>	(Status)
+//Group:Contact:OR(OPEN, CLOSED) 	Windows 	"Open windows [(%d)]"				<contact>		(All)
+
+Switch setasmeasured "Set as measured" <temperature> (T31, TechnicView_Node1) {souliss="T31:1:7:setasmeasured"}
+
+Number Temperature_Termocamino_SetPoint	"Temp Set Point [%.1f °C]" 	<temperature> (TechnicView_Node1) {souliss="T31:1:7:setpoint" autoupdate="false"}
+Contact riscaldamento_tutto "Riscaldamento - Tutto" (TechnicView_Node1) {souliss="T31:1:7:heating"}
+
+Switch SwitchAutoMode 	"T12" 		(GF_Soggiorno, TechnicView_Node3) {souliss="T12:3:0:switch", autoupdate="false"}
+Switch SwitchAutoMode_setup 	"Auto" 		(GF_Soggiorno, TechnicView_Node3) {souliss="T12:3:0:automode", autoupdate="false"}
+

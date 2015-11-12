@@ -1,0 +1,6 @@
+Strategies {
+default = everyChange
+}
+Items {
+rientrocasa* : strategy = everyChange, restoreOnStartup
+}
