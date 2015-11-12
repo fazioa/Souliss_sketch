@@ -86,6 +86,7 @@
 			Switch item=heatingmode  label="Mod. Riscaldamento" mappings=[ON="ON"] icon="siren"
 			Switch item=power  label="Power" mappings=[ON="OFF"] icon="powerIcon"
 			Slider item=DisplayBright
+			Text item=TIMESTAMP_Nodo6_GF_Servizio label="Aggiornato: [%1$td.%1$tm.%1$tY %1$tk:%1$tM:%1$tS]" icon="icon16x16"
 		}	
 	}
 	Frame label="Diagnostica e Vista Tecnica" {
