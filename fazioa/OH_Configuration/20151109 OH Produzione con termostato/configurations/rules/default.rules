@@ -4,7 +4,8 @@ import org.openhab.model.script.actions.*
 
 rule "Media consumo 10 minuti"
 when
-	Time cron "*/10 * * * * ?"
+	Time cron "*/10 * * * * ?" or
+	System started
 then
 	postUpdate(Consumo_medio_x_minuti,Consumo_GF_Soggiorno.averageSince(now.minusMinutes(10)).intValue )
 end
@@ -133,4 +134,82 @@ when
 	Item SwitchTermocamino received update ON 
 then	
 	sendNotification("fazioa@gmail.com", "Acqua <- Termocamino")
+end
+
+rule "Light Scenes"
+when
+Item Light_scene received command 
+then
+if (receivedCommand==0) { 
+    sendCommand(Light_scene_ColorSelect, new HSBType(new DecimalType(0),new PercentType(0),new PercentType(100)))
+}
+if (receivedCommand==1) { 
+    sendCommand(Light_scene_ColorSelect, new HSBType(new DecimalType(0),new PercentType(100),new PercentType(100)))
+}
+if (receivedCommand==2) { 
+    sendCommand(Light_scene_ColorSelect, new HSBType(new DecimalType(60),new PercentType(100),new PercentType(100)))
+}
+if (receivedCommand==3) { 
+    sendCommand(Light_scene_ColorSelect, new HSBType(new DecimalType(120),new PercentType(100),new PercentType(100)))
+}
+if (receivedCommand==4) { 
+    sendCommand(Light_scene_ColorSelect, new HSBType(new DecimalType(120),new PercentType(100),new PercentType(50)))
+}
+if (receivedCommand==5) { 
+    sendCommand(Light_scene_ColorSelect, new HSBType(new DecimalType(180),new PercentType(100),new PercentType(100)))
+}
+if (receivedCommand==6) { 
+    sendCommand(Light_scene_ColorSelect, new HSBType(new DecimalType(240),new PercentType(100),new PercentType(100)))
+}
+if (receivedCommand==7) { 
+    sendCommand(Light_scene_ColorSelect, new HSBType(new DecimalType(300),new PercentType(100),new PercentType(100)))
+}
+end
+
+rule "Milight Brightness Scenes"
+when
+Item milight_brightness_scenes received command 
+then
+if (receivedCommand==0) { 
+    sendCommand(milight_brightness, new DecimalType(20))
+}
+if (receivedCommand==1) { 
+    sendCommand(milight_brightness,new DecimalType(30))
+}
+if (receivedCommand==2) { 
+    sendCommand(milight_brightness, new DecimalType(50))
+}
+if (receivedCommand==3) { 
+    sendCommand(milight_brightness, new DecimalType(70))
+}
+if (receivedCommand==4) { 
+    sendCommand(milight_brightness, new DecimalType(90))
+}
+if (receivedCommand==5) { 
+    sendCommand(milight_brightness, new DecimalType(100))
+}
+end
+
+rule "Milight RGB Brightness Scenes"
+when
+Item milight_RBG_brightness_scenes received command 
+then
+if (receivedCommand==0) { 
+    sendCommand(milight_RGB_brightness, new DecimalType(20))
+}
+if (receivedCommand==1) { 
+    sendCommand(milight_RGB_brightness,new DecimalType(30))
+}
+if (receivedCommand==2) { 
+    sendCommand(milight_RGB_brightness, new DecimalType(50))
+}
+if (receivedCommand==3) { 
+    sendCommand(milight_RGB_brightness, new DecimalType(70))
+}
+if (receivedCommand==4) { 
+    sendCommand(milight_RGB_brightness, new DecimalType(90))
+}
+if (receivedCommand==5) { 
+    sendCommand(milight_RGB_brightness, new DecimalType(100))
+}
 end

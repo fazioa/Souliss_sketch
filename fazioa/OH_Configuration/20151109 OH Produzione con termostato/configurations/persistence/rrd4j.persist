@@ -23,5 +23,4 @@ Items {
 	network* : strategy = every05Minutes, everyChange, restoreOnStartup
 	GF_TempTermocaminoBoiler* : strategy = every30Minutes, everyChange, restoreOnStartup
 	SwitchTermocamino : strategy = every30Minutes, everyChange, restoreOnStartup
-	G_TemperaturaSoggiorno : strategy = every30Minutes, everyChange, restoreOnStartup
 }

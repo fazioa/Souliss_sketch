@@ -99,7 +99,7 @@
 			Group item=TechnicView_Node6 label="Nodo 6" icon="icon16x16"
 		}
 		Text label="Grafici Salute Nodi" icon="icon16x16"  {	
-			Chart item=Health period=3D refresh=60000
+			Chart item=Health label="Salute Nodi" period=3D refresh=60000
 		}	
 	}
 }

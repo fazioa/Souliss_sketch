@@ -4,7 +4,6 @@ Group	Shutters	(All)
 Group	Interruttori	(All)	
 Group	Luci	(All)	
 Group	TechnicView_Node1	(All)	
-Group	TechnicView_Node1	(All)	
 Group	TechnicView_Node2	(All)	
 Group	TechnicView_Node3	(All)
 Group	TechnicView_Node4	(All)	
@@ -19,7 +18,7 @@ Group	GraphTemp_accoppiata_interno_esterno	(All)
 Group	GF_Consumi_Chart	(All)	
 Group	GF_TempTermocaminoBoiler	(All)	
 Group	GF_Soggiorno	"Soggiorno"	<video>	(gGF)	
-Group	Luci	(All)	
+Group	GF_Tettoia	"Tettoia"	<video>	(gGF)	
 Group	GF_esterno	"Giardino"	<video>	(gGF)	
 Group	GF_Temperature	"Temperatura - Umidità"	<temperature>	(All)	
 Group	G_TemperaturaSoggiorno	"Soggiorno"	<temperature>	(All)	
@@ -49,6 +48,10 @@ Number	Temperature_GF_Giardino	"Temperatura Giardino [%.1f °C]"	<temperature>	(
 Number	Umidita_GF_Giardino	"Umidità Giardino [%.1f %%]"	<temperature>	(GF_Temperature,G_TemperaturaGiardino,GF_esterno,TechnicView_Node2)		{ souliss="T53:2:2" }
 Number	Temperature_GF_Giardino_Max	"Oggi massima [%.1f °C]"	<temperature>	(G_TemperaturaGiardino)	
 Number	Temperature_GF_Giardino_Min	"Oggi minima [%.1f °C]"	<temperature>	(G_TemperaturaGiardino)	
+Switch	Luce1_Giardino	"Luce 1"	(GF_esterno,TechnicView_Node2)		{ souliss="T11:2:4", autoupdate="false" }
+Switch	Luce2_Giardino	"Luce 2"	(GF_esterno,TechnicView_Node2)		{ souliss="T11:2:5", autoupdate="false" }
+
+
 
 Switch	SwitchPortoncino	"Portoncino"	(rientrocasa,GF_Soggiorno,TechnicView_Node1)		{ souliss="T11:1:6", autoupdate="false" }
 Switch	SwitchCancello	"Cancello"	(rientrocasa,GF_Soggiorno,TechnicView_Node1)		{ souliss="T11:1:7", autoupdate="false" }
@@ -74,19 +77,27 @@ Switch power "Power" (Termostato, TechnicView_Node6) {souliss="T31:6:0:power"}
 Number	Umidita_Termostato	"Umidità Termostato [%.1f %%]"	<temperature>	(Termostato,TechnicView_Node6)		{ souliss="T53:6:7" }
 Dimmer	DisplayBright	"Lum. Display" (Termostato,TechnicView_Node6)		{ souliss="T19:6:9" }
 
-Switch	milight_switch	"Luci divano"	(Luci)		{ milight="bridge1;0" }
-Dimmer	milight_brightness	"Luci divano - intensità"	<slider>	(Luci,GF_Soggiorno)		{ milight="bridge1;0;brightness", autoupdate="false" }
-Switch	milight_NightMode	"Luci divano - night mode"	(Luci,GF_Soggiorno)		{ milight="bridge1;0;nightMode", autoupdate="false" }
-Dimmer	milight_ColorTemp	"Luci divano - colore"	<slider>	(Luci,GF_Soggiorno)		{ milight="bridge1;0;colorTemperature", autoupdate="false" }
+Switch	milight_switch	"Luci divano"	(Luci, GF_Soggiorno)		{ milight="bridge1;0" }
+Dimmer	milight_brightness	"Luci divano - intensità"	<slider>	(Luci,GF_Soggiorno)		{ milight="bridge1;0;brightness"}
+Number milight_brightness_scenes
+Switch	milight_NightMode	"Luci divano - night mode"	(Luci,GF_Soggiorno)		{ milight="bridge1;0;nightMode"}
+Dimmer	milight_ColorTemp	"Luci divano - colore"	<slider>	(Luci,GF_Soggiorno)		{ milight="bridge1;0;colorTemperature"}
+
+Switch	milight_RGB_switch	"Luci tettoia"	(Luci,GF_Tettoia)		{ milight="bridge1;6" }
+Dimmer	milight_RGB_brightness	"Luci tettoia - intensità"	<slider>	(Luci,GF_Tettoia)		{ milight="bridge1;6;brightness;4"}
+Number milight_RBG_brightness_scenes
+Number Light_scene      "Colori"
+Color  milight_RGB_Color "Scene Selector"   <colorwheel> (MiLight)    { milight="bridge1;6;rgb" }
+Switch	milight_RGB_NightMode	"Luci tettoia - night mode"	(Luci,GF_Tettoia)		{ milight="bridge1;6;nightMode"}
 
 Number	HEALTHNodo1_GF_Servizio	"Health Nodo 1 [%1d]"	<keyring>	(Diagnostic,TechnicView_Node1,Health)		{souliss="D98:1:998" }
 Number	HEALTHNodo2_GF_Servizio	"Health Nodo 2 [%1d]"	<keyring>	(Diagnostic,TechnicView_Node2,Health)		{souliss="D98:2:998" }
 Number	HEALTHNodo3_GF_Servizio	"Health Nodo 3 [%1d]"	<keyring>	(Diagnostic,TechnicView_Node3,Health)		{souliss="D98:3:998" }
 Number	HEALTHNodo4_GF_Servizio	"Health Nodo 4 [%1d]"	<keyring>	(Diagnostic,TechnicView_Node4,Health)		{souliss="D98:4:998" }
-Number	HEALTHNodo6_GF_Servizio	"Health Nodo 7 [%1d]"	<keyring>	(Diagnostic,TechnicView_Node6,Health)		{souliss="D98:6:998" }
+Number	HEALTHNodo6_GF_Servizio	"Health Nodo 6 [%1d]"	<keyring>	(Diagnostic,TechnicView_Node6,Health)		{souliss="D98:6:998" }
 
 String	TIMESTAMP_Nodo1_GF_Servizio	"Aggiorn.Nodo1 [%1$td.%1$tm.%1$tY %1$tk:%1$tM:%1$tS]"	<keyring>	(Diagnostic,TechnicView_Node1, G_TemperaturaSoggiorno, GF_Consumi_sitemap)		{ souliss="D99:1:999" }
 String	TIMESTAMP_Nodo2_GF_Servizio	"Aggiorn.Nodo2 [%1$td.%1$tm.%1$tY %1$tk:%1$tM:%1$tS]"	<keyring>	(Diagnostic,TechnicView_Node2, G_TemperaturaGiardino)		{ souliss="D99:2:999" }
 String	TIMESTAMP_Nodo3_GF_Servizio	"Aggiorn.Nodo3 [%1$td.%1$tm.%1$tY %1$tk:%1$tM:%1$tS]"	<keyring>	(Diagnostic,TechnicView_Node3)		{ souliss="D99:3:999" }
 String	TIMESTAMP_Nodo4_GF_Servizio	"Aggiorn.Nodo4 [%1$td.%1$tm.%1$tY %1$tk:%1$tM:%1$tS]"	<keyring>	(Diagnostic,TechnicView_Node4)		{ souliss="D99:4:999" }
-String	TIMESTAMP_Nodo6_GF_Servizio	"Aggiorn.Nodo7 [%1$td.%1$tm.%1$tY %1$tk:%1$tM:%1$tS]"	<keyring>	(Diagnostic,TechnicView_Node6)		{ souliss="D99:6:999" }
+String	TIMESTAMP_Nodo6_GF_Servizio	"Aggiorn.Nodo6 [%1$td.%1$tm.%1$tY %1$tk:%1$tM:%1$tS]"	<keyring>	(Diagnostic,TechnicView_Node6)		{ souliss="D99:6:999" }

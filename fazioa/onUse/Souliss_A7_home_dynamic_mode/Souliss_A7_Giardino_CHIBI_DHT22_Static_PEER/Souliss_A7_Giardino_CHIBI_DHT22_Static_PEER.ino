@@ -26,11 +26,19 @@ DHT on PIN 2
 #define	myvNet_supern	Gateway_address
 
 #define PIN_DHT      2
+#define PIN_T11_ONE_IN      3
+#define PIN_T11_TWO_IN      4
+#define PIN_T11_ONE_OUT      5
+#define PIN_T11_TWO_OUT      6
+
 
 #define DHTTYPE DHT22   // DHT 22  
 
 #define TEMPERATURE				0			// This is the memory slot used for the execution of the logic in network_address1
 #define HUMIDITY				2			// This is the memory slot used for the execution of the logic
+#define SLOT_T11_ONE        4
+#define SLOT_T11_TWO        5
+
 #define DEADBAND				0.01		// Deadband value 1%  
 
 // Initialize DHT sensor for normal 8mhz Arduino
@@ -50,7 +58,19 @@ void setup()
   Set_T53(HUMIDITY);
   pinMode(PIN_DHT, INPUT);
 
+
   dht.begin();
+
+  digitalWrite(PIN_T11_ONE_IN, LOW);
+  pinMode(PIN_T11_ONE_IN, INPUT);
+  pinMode(PIN_T11_ONE_OUT, OUTPUT);
+  Set_SimpleLight(SLOT_T11_ONE);
+
+  digitalWrite(PIN_T11_TWO_IN, LOW);
+  pinMode(PIN_T11_TWO_IN, INPUT);
+  pinMode(PIN_T11_TWO_OUT, OUTPUT);
+  Set_SimpleLight(SLOT_T11_TWO);
+
 }
 
 void loop()
@@ -58,6 +78,18 @@ void loop()
 
   EXECUTEFAST() {
     UPDATEFAST();
+
+    FAST_50ms() {   // We process the logic and relevant input and output every 50 milliseconds
+      DigIn(PIN_T11_ONE_IN, Souliss_T1n_ToggleCmd, SLOT_T11_ONE);            // Use the PIN_T11_ONE_IN as ON/OFF toggle command
+      Logic_SimpleLight(SLOT_T11_ONE);                          // Drive the LED as per command
+      DigOut(PIN_T11_ONE_OUT, Souliss_T1n_Coil, SLOT_T11_ONE);                // Use the PIN_T11_ONE_OUT to give power to the LED according to the logic
+
+      DigIn(PIN_T11_TWO_IN, Souliss_T1n_ToggleCmd, SLOT_T11_TWO);            // Use the PIN_T11_TWO_IN as ON/OFF toggle command
+      Logic_SimpleLight(SLOT_T11_TWO);                          // Drive the LED as per command
+      DigOut(PIN_T11_TWO_OUT, Souliss_T1n_Coil, SLOT_T11_TWO);                // Use the PIN_T11_TWO_OUT to give power to the LED according to the logic
+
+    }
+
 
     // Process every 510ms the logic that control the curtain
     FAST_510ms() {
@@ -81,6 +113,9 @@ void loop()
       // Read humidity value from DHT sensor and convert from single-precision to half-precision
       float humidity = dht.readHumidity();
       ImportAnalog(HUMIDITY, &humidity);
+
+      Timer_SimpleLight(SLOT_T11_ONE);
+      Timer_SimpleLight(SLOT_T11_TWO);
     }
   }
 }
