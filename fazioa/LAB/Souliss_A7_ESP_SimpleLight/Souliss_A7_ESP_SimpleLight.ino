@@ -1,11 +1,12 @@
+#define HOST_NAME_INSKETCH
+#define HOST_NAME "Souliss-Power-Socket-1"
+
 /**************************************************************************
-   Souliss - Web Configuration
+Sketch: POWER SOCKET - VER.1 - Souliss - Web Configuration
+Author: Tonino Fazio
 
-    This example demonstrate a complete web configuration of ESP8266 based
-  nodes, the node starts as access point and allow though a web interface
-  the configuration of IP and Souliss parameters.
-
-  This example is only supported on ESP8266.
+ESP Core 1.6.5 Staging 1.6.5-1160-gef26c5f
+ This example is only supported on ESP8266.
 ***************************************************************************/
 #include <ESP8266WiFi.h>
 #include <ESP8266WebServer.h>
@@ -31,6 +32,8 @@
 OTA_Setup();
 void setup()
 {
+  //delay 30 seconds
+  delay(30000);
   Initialize();
 
   // Read the IP configuration from the EEPROM, if not available start
