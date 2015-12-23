@@ -1,0 +1,215 @@
+import org.openhab.core.library.types.*
+import org.openhab.core.persistence.*
+import org.openhab.model.script.actions.*
+
+rule "Media consumo 10 minuti"
+when
+	Time cron "*/10 * * * * ?" or
+	System started
+then
+	postUpdate(Consumo_medio_x_minuti,Consumo_GF_Soggiorno.averageSince(now.minusMinutes(10)).intValue )
+end
+
+rule "Update max and min Temp Giardino"
+when
+	Item Temperature_GF_Giardino changed or
+	Time cron "*/30 * * * * ?" or
+	System started
+then	
+	postUpdate(Temperature_GF_Giardino_Max, Temperature_GF_Giardino.maximumSince(now.toDateMidnight).state)
+	postUpdate(Temperature_GF_Giardino_Min, Temperature_GF_Giardino.minimumSince(now.toDateMidnight).state)
+end
+
+
+rule "Update max and min consumo"
+when
+	Item Consumo_GF_Soggiorno changed or
+	Time cron "*/30 * * * * ?" or
+	System started
+then	
+	postUpdate(Consumo_GF_Soggiorno_Max, Consumo_GF_Soggiorno.maximumSince(now.toDateMidnight).state)
+	postUpdate(Consumo_GF_Soggiorno_Min, Consumo_GF_Soggiorno.minimumSince(now.toDateMidnight).state)
+end
+
+rule "Update max and min Temp Sogg"
+when
+	Item Temperature_GF_Soggiorno changed or
+	Time cron "*/30 * * * * ?" or
+	System started
+then	
+	postUpdate(Temperature_GF_Soggiorno_Max, Temperature_GF_Soggiorno.maximumSince(now.toDateMidnight).state)
+	postUpdate(Temperature_GF_Soggiorno_Min, Temperature_GF_Soggiorno.minimumSince(now.toDateMidnight).state)
+end
+
+
+
+rule "Periodically check presence"
+when
+    Time cron "0 * * * * ?"
+then
+        if (Presence.state == ON)
+        {
+            logInfo("PresenceCheck", "No phone within reach, checking for flapping")
+            if(network.members.filter(s |  s.state == ON ).size == 0) {
+                logInfo("PresenceCheck", "Nobody is at home")
+                sendCommand(Presence, OFF)
+            }
+        }
+end
+
+rule "Coming home"
+when
+        Item network changed
+then
+        if (Presence.state != ON) {
+                if(network.members.filter(s | s.state == ON).size > 0) {
+                        logInfo("PresenceCheck", "Somebody is home")
+                        sendCommand(Presence, ON)
+                }
+        }
+end
+
+rule "Apertura Cancello"
+when
+	Item SwitchCancello received command ON 
+then	
+	sendNotification("fazioa@gmail.com", "Ricevuto. Apertura cancello...")
+	sendNotification("cristinapucci@gmail.com", "Ricevuto. Apertura portoncino...")
+end
+
+rule "Apertura Portoncino"
+when
+	Item SwitchPortoncino received command ON 
+then	
+	sendNotification("fazioa@gmail.com", "Ricevuto. Apertura portoncino...")
+	sendNotification("cristinapucci@gmail.com", "Ricevuto. Apertura portoncino...")
+end
+
+rule "Set Point 65"
+when
+	Item setpoint65 received command ON
+then
+	sendCommand(Temperature_Termocamino_SetPoint, 65)
+end
+
+rule "Set Point 70"
+when
+	Item setpoint70 received command ON
+then
+	sendCommand(Temperature_Termocamino_SetPoint, 70)
+end
+
+rule "Set Point 80"
+when
+	Item setpoint80 received command ON
+then
+	sendCommand(Temperature_Termocamino_SetPoint, 80)
+end
+
+rule "Riscaldamento - Tutto"
+when
+	Item riscaldamento_tutto received update ON 
+then	
+	sendNotification("fazioa@gmail.com", "Riscaldamento - Apertura tutte valvole di zona")
+end
+
+rule "Riscaldamento - Ripristino valvole zona"
+when
+	Item riscaldamento_tutto received update OFF 
+then	
+	sendNotification("fazioa@gmail.com", "Riscaldamento - Ripristino valvole zona valvole di zona")
+end
+
+rule "Acqua <- Solare"
+when
+Item SwitchTermocamino changed and 
+	Item SwitchTermocamino received update OFF 
+then	
+	sendNotification("fazioa@gmail.com", "Acqua <- Solare")
+end
+
+rule "Acqua <- Termocamino"
+when
+	Item SwitchTermocamino changed and 
+	Item SwitchTermocamino received update ON 
+then	
+	sendNotification("fazioa@gmail.com", "Acqua <- Termocamino")
+end
+
+rule "Light Scenes"
+when
+Item Light_scene received command 
+then
+if (receivedCommand==0) { 
+    sendCommand(Light_scene_ColorSelect, new HSBType(new DecimalType(0),new PercentType(0),new PercentType(100)))
+}
+if (receivedCommand==1) { 
+    sendCommand(Light_scene_ColorSelect, new HSBType(new DecimalType(0),new PercentType(100),new PercentType(100)))
+}
+if (receivedCommand==2) { 
+    sendCommand(Light_scene_ColorSelect, new HSBType(new DecimalType(60),new PercentType(100),new PercentType(100)))
+}
+if (receivedCommand==3) { 
+    sendCommand(Light_scene_ColorSelect, new HSBType(new DecimalType(120),new PercentType(100),new PercentType(100)))
+}
+if (receivedCommand==4) { 
+    sendCommand(Light_scene_ColorSelect, new HSBType(new DecimalType(120),new PercentType(100),new PercentType(50)))
+}
+if (receivedCommand==5) { 
+    sendCommand(Light_scene_ColorSelect, new HSBType(new DecimalType(180),new PercentType(100),new PercentType(100)))
+}
+if (receivedCommand==6) { 
+    sendCommand(Light_scene_ColorSelect, new HSBType(new DecimalType(240),new PercentType(100),new PercentType(100)))
+}
+if (receivedCommand==7) { 
+    sendCommand(Light_scene_ColorSelect, new HSBType(new DecimalType(300),new PercentType(100),new PercentType(100)))
+}
+end
+
+rule "Milight Brightness Scenes"
+when
+Item milight_brightness_scenes received command 
+then
+if (receivedCommand==0) { 
+    sendCommand(milight_brightness, new DecimalType(20))
+}
+if (receivedCommand==1) { 
+    sendCommand(milight_brightness,new DecimalType(30))
+}
+if (receivedCommand==2) { 
+    sendCommand(milight_brightness, new DecimalType(50))
+}
+if (receivedCommand==3) { 
+    sendCommand(milight_brightness, new DecimalType(70))
+}
+if (receivedCommand==4) { 
+    sendCommand(milight_brightness, new DecimalType(90))
+}
+if (receivedCommand==5) { 
+    sendCommand(milight_brightness, new DecimalType(100))
+}
+end
+
+rule "Milight RGB Brightness Scenes"
+when
+Item milight_RBG_brightness_scenes received command 
+then
+if (receivedCommand==0) { 
+    sendCommand(milight_RGB_brightness, new DecimalType(20))
+}
+if (receivedCommand==1) { 
+    sendCommand(milight_RGB_brightness,new DecimalType(30))
+}
+if (receivedCommand==2) { 
+    sendCommand(milight_RGB_brightness, new DecimalType(50))
+}
+if (receivedCommand==3) { 
+    sendCommand(milight_RGB_brightness, new DecimalType(70))
+}
+if (receivedCommand==4) { 
+    sendCommand(milight_RGB_brightness, new DecimalType(90))
+}
+if (receivedCommand==5) { 
+    sendCommand(milight_RGB_brightness, new DecimalType(100))
+}
+end
