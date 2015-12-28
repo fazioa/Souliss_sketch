@@ -1,5 +1,5 @@
 #define HOST_NAME_INSKETCH
-#define HOST_NAME "Souliss-Power-Socket-1"
+#define HOST_NAME "Souliss-TEST-1"
 
 /**************************************************************************
 Sketch: POWER SOCKET - VER.1 - Souliss - Web Configuration

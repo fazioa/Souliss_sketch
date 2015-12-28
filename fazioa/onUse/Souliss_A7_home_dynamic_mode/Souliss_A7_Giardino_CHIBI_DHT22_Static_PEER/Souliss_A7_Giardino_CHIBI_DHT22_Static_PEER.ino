@@ -61,14 +61,18 @@ void setup()
 
   dht.begin();
 
-  digitalWrite(PIN_T11_ONE_IN, LOW);
-  pinMode(PIN_T11_ONE_IN, INPUT);
-  pinMode(PIN_T11_ONE_OUT, OUTPUT);
-  Set_SimpleLight(SLOT_T11_ONE);
 
-  digitalWrite(PIN_T11_TWO_IN, LOW);
-  pinMode(PIN_T11_TWO_IN, INPUT);
+  pinMode(PIN_T11_ONE_IN, INPUT_PULLUP);
+  pinMode(PIN_T11_TWO_IN, INPUT_PULLUP);
+  
+
+  pinMode(PIN_T11_ONE_OUT, OUTPUT);
+  digitalWrite(PIN_T11_ONE_OUT, LOW);
+
   pinMode(PIN_T11_TWO_OUT, OUTPUT);
+  digitalWrite(PIN_T11_TWO_OUT, LOW);
+  
+  Set_SimpleLight(SLOT_T11_ONE);
   Set_SimpleLight(SLOT_T11_TWO);
 
 }
@@ -80,11 +84,11 @@ void loop()
     UPDATEFAST();
 
     FAST_50ms() {   // We process the logic and relevant input and output every 50 milliseconds
-      DigIn(PIN_T11_ONE_IN, Souliss_T1n_ToggleCmd, SLOT_T11_ONE);            // Use the PIN_T11_ONE_IN as ON/OFF toggle command
+      LowDigIn(PIN_T11_ONE_IN, Souliss_T1n_ToggleCmd, SLOT_T11_ONE);            // Use the PIN_T11_ONE_IN as ON/OFF toggle command
       Logic_SimpleLight(SLOT_T11_ONE);                          // Drive the LED as per command
       DigOut(PIN_T11_ONE_OUT, Souliss_T1n_Coil, SLOT_T11_ONE);                // Use the PIN_T11_ONE_OUT to give power to the LED according to the logic
 
-      DigIn(PIN_T11_TWO_IN, Souliss_T1n_ToggleCmd, SLOT_T11_TWO);            // Use the PIN_T11_TWO_IN as ON/OFF toggle command
+      LowDigIn(PIN_T11_TWO_IN, Souliss_T1n_ToggleCmd, SLOT_T11_TWO);            // Use the PIN_T11_TWO_IN as ON/OFF toggle command
       Logic_SimpleLight(SLOT_T11_TWO);                          // Drive the LED as per command
       DigOut(PIN_T11_TWO_OUT, Souliss_T1n_Coil, SLOT_T11_TWO);                // Use the PIN_T11_TWO_OUT to give power to the LED according to the logic
 

@@ -8,7 +8,6 @@
 #include "conf/ethW5100.h"                  // Ethernet through Wiznet W5100
 #include "conf/Gateway.h"                   // The main node is the Gateway, we have just one node
 #include "conf/Webhook.h"                   // Enable DHCP and DNS
-//#include "conf/SmallNetwork.h"                   // The main node is the Gateway, we have just one node
 #include "conf/DynamicAddressing.h"         // Use dynamic address
 
 #include <SPI.h>
