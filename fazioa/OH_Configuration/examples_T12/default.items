@@ -1,0 +1,24 @@
+Group All
+Group gGF 		(All)
+
+
+Group TechnicView_Node2 	(All)
+Group Diagnostic 	(All)
+Group Health (All)
+
+Switch SwitchAutoMode   "T12"       (GF_Soggiorno, TechnicView_Node2) {souliss="T12:2:0", autoupdate="false"}
+Switch SwitchAutoMode_setup     "Auto"      (GF_Soggiorno, TechnicView_Node2) {souliss="T12:2:0:automode", autoupdate="false"}
+
+Number	HEALTHNodo1_GF_Servizio	"Health Nodo 1 [%1d]"	<keyring>	(Diagnostic,TechnicView_Node1,G_Health)		{souliss="D98:1:998" }
+Number	HEALTHNodo2_GF_Servizio	"Health Nodo 2 [%1d]"	<keyring>	(Diagnostic,TechnicView_Node2,G_Health)		{souliss="D98:2:998" }
+Number	HEALTHNodo3_GF_Servizio	"Health Nodo 3 [%1d]"	<keyring>	(Diagnostic,TechnicView_Node3,G_Health)		{souliss="D98:3:998" }
+Number	HEALTHNodo4_GF_Servizio	"Health Nodo 4 [%1d]"	<keyring>	(Diagnostic,TechnicView_Node4,G_Health)		{souliss="D98:4:998" }
+Number	HEALTHNodo6_GF_Servizio	"Health Nodo 6 [%1d]"	<keyring>	(Diagnostic,TechnicView_Node6,G_Health)		{souliss="D98:6:998" }
+Number	HEALTHNodo5_GF_Servizio	"Health Nodo 5 [%1d]"	<keyring>	(Diagnostic,TechnicView_Node11,G_Health)		{souliss="D98:5:998" }
+
+String	TIMESTAMP_Nodo1_GF_Servizio	"Aggiorn.Nodo1 [%1$td.%1$tm.%1$tY %1$tk:%1$tM:%1$tS]"	<keyring>	(Diagnostic,TechnicView_Node1, G_TemperaturaSoggiorno, G_Sitemap_Consumi)		{ souliss="D99:1:999" }
+String	TIMESTAMP_Nodo2_GF_Servizio	"Aggiorn.Nodo2 [%1$td.%1$tm.%1$tY %1$tk:%1$tM:%1$tS]"	<keyring>	(Diagnostic,TechnicView_Node2, G_TemperaturaGiardino)		{ souliss="D99:2:999" }
+String	TIMESTAMP_Nodo3_GF_Servizio	"Aggiorn.Nodo3 [%1$td.%1$tm.%1$tY %1$tk:%1$tM:%1$tS]"	<keyring>	(Diagnostic,TechnicView_Node3)		{ souliss="D99:3:999" }
+String	TIMESTAMP_Nodo4_GF_Servizio	"Aggiorn.Nodo4 [%1$td.%1$tm.%1$tY %1$tk:%1$tM:%1$tS]"	<keyring>	(Diagnostic,TechnicView_Node4, G_Sitemap_Fotovoltaico)		{ souliss="D99:4:999" }
+String	TIMESTAMP_Nodo6_GF_Servizio	"Aggiorn.Nodo6 [%1$td.%1$tm.%1$tY %1$tk:%1$tM:%1$tS]"	<keyring>	(Diagnostic,TechnicView_Node6)		{ souliss="D99:6:999" }
+String	TIMESTAMP_Nodo5_GF_Servizio	"Aggiorn.Nodo5 [%1$td.%1$tm.%1$tY %1$tk:%1$tM:%1$tS]"	<keyring>	(Diagnostic, TechnicView_Node11)		{ souliss="D99:5:999" }9"}
