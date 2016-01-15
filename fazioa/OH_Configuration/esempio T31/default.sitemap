@@ -1,0 +1,15 @@
+﻿sitemap tonino label="Main Menu"
+{
+	
+	Frame label="Diagnostica e Vista Tecnica" {
+		Setpoint item=Temperature_2F_Living_SP step=0.3 minValue=5 maxValue=90
+		Slider item=display step=10 minValue=0 maxValue=100
+
+		Group item=Diagnostic label="Salute ed aggiornamenti" icon="icon16x16"
+		Text label="Struttura Nodi" icon="icon16x16"  {	
+			Group item=TechnicView_Node0 label="Nodo 1" icon="icon16x16"
+			Group item=TechnicView_Node1 label="Nodo 2" icon="icon16x16"
+		}
+	}
+}
+
