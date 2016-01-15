@@ -1,0 +1,22 @@
+sitemap tonino label="Illuminazione"
+{
+
+Frame label="Divano"  {
+	Switch item=milight_switch label="Interruttore" mappings=[OFF="Spegni", ON="Accendi"]
+	Selection item=milight_brightness_scenes label="Intensità" mappings=[1="10%", 2="30%", 3="50%", 4="70%", 5="80%", 6="100%"]
+	Slider item=milight_ColorTemp  
+	Switch item=milight_NightMode mappings=[ON="Night"]
+}
+Frame label="Giardino"  {
+	Switch item=Luce1_Giardino mappings=[OFF="Spegni", ON="Accendi"]
+	Switch item=Luce2_Giardino mappings=[OFF="Spegni", ON="Accendi"]
+}
+
+Frame label="Tettoia"  {
+	Switch item=milight_RGB_switch label="Interruttore" mappings=[OFF="Spegni", ON="Accendi"]
+	Selection item=milight_RBG_brightness_scenes label="Intensità" mappings=[0="20%", 1="30%", 2="50%", 3="70%", 4="90%", 5="100%"]
+	Color item=milight_RGB_Color  
+	Selection item=Light_scene mappings=[0="weiß", 1="rot", 2="gelb", 3="grün", 4="dunkelgrün", 5="cyan", 6="blau", 7="magenta"]
+	Switch item=milight_RGB_NightMode mappings=[ON="Night"]
+}
+}
