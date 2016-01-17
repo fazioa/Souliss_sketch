@@ -1,9 +1,11 @@
-//NODO Test T12
-//AUTORE: Antonino Fazio - giugno 2015
-
-
+/**************************************************************************
+    Souliss
+    
+  NODE:
+  Typical 12 : ON/OFF Digital Output with AUTO mode
+***************************************************************************/
+  
 #include "bconf/Chibiduino_v1.h"			// Use a Chibiduino 2.4 GHz wireless board
-#include "conf/SmallNetwork.h"                   // The main node is the Gateway, we have just one node
 
 #include "Souliss.h"
 #include "Typicals.h"
@@ -18,7 +20,7 @@
 // Define the network configuration according to your router settingsuration according to your router settings
 #define	Gateway_address	0x6511				// The Gateway node has two address, one on the Ethernet side 69				// The Gateway node has two address, one on the Ethernet side
 // and the other on the wireless oneless one
-#define	Peer_address	0x6514
+#define	Peer_address	0x6513
 #define	myvNet_subnet	0xFF00
 #define	myvNet_supern	Gateway_address
 
@@ -46,7 +48,7 @@ void loop()
     FAST_50ms() {
       DigIn(PIN_auto,9,SLOT_T12);
       Logic_T12(SLOT_T12);
-      nLowDigOut(PIN_OUT, Souliss_T1n_Coil & Souliss_T1n_AutoOnCoil, SLOT_T12);
+      nDigOut(PIN_OUT, Souliss_T1n_Coil & Souliss_T1n_AutoOnCoil, SLOT_T12);
 //      LowDigOut(PIN_OUT, Souliss_T1n_AutoOnCoil , SLOT_T12);
   }
     // Process the communication
