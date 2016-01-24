@@ -29,7 +29,7 @@ uint8_t ip_gateway[4]  = {192, 168, 1, 1};
 #define chibi_bridge_address    0x6511 //gateway
 #define peer_chibi_address_termocamino	0x6512 //termocamino
 #define peer_chibi_address_giardino	0x6513 //giardino
-#define peer_chibi_address_4	0x6514 //tende - DA USARE ANCORA...
+#define peer_chibi_address_fotovoltaico	0x6514 //fotovoltaico
 #define peer_chibi_address_soggiorno  0x0010 //soggiorno
 
 void setup()
@@ -45,7 +45,7 @@ void setup()
   SetAsPeerNode(peer_chibi_address_soggiorno, 1);
   SetAsPeerNode(peer_chibi_address_giardino, 2);
   SetAsPeerNode(peer_chibi_address_termocamino, 3);
-  SetAsPeerNode(peer_chibi_address_4, 4);
+  SetAsPeerNode(peer_chibi_address_fotovoltaico, 4);
   
   // This node will serve all the others in the network providing an address
   SetAddressingServer();
