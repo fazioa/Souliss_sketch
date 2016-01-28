@@ -13,6 +13,8 @@ ESP Core 1.6.5 Staging 1.6.5-1160-gef26c5f
 #include <ESP8266mDNS.h>
 #include <EEPROM.h>
 #include <WiFiUdp.h>
+#include "Adafruit_MQTT.h"
+#include "Adafruit_MQTT_Client.h"
 
 // Configure the Souliss framework
 #include "bconf/MCU_ESP8266.h"              // Load the code directly on the ESP8266
@@ -24,6 +26,41 @@ ESP Core 1.6.5 Staging 1.6.5-1160-gef26c5f
 #include "DHT.h"
 //*************************************************************************
 //*************************************************************************
+
+/************************* Adafruit.io Setup *********************************/
+
+//#define AIO_SERVER      "io.adafruit.com"
+//#define AIO_SERVERPORT  1883
+//#define AIO_USERNAME    "...your AIO username (see https://accounts.adafruit.com)..."
+#define AIO_USERNAME    "ESP8266"
+//#define AIO_KEY         "...your AIO key..."
+
+/************************* iot.eclipse.org Setup *********************************/
+#define AIO_SERVER      "192.168.1.121"
+#define AIO_SERVERPORT  1883
+
+// Store the MQTT server, client ID, username, and password in flash memory.
+// This is required for using the Adafruit MQTT library.
+//const char MQTT_SERVER[] PROGMEM    = AIO_SERVER;
+// Set a unique MQTT client ID using the AIO key + the date and time the sketch
+// was compiled (so this should be unique across multiple devices for a user,
+// alternatively you can manually set this to a GUID or other random value).
+//const char MQTT_CLIENTID[] PROGMEM  = __TIME__ AIO_USERNAME;
+//const char MQTT_CLIENTID[] PROGMEM  = __TIME__;
+const char MQTT_USERNAME[] PROGMEM  = AIO_USERNAME;
+const char MQTT_PASSWORD[] PROGMEM  = "";
+
+const char MQTT_CLIENTID[] PROGMEM  = __TIME__ AIO_USERNAME;
+const char MQTT_SERVER[] PROGMEM    = AIO_SERVER;
+
+// Create an ESP8266 WiFiClient class to connect to the MQTT server.
+WiFiClient client;
+// Setup the MQTT client class by passing in the WiFi client and MQTT server and login details.
+Adafruit_MQTT_Client mqtt(&client, MQTT_SERVER, AIO_SERVERPORT, MQTT_CLIENTID, MQTT_USERNAME, MQTT_PASSWORD);
+Adafruit_MQTT_Publish MQTTtemperature = Adafruit_MQTT_Publish(&mqtt, "/feeds/temperature");
+Adafruit_MQTT_Publish MQTTrelay0 = Adafruit_MQTT_Publish(&mqtt, "/feeds/relay0");
+
+
 
 #define SLOT_RELAY_0 0
 #define SLOT_TEMPERATURE        1     // This is the memory slot used for the execution of the logic in network_address1
@@ -61,10 +98,11 @@ DHT dht(PIN_DHT, DHTTYPE, 2);
 OTA_Setup();
 void setup()
 {
+  Serial.begin(115200);
   //delay 30 seconds
   delay(15000);
   Initialize();
-
+  Serial.println(F("Inizialize OK"));
   // Read the IP configuration from the EEPROM, if not available start
   // the node as access point
   if (!ReadIPConfiguration())
@@ -72,12 +110,14 @@ void setup()
     // Start the node as access point with a configuration WebServer
     SetAccessPoint();
     startWebServer();
+    Serial.println(F("startWebServer OK"));
     // We have nothing more than the WebServer for the configuration
     // to run, once configured the node will quit this.
     while (1)
     {
       yield();
       runWebServer();
+      Serial.println(F("runWebServer"));
     }
 
   }
@@ -87,6 +127,7 @@ void setup()
     // Connect to the WiFi network and get an address from DHCP
     SetAsGateway(myvNet_dhcp);       // Set this node as gateway for SoulissApp
     SetAddressingServer();
+    Serial.println(F("SetAsGateway OK"));
   }
   else
   {
@@ -94,6 +135,7 @@ void setup()
     // to configure any parameter here.
     SetDynamicAddressing();
     GetAddress();
+    Serial.println(F("SetAsPeer OK"));
   }
 
   //*************************************************************************
@@ -131,15 +173,18 @@ void setup()
   pinMode(PIN_13, OUTPUT);    // Relè
   //  pinMode(PIN_15, OUTPUT);    // Relè
 
-
+  Serial.println(F("Set Typical OK"));
   // Init the OTA
   OTA_Init();
+  Serial.println(F("OTA_Init OK"));
 }
 
 void loop()
 {
   EXECUTEFAST() {
     UPDATEFAST();
+
+    MQTT_connect();
 
     FAST_50ms() {
       DigIn2State(PIN_14, Souliss_T1n_ToggleCmd, Souliss_T1n_ToggleCmd, SLOT_RELAY_0);
@@ -202,6 +247,12 @@ void loop()
       float humidity = dht.readHumidity();
       ImportAnalog(SLOT_HUMIDITY, &humidity);
 
+      if (!MQTTtemperature.publish(temperature)) {
+        Serial.println(F("Failed"));
+      } else {
+        Serial.print(".publish(temperature): "); Serial.println(temperature);
+      }
+
     }
     // If running as Peer
     if (!IsRuntimeGateway())
@@ -211,4 +262,23 @@ void loop()
   OTA_Process();
 }
 
+// Function to connect and reconnect as necessary to the MQTT server.
+// Should be called in the loop function and it will take care if connecting.
+void MQTT_connect() {
+  int8_t ret;
 
+  // Stop if already connected.
+  if (mqtt.connected()) {
+    return;
+  }
+
+  Serial.print("Connecting to MQTT... ");
+
+  while ((ret = mqtt.connect()) != 0) { // connect will return 0 for connected
+    Serial.println(mqtt.connectErrorString(ret));
+    Serial.println("Retrying MQTT connection in 5 seconds...");
+    mqtt.disconnect();
+    delay(5000);  // wait 5 seconds
+  }
+  Serial.println("MQTT Connected!");
+}
