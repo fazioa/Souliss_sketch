@@ -9,6 +9,7 @@ ESP Core 1.6.5 Staging 1.6.5-1160-gef26c5f
  This example is only supported on ESP8266.
 ***************************************************************************/
 #include <ESP8266WiFi.h>
+#include <PubSubClient.h>
 #include <ESP8266WebServer.h>
 #include <ESP8266mDNS.h>
 #include <EEPROM.h>
@@ -23,6 +24,24 @@ ESP Core 1.6.5 Staging 1.6.5-1160-gef26c5f
 #include "Souliss.h"
 #include "DHT.h"
 //*************************************************************************
+//Configure MQTT Server
+const char* mqtt_server = "iot.eclipse.org";
+char* MQTT_TOPIC_TOP = "ESP8266/MEMBER/DVES_";
+char* MQTT_TEMP = "/TEMP/";
+
+String mqtt_id;
+String mqtt_path;
+
+
+
+uint8_t MAC_array[6];
+char MAC_char[18];
+
+
+
+WiFiClient espClient;
+PubSubClient client(espClient);
+char msg[50];
 //*************************************************************************
 
 #define SLOT_RELAY_0 0
@@ -61,6 +80,7 @@ DHT dht(PIN_DHT, DHTTYPE, 2);
 OTA_Setup();
 void setup()
 {
+  Serial.begin(115200);
   //delay 30 seconds
   delay(15000);
   Initialize();
@@ -87,6 +107,7 @@ void setup()
     // Connect to the WiFi network and get an address from DHCP
     SetAsGateway(myvNet_dhcp);       // Set this node as gateway for SoulissApp
     SetAddressingServer();
+    Serial.println("Gateway Mode");
   }
   else
   {
@@ -94,6 +115,7 @@ void setup()
     // to configure any parameter here.
     SetDynamicAddressing();
     GetAddress();
+    Serial.println("Peer Mode");
   }
 
   //*************************************************************************
@@ -130,8 +152,23 @@ void setup()
   digitalWrite(PIN_13, LOW);
   pinMode(PIN_13, OUTPUT);    // Relè
   //  pinMode(PIN_15, OUTPUT);    // Relè
+  Serial.println("Set pins OK");
 
+  //Init MQTT Client
+  client.setServer(mqtt_server, 1883);
+  client.setCallback(callback);
+  Serial.println("Set MQTT Server OK");
 
+  WiFi.macAddress(MAC_array);
+  //example: if mac address is 5C:CF:7F:0A:23:26 it retrieve ID 0A:23:26
+  for (int i = 3; i < sizeof(MAC_array); ++i) {
+    sprintf(MAC_char, "%s%02x", MAC_char, MAC_array[i]);
+  }
+  mqtt_id = MAC_char;
+  Serial.print("mqtt_id: "); Serial.println(mqtt_id);
+
+  mqtt_path = MQTT_TOPIC_TOP + mqtt_id;
+  Serial.print("MQTT Path: "); Serial.println(mqtt_path);
   // Init the OTA
   OTA_Init();
 }
@@ -140,6 +177,13 @@ void loop()
 {
   EXECUTEFAST() {
     UPDATEFAST();
+
+    FAST_710ms() {
+      if (!client.connected()) {
+        reconnect();
+      }
+      client.loop();
+    }
 
     FAST_50ms() {
       DigIn2State(PIN_14, Souliss_T1n_ToggleCmd, Souliss_T1n_ToggleCmd, SLOT_RELAY_0);
@@ -192,11 +236,26 @@ void loop()
 
   EXECUTESLOW() {
     UPDATESLOW();
+
     SLOW_10s() {  // Process the timer every 10 seconds
       Timer_SimpleLight(SLOT_RELAY_0);
       // Read temperature value from DHT sensor and convert from single-precision to half-precision
       float temperature = dht.readTemperature();
       ImportAnalog(SLOT_TEMPERATURE, &temperature);
+
+      //snprintf(mqtt_path, 100, "test");
+
+      String sTopic = mqtt_path + MQTT_TEMP;
+
+      char charBuf[sTopic.length()];
+      sTopic.toCharArray(charBuf, sTopic.length());
+
+      Serial.print("Publish message: ");
+      Serial.print(sTopic + ": "); Serial.println(temperature);
+      Serial.println("");
+      sprintf(msg, "%f", temperature);
+      //client.publish(charBuf, msg);
+      client.publish("TEST", "tempxxx");
 
       // Read humidity value from DHT sensor and convert from single-precision to half-precision
       float humidity = dht.readHumidity();
@@ -211,4 +270,44 @@ void loop()
   OTA_Process();
 }
 
+
+void callback(char* topic, byte* payload, unsigned int length) {
+  Serial.print("Message arrived [");
+  Serial.print(topic);
+  Serial.print("] ");
+  for (int i = 0; i < length; i++) {
+    Serial.print((char)payload[i]);
+  }
+  Serial.println();
+
+  // Switch on the LED if an 1 was received as first character
+  if ((char)payload[0] == '1') {
+    digitalWrite(BUILTIN_LED, LOW);   // Turn the LED on (Note that LOW is the voltage level
+    // but actually the LED is on; this is because
+    // it is acive low on the ESP-01)
+  } else {
+    digitalWrite(BUILTIN_LED, HIGH);  // Turn the LED off by making the voltage HIGH
+  }
+
+}
+
+void reconnect() {
+  // Loop until we're reconnected
+  // while (!client.connected()) {
+  Serial.print("Attempting MQTT connection...");
+  // Attempt to connect
+  if (client.connect("ESP8266Client")) {
+    Serial.println("connected");
+    // Once connected, publish an announcement...
+    // client.publish("outTopic", "hello world");
+    // ... and resubscribe
+    client.subscribe("RELAY");
+  } else {
+    Serial.print("failed, rc=");
+    Serial.print(client.state());
+    Serial.println(" try again in 5 seconds");
+    // Wait 5 seconds before retrying
+    //delay(5000);
+  }
+}
 
