@@ -28,38 +28,38 @@ ESP Core 1.6.5 Staging 1.6.5-1160-gef26c5f
 //*************************************************************************
 
 /************************* Adafruit.io Setup *********************************/
-
-//#define AIO_SERVER      "io.adafruit.com"
-//#define AIO_SERVERPORT  1883
-//#define AIO_USERNAME    "...your AIO username (see https://accounts.adafruit.com)..."
-#define AIO_USERNAME    "ESP8266"
-//#define AIO_KEY         "...your AIO key..."
-
-/************************* iot.eclipse.org Setup *********************************/
-#define AIO_SERVER      "192.168.1.121"
+#define AIO_SERVER      "io.adafruit.com"
 #define AIO_SERVERPORT  1883
+#include "user.h"
 
-// Store the MQTT server, client ID, username, and password in flash memory.
-// This is required for using the Adafruit MQTT library.
-//const char MQTT_SERVER[] PROGMEM    = AIO_SERVER;
-// Set a unique MQTT client ID using the AIO key + the date and time the sketch
-// was compiled (so this should be unique across multiple devices for a user,
-// alternatively you can manually set this to a GUID or other random value).
-//const char MQTT_CLIENTID[] PROGMEM  = __TIME__ AIO_USERNAME;
-//const char MQTT_CLIENTID[] PROGMEM  = __TIME__;
-const char MQTT_USERNAME[] PROGMEM  = AIO_USERNAME;
-const char MQTT_PASSWORD[] PROGMEM  = "";
-
-const char MQTT_CLIENTID[] PROGMEM  = __TIME__ AIO_USERNAME;
-const char MQTT_SERVER[] PROGMEM    = AIO_SERVER;
+/************ Global State (you don't need to change this!) ******************/
 
 // Create an ESP8266 WiFiClient class to connect to the MQTT server.
 WiFiClient client;
+
+// Store the MQTT server, client ID, username, and password in flash memory.
+// This is required for using the Adafruit MQTT library.
+const char MQTT_SERVER[] PROGMEM    = AIO_SERVER;
+// Set a unique MQTT client ID using the AIO key + the date and time the sketch
+// was compiled (so this should be unique across multiple devices for a user,
+// alternatively you can manually set this to a GUID or other random value).
+const char MQTT_CLIENTID[] PROGMEM  = __TIME__ AIO_USERNAME;
+const char MQTT_USERNAME[] PROGMEM  = AIO_USERNAME;
+const char MQTT_PASSWORD[] PROGMEM  = AIO_KEY;
+
 // Setup the MQTT client class by passing in the WiFi client and MQTT server and login details.
 Adafruit_MQTT_Client mqtt(&client, MQTT_SERVER, AIO_SERVERPORT, MQTT_CLIENTID, MQTT_USERNAME, MQTT_PASSWORD);
-Adafruit_MQTT_Publish MQTTtemperature = Adafruit_MQTT_Publish(&mqtt, "/feeds/temperature");
-Adafruit_MQTT_Publish MQTTrelay0 = Adafruit_MQTT_Publish(&mqtt, "/feeds/relay0");
 
+/****************************** Feeds ***************************************/
+
+// Setup a feed called 'photocell' for publishing.
+// Notice MQTT paths for AIO follow the form: <username>/feeds/<feedname>
+const char PHOTOCELL_FEED[] PROGMEM = AIO_USERNAME "/feeds/temperature";
+Adafruit_MQTT_Publish MQTTtemperature = Adafruit_MQTT_Publish(&mqtt, PHOTOCELL_FEED);
+
+// Setup a feed called 'onoff' for subscribing to changes.
+const char ONOFF_FEED[] PROGMEM = AIO_USERNAME "/feeds/relay0";
+Adafruit_MQTT_Subscribe MQTTrelay0 = Adafruit_MQTT_Subscribe(&mqtt, ONOFF_FEED);
 
 
 #define SLOT_RELAY_0 0
@@ -177,16 +177,47 @@ void setup()
   // Init the OTA
   OTA_Init();
   Serial.println(F("OTA_Init OK"));
+
+  // Setup MQTT subscription for onoff feed.
+  mqtt.subscribe(&MQTTrelay0);
 }
 
 void loop()
 {
+
   EXECUTEFAST() {
     UPDATEFAST();
+    FAST_9110ms() {
+      // Ensure the connection to the MQTT server is alive (this will make the first
+      // connection and automatically reconnect when disconnected).  See the MQTT_connect
+      // function definition further below.
+      MQTT_connect();
+    }
 
-    MQTT_connect();
+    FAST_1110ms() {
+      // this is our 'wait for incoming subscription packets' busy subloop
+      Adafruit_MQTT_Subscribe *subscription;
+      while ((subscription = mqtt.readSubscription(1000))) {
+        if (subscription == &MQTTrelay0) {
+          Serial.print(F("Got: "));
+          Serial.println((char *)MQTTrelay0.lastread);
+          // convert mqtt ascii payload to int
+
+          Serial.print("MQTTrelay0.lastread: "); Serial.println((char*) MQTTrelay0.lastread);
+
+          if (strcmp( (char *)MQTTrelay0.lastread, "ON")) {
+            Serial.println("Set Souliss Relay ON");
+            mInput(SLOT_RELAY_0) = Souliss_T1n_OnCmd;
+          } else if (strcmp( (char *)MQTTrelay0.lastread, "OFF")) {
+            Serial.println("Set Souliss Relay OFF");
+            mInput(SLOT_RELAY_0) = Souliss_T1n_OffCmd;
+          }
+        }
+      }
+    }
 
     FAST_50ms() {
+
       DigIn2State(PIN_14, Souliss_T1n_ToggleCmd, Souliss_T1n_ToggleCmd, SLOT_RELAY_0);
       Logic_SimpleLight(SLOT_RELAY_0);
       PulseDigOut(PIN_12, Souliss_T1n_OnCoil, SLOT_RELAY_0);
@@ -247,11 +278,16 @@ void loop()
       float humidity = dht.readHumidity();
       ImportAnalog(SLOT_HUMIDITY, &humidity);
 
-      if (!MQTTtemperature.publish(temperature)) {
+      // Now we can publish stuff!
+      Serial.print(F("\nSending temperature val "));
+      Serial.print(temperature);
+      Serial.print("...");
+      if (! MQTTtemperature.publish(temperature)) {
         Serial.println(F("Failed"));
       } else {
-        Serial.print(".publish(temperature): "); Serial.println(temperature);
+        Serial.println(F("OK!"));
       }
+
 
     }
     // If running as Peer
