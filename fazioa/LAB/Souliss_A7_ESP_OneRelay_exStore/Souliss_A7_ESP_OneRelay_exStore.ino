@@ -52,41 +52,29 @@ Adafruit_MQTT_Client mqtt(&client, MQTT_SERVER, AIO_SERVERPORT, MQTT_CLIENTID, M
 
 /****************************** Feeds ***************************************/
 
-// Setup a feed called 'photocell' for publishing.
+// Setup a feed for publishing.
 // Notice MQTT paths for AIO follow the form: <username>/feeds/<feedname>
-const char PHOTOCELL_FEED[] PROGMEM = AIO_USERNAME "/feeds/temperature";
-Adafruit_MQTT_Publish MQTTtemperature = Adafruit_MQTT_Publish(&mqtt, PHOTOCELL_FEED);
+const char TEMPERATURE_FEED[] PROGMEM = AIO_USERNAME "/feeds/temperature";
+Adafruit_MQTT_Publish MQTTtemperature = Adafruit_MQTT_Publish(&mqtt, TEMPERATURE_FEED);
 
 // Setup a feed called 'onoff' for subscribing to changes.
 const char ONOFF_FEED[] PROGMEM = AIO_USERNAME "/feeds/relay0";
-Adafruit_MQTT_Subscribe MQTTrelay0 = Adafruit_MQTT_Subscribe(&mqtt, ONOFF_FEED);
+Adafruit_MQTT_Subscribe MQTTrelay0_toRead = Adafruit_MQTT_Subscribe(&mqtt, ONOFF_FEED);
+Adafruit_MQTT_Publish MQTTrelay0 = Adafruit_MQTT_Publish(&mqtt, ONOFF_FEED);
 
+boolean bFlag_writeSwitchState = false;
+U8 lastVal;
 
 #define SLOT_RELAY_0 0
 #define SLOT_TEMPERATURE        1     // This is the memory slot used for the execution of the logic in network_address1
 #define SLOT_HUMIDITY        3     // This is the memory slot used for the execution of the logic
 //#define SLOT_RELAY_1 1
-//#define SLOT_RELAY_2 2
-//#define SLOT_RELAY_3 3
-//#define SLOT_RELAY_4 4
-//#define SLOT_RELAY_5 5
-//#define SLOT_RELAY_6 6
-//#define SLOT_RELAY_7 7
-//#define SLOT_RELAY_8 8
-//#define SLOT_RELAY_9 9
-
-
-//#define PIN_0 0
 //#define PIN_2 2
-//#define PIN_4 4
-//#define PIN_5 5
+
 #define PIN_14 14
-//#define PIN_16 16
-//
-//#define PIN_1 1
 #define PIN_12 12
 #define PIN_13 13
-//#define PIN_15 15
+
 
 #define PIN_DHT      16
 #define DHTTYPE DHT22   // DHT 22 
@@ -117,8 +105,7 @@ void setup()
     {
       yield();
       runWebServer();
-      Serial.println(F("runWebServer"));
-    }
+     }
 
   }
 
@@ -146,32 +133,16 @@ void setup()
   pinMode(PIN_DHT, INPUT);
   dht.begin();
   // Set_SimpleLight(SLOT_RELAY_1);
-  // Set_SimpleLight(SLOT_RELAY_2);
-  // Set_SimpleLight(SLOT_RELAY_3);
-  //  Set_SimpleLight(SLOT_RELAY_4);
-  //  Set_SimpleLight(SLOT_RELAY_5);
-
-  //  Set_SimpleLight(SLOT_RELAY_6);
-  // Set_SimpleLight(SLOT_RELAY_7);
-  // Set_SimpleLight(SLOT_RELAY_8);
-  //  Set_SimpleLight(SLOT_RELAY_9);
 
   // Define output pins
-  //  pinMode(PIN_0, OUTPUT);    // Relè
   //  pinMode(PIN_2, OUTPUT);    // Relè
-  //  pinMode(PIN_4, OUTPUT);    // Relè
-  //  pinMode(PIN_5, OUTPUT);    // Relè
-  pinMode(PIN_14, INPUT_PULLUP);    // Relè
 
-  //  pinMode(PIN_16, OUTPUT);    // Relè
-  //
-  //  pinMode(PIN_1, OUTPUT);    // Relè
+  pinMode(PIN_14, INPUT_PULLUP);    // Relè
 
   digitalWrite(PIN_12, LOW);
   pinMode(PIN_12, OUTPUT);    // Relè
   digitalWrite(PIN_13, LOW);
   pinMode(PIN_13, OUTPUT);    // Relè
-  //  pinMode(PIN_15, OUTPUT);    // Relè
 
   Serial.println(F("Set Typical OK"));
   // Init the OTA
@@ -179,7 +150,7 @@ void setup()
   Serial.println(F("OTA_Init OK"));
 
   // Setup MQTT subscription for onoff feed.
-  mqtt.subscribe(&MQTTrelay0);
+  mqtt.subscribe(&MQTTrelay0_toRead);
 }
 
 void loop()
@@ -198,17 +169,15 @@ void loop()
       // this is our 'wait for incoming subscription packets' busy subloop
       Adafruit_MQTT_Subscribe *subscription;
       while ((subscription = mqtt.readSubscription(1000))) {
-        if (subscription == &MQTTrelay0) {
+        if (subscription == &MQTTrelay0_toRead) {
           Serial.print(F("Got: "));
-          Serial.println((char *)MQTTrelay0.lastread);
-          // convert mqtt ascii payload to int
+          Serial.println((char *)MQTTrelay0_toRead.lastread);
+          Serial.print("MQTTrelay0_toRead.lastread: "); Serial.println((char*) MQTTrelay0_toRead.lastread);
 
-          Serial.print("MQTTrelay0.lastread: "); Serial.println((char*) MQTTrelay0.lastread);
-
-          if (strcmp( (char *)MQTTrelay0.lastread, "ON")) {
+          if (!strcmp( (char *)MQTTrelay0_toRead.lastread, "ON")) {
             Serial.println("Set Souliss Relay ON");
             mInput(SLOT_RELAY_0) = Souliss_T1n_OnCmd;
-          } else if (strcmp( (char *)MQTTrelay0.lastread, "OFF")) {
+           } else if (!strcmp( (char *)MQTTrelay0_toRead.lastread, "OFF")) {
             Serial.println("Set Souliss Relay OFF");
             mInput(SLOT_RELAY_0) = Souliss_T1n_OffCmd;
           }
@@ -216,9 +185,12 @@ void loop()
       }
     }
 
+
     FAST_50ms() {
 
       DigIn2State(PIN_14, Souliss_T1n_ToggleCmd, Souliss_T1n_ToggleCmd, SLOT_RELAY_0);
+
+      Logic_SimpleLight_MQTT(MQTTrelay0, SLOT_RELAY_0, &data_changed);
       Logic_SimpleLight(SLOT_RELAY_0);
       PulseDigOut(PIN_12, Souliss_T1n_OnCoil, SLOT_RELAY_0);
       PulseDigOut(PIN_13, Souliss_T1n_OffCoil, SLOT_RELAY_0);
@@ -226,31 +198,6 @@ void loop()
       //
       //      Logic_SimpleLight(SLOT_RELAY_1);
       //      DigOut(PIN_2, Souliss_T1n_Coil, SLOT_RELAY_1);
-      //
-      //      Logic_SimpleLight(SLOT_RELAY_2);
-      //      DigOut(PIN_4, Souliss_T1n_Coil, SLOT_RELAY_2);
-      //
-      //      Logic_SimpleLight(SLOT_RELAY_3);
-      //      DigOut(PIN_5, Souliss_T1n_Coil, SLOT_RELAY_3);
-      //
-      //      Logic_SimpleLight(SLOT_RELAY_4);
-      //      DigOut(PIN_14, Souliss_T1n_Coil, SLOT_RELAY_4);
-      //
-      //      Logic_SimpleLight(SLOT_RELAY_5);
-      //      DigOut(PIN_16, Souliss_T1n_Coil, SLOT_RELAY_5);
-      //
-      //      Logic_SimpleLight(SLOT_RELAY_6);
-      //      DigOut(PIN_1, Souliss_T1n_Coil, SLOT_RELAY_6);
-      //
-      //      Logic_SimpleLight(SLOT_RELAY_7);
-      //      DigOut(PIN_12, Souliss_T1n_Coil, SLOT_RELAY_7);
-      //
-      //      Logic_SimpleLight(SLOT_RELAY_8);
-      //      DigOut(PIN_13, Souliss_T1n_Coil, SLOT_RELAY_8);
-
-      //      Logic_SimpleLight(SLOT_RELAY_9);
-      //      DigOut(PIN_15, Souliss_T1n_Coil, SLOT_RELAY_9);
-
     }
 
     FAST_510ms() {
@@ -318,3 +265,28 @@ void MQTT_connect() {
   }
   Serial.println("MQTT Connected!");
 }
+
+void Logic_SimpleLight_MQTT(Adafruit_MQTT_Publish MQTTrelayX, U8 slot, U8 *trigger) {
+
+  if (mOutput(slot) != lastVal) {
+      Serial.print(F("\nSending relay state. "));
+      if (mOutput(slot) == Souliss_T1n_OnCoil) {
+        if (! MQTTrelayX.publish("ON")) {
+          Serial.println(F("Failed to write ON"));
+        } else {
+          Serial.println(F("Write ON. OK!"));
+          lastVal=Souliss_T1n_OnCoil;
+        }
+      } else if (mOutput(slot) == Souliss_T1n_OffCoil) {
+        if (!MQTTrelayX.publish("OFF")) {
+          Serial.println(F("Failed to write OFF"));
+        } else {
+          Serial.println(F("Write OFF. OK!"));
+          lastVal=Souliss_T1n_OffCoil;
+        }
+      }
+    }
+    
+  }
+
+
