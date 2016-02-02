@@ -51,7 +51,6 @@ const char MQTT_PASSWORD[] PROGMEM  = AIO_KEY;
 Adafruit_MQTT_Client mqtt(&client, MQTT_SERVER, AIO_SERVERPORT, MQTT_CLIENTID, MQTT_USERNAME, MQTT_PASSWORD);
 
 /****************************** Feeds ***************************************/
-
 // Setup a feed for publishing.
 // Notice MQTT paths for AIO follow the form: <username>/feeds/<feedname>
 const char TEMPERATURE_FEED[] PROGMEM = AIO_USERNAME "/feeds/temperature";
@@ -62,14 +61,11 @@ const char ONOFF_FEED[] PROGMEM = AIO_USERNAME "/feeds/relay0";
 Adafruit_MQTT_Subscribe MQTTrelay0_toRead = Adafruit_MQTT_Subscribe(&mqtt, ONOFF_FEED);
 Adafruit_MQTT_Publish MQTTrelay0 = Adafruit_MQTT_Publish(&mqtt, ONOFF_FEED);
 
-boolean bFlag_writeSwitchState = false;
 U8 lastVal;
 
 #define SLOT_RELAY_0 0
 #define SLOT_TEMPERATURE        1     // This is the memory slot used for the execution of the logic in network_address1
 #define SLOT_HUMIDITY        3     // This is the memory slot used for the execution of the logic
-//#define SLOT_RELAY_1 1
-//#define PIN_2 2
 
 #define PIN_14 14
 #define PIN_12 12
@@ -82,15 +78,21 @@ U8 lastVal;
 // Initialize DHT sensor for normal 8mhz Arduino
 DHT dht(PIN_DHT, DHTTYPE, 2);
 
+
+uint8_t MAC_array[6];
+char MAC_char[18];
+String mqtt_id;
+
 // Setup the libraries for Over The Air Update
 OTA_Setup();
 void setup()
 {
   Serial.begin(115200);
-  //delay 30 seconds
+  Serial.println(F("begin OK"));
+  //delay 15 seconds
   delay(15000);
   Initialize();
-  Serial.println(F("Inizialize OK"));
+  Serial.println(F("init  OK"));
   // Read the IP configuration from the EEPROM, if not available start
   // the node as access point
   if (!ReadIPConfiguration())
@@ -98,15 +100,11 @@ void setup()
     // Start the node as access point with a configuration WebServer
     SetAccessPoint();
     startWebServer();
-    Serial.println(F("startWebServer OK"));
-    // We have nothing more than the WebServer for the configuration
-    // to run, once configured the node will quit this.
     while (1)
     {
       yield();
       runWebServer();
-     }
-
+    }
   }
 
   if (IsRuntimeGateway())
@@ -132,22 +130,26 @@ void setup()
   Set_Humidity(SLOT_HUMIDITY);
   pinMode(PIN_DHT, INPUT);
   dht.begin();
-  // Set_SimpleLight(SLOT_RELAY_1);
-
-  // Define output pins
-  //  pinMode(PIN_2, OUTPUT);    // Relè
 
   pinMode(PIN_14, INPUT_PULLUP);    // Relè
-
   digitalWrite(PIN_12, LOW);
   pinMode(PIN_12, OUTPUT);    // Relè
   digitalWrite(PIN_13, LOW);
   pinMode(PIN_13, OUTPUT);    // Relè
 
-  Serial.println(F("Set Typical OK"));
+  char MAC_char[4];
+  getNodeID(MAC_char);
+    Serial.print("mqtt_id: "); Serial.println(MAC_char);
+    WiFi.macAddress(MAC_array);
+    //example: if mac address is 5C:CF:7F:0A:23:26 it retrieve ID 0A:23:26
+    for (int i = 4; i < sizeof(MAC_array); ++i) {
+    sprintf(MAC_char, "%s%02x", MAC_char, MAC_array[i]);
+  }
+  mqtt_id = MAC_char;
+  Serial.print("mqtt_id: "); Serial.println(mqtt_id);
+
   // Init the OTA
   OTA_Init();
-  Serial.println(F("OTA_Init OK"));
 
   // Setup MQTT subscription for onoff feed.
   mqtt.subscribe(&MQTTrelay0_toRead);
@@ -177,7 +179,7 @@ void loop()
           if (!strcmp( (char *)MQTTrelay0_toRead.lastread, "ON")) {
             Serial.println("Set Souliss Relay ON");
             mInput(SLOT_RELAY_0) = Souliss_T1n_OnCmd;
-           } else if (!strcmp( (char *)MQTTrelay0_toRead.lastread, "OFF")) {
+          } else if (!strcmp( (char *)MQTTrelay0_toRead.lastread, "OFF")) {
             Serial.println("Set Souliss Relay OFF");
             mInput(SLOT_RELAY_0) = Souliss_T1n_OffCmd;
           }
@@ -187,24 +189,17 @@ void loop()
 
 
     FAST_50ms() {
-
       DigIn2State(PIN_14, Souliss_T1n_ToggleCmd, Souliss_T1n_ToggleCmd, SLOT_RELAY_0);
-
       Logic_SimpleLight_MQTT(MQTTrelay0, SLOT_RELAY_0, &data_changed);
       Logic_SimpleLight(SLOT_RELAY_0);
       PulseDigOut(PIN_12, Souliss_T1n_OnCoil, SLOT_RELAY_0);
       PulseDigOut(PIN_13, Souliss_T1n_OffCoil, SLOT_RELAY_0);
-
-      //
-      //      Logic_SimpleLight(SLOT_RELAY_1);
-      //      DigOut(PIN_2, Souliss_T1n_Coil, SLOT_RELAY_1);
     }
 
     FAST_510ms() {
       Logic_Temperature(SLOT_TEMPERATURE);
       Logic_Humidity(SLOT_HUMIDITY);
     }
-
 
     // Run communication as Gateway or Peer
     if (IsRuntimeGateway())
@@ -225,7 +220,7 @@ void loop()
       float humidity = dht.readHumidity();
       ImportAnalog(SLOT_HUMIDITY, &humidity);
 
-      // Now we can publish stuff!
+      // MQTT Publish
       Serial.print(F("\nSending temperature val "));
       Serial.print(temperature);
       Serial.print("...");
@@ -254,14 +249,12 @@ void MQTT_connect() {
   if (mqtt.connected()) {
     return;
   }
-
   Serial.print("Connecting to MQTT... ");
 
   while ((ret = mqtt.connect()) != 0) { // connect will return 0 for connected
     Serial.println(mqtt.connectErrorString(ret));
-    Serial.println("Retrying MQTT connection in 5 seconds...");
+    Serial.println("Retrying MQTT connection...");
     mqtt.disconnect();
-    delay(5000);  // wait 5 seconds
   }
   Serial.println("MQTT Connected!");
 }
@@ -269,24 +262,34 @@ void MQTT_connect() {
 void Logic_SimpleLight_MQTT(Adafruit_MQTT_Publish MQTTrelayX, U8 slot, U8 *trigger) {
 
   if (mOutput(slot) != lastVal) {
-      Serial.print(F("\nSending relay state. "));
-      if (mOutput(slot) == Souliss_T1n_OnCoil) {
-        if (! MQTTrelayX.publish("ON")) {
-          Serial.println(F("Failed to write ON"));
-        } else {
-          Serial.println(F("Write ON. OK!"));
-          lastVal=Souliss_T1n_OnCoil;
-        }
-      } else if (mOutput(slot) == Souliss_T1n_OffCoil) {
-        if (!MQTTrelayX.publish("OFF")) {
-          Serial.println(F("Failed to write OFF"));
-        } else {
-          Serial.println(F("Write OFF. OK!"));
-          lastVal=Souliss_T1n_OffCoil;
-        }
+    Serial.print(F("\nSending relay state. "));
+    if (mOutput(slot) == Souliss_T1n_OnCoil) {
+      if (! MQTTrelayX.publish("ON")) {
+        Serial.println(F("Failed to write ON"));
+      } else {
+        Serial.println(F("Write ON. OK!"));
+        lastVal = Souliss_T1n_OnCoil;
+      }
+    } else if (mOutput(slot) == Souliss_T1n_OffCoil) {
+      if (!MQTTrelayX.publish("OFF")) {
+        Serial.println(F("Failed to write OFF"));
+      } else {
+        Serial.println(F("Write OFF. OK!"));
+        lastVal = Souliss_T1n_OffCoil;
       }
     }
-    
   }
+
+}
+
+
+void getNodeID(char* MAC_char) {
+  uint8_t MAC_array[6];
+  WiFi.macAddress(MAC_array);
+  //example: if mac address is 5C:CF:7F:0A:23:26 it retrieve ID 2326
+  for (int i = 3; i < sizeof(MAC_array); ++i) {
+    sprintf(MAC_char, "%s%02x", MAC_char, MAC_array[i]);
+  }
+}
 
 
