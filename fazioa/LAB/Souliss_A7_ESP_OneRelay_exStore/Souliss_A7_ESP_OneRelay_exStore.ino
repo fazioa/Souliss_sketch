@@ -50,16 +50,12 @@ const char MQTT_PASSWORD[] PROGMEM  = AIO_KEY;
 // Setup the MQTT client class by passing in the WiFi client and MQTT server and login details.
 Adafruit_MQTT_Client mqtt(&client, MQTT_SERVER, AIO_SERVERPORT, MQTT_CLIENTID, MQTT_USERNAME, MQTT_PASSWORD);
 
-/****************************** Feeds ***************************************/
-// Setup a feed for publishing.
-// Notice MQTT paths for AIO follow the form: <username>/feeds/<feedname>
-const char TEMPERATURE_FEED[] PROGMEM = AIO_USERNAME "/feeds/temperature";
+const char TEMPERATURE_FEED[] = "";
 Adafruit_MQTT_Publish MQTTtemperature = Adafruit_MQTT_Publish(&mqtt, TEMPERATURE_FEED);
-
-// Setup a feed called 'onoff' for subscribing to changes.
-const char ONOFF_FEED[] PROGMEM = AIO_USERNAME "/feeds/relay0";
-Adafruit_MQTT_Subscribe MQTTrelay0_toRead = Adafruit_MQTT_Subscribe(&mqtt, ONOFF_FEED);
+const char ONOFF_FEED[] = AIO_USERNAME "/feeds/relay0";
 Adafruit_MQTT_Publish MQTTrelay0 = Adafruit_MQTT_Publish(&mqtt, ONOFF_FEED);
+/****************************** Subscribe ***************************************/
+Adafruit_MQTT_Subscribe MQTTrelay0_toRead = Adafruit_MQTT_Subscribe(&mqtt, ONOFF_FEED);
 
 U8 lastVal;
 
@@ -81,7 +77,6 @@ DHT dht(PIN_DHT, DHTTYPE, 2);
 
 uint8_t MAC_array[6];
 char MAC_char[18];
-String mqtt_id;
 
 // Setup the libraries for Over The Air Update
 OTA_Setup();
@@ -137,16 +132,28 @@ void setup()
   digitalWrite(PIN_13, LOW);
   pinMode(PIN_13, OUTPUT);    // Relè
 
-  char MAC_char[4];
+  char MAC_char[2];
   getNodeID(MAC_char);
-    Serial.print("mqtt_id: "); Serial.println(MAC_char);
-    WiFi.macAddress(MAC_array);
-    //example: if mac address is 5C:CF:7F:0A:23:26 it retrieve ID 0A:23:26
-    for (int i = 4; i < sizeof(MAC_array); ++i) {
-    sprintf(MAC_char, "%s%02x", MAC_char, MAC_array[i]);
-  }
-  mqtt_id = MAC_char;
-  Serial.print("mqtt_id: "); Serial.println(mqtt_id);
+  Serial.print("mqtt_id: "); Serial.println(MAC_char);
+  
+  /****************************** Feeds ***************************************/
+  /****************************** Publish ***************************************/
+  // Setup a feed for publishing.
+  // Notice MQTT paths for AIO follow the form: <username>/feeds/<feedname>
+  String sMac_address=String(MAC_char);
+  //const char TEMPERATURE_FEED[] = AIO_USERNAME "/feeds/"; mac; "temperature";
+  String sUsername=String(AIO_USERNAME);
+  String TEMPERATURE_FEED = sUsername+ "/feeds/" + "temperature";
+  Serial.print("TEMPERATURE_FEED: "); Serial.println(TEMPERATURE_FEED);
+
+
+  
+  MQTTtemperature = Adafruit_MQTT_Publish(&mqtt, TEMPERATURE_FEED.c_str());
+  //Adafruit_MQTT_Publish TEST;
+  // Setup a feed called 'onoff' for subscribing to changes.
+  const char ONOFF_FEED[] = AIO_USERNAME "/feeds/relay0";
+  MQTTrelay0 = Adafruit_MQTT_Publish(&mqtt, ONOFF_FEED);
+
 
   // Init the OTA
   OTA_Init();
@@ -282,12 +289,13 @@ void Logic_SimpleLight_MQTT(Adafruit_MQTT_Publish MQTTrelayX, U8 slot, U8 *trigg
 
 }
 
-
+//it need external buffer  char MAC_char[4];
 void getNodeID(char* MAC_char) {
-  uint8_t MAC_array[6];
+  uint8_t MAC_array[2];
   WiFi.macAddress(MAC_array);
+  Serial.print("Size MAC_array: "); Serial.println(sizeof(MAC_array));
   //example: if mac address is 5C:CF:7F:0A:23:26 it retrieve ID 2326
-  for (int i = 3; i < sizeof(MAC_array); ++i) {
+  for (int i = 4; i <= 5; ++i) {
     sprintf(MAC_char, "%s%02x", MAC_char, MAC_array[i]);
   }
 }
