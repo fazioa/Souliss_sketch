@@ -1,12 +1,11 @@
 #define HOST_NAME_INSKETCH
-#define HOST_NAME "ESP8266-WiFi-Relay-V3"
+#define HOST_NAME "ESP8266-WiFi-Relay-V3-AdafruitIO"
 
 /**************************************************************************
-Sketch: ESP8266 WiFi Relay V3 - Souliss - Web Configuration
+Sketch: ESP8266 WiFi Relay V3 - Souliss - Web Configuration - AdafruitIO
 Author: Tonino Fazio
 
 This example is only supported on ESP8266.
-Compatible: 
 
  //Used pins 
 // pin 12: onboad relay ON
@@ -134,9 +133,9 @@ void setup()
 
   pinMode(PIN_SWITCH, INPUT_PULLUP);    // SWITCH
   digitalWrite(PIN_RELAY_ON, LOW);
-  pinMode(PIN_RELAY_ON, OUTPUT);    // Relè ON
+  pinMode(PIN_RELAY_ON, OUTPUT);    // Relay ON
   digitalWrite(PIN_RELAY_OFF, LOW);
-  pinMode(PIN_RELAY_OFF, OUTPUT);    // Relè OFF
+  pinMode(PIN_RELAY_OFF, OUTPUT);    // Relay OFF
 
   // Init the OTA
   OTA_Init();
