@@ -7,10 +7,10 @@ Author: Tonino Fazio
 
 This example is only supported on ESP8266.
 
- //Used pins 
+ //Used pins
 // pin 12: onboad relay ON
 // pin 13: onboad relay OFF
-// pin 14: switch 
+// pin 14: switch
 ***************************************************************************/
 #include <ESP8266WiFi.h>
 #include <ESP8266WebServer.h>
@@ -30,12 +30,14 @@ This example is only supported on ESP8266.
 
 #define SLOT_RELAY_0 0
 
-// Example for other optional relay 
+// Example for other optional relay
 //#define SLOT_RELAY_1 1
+//#define PIN_RELAY_1 16
 
 #define PIN_SWITCH 14
 #define PIN_RELAY_ON 12
 #define PIN_RELAY_OFF 13
+#define PIN_LED 2
 
 // Setup the libraries for Over The Air Update
 OTA_Setup();
@@ -78,18 +80,22 @@ void setup()
   //*************************************************************************
   //*************************************************************************
   Set_SimpleLight(SLOT_RELAY_0);
-  
-  // Example for other optional relay 
-  // Set_SimpleLight(SLOT_RELAY_0);
-  
+
+  // Example for other optional relay
+  // Set_SimpleLight(SLOT_RELAY_1);
+  //digitalWrite(PIN_RELAY_1, LOW);
+  //pinMode(PIN_RELAY_1, OUTPUT);    // Relay 1
+
   pinMode(PIN_SWITCH, INPUT_PULLUP);    // Switch
 
   digitalWrite(PIN_RELAY_ON, LOW);
   pinMode(PIN_RELAY_ON, OUTPUT);    // Relay ON
-  
+
   digitalWrite(PIN_RELAY_OFF, LOW);
   pinMode(PIN_RELAY_OFF, OUTPUT);    // Relay OFF
-  
+
+  pinMode(PIN_LED, OUTPUT);
+
   // Init the OTA
   OTA_Init();
 }
@@ -98,6 +104,10 @@ void loop()
 {
   EXECUTEFAST() {
     UPDATEFAST();
+    FAST_210ms() {
+      check_if_joined();
+    }
+
 
     FAST_50ms() {
       DigIn2State(PIN_SWITCH, Souliss_T1n_ToggleCmd, Souliss_T1n_ToggleCmd, SLOT_RELAY_0);
@@ -106,8 +116,8 @@ void loop()
       PulseDigOut(PIN_RELAY_OFF, Souliss_T1n_OffCoil, SLOT_RELAY_0);
 
       // Example for other optional relay
-      //      Logic_SimpleLight(SLOT_RELAY_1);
-      //      DigOut(PIN_2, Souliss_T1n_Coil, SLOT_RELAY_1);
+      // Logic_SimpleLight(SLOT_RELAY_1);
+      // DigOut(PIN_RELAY_1, Souliss_T1n_Coil, SLOT_RELAY_1);
 
     }
 
@@ -128,4 +138,20 @@ void loop()
   OTA_Process();
 }
 
-
+U8 led_status = 0;
+U8 joined = 0;
+void check_if_joined() {
+  if (JoinInProgress() && joined == 0) {
+    joined = 0;
+    if (led_status == 0) {
+      digitalWrite(PIN_LED, HIGH);
+      led_status = 1;
+    } else {
+      digitalWrite(PIN_LED, LOW);
+      led_status = 0;
+    }
+  } else {
+    joined = 1;
+    digitalWrite(PIN_LED, HIGH);
+  }
+}

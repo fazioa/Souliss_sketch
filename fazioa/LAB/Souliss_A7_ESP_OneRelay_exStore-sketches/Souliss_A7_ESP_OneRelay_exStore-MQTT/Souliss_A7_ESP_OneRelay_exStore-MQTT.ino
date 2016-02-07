@@ -7,10 +7,10 @@ Author: Tonino Fazio
 
 This example is only supported on ESP8266.
 
- //Used pins 
+ //Used pins
 // pin 12: onboad relay ON
 // pin 13: onboad relay OFF
-// pin 14: switch 
+// pin 14: switch
 // pin 16: DHT22 - Terperature sensor
 ***************************************************************************/
 #include <ESP8266WiFi.h>
@@ -69,7 +69,8 @@ U8 lastVal;
 #define SLOT_TEMPERATURE        1     // This is the memory slot used for the execution of the logic in network_address1
 #define SLOT_HUMIDITY        3     // This is the memory slot used for the execution of the logic
 
-#define PIN_SWITCH  14 
+#define PIN_LED 2
+#define PIN_SWITCH  14
 #define PIN_RELAY_ON  12
 #define PIN_RELAY_OFF  13
 #define PIN_DHT 16
@@ -136,7 +137,7 @@ void setup()
   pinMode(PIN_RELAY_ON, OUTPUT);    // Relay ON
   digitalWrite(PIN_RELAY_OFF, LOW);
   pinMode(PIN_RELAY_OFF, OUTPUT);    // Relay OFF
-
+  pinMode(PIN_LED, OUTPUT);
   // Init the OTA
   OTA_Init();
 
@@ -148,9 +149,12 @@ void loop()
 {
   // Look for a new sketch to update over the air
   OTA_Process();
-  
+
   EXECUTEFAST() {
     UPDATEFAST();
+    FAST_210ms() {
+      check_if_joined();
+    }
     FAST_9110ms() {
       // Ensure the connection to the MQTT server is alive (this will make the first
       // connection and automatically reconnect when disconnected).  See the MQTT_connect
@@ -265,6 +269,23 @@ void Logic_SimpleLight_MQTT(Adafruit_MQTT_Publish MQTTrelayX, U8 slot, U8 *trigg
         lastVal = Souliss_T1n_OffCoil;
       }
     }
+  }
+}
+U8 led_status = 0;
+U8 joined = 0;
+void check_if_joined() {
+  if (JoinInProgress() && joined == 0) {
+    joined = 0;
+    if (led_status == 0) {
+      digitalWrite(PIN_LED, HIGH);
+      led_status = 1;
+    } else {
+      digitalWrite(PIN_LED, LOW);
+      led_status = 0;
+    }
+  } else {
+    joined = 1;
+    digitalWrite(PIN_LED, HIGH);
   }
 }
 
