@@ -50,12 +50,13 @@ const char MQTT_PASSWORD[] PROGMEM  = AIO_KEY;
 // Setup the MQTT client class by passing in the WiFi client and MQTT server and login details.
 Adafruit_MQTT_Client mqtt(&client, MQTT_SERVER, AIO_SERVERPORT, MQTT_CLIENTID, MQTT_USERNAME, MQTT_PASSWORD);
 
-const char TEMPERATURE_FEED[] = "";
+/****************************** Feeds ***************************************/
+const char TEMPERATURE_FEED[] = AIO_USERNAME "/feeds/temperature";
 Adafruit_MQTT_Publish MQTTtemperature = Adafruit_MQTT_Publish(&mqtt, TEMPERATURE_FEED);
 const char ONOFF_FEED[] = AIO_USERNAME "/feeds/relay0";
 Adafruit_MQTT_Publish MQTTrelay0 = Adafruit_MQTT_Publish(&mqtt, ONOFF_FEED);
 /****************************** Subscribe ***************************************/
-Adafruit_MQTT_Subscribe MQTTrelay0_toRead = Adafruit_MQTT_Subscribe(&mqtt, ONOFF_FEED);
+Adafruit_MQTT_Subscribe MQTTrelay0_Read = Adafruit_MQTT_Subscribe(&mqtt, ONOFF_FEED);
 
 U8 lastVal;
 
@@ -128,38 +129,15 @@ void setup()
 
   pinMode(PIN_14, INPUT_PULLUP);    // Relè
   digitalWrite(PIN_12, LOW);
-  pinMode(PIN_12, OUTPUT);    // Relè
+  pinMode(PIN_12, OUTPUT);    // Relè ON
   digitalWrite(PIN_13, LOW);
-  pinMode(PIN_13, OUTPUT);    // Relè
-
-  char MAC_char[2];
-  getNodeID(MAC_char);
-  Serial.print("mqtt_id: "); Serial.println(MAC_char);
-  
-  /****************************** Feeds ***************************************/
-  /****************************** Publish ***************************************/
-  // Setup a feed for publishing.
-  // Notice MQTT paths for AIO follow the form: <username>/feeds/<feedname>
-  String sMac_address=String(MAC_char);
-  //const char TEMPERATURE_FEED[] = AIO_USERNAME "/feeds/"; mac; "temperature";
-  String sUsername=String(AIO_USERNAME);
-  String TEMPERATURE_FEED = sUsername+ "/feeds/" + "temperature";
-  Serial.print("TEMPERATURE_FEED: "); Serial.println(TEMPERATURE_FEED);
-
-
-  
-  MQTTtemperature = Adafruit_MQTT_Publish(&mqtt, TEMPERATURE_FEED.c_str());
-  //Adafruit_MQTT_Publish TEST;
-  // Setup a feed called 'onoff' for subscribing to changes.
-  const char ONOFF_FEED[] = AIO_USERNAME "/feeds/relay0";
-  MQTTrelay0 = Adafruit_MQTT_Publish(&mqtt, ONOFF_FEED);
-
+  pinMode(PIN_13, OUTPUT);    // Relè OFF
 
   // Init the OTA
   OTA_Init();
 
   // Setup MQTT subscription for onoff feed.
-  mqtt.subscribe(&MQTTrelay0_toRead);
+  mqtt.subscribe(&MQTTrelay0_Read);
 }
 
 void loop()
@@ -178,22 +156,21 @@ void loop()
       // this is our 'wait for incoming subscription packets' busy subloop
       Adafruit_MQTT_Subscribe *subscription;
       while ((subscription = mqtt.readSubscription(1000))) {
-        if (subscription == &MQTTrelay0_toRead) {
+        if (subscription == &MQTTrelay0_Read) {
           Serial.print(F("Got: "));
-          Serial.println((char *)MQTTrelay0_toRead.lastread);
-          Serial.print("MQTTrelay0_toRead.lastread: "); Serial.println((char*) MQTTrelay0_toRead.lastread);
+          Serial.println((char *)MQTTrelay0_Read.lastread);
+          Serial.print("MQTTrelay0_Read.lastread: "); Serial.println((char*) MQTTrelay0_Read.lastread);
 
-          if (!strcmp( (char *)MQTTrelay0_toRead.lastread, "ON")) {
+          if (!strcmp( (char *)MQTTrelay0_Read.lastread, "ON")) {
             Serial.println("Set Souliss Relay ON");
             mInput(SLOT_RELAY_0) = Souliss_T1n_OnCmd;
-          } else if (!strcmp( (char *)MQTTrelay0_toRead.lastread, "OFF")) {
+          } else if (!strcmp( (char *)MQTTrelay0_Read.lastread, "OFF")) {
             Serial.println("Set Souliss Relay OFF");
             mInput(SLOT_RELAY_0) = Souliss_T1n_OffCmd;
           }
         }
       }
     }
-
 
     FAST_50ms() {
       DigIn2State(PIN_14, Souliss_T1n_ToggleCmd, Souliss_T1n_ToggleCmd, SLOT_RELAY_0);
@@ -236,8 +213,6 @@ void loop()
       } else {
         Serial.println(F("OK!"));
       }
-
-
     }
     // If running as Peer
     if (!IsRuntimeGateway())
@@ -286,18 +261,7 @@ void Logic_SimpleLight_MQTT(Adafruit_MQTT_Publish MQTTrelayX, U8 slot, U8 *trigg
       }
     }
   }
-
 }
 
-//it need external buffer  char MAC_char[4];
-void getNodeID(char* MAC_char) {
-  uint8_t MAC_array[2];
-  WiFi.macAddress(MAC_array);
-  Serial.print("Size MAC_array: "); Serial.println(sizeof(MAC_array));
-  //example: if mac address is 5C:CF:7F:0A:23:26 it retrieve ID 2326
-  for (int i = 4; i <= 5; ++i) {
-    sprintf(MAC_char, "%s%02x", MAC_char, MAC_array[i]);
-  }
-}
 
 
