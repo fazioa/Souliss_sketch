@@ -2,11 +2,17 @@
 #define HOST_NAME "ESP8266-WiFi-Relay-V3"
 
 /**************************************************************************
-Sketch: POWER SOCKET - VER.1 - Souliss - Web Configuration
+Sketch: ESP8266 WiFi Relay V3 - Souliss - Web Configuration
 Author: Tonino Fazio
 
-ESP Core 1.6.5 Staging 1.6.5-1160-gef26c5f
- This example is only supported on ESP8266.
+This example is only supported on ESP8266.
+Compatible: 
+
+ //Used pins 
+// pin 14: DHT22 - Terperature sensor
+// pin 12: onboad relay ON
+// pin 13: onboad relay OFF
+
 ***************************************************************************/
 #include <ESP8266WiFi.h>
 #include <ESP8266WebServer.h>
@@ -39,13 +45,13 @@ WiFiClient client;
 
 // Store the MQTT server, client ID, username, and password in flash memory.
 // This is required for using the Adafruit MQTT library.
-const char MQTT_SERVER[] PROGMEM    = AIO_SERVER;
+const char MQTT_SERVER[]  = AIO_SERVER;
 // Set a unique MQTT client ID using the AIO key + the date and time the sketch
 // was compiled (so this should be unique across multiple devices for a user,
 // alternatively you can manually set this to a GUID or other random value).
-const char MQTT_CLIENTID[] PROGMEM  = __TIME__ AIO_USERNAME;
-const char MQTT_USERNAME[] PROGMEM  = AIO_USERNAME;
-const char MQTT_PASSWORD[] PROGMEM  = AIO_KEY;
+const char MQTT_CLIENTID[]  = __TIME__ AIO_USERNAME;
+const char MQTT_USERNAME[]  = AIO_USERNAME;
+const char MQTT_PASSWORD[]  = AIO_KEY;
 
 // Setup the MQTT client class by passing in the WiFi client and MQTT server and login details.
 Adafruit_MQTT_Client mqtt(&client, MQTT_SERVER, AIO_SERVERPORT, MQTT_CLIENTID, MQTT_USERNAME, MQTT_PASSWORD);
@@ -64,7 +70,7 @@ U8 lastVal;
 #define SLOT_TEMPERATURE        1     // This is the memory slot used for the execution of the logic in network_address1
 #define SLOT_HUMIDITY        3     // This is the memory slot used for the execution of the logic
 
-#define PIN_14 14
+#define PIN_14 14 
 #define PIN_12 12
 #define PIN_13 13
 
@@ -127,7 +133,7 @@ void setup()
   pinMode(PIN_DHT, INPUT);
   dht.begin();
 
-  pinMode(PIN_14, INPUT_PULLUP);    // Relè
+  pinMode(PIN_14, INPUT_PULLUP);    // DHT22
   digitalWrite(PIN_12, LOW);
   pinMode(PIN_12, OUTPUT);    // Relè ON
   digitalWrite(PIN_13, LOW);
