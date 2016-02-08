@@ -127,6 +127,8 @@ void setup()
   //*************************************************************************
   //*************************************************************************
   Set_SimpleLight(SLOT_RELAY_0);
+  mOutput(SLOT_RELAY_0)=Souliss_T1n_OnCoil; //Set output to ON, then first execution of DigIn2State cause a change state to OFF. 
+  
   Set_Temperature(SLOT_TEMPERATURE);
   Set_Humidity(SLOT_HUMIDITY);
   pinMode(PIN_DHT, INPUT);
@@ -138,8 +140,11 @@ void setup()
   digitalWrite(PIN_RELAY_OFF, LOW);
   pinMode(PIN_RELAY_OFF, OUTPUT);    // Relay OFF
   pinMode(PIN_LED, OUTPUT);
+
+  
   // Init the OTA
   OTA_Init();
+
 
   // Setup MQTT subscription for onoff feed.
   mqtt.subscribe(&MQTTrelay0_Read);

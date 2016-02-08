@@ -79,8 +79,7 @@ void setup()
 
   //*************************************************************************
   //*************************************************************************
-  Set_SimpleLight(SLOT_RELAY_0);
-
+ 
   // Example for other optional relay
   // Set_SimpleLight(SLOT_RELAY_1);
   //digitalWrite(PIN_RELAY_1, LOW);
@@ -94,8 +93,12 @@ void setup()
   digitalWrite(PIN_RELAY_OFF, LOW);
   pinMode(PIN_RELAY_OFF, OUTPUT);    // Relay OFF
 
+
   pinMode(PIN_LED, OUTPUT);
 
+ Set_SimpleLight(SLOT_RELAY_0);
+ mOutput(SLOT_RELAY_0)=Souliss_T1n_OnCoil; //Set output to ON, then first execution of DigIn2State cause a change state to OFF. 
+ 
   // Init the OTA
   OTA_Init();
 }
