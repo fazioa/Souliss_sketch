@@ -74,6 +74,7 @@ U8 lastVal;
 #define PIN_RELAY_ON  12
 #define PIN_RELAY_OFF  13
 #define PIN_DHT 16
+#define PIN_RESET 0
 
 #define DHTTYPE DHT22   // DHT 22 
 #define DEADBAND        0.01    // Deadband value 1% 
@@ -127,8 +128,8 @@ void setup()
   //*************************************************************************
   //*************************************************************************
   Set_SimpleLight(SLOT_RELAY_0);
-  mOutput(SLOT_RELAY_0)=Souliss_T1n_OnCoil; //Set output to ON, then first execution of DigIn2State cause a change state to OFF. 
-  
+  mOutput(SLOT_RELAY_0) = Souliss_T1n_OnCoil; //Set output to ON, then first execution of DigIn2State cause a change state to OFF.
+
   Set_Temperature(SLOT_TEMPERATURE);
   Set_Humidity(SLOT_HUMIDITY);
   pinMode(PIN_DHT, INPUT);
@@ -140,8 +141,8 @@ void setup()
   digitalWrite(PIN_RELAY_OFF, LOW);
   pinMode(PIN_RELAY_OFF, OUTPUT);    // Relay OFF
   pinMode(PIN_LED, OUTPUT);
+  pinMode(PIN_RESET, INPUT); //10 seconds to gnd for eeprom reset
 
-  
   // Init the OTA
   OTA_Init();
 
@@ -159,6 +160,9 @@ void loop()
     UPDATEFAST();
     FAST_210ms() {
       check_if_joined();
+    }
+    FAST_2110ms() {
+      check_if_reset();
     }
     FAST_9110ms() {
       // Ensure the connection to the MQTT server is alive (this will make the first
@@ -294,5 +298,21 @@ void check_if_joined() {
   }
 }
 
-
+unsigned long time_start = 0;
+unsigned long time_for_reset = 10000;
+void check_if_reset() {
+  if (!digitalRead(PIN_RESET)) {
+    if (abs(millis() - time_start) > time_for_reset)
+    {
+      Serial.println(F("Reset"));
+      Store_Init();
+      Store_Clear();
+      Store_Commit();
+      Serial.println(F("OK"));
+      time_start = millis();
+    }
+  } else {
+    time_start = millis();
+  }
+}
 
