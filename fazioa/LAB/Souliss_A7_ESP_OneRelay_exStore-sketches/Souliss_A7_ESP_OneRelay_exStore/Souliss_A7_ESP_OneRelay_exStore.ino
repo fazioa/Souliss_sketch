@@ -97,7 +97,7 @@ void setup()
 
 
   pinMode(PIN_LED, OUTPUT);
-  pinMode(PIN_RESET, INPUT);
+  pinMode(PIN_RESET, INPUT); //10 seconds to gnd for eeprom reset
 
   Set_SimpleLight(SLOT_RELAY_0);
   mOutput(SLOT_RELAY_0) = Souliss_T1n_OnCoil; //Set output to ON, then first execution of DigIn2State cause a change state to OFF.
