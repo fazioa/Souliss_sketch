@@ -94,6 +94,8 @@ void setup()
   //delay 15 seconds
   delay(15000);
   Initialize();
+  check_for_reset_now();
+  
   Serial.println(F("init  OK"));
   // Read the IP configuration from the EEPROM, if not available start
   // the node as access point
@@ -163,6 +165,7 @@ void loop()
     }
     FAST_2110ms() {
       check_if_reset();
+      activity();
     }
     FAST_9110ms() {
       // Ensure the connection to the MQTT server is alive (this will make the first
@@ -313,6 +316,28 @@ void check_if_reset() {
     }
   } else {
     time_start = millis();
+  }
+}
+
+void check_for_reset_now() {
+  if (!digitalRead(PIN_RESET)) {
+      Serial.println("");
+      Serial.println(F("Reset"));
+      Store_Init();
+      Store_Clear();
+      Store_Commit();
+      Serial.println(F("OK"));
+    }
+}
+
+U8 activity_led_status = 0;
+void activity() {
+  if (activity_led_status == 0) {
+    digitalWrite(PIN_LED, HIGH);
+    activity_led_status = 1;
+  } else {
+    digitalWrite(PIN_LED, LOW);
+    activity_led_status = 0;
   }
 }
 
