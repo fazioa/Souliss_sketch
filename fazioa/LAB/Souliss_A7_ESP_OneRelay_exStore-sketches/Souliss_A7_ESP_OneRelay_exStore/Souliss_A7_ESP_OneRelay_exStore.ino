@@ -1,5 +1,5 @@
 #define HOST_NAME_INSKETCH
-#define HOST_NAME "ESP8266-WiFi-Relay-V3"
+#define HOST_NAME "ESP8266-WiFi-Relay-V3_OTA"
 
 /**************************************************************************
 Sketch: ESP8266 WiFi Relay V3 - Souliss - Web Configuration
@@ -45,10 +45,15 @@ OTA_Setup();
 void setup()
 {
   Serial.begin(115200);
-  //delay 15 seconds
+  Serial.println(F("Delay 15s"));
+   //delay 15 seconds
   delay(15000);
+
   Initialize();
 
+  check_for_reset_now();
+  Serial.println(F("Start"));
+  
   // Read the IP configuration from the EEPROM, if not available start
   // the node as access point
   if (!ReadIPConfiguration())
@@ -61,6 +66,7 @@ void setup()
     while (1)
     {
       yield();
+      Serial.println(F("runWebServer"));
       runWebServer();
     }
   }
@@ -68,6 +74,7 @@ void setup()
   if (IsRuntimeGateway())
   {
     // Connect to the WiFi network and get an address from DHCP
+    Serial.println(F("Start in gateway mode"));
     SetAsGateway(myvNet_dhcp);       // Set this node as gateway for SoulissApp
     SetAddressingServer();
   }
@@ -75,8 +82,10 @@ void setup()
   {
     // This board request an address to the gateway at runtime, no need
     // to configure any parameter here.
+    Serial.println(F("Start in peer mode"));
     SetDynamicAddressing();
     GetAddress();
+    
   }
 
   //*************************************************************************
@@ -97,6 +106,7 @@ void setup()
 
 
   pinMode(PIN_LED, OUTPUT);
+  
   pinMode(PIN_RESET, INPUT); //10 seconds to gnd for eeprom reset
 
   Set_SimpleLight(SLOT_RELAY_0);
@@ -104,6 +114,10 @@ void setup()
 
   // Init the OTA
   OTA_Init();
+  
+  //End setup
+  digitalWrite(PIN_LED, HIGH);
+  Serial.println(F("End setup"));
 }
 
 void loop()
@@ -114,8 +128,9 @@ void loop()
       check_if_joined();
     }
 
-    FAST_2110ms(){
+    FAST_2110ms() {
       check_if_reset();
+      activity();
     }
 
     FAST_50ms() {
@@ -169,8 +184,10 @@ unsigned long time_start = 0;
 unsigned long time_for_reset = 10000;
 void check_if_reset() {
   if (!digitalRead(PIN_RESET)) {
+    Serial.print(".");
     if (abs(millis() - time_start) > time_for_reset)
     {
+      Serial.println("");
       Serial.println(F("Reset"));
       Store_Init();
       Store_Clear();
@@ -183,3 +200,24 @@ void check_if_reset() {
   }
 }
 
+void check_for_reset_now() {
+  if (!digitalRead(PIN_RESET)) {
+      Serial.println("");
+      Serial.println(F("Reset"));
+      Store_Init();
+      Store_Clear();
+      Store_Commit();
+      Serial.println(F("OK"));
+    }
+}
+
+U8 activity_led_status = 0;
+void activity() {
+  if (activity_led_status == 0) {
+    digitalWrite(PIN_LED, HIGH);
+    activity_led_status = 1;
+  } else {
+    digitalWrite(PIN_LED, LOW);
+    activity_led_status = 0;
+  }
+}
