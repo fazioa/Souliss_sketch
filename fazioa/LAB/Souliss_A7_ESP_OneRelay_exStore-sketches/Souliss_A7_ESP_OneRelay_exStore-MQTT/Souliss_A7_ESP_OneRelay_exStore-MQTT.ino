@@ -198,8 +198,8 @@ void loop()
       DigIn2State(PIN_SWITCH, Souliss_T1n_ToggleCmd, Souliss_T1n_ToggleCmd, SLOT_RELAY_0);
       Logic_SimpleLight_MQTT(MQTTrelay0, SLOT_RELAY_0, &data_changed);
       Logic_SimpleLight(SLOT_RELAY_0);
-      PulseDigOut(PIN_RELAY_ON, Souliss_T1n_OnCoil, SLOT_RELAY_0);
-      PulseDigOut(PIN_RELAY_OFF, Souliss_T1n_OffCoil, SLOT_RELAY_0);
+      PulseLowDigOut(PIN_RELAY_ON, Souliss_T1n_OnCoil, SLOT_RELAY_0);
+      PulseLowDigOut(PIN_RELAY_OFF, Souliss_T1n_OffCoil, SLOT_RELAY_0);
     }
 
     FAST_510ms() {

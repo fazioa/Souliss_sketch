@@ -46,14 +46,14 @@ void setup()
 {
   Serial.begin(115200);
   Serial.println(F("Delay 15s"));
-   //delay 15 seconds
+  //delay 15 seconds
   delay(15000);
 
   Initialize();
 
   check_for_reset_now();
   Serial.println(F("Start"));
-  
+
   // Read the IP configuration from the EEPROM, if not available start
   // the node as access point
   if (!ReadIPConfiguration())
@@ -85,7 +85,7 @@ void setup()
     Serial.println(F("Start in peer mode"));
     SetDynamicAddressing();
     GetAddress();
-    
+
   }
 
   //*************************************************************************
@@ -106,7 +106,7 @@ void setup()
 
 
   pinMode(PIN_LED, OUTPUT);
-  
+
   pinMode(PIN_RESET, INPUT); //10 seconds to gnd for eeprom reset
 
   Set_SimpleLight(SLOT_RELAY_0);
@@ -114,7 +114,7 @@ void setup()
 
   // Init the OTA
   OTA_Init();
-  
+
   //End setup
   digitalWrite(PIN_LED, HIGH);
   Serial.println(F("End setup"));
@@ -122,6 +122,9 @@ void setup()
 
 void loop()
 {
+  // Look for a new sketch to update over the air
+  OTA_Process();
+
   EXECUTEFAST() {
     UPDATEFAST();
     FAST_210ms() {
@@ -136,8 +139,8 @@ void loop()
     FAST_50ms() {
       DigIn2State(PIN_SWITCH, Souliss_T1n_ToggleCmd, Souliss_T1n_ToggleCmd, SLOT_RELAY_0);
       Logic_SimpleLight(SLOT_RELAY_0);
-      PulseDigOut(PIN_RELAY_ON, Souliss_T1n_OnCoil, SLOT_RELAY_0);
-      PulseDigOut(PIN_RELAY_OFF, Souliss_T1n_OffCoil, SLOT_RELAY_0);
+      PulseLowDigOut(PIN_RELAY_ON, Souliss_T1n_OnCoil, SLOT_RELAY_0);
+      PulseLowDigOut(PIN_RELAY_OFF, Souliss_T1n_OffCoil, SLOT_RELAY_0);
 
       // Example for other optional relay
       // Logic_SimpleLight(SLOT_RELAY_1);
@@ -158,8 +161,6 @@ void loop()
     if (!IsRuntimeGateway())
       SLOW_PeerJoin();
   }
-  // Look for a new sketch to update over the air
-  OTA_Process();
 }
 
 U8 led_status = 0;
@@ -202,13 +203,13 @@ void check_if_reset() {
 
 void check_for_reset_now() {
   if (!digitalRead(PIN_RESET)) {
-      Serial.println("");
-      Serial.println(F("Reset"));
-      Store_Init();
-      Store_Clear();
-      Store_Commit();
-      Serial.println(F("OK"));
-    }
+    Serial.println("");
+    Serial.println(F("Reset"));
+    Store_Init();
+    Store_Clear();
+    Store_Commit();
+    Serial.println(F("OK"));
+  }
 }
 
 U8 activity_led_status = 0;
