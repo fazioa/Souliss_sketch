@@ -1,0 +1,795 @@
+03:09:36.836 INFO  o.o.c.internal.CoreActivator[:61]- openHAB runtime has been started (v1.7.0).
+03:09:44.332 INFO  o.o.i.s.i.DiscoveryServiceImpl[:93]- mDNS service has been started
+03:09:46.517 INFO  o.o.i.s.i.DiscoveryServiceImpl[:53]- Service Discovery initialization completed.
+03:09:52.275 WARN  o.a.c.DefaultAnnotationProcessor[:178]- Unable to detect annotations. Application may fail to deploy.
+03:09:52.540 INFO  o.o.m.c.i.ModelRepositoryImpl[:80]- Loading model 'illuminazione.sitemap'
+03:09:53.972 INFO  o.o.m.c.i.ModelRepositoryImpl[:80]- Loading model 'default.sitemap'
+03:09:54.582 INFO  o.o.m.c.i.ModelRepositoryImpl[:80]- Loading model 'cosm.persist'
+03:09:54.737 INFO  o.o.m.c.i.ModelRepositoryImpl[:80]- Loading model 'myopenhab.persist'
+03:09:54.765 INFO  o.o.m.c.i.ModelRepositoryImpl[:80]- Loading model 'rrd4j.persist'
+03:09:54.980 INFO  o.o.m.c.i.ModelRepositoryImpl[:80]- Loading model 'default.items'
+03:09:59.198 INFO  o.o.io.rest.RESTApplication[:144]- Started REST API at /rest
+03:10:04.652 INFO  o.o.u.w.i.s.WebAppServlet[:79]- Started Classic UI at /openhab.app
+03:10:05.186 WARN  o.o.u.i.i.ItemUIRegistryImpl[:471]- Cannot find page for id 'tonino'.
+03:10:07.703 WARN  o.o.u.i.i.ItemUIRegistryImpl[:471]- Cannot find page for id 'tonino'.
+03:10:10.768 INFO  o.o.c.s.AbstractActiveService[:169]- NetworkHealth Refresh Service has been started
+03:10:11.213 INFO  o.o.b.s.i.SoulissActivator[:46]- souliss binding has been started.
+03:10:11.223 INFO  o.o.b.s.i.SoulissActivator[:49]- Load parameter from file: /properties/typicals_value_bytes.properties
+03:10:11.229 INFO  o.o.b.s.i.SoulissActivator[:52]- Load parameter from file: /properties/commands_OHtoSOULISS.properties
+03:10:11.236 INFO  o.o.b.s.i.n.t.StateTraslator[:135]- ok
+03:10:11.238 INFO  o.o.b.s.i.SoulissActivator[:56]- Load parameter from file: /properties/states_SOULISStoOH.properties
+03:10:11.241 INFO  o.o.b.s.i.n.t.StateTraslator[:152]- ok
+03:10:11.243 INFO  o.o.b.s.i.SoulissActivator[:60]- Load parameter from file: /properties/itemsType_SOULISS.properties
+03:10:11.246 INFO  o.o.b.s.i.n.t.StateTraslator[:169]- ok
+03:10:11.247 INFO  o.o.b.s.i.SoulissActivator[:64]- Load parameter from file: /properties/commands_to_states.properties
+03:10:11.250 INFO  o.o.b.s.i.n.t.StateTraslator[:180]- ok
+03:10:11.328 INFO  o.o.b.s.i.n.t.SoulissTypicals[:51]- Add Item: Temperature_Soggiorno - Typ: 52, Node: 1, Slot: 0
+03:10:11.330 INFO  o.o.b.s.i.n.t.SoulissTypicals[:55]- hashTableItemToAddress <-- [key: Temperature_Soggiorno - value: 1 - Slot 0]
+03:10:11.333 INFO  o.o.b.s.i.n.t.SoulissTypicals[:61]- hashTableAddressToTypicals <-- [key: 100 - value: org.openhab.binding.souliss.internal.network.typicals.SoulissT52@415cbd]
+03:10:11.337 INFO  o.o.b.s.i.n.t.SoulissTypicals[:51]- Add Item: Umidita_Soggiorno - Typ: 53, Node: 1, Slot: 2
+03:10:11.339 INFO  o.o.b.s.i.n.t.SoulissTypicals[:55]- hashTableItemToAddress <-- [key: Umidita_Soggiorno - value: 1 - Slot 2]
+03:10:11.341 INFO  o.o.b.s.i.n.t.SoulissTypicals[:61]- hashTableAddressToTypicals <-- [key: 120 - value: org.openhab.binding.souliss.internal.network.typicals.SoulissT53@103ec08]
+03:10:11.344 INFO  o.o.b.s.i.n.t.SoulissTypicals[:51]- Add Item: Consumo_Soggiorno - Typ: 57, Node: 1, Slot: 4
+03:10:11.346 INFO  o.o.b.s.i.n.t.SoulissTypicals[:55]- hashTableItemToAddress <-- [key: Consumo_Soggiorno - value: 1 - Slot 4]
+03:10:11.348 INFO  o.o.b.s.i.n.t.SoulissTypicals[:61]- hashTableAddressToTypicals <-- [key: 140 - value: org.openhab.binding.souliss.internal.network.typicals.SoulissT57@c0670d]
+03:10:11.350 INFO  o.o.b.s.i.n.t.SoulissTypicals[:51]- Add Item: ProduzioneFotovoltaico - Typ: 57, Node: 4, Slot: 0
+03:10:11.352 INFO  o.o.b.s.i.n.t.SoulissTypicals[:55]- hashTableItemToAddress <-- [key: ProduzioneFotovoltaico - value: 4 - Slot 0]
+03:10:11.354 INFO  o.o.b.s.i.n.t.SoulissTypicals[:61]- hashTableAddressToTypicals <-- [key: 400 - value: org.openhab.binding.souliss.internal.network.typicals.SoulissT57@3e8b96]
+03:10:11.357 INFO  o.o.b.s.i.n.t.SoulissTypicals[:51]- Add Item: Temperature_GF_Giardino - Typ: 52, Node: 2, Slot: 0
+03:10:11.359 INFO  o.o.b.s.i.n.t.SoulissTypicals[:55]- hashTableItemToAddress <-- [key: Temperature_GF_Giardino - value: 2 - Slot 0]
+03:10:11.361 INFO  o.o.b.s.i.n.t.SoulissTypicals[:61]- hashTableAddressToTypicals <-- [key: 200 - value: org.openhab.binding.souliss.internal.network.typicals.SoulissT52@548558]
+03:10:11.363 INFO  o.o.b.s.i.n.t.SoulissTypicals[:51]- Add Item: Umidita_GF_Giardino - Typ: 53, Node: 2, Slot: 2
+03:10:11.365 INFO  o.o.b.s.i.n.t.SoulissTypicals[:55]- hashTableItemToAddress <-- [key: Umidita_GF_Giardino - value: 2 - Slot 2]
+03:10:11.367 INFO  o.o.b.s.i.n.t.SoulissTypicals[:61]- hashTableAddressToTypicals <-- [key: 220 - value: org.openhab.binding.souliss.internal.network.typicals.SoulissT53@214df6]
+03:10:11.370 INFO  o.o.b.s.i.n.t.SoulissTypicals[:51]- Add Item: Luce1_Giardino - Typ: 11, Node: 2, Slot: 4
+03:10:11.372 INFO  o.o.b.s.i.n.t.SoulissTypicals[:55]- hashTableItemToAddress <-- [key: Luce1_Giardino - value: 2 - Slot 4]
+03:10:11.374 INFO  o.o.b.s.i.n.t.SoulissTypicals[:61]- hashTableAddressToTypicals <-- [key: 240 - value: org.openhab.binding.souliss.internal.network.typicals.SoulissT11@1babf30]
+03:10:11.377 INFO  o.o.b.s.i.n.t.SoulissTypicals[:51]- Add Item: Luce2_Giardino - Typ: 11, Node: 2, Slot: 5
+03:10:11.379 INFO  o.o.b.s.i.n.t.SoulissTypicals[:55]- hashTableItemToAddress <-- [key: Luce2_Giardino - value: 2 - Slot 5]
+03:10:11.380 INFO  o.o.b.s.i.n.t.SoulissTypicals[:61]- hashTableAddressToTypicals <-- [key: 250 - value: org.openhab.binding.souliss.internal.network.typicals.SoulissT11@1daef2a]
+03:10:11.383 INFO  o.o.b.s.i.n.t.SoulissTypicals[:51]- Add Item: SwitchPortoncino - Typ: 11, Node: 1, Slot: 6
+03:10:11.385 INFO  o.o.b.s.i.n.t.SoulissTypicals[:55]- hashTableItemToAddress <-- [key: SwitchPortoncino - value: 1 - Slot 6]
+03:10:11.387 INFO  o.o.b.s.i.n.t.SoulissTypicals[:61]- hashTableAddressToTypicals <-- [key: 160 - value: org.openhab.binding.souliss.internal.network.typicals.SoulissT11@138ddcc]
+03:10:11.389 INFO  o.o.b.s.i.n.t.SoulissTypicals[:51]- Add Item: SwitchCancello - Typ: 11, Node: 1, Slot: 7
+03:10:11.391 INFO  o.o.b.s.i.n.t.SoulissTypicals[:55]- hashTableItemToAddress <-- [key: SwitchCancello - value: 1 - Slot 7]
+03:10:11.394 INFO  o.o.b.s.i.n.t.SoulissTypicals[:61]- hashTableAddressToTypicals <-- [key: 170 - value: org.openhab.binding.souliss.internal.network.typicals.SoulissT11@15274a0]
+03:10:11.397 INFO  o.o.b.s.i.n.t.SoulissTypicals[:51]- Add Item: Temperature_Boiler_Solare_Termico - Typ: 52, Node: 3, Slot: 0
+03:10:11.399 INFO  o.o.b.s.i.n.t.SoulissTypicals[:55]- hashTableItemToAddress <-- [key: Temperature_Boiler_Solare_Termico - value: 3 - Slot 0]
+03:10:11.402 INFO  o.o.b.s.i.n.t.SoulissTypicals[:61]- hashTableAddressToTypicals <-- [key: 300 - value: org.openhab.binding.souliss.internal.network.typicals.SoulissT52@1891645]
+03:10:11.404 INFO  o.o.b.s.i.n.t.SoulissTypicals[:51]- Add Item: Temperature_Termocamino - Typ: 52, Node: 3, Slot: 2
+03:10:11.406 INFO  o.o.b.s.i.n.t.SoulissTypicals[:55]- hashTableItemToAddress <-- [key: Temperature_Termocamino - value: 3 - Slot 2]
+03:10:11.408 INFO  o.o.b.s.i.n.t.SoulissTypicals[:61]- hashTableAddressToTypicals <-- [key: 320 - value: org.openhab.binding.souliss.internal.network.typicals.SoulissT52@1b20721]
+03:10:11.410 INFO  o.o.b.s.i.n.t.SoulissTypicals[:51]- Add Item: SwitchTermocamino - Typ: 11, Node: 3, Slot: 4
+03:10:11.412 INFO  o.o.b.s.i.n.t.SoulissTypicals[:55]- hashTableItemToAddress <-- [key: SwitchTermocamino - value: 3 - Slot 4]
+03:10:11.415 INFO  o.o.b.s.i.n.t.SoulissTypicals[:61]- hashTableAddressToTypicals <-- [key: 340 - value: org.openhab.binding.souliss.internal.network.typicals.SoulissT11@7172a6]
+03:10:11.419 INFO  o.o.b.s.i.n.t.SoulissTypicals[:51]- Add Item: Boiler_TC_Automode - Typ: 11, Node: 3, Slot: 6
+03:10:11.421 INFO  o.o.b.s.i.n.t.SoulissTypicals[:55]- hashTableItemToAddress <-- [key: Boiler_TC_Automode - value: 3 - Slot 6]
+03:10:11.423 INFO  o.o.b.s.i.n.t.SoulissTypicals[:61]- hashTableAddressToTypicals <-- [key: 360 - value: org.openhab.binding.souliss.internal.network.typicals.SoulissT11@e2ed3c]
+03:10:11.428 INFO  o.o.b.s.i.n.t.TypicalFactory[:165]- Add parameter to T31/T12 : setasmeasured
+03:10:11.430 INFO  o.o.b.s.i.n.t.SoulissTypicals[:51]- Add Item: setasmeasured - Typ: 31, Node: 3, Slot: 7
+03:10:11.432 INFO  o.o.b.s.i.n.t.SoulissTypicals[:55]- hashTableItemToAddress <-- [key: setasmeasured - value: 3 - Slot 7]
+03:10:11.434 INFO  o.o.b.s.i.n.t.SoulissTypicals[:61]- hashTableAddressToTypicals <-- [key: 370 - value: org.openhab.binding.souliss.internal.network.typicals.SoulissT31@1fef89b]
+03:10:11.437 INFO  o.o.b.s.i.n.t.TypicalFactory[:165]- Add parameter to T31/T12 : setpoint
+03:10:11.439 INFO  o.o.b.s.i.n.t.SoulissTypicals[:51]- Add Item: Temperature_Termocamino_SetPoint - Typ: 31, Node: 3, Slot: 7
+03:10:11.441 INFO  o.o.b.s.i.n.t.SoulissTypicals[:55]- hashTableItemToAddress <-- [key: Temperature_Termocamino_SetPoint - value: 3 - Slot 7]
+03:10:11.443 INFO  o.o.b.s.i.n.t.SoulissTypicals[:61]- hashTableAddressToTypicals <-- [key: 370 - value: org.openhab.binding.souliss.internal.network.typicals.SoulissT31@1fef89b]
+03:10:11.445 INFO  o.o.b.s.i.n.t.TypicalFactory[:165]- Add parameter to T31/T12 : heating
+03:10:11.448 INFO  o.o.b.s.i.n.t.SoulissTypicals[:51]- Add Item: riscaldamento_tutto - Typ: 31, Node: 3, Slot: 7
+03:10:11.450 INFO  o.o.b.s.i.n.t.SoulissTypicals[:55]- hashTableItemToAddress <-- [key: riscaldamento_tutto - value: 3 - Slot 7]
+03:10:11.453 INFO  o.o.b.s.i.n.t.SoulissTypicals[:61]- hashTableAddressToTypicals <-- [key: 370 - value: org.openhab.binding.souliss.internal.network.typicals.SoulissT31@1fef89b]
+03:10:11.456 INFO  o.o.b.s.i.n.t.TypicalFactory[:165]- Add parameter to T31/T12 : measured
+03:10:11.458 INFO  o.o.b.s.i.n.t.SoulissTypicals[:51]- Add Item: Temperature_Termostato - Typ: 31, Node: 6, Slot: 0
+03:10:11.460 INFO  o.o.b.s.i.n.t.SoulissTypicals[:55]- hashTableItemToAddress <-- [key: Temperature_Termostato - value: 6 - Slot 0]
+03:10:11.462 INFO  o.o.b.s.i.n.t.SoulissTypicals[:61]- hashTableAddressToTypicals <-- [key: 600 - value: org.openhab.binding.souliss.internal.network.typicals.SoulissT31@12688a]
+03:10:11.464 INFO  o.o.b.s.i.n.t.TypicalFactory[:165]- Add parameter to T31/T12 : setpoint
+03:10:11.466 INFO  o.o.b.s.i.n.t.SoulissTypicals[:51]- Add Item: Temperature_Setpoint - Typ: 31, Node: 6, Slot: 0
+03:10:11.468 INFO  o.o.b.s.i.n.t.SoulissTypicals[:55]- hashTableItemToAddress <-- [key: Temperature_Setpoint - value: 6 - Slot 0]
+03:10:11.470 INFO  o.o.b.s.i.n.t.SoulissTypicals[:61]- hashTableAddressToTypicals <-- [key: 600 - value: org.openhab.binding.souliss.internal.network.typicals.SoulissT31@12688a]
+03:10:11.472 INFO  o.o.b.s.i.n.t.TypicalFactory[:165]- Add parameter to T31/T12 : setasmeasured
+03:10:11.474 INFO  o.o.b.s.i.n.t.SoulissTypicals[:51]- Add Item: setasmeasured_termostato - Typ: 31, Node: 6, Slot: 0
+03:10:11.476 INFO  o.o.b.s.i.n.t.SoulissTypicals[:55]- hashTableItemToAddress <-- [key: setasmeasured_termostato - value: 6 - Slot 0]
+03:10:11.479 INFO  o.o.b.s.i.n.t.SoulissTypicals[:61]- hashTableAddressToTypicals <-- [key: 600 - value: org.openhab.binding.souliss.internal.network.typicals.SoulissT31@12688a]
+03:10:11.481 INFO  o.o.b.s.i.n.t.TypicalFactory[:165]- Add parameter to T31/T12 : heating
+03:10:11.484 INFO  o.o.b.s.i.n.t.SoulissTypicals[:51]- Add Item: termostato_heating - Typ: 31, Node: 6, Slot: 0
+03:10:11.486 INFO  o.o.b.s.i.n.t.SoulissTypicals[:55]- hashTableItemToAddress <-- [key: termostato_heating - value: 6 - Slot 0]
+03:10:11.488 INFO  o.o.b.s.i.n.t.SoulissTypicals[:61]- hashTableAddressToTypicals <-- [key: 600 - value: org.openhab.binding.souliss.internal.network.typicals.SoulissT31@12688a]
+03:10:11.490 INFO  o.o.b.s.i.n.t.TypicalFactory[:165]- Add parameter to T31/T12 : heatingcooling
+03:10:11.492 INFO  o.o.b.s.i.n.t.SoulissTypicals[:51]- Add Item: heatingmode - Typ: 31, Node: 6, Slot: 0
+03:10:11.494 INFO  o.o.b.s.i.n.t.SoulissTypicals[:55]- hashTableItemToAddress <-- [key: heatingmode - value: 6 - Slot 0]
+03:10:11.496 INFO  o.o.b.s.i.n.t.SoulissTypicals[:61]- hashTableAddressToTypicals <-- [key: 600 - value: org.openhab.binding.souliss.internal.network.typicals.SoulissT31@12688a]
+03:10:11.498 INFO  o.o.b.s.i.n.t.TypicalFactory[:165]- Add parameter to T31/T12 : power
+03:10:11.500 INFO  o.o.b.s.i.n.t.SoulissTypicals[:51]- Add Item: power - Typ: 31, Node: 6, Slot: 0
+03:10:11.502 INFO  o.o.b.s.i.n.t.SoulissTypicals[:55]- hashTableItemToAddress <-- [key: power - value: 6 - Slot 0]
+03:10:11.505 INFO  o.o.b.s.i.n.t.SoulissTypicals[:61]- hashTableAddressToTypicals <-- [key: 600 - value: org.openhab.binding.souliss.internal.network.typicals.SoulissT31@12688a]
+03:10:11.508 INFO  o.o.b.s.i.n.t.SoulissTypicals[:51]- Add Item: Umidita_Termostato - Typ: 53, Node: 6, Slot: 7
+03:10:11.510 INFO  o.o.b.s.i.n.t.SoulissTypicals[:55]- hashTableItemToAddress <-- [key: Umidita_Termostato - value: 6 - Slot 7]
+03:10:11.511 INFO  o.o.b.s.i.n.t.SoulissTypicals[:61]- hashTableAddressToTypicals <-- [key: 670 - value: org.openhab.binding.souliss.internal.network.typicals.SoulissT53@19fd6ac]
+03:10:11.514 INFO  o.o.b.s.i.n.t.SoulissTypicals[:51]- Add Item: DisplayBright - Typ: 19, Node: 6, Slot: 9
+03:10:11.516 INFO  o.o.b.s.i.n.t.SoulissTypicals[:55]- hashTableItemToAddress <-- [key: DisplayBright - value: 6 - Slot 9]
+03:10:11.518 INFO  o.o.b.s.i.n.t.SoulissTypicals[:61]- hashTableAddressToTypicals <-- [key: 690 - value: org.openhab.binding.souliss.internal.network.typicals.SoulissT19@85456e]
+03:10:11.521 INFO  o.o.b.s.i.n.t.SoulissTypicals[:51]- Add Item: powerSwitch1 - Typ: 11, Node: 5, Slot: 0
+03:10:11.523 INFO  o.o.b.s.i.n.t.SoulissTypicals[:55]- hashTableItemToAddress <-- [key: powerSwitch1 - value: 5 - Slot 0]
+03:10:11.524 INFO  o.o.b.s.i.n.t.SoulissTypicals[:61]- hashTableAddressToTypicals <-- [key: 500 - value: org.openhab.binding.souliss.internal.network.typicals.SoulissT11@e95805]
+03:10:11.527 INFO  o.o.b.s.i.n.t.SoulissTypicals[:51]- Add Item: HEALTHNodo1_GF_Servizio - Typ: 98, Node: 1, Slot: 998
+03:10:11.530 INFO  o.o.b.s.i.n.t.SoulissTypicals[:55]- hashTableItemToAddress <-- [key: HEALTHNodo1_GF_Servizio - value: 1 - Slot 998]
+03:10:11.532 INFO  o.o.b.s.i.n.t.SoulissTypicals[:61]- hashTableAddressToTypicals <-- [key: 19980 - value: org.openhab.binding.souliss.internal.network.typicals.SoulissTServiceNODE_HEALTY@1ea3baa]
+03:10:11.535 INFO  o.o.b.s.i.n.t.SoulissTypicals[:51]- Add Item: HEALTHNodo2_GF_Servizio - Typ: 98, Node: 2, Slot: 998
+03:10:11.538 INFO  o.o.b.s.i.n.t.SoulissTypicals[:55]- hashTableItemToAddress <-- [key: HEALTHNodo2_GF_Servizio - value: 2 - Slot 998]
+03:10:11.540 INFO  o.o.b.s.i.n.t.SoulissTypicals[:61]- hashTableAddressToTypicals <-- [key: 29980 - value: org.openhab.binding.souliss.internal.network.typicals.SoulissTServiceNODE_HEALTY@91a00d]
+03:10:11.542 INFO  o.o.b.s.i.n.t.SoulissTypicals[:51]- Add Item: HEALTHNodo3_GF_Servizio - Typ: 98, Node: 3, Slot: 998
+03:10:11.544 INFO  o.o.b.s.i.n.t.SoulissTypicals[:55]- hashTableItemToAddress <-- [key: HEALTHNodo3_GF_Servizio - value: 3 - Slot 998]
+03:10:11.546 INFO  o.o.b.s.i.n.t.SoulissTypicals[:61]- hashTableAddressToTypicals <-- [key: 39980 - value: org.openhab.binding.souliss.internal.network.typicals.SoulissTServiceNODE_HEALTY@2b36c4]
+03:10:11.548 INFO  o.o.b.s.i.n.t.SoulissTypicals[:51]- Add Item: HEALTHNodo4_GF_Servizio - Typ: 98, Node: 4, Slot: 998
+03:10:11.550 INFO  o.o.b.s.i.n.t.SoulissTypicals[:55]- hashTableItemToAddress <-- [key: HEALTHNodo4_GF_Servizio - value: 4 - Slot 998]
+03:10:11.552 INFO  o.o.b.s.i.n.t.SoulissTypicals[:61]- hashTableAddressToTypicals <-- [key: 49980 - value: org.openhab.binding.souliss.internal.network.typicals.SoulissTServiceNODE_HEALTY@2060b4]
+03:10:11.554 INFO  o.o.b.s.i.n.t.SoulissTypicals[:51]- Add Item: HEALTHNodo6_GF_Servizio - Typ: 98, Node: 6, Slot: 998
+03:10:11.556 INFO  o.o.b.s.i.n.t.SoulissTypicals[:55]- hashTableItemToAddress <-- [key: HEALTHNodo6_GF_Servizio - value: 6 - Slot 998]
+03:10:11.559 INFO  o.o.b.s.i.n.t.SoulissTypicals[:61]- hashTableAddressToTypicals <-- [key: 69980 - value: org.openhab.binding.souliss.internal.network.typicals.SoulissTServiceNODE_HEALTY@7b3731]
+03:10:11.561 INFO  o.o.b.s.i.n.t.SoulissTypicals[:51]- Add Item: HEALTHNodo5_GF_Servizio - Typ: 98, Node: 5, Slot: 998
+03:10:11.563 INFO  o.o.b.s.i.n.t.SoulissTypicals[:55]- hashTableItemToAddress <-- [key: HEALTHNodo5_GF_Servizio - value: 5 - Slot 998]
+03:10:11.565 INFO  o.o.b.s.i.n.t.SoulissTypicals[:61]- hashTableAddressToTypicals <-- [key: 59980 - value: org.openhab.binding.souliss.internal.network.typicals.SoulissTServiceNODE_HEALTY@10b683b]
+03:10:11.568 INFO  o.o.b.s.i.n.t.SoulissTypicals[:51]- Add Item: TIMESTAMP_Nodo1_GF_Servizio - Typ: 99, Node: 1, Slot: 999
+03:10:11.570 INFO  o.o.b.s.i.n.t.SoulissTypicals[:55]- hashTableItemToAddress <-- [key: TIMESTAMP_Nodo1_GF_Servizio - value: 1 - Slot 999]
+03:10:11.572 INFO  o.o.b.s.i.n.t.SoulissTypicals[:61]- hashTableAddressToTypicals <-- [key: 19990 - value: org.openhab.binding.souliss.internal.network.typicals.SoulissTServiceNODE_TIMESTAMP@b7f908]
+03:10:11.575 INFO  o.o.b.s.i.n.t.SoulissTypicals[:51]- Add Item: TIMESTAMP_Nodo2_GF_Servizio - Typ: 99, Node: 2, Slot: 999
+03:10:11.577 INFO  o.o.b.s.i.n.t.SoulissTypicals[:55]- hashTableItemToAddress <-- [key: TIMESTAMP_Nodo2_GF_Servizio - value: 2 - Slot 999]
+03:10:11.578 INFO  o.o.b.s.i.n.t.SoulissTypicals[:61]- hashTableAddressToTypicals <-- [key: 29990 - value: org.openhab.binding.souliss.internal.network.typicals.SoulissTServiceNODE_TIMESTAMP@1cb02aa]
+03:10:11.581 INFO  o.o.b.s.i.n.t.SoulissTypicals[:51]- Add Item: TIMESTAMP_Nodo3_GF_Servizio - Typ: 99, Node: 3, Slot: 999
+03:10:11.583 INFO  o.o.b.s.i.n.t.SoulissTypicals[:55]- hashTableItemToAddress <-- [key: TIMESTAMP_Nodo3_GF_Servizio - value: 3 - Slot 999]
+03:10:11.584 INFO  o.o.b.s.i.n.t.SoulissTypicals[:61]- hashTableAddressToTypicals <-- [key: 39990 - value: org.openhab.binding.souliss.internal.network.typicals.SoulissTServiceNODE_TIMESTAMP@e66add]
+03:10:11.587 INFO  o.o.b.s.i.n.t.SoulissTypicals[:51]- Add Item: TIMESTAMP_Nodo4_GF_Servizio - Typ: 99, Node: 4, Slot: 999
+03:10:11.589 INFO  o.o.b.s.i.n.t.SoulissTypicals[:55]- hashTableItemToAddress <-- [key: TIMESTAMP_Nodo4_GF_Servizio - value: 4 - Slot 999]
+03:10:11.590 INFO  o.o.b.s.i.n.t.SoulissTypicals[:61]- hashTableAddressToTypicals <-- [key: 49990 - value: org.openhab.binding.souliss.internal.network.typicals.SoulissTServiceNODE_TIMESTAMP@20984a]
+03:10:11.593 INFO  o.o.b.s.i.n.t.SoulissTypicals[:51]- Add Item: TIMESTAMP_Nodo6_GF_Servizio - Typ: 99, Node: 6, Slot: 999
+03:10:11.594 INFO  o.o.b.s.i.n.t.SoulissTypicals[:55]- hashTableItemToAddress <-- [key: TIMESTAMP_Nodo6_GF_Servizio - value: 6 - Slot 999]
+03:10:11.596 INFO  o.o.b.s.i.n.t.SoulissTypicals[:61]- hashTableAddressToTypicals <-- [key: 69990 - value: org.openhab.binding.souliss.internal.network.typicals.SoulissTServiceNODE_TIMESTAMP@116477f]
+03:10:11.599 INFO  o.o.b.s.i.n.t.SoulissTypicals[:51]- Add Item: TIMESTAMP_Nodo5_GF_Servizio - Typ: 99, Node: 5, Slot: 999
+03:10:11.600 INFO  o.o.b.s.i.n.t.SoulissTypicals[:55]- hashTableItemToAddress <-- [key: TIMESTAMP_Nodo5_GF_Servizio - value: 5 - Slot 999]
+03:10:11.602 INFO  o.o.b.s.i.n.t.SoulissTypicals[:61]- hashTableAddressToTypicals <-- [key: 59990 - value: org.openhab.binding.souliss.internal.network.typicals.SoulissTServiceNODE_TIMESTAMP@3fdb25]
+03:10:11.626 INFO  o.o.b.s.i.SoulissBinding[:83]- PARAMETER: IP_LAN = 192.168.1.105
+03:10:11.629 INFO  o.o.b.s.i.SoulissBinding[:83]- PARAMETER: NODE_INDEX = 133
+03:10:11.631 INFO  o.o.b.s.i.SoulissBinding[:83]- PARAMETER: REFRESH_DBSTRUCT_TIME = 600000
+03:10:11.633 INFO  o.o.b.s.i.SoulissBinding[:83]- PARAMETER: REFRESH_HEALTY_TIME = 60000
+03:10:11.634 INFO  o.o.b.s.i.SoulissBinding[:83]- PARAMETER: REFRESH_MONITOR_TIME = 500
+03:10:11.638 INFO  o.o.b.s.i.SoulissBinding[:83]- PARAMETER: REFRESH_SUBSCRIPTION_TIME = 120000
+03:10:11.640 INFO  o.o.b.s.i.SoulissBinding[:83]- PARAMETER: SECURE_SEND_TIMEOUT_TO_REMOVE_PACKET = 30000
+03:10:11.644 INFO  o.o.b.s.i.SoulissBinding[:83]- PARAMETER: SECURE_SEND_TIMEOUT_TO_REQUEUE = 5000
+03:10:11.648 INFO  o.o.b.s.i.SoulissBinding[:83]- PARAMETER: SEND_DELAY = 1500
+03:10:11.654 INFO  o.o.b.s.i.SoulissBinding[:83]- PARAMETER: SEND_MIN_DELAY = 100
+03:10:11.656 INFO  o.o.b.s.i.SoulissBinding[:83]- PARAMETER: SERVERPORT = 
+03:10:11.657 INFO  o.o.b.s.i.SoulissBinding[:83]- PARAMETER: service.pid = org.openhab.souliss
+03:10:11.659 INFO  o.o.b.s.i.SoulissBinding[:83]- PARAMETER: USER_INDEX = 72
+03:10:11.660 INFO  o.o.b.s.i.SoulissBinding[:323]- START
+03:10:11.676 INFO  o.o.b.s.i.n.u.UDPServerThread[:45]- Start UDPServerThread - Server in ascolto sulla porta 56981
+03:10:11.683 INFO  o.o.b.s.i.n.typicals.Monitor[:38]- Start MonitorThread
+03:10:11.694 INFO  o.o.b.s.i.n.udp.SendDispatcher[:49]- Start SendDispatcherThread
+03:10:11.699 INFO  o.o.b.s.i.n.t.RefreshSUBSCRIPTION[:34]- Start RefreshSUBSCRIPTIONThread
+03:10:11.703 INFO  o.o.b.s.i.n.t.RefreshHEALTY[:37]- Start RefreshDBSTRUCTThread
+03:10:11.706 INFO  o.o.c.s.AbstractActiveService[:169]- Souliss Refresh Service has been started
+03:10:13.632 WARN  o.o.c.p.i.PersistenceManager[:396]- Failed to restore item states as persistence service 'myopenhab' can not be queried.
+03:10:13.650 WARN  o.o.c.p.i.PersistenceManager[:396]- Failed to restore item states as persistence service 'myopenhab' can not be queried.
+03:10:13.669 WARN  o.o.c.p.i.PersistenceManager[:396]- Failed to restore item states as persistence service 'myopenhab' can not be queried.
+03:10:15.557 WARN  o.o.c.i.e.EventPublisherImpl[:80]- given new state is NULL, couldn't post update for 'Umidita_GF_Giardino'
+03:10:15.559 WARN  o.o.c.i.e.EventPublisherImpl[:80]- given new state is NULL, couldn't post update for 'Temperature_GF_Giardino'
+03:10:16.010 INFO  o.o.m.c.i.ModelRepositoryImpl[:80]- Loading model 'default.rules'
+03:10:17.067 INFO  o.o.i.m.internal.MyOHClient[:205]- Connected to my.openHAB service (UUID = f944b2bf-e0d4-40fa-aabd-72f9a5f97972, base URL = http://localhost:8080)
+03:10:17.803 ERROR o.o.m.r.i.e.RuleTriggerManager[:320]- Cannot create timer for rule 'Periodically check presence': CronExpression '*/30 * * * ?' is invalid,.
+03:10:17.806 ERROR o.o.m.r.i.e.RuleTriggerManager[:320]- Cannot create timer for rule 'Coming home': CronExpression '*/30 * * * ?' is invalid,.
+03:11:10.841 WARN  o.a.cpr.DefaultBroadcaster[:1369]- Duplicate resource 8d5209a8-a816-4e2f-abd1-f897d31b7337. Could be caused by a dead connection not detected by your server. Replacing the old one with the fresh one
+03:11:43.816 INFO  o.o.m.c.i.ModelRepositoryImpl[:98]- Refreshing model 'default.rules'
+03:11:44.200 ERROR o.o.m.r.i.e.RuleTriggerManager[:320]- Cannot create timer for rule 'Periodically check presence': CronExpression '*/30 * * * ?' is invalid,.
+03:11:44.202 ERROR o.o.m.r.i.e.RuleTriggerManager[:320]- Cannot create timer for rule 'Coming home': CronExpression '*/30 * * * ?' is invalid,.
+03:12:17.092 WARN  o.o.c.i.e.EventPublisherImpl[:80]- given new state is NULL, couldn't post update for 'Umidita_GF_Giardino'
+03:12:17.094 WARN  o.o.c.i.e.EventPublisherImpl[:80]- given new state is NULL, couldn't post update for 'Temperature_GF_Giardino'
+03:12:43.637 WARN  o.a.cpr.DefaultBroadcaster[:1369]- Duplicate resource 8d5209a8-a816-4e2f-abd1-f897d31b7337. Could be caused by a dead connection not detected by your server. Replacing the old one with the fresh one
+03:14:07.306 INFO  o.o.m.c.i.ModelRepositoryImpl[:98]- Refreshing model 'default.rules'
+03:14:07.622 ERROR o.o.m.r.i.e.RuleTriggerManager[:320]- Cannot create timer for rule 'Periodically check presence': CronExpression '*/30 * * * ?' is invalid,.
+03:14:07.625 ERROR o.o.m.r.i.e.RuleTriggerManager[:320]- Cannot create timer for rule 'Coming home': CronExpression '*/30 * * * ?' is invalid,.
+03:14:12.643 WARN  o.o.c.i.e.EventPublisherImpl[:80]- given new state is NULL, couldn't post update for 'Umidita_GF_Giardino'
+03:14:12.644 WARN  o.o.c.i.e.EventPublisherImpl[:80]- given new state is NULL, couldn't post update for 'Temperature_GF_Giardino'
+03:15:07.876 WARN  o.o.u.i.i.ItemUIRegistryImpl[:471]- Cannot find page for id 'tonino'.
+03:15:11.534 INFO  o.o.io.rest.RESTApplication[:160]- Stopped REST API
+03:15:15.586 INFO  o.o.u.w.i.s.WebAppServlet[:90]- Stopped Classic UI
+03:15:15.674 WARN  o.e.j.u.t.QueuedThreadPool[:140]- 1 threads could not be stopped
+03:15:39.431 INFO  o.o.c.internal.CoreActivator[:61]- openHAB runtime has been started (v1.7.0).
+03:15:48.143 INFO  o.o.i.s.i.DiscoveryServiceImpl[:93]- mDNS service has been started
+03:15:50.315 INFO  o.o.i.s.i.DiscoveryServiceImpl[:53]- Service Discovery initialization completed.
+03:15:55.205 INFO  o.o.m.c.i.ModelRepositoryImpl[:80]- Loading model 'cosm.persist'
+03:15:56.899 INFO  o.o.m.c.i.ModelRepositoryImpl[:80]- Loading model 'myopenhab.persist'
+03:15:57.024 INFO  o.o.m.c.i.ModelRepositoryImpl[:80]- Loading model 'rrd4j.persist'
+03:15:57.805 INFO  o.o.m.c.i.ModelRepositoryImpl[:80]- Loading model 'default.items'
+03:15:59.270 WARN  o.a.c.DefaultAnnotationProcessor[:178]- Unable to detect annotations. Application may fail to deploy.
+03:16:04.587 INFO  o.o.io.rest.RESTApplication[:144]- Started REST API at /rest
+03:16:04.914 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:04.916 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:04.914 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:04.978 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:04.985 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:04.993 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:05.007 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:05.048 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:05.061 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:05.064 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:05.099 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:05.112 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:05.119 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:05.171 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:05.187 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:05.188 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:05.229 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:05.244 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:05.249 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:05.281 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:05.282 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:05.297 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:05.316 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:05.336 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:05.340 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:05.356 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:05.377 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:05.379 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:05.408 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:05.430 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:05.435 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:05.440 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:05.455 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:05.488 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:05.505 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:05.504 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:05.538 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:05.561 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:05.553 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:05.586 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:05.597 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:05.632 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:05.640 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:05.648 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:05.666 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:05.693 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:05.693 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:05.708 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:05.727 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:05.754 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:05.756 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:05.767 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:05.786 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:05.809 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:05.811 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:05.828 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:05.844 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:05.867 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:05.872 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:05.895 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:05.906 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:05.935 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:05.950 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:05.953 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:05.988 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:05.999 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:06.001 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:06.027 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:06.034 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:06.049 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:06.066 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:06.066 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:06.094 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:06.107 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:06.168 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:06.160 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:06.210 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:06.213 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:06.221 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:06.360 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:06.364 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:06.370 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:06.395 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:06.402 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:06.418 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:06.439 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:06.440 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:06.456 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:06.477 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:06.486 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:06.497 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:06.514 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:06.515 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:06.533 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:06.559 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:06.568 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:06.575 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:06.605 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:06.605 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:06.615 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:06.638 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:06.645 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:06.656 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:06.686 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:06.695 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:06.703 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:06.719 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:06.745 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:06.745 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:06.760 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:06.788 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:06.794 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:06.795 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:06.824 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:06.824 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:06.843 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:06.865 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:06.873 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:06.896 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:06.911 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:06.918 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:06.925 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:06.948 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:06.961 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:06.974 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:06.985 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:07.006 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:07.025 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:07.032 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:07.045 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:07.068 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:07.085 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:07.097 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:07.106 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:07.124 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:07.128 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:07.143 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:07.163 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:07.171 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:07.190 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:07.204 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:07.204 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:07.233 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:07.244 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:07.244 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:07.275 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:07.275 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:07.282 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:07.310 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:07.311 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:07.315 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:07.344 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:07.354 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:07.357 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:07.372 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:07.394 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:07.400 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:07.404 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:07.424 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:07.443 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:07.453 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:07.459 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:07.494 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:07.499 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:07.504 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:07.533 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:07.537 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:07.540 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:07.573 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:07.573 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:07.584 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:07.614 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:07.616 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:07.628 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:07.657 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:07.664 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:07.658 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:07.694 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:07.699 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:07.706 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:07.735 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:07.739 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:07.747 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:07.773 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:07.783 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:07.783 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:07.793 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:07.823 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:07.827 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:07.843 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:07.869 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:07.874 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:07.875 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:07.894 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:07.913 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:07.903 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:07.933 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:07.954 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:07.962 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:07.974 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:07.988 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:07.994 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:08.014 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:08.016 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:08.044 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:08.046 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:08.054 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:08.084 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:08.091 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:08.088 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:08.124 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:08.125 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:08.124 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:08.162 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:08.184 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:08.185 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:08.200 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:08.224 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:08.225 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:08.236 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:08.264 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:08.264 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:08.271 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:08.322 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:08.326 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:08.324 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:08.365 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:08.373 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:08.379 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:08.414 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:08.416 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:08.428 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:08.444 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:08.444 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:08.471 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:08.476 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:08.481 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:08.503 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:08.503 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:08.516 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:08.533 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:08.527 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:08.545 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:08.563 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:08.563 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:08.573 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:08.584 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:08.614 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:08.617 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:08.626 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:08.645 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:08.653 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:08.663 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:08.673 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:08.694 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:08.700 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:08.715 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:08.734 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:08.734 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:08.754 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:08.776 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:08.782 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:08.793 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:08.810 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:08.813 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:08.832 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:08.833 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:08.853 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:09.252 INFO  o.o.m.c.i.ModelRepositoryImpl[:80]- Loading model 'illuminazione.sitemap'
+03:16:09.688 INFO  o.o.i.r.i.r.SitemapResource[:221]- Received HTTP GET request at 'http://192.168.1.121:8080/rest/' for the unknown sitemap 'default'.
+03:16:09.727 INFO  o.o.m.c.i.ModelRepositoryImpl[:80]- Loading model 'default.sitemap'
+03:16:10.402 INFO  o.o.u.w.i.s.WebAppServlet[:79]- Started Classic UI at /openhab.app
+03:16:10.750 WARN  o.o.u.i.i.ItemUIRegistryImpl[:471]- Cannot find page for id 'tonino'.
+03:16:15.560 INFO  o.o.c.s.AbstractActiveService[:169]- NetworkHealth Refresh Service has been started
+03:16:15.921 INFO  o.o.b.s.i.SoulissActivator[:46]- souliss binding has been started.
+03:16:15.924 INFO  o.o.b.s.i.SoulissActivator[:49]- Load parameter from file: /properties/typicals_value_bytes.properties
+03:16:15.932 INFO  o.o.b.s.i.SoulissActivator[:52]- Load parameter from file: /properties/commands_OHtoSOULISS.properties
+03:16:15.938 INFO  o.o.b.s.i.n.t.StateTraslator[:135]- ok
+03:16:15.940 INFO  o.o.b.s.i.SoulissActivator[:56]- Load parameter from file: /properties/states_SOULISStoOH.properties
+03:16:15.942 INFO  o.o.b.s.i.n.t.StateTraslator[:152]- ok
+03:16:15.944 INFO  o.o.b.s.i.SoulissActivator[:60]- Load parameter from file: /properties/itemsType_SOULISS.properties
+03:16:15.946 INFO  o.o.b.s.i.n.t.StateTraslator[:169]- ok
+03:16:15.947 INFO  o.o.b.s.i.SoulissActivator[:64]- Load parameter from file: /properties/commands_to_states.properties
+03:16:15.949 INFO  o.o.b.s.i.n.t.StateTraslator[:180]- ok
+03:16:16.023 INFO  o.o.b.s.i.n.t.SoulissTypicals[:51]- Add Item: Temperature_Soggiorno - Typ: 52, Node: 1, Slot: 0
+03:16:16.026 INFO  o.o.b.s.i.n.t.SoulissTypicals[:55]- hashTableItemToAddress <-- [key: Temperature_Soggiorno - value: 1 - Slot 0]
+03:16:16.028 INFO  o.o.b.s.i.n.t.SoulissTypicals[:61]- hashTableAddressToTypicals <-- [key: 100 - value: org.openhab.binding.souliss.internal.network.typicals.SoulissT52@903df7]
+03:16:16.031 INFO  o.o.b.s.i.n.t.SoulissTypicals[:51]- Add Item: Umidita_Soggiorno - Typ: 53, Node: 1, Slot: 2
+03:16:16.033 INFO  o.o.b.s.i.n.t.SoulissTypicals[:55]- hashTableItemToAddress <-- [key: Umidita_Soggiorno - value: 1 - Slot 2]
+03:16:16.034 INFO  o.o.b.s.i.n.t.SoulissTypicals[:61]- hashTableAddressToTypicals <-- [key: 120 - value: org.openhab.binding.souliss.internal.network.typicals.SoulissT53@150314e]
+03:16:16.037 INFO  o.o.b.s.i.n.t.SoulissTypicals[:51]- Add Item: Consumo_Soggiorno - Typ: 57, Node: 1, Slot: 4
+03:16:16.039 INFO  o.o.b.s.i.n.t.SoulissTypicals[:55]- hashTableItemToAddress <-- [key: Consumo_Soggiorno - value: 1 - Slot 4]
+03:16:16.040 INFO  o.o.b.s.i.n.t.SoulissTypicals[:61]- hashTableAddressToTypicals <-- [key: 140 - value: org.openhab.binding.souliss.internal.network.typicals.SoulissT57@19bdc3e]
+03:16:16.042 INFO  o.o.b.s.i.n.t.SoulissTypicals[:51]- Add Item: ProduzioneFotovoltaico - Typ: 57, Node: 4, Slot: 0
+03:16:16.044 INFO  o.o.b.s.i.n.t.SoulissTypicals[:55]- hashTableItemToAddress <-- [key: ProduzioneFotovoltaico - value: 4 - Slot 0]
+03:16:16.046 INFO  o.o.b.s.i.n.t.SoulissTypicals[:61]- hashTableAddressToTypicals <-- [key: 400 - value: org.openhab.binding.souliss.internal.network.typicals.SoulissT57@a780e5]
+03:16:16.048 INFO  o.o.b.s.i.n.t.SoulissTypicals[:51]- Add Item: Temperature_GF_Giardino - Typ: 52, Node: 2, Slot: 0
+03:16:16.049 INFO  o.o.b.s.i.n.t.SoulissTypicals[:55]- hashTableItemToAddress <-- [key: Temperature_GF_Giardino - value: 2 - Slot 0]
+03:16:16.051 INFO  o.o.b.s.i.n.t.SoulissTypicals[:61]- hashTableAddressToTypicals <-- [key: 200 - value: org.openhab.binding.souliss.internal.network.typicals.SoulissT52@1e97a83]
+03:16:16.053 INFO  o.o.b.s.i.n.t.SoulissTypicals[:51]- Add Item: Umidita_GF_Giardino - Typ: 53, Node: 2, Slot: 2
+03:16:16.055 INFO  o.o.b.s.i.n.t.SoulissTypicals[:55]- hashTableItemToAddress <-- [key: Umidita_GF_Giardino - value: 2 - Slot 2]
+03:16:16.056 INFO  o.o.b.s.i.n.t.SoulissTypicals[:61]- hashTableAddressToTypicals <-- [key: 220 - value: org.openhab.binding.souliss.internal.network.typicals.SoulissT53@15de7b1]
+03:16:16.059 INFO  o.o.b.s.i.n.t.SoulissTypicals[:51]- Add Item: Luce1_Giardino - Typ: 11, Node: 2, Slot: 4
+03:16:16.061 INFO  o.o.b.s.i.n.t.SoulissTypicals[:55]- hashTableItemToAddress <-- [key: Luce1_Giardino - value: 2 - Slot 4]
+03:16:16.062 INFO  o.o.b.s.i.n.t.SoulissTypicals[:61]- hashTableAddressToTypicals <-- [key: 240 - value: org.openhab.binding.souliss.internal.network.typicals.SoulissT11@a4ba48]
+03:16:16.064 INFO  o.o.b.s.i.n.t.SoulissTypicals[:51]- Add Item: Luce2_Giardino - Typ: 11, Node: 2, Slot: 5
+03:16:16.066 INFO  o.o.b.s.i.n.t.SoulissTypicals[:55]- hashTableItemToAddress <-- [key: Luce2_Giardino - value: 2 - Slot 5]
+03:16:16.068 INFO  o.o.b.s.i.n.t.SoulissTypicals[:61]- hashTableAddressToTypicals <-- [key: 250 - value: org.openhab.binding.souliss.internal.network.typicals.SoulissT11@38a991]
+03:16:16.070 INFO  o.o.b.s.i.n.t.SoulissTypicals[:51]- Add Item: SwitchPortoncino - Typ: 11, Node: 1, Slot: 6
+03:16:16.071 INFO  o.o.b.s.i.n.t.SoulissTypicals[:55]- hashTableItemToAddress <-- [key: SwitchPortoncino - value: 1 - Slot 6]
+03:16:16.073 INFO  o.o.b.s.i.n.t.SoulissTypicals[:61]- hashTableAddressToTypicals <-- [key: 160 - value: org.openhab.binding.souliss.internal.network.typicals.SoulissT11@7fea77]
+03:16:16.075 INFO  o.o.b.s.i.n.t.SoulissTypicals[:51]- Add Item: SwitchCancello - Typ: 11, Node: 1, Slot: 7
+03:16:16.082 INFO  o.o.b.s.i.n.t.SoulissTypicals[:55]- hashTableItemToAddress <-- [key: SwitchCancello - value: 1 - Slot 7]
+03:16:16.083 INFO  o.o.b.s.i.n.t.SoulissTypicals[:61]- hashTableAddressToTypicals <-- [key: 170 - value: org.openhab.binding.souliss.internal.network.typicals.SoulissT11@aff6e6]
+03:16:16.085 INFO  o.o.b.s.i.n.t.SoulissTypicals[:51]- Add Item: Temperature_Boiler_Solare_Termico - Typ: 52, Node: 3, Slot: 0
+03:16:16.087 INFO  o.o.b.s.i.n.t.SoulissTypicals[:55]- hashTableItemToAddress <-- [key: Temperature_Boiler_Solare_Termico - value: 3 - Slot 0]
+03:16:16.088 INFO  o.o.b.s.i.n.t.SoulissTypicals[:61]- hashTableAddressToTypicals <-- [key: 300 - value: org.openhab.binding.souliss.internal.network.typicals.SoulissT52@1207f01]
+03:16:16.090 INFO  o.o.b.s.i.n.t.SoulissTypicals[:51]- Add Item: Temperature_Termocamino - Typ: 52, Node: 3, Slot: 2
+03:16:16.092 INFO  o.o.b.s.i.n.t.SoulissTypicals[:55]- hashTableItemToAddress <-- [key: Temperature_Termocamino - value: 3 - Slot 2]
+03:16:16.094 INFO  o.o.b.s.i.n.t.SoulissTypicals[:61]- hashTableAddressToTypicals <-- [key: 320 - value: org.openhab.binding.souliss.internal.network.typicals.SoulissT52@7130d5]
+03:16:16.096 INFO  o.o.b.s.i.n.t.SoulissTypicals[:51]- Add Item: SwitchTermocamino - Typ: 11, Node: 3, Slot: 4
+03:16:16.097 INFO  o.o.b.s.i.n.t.SoulissTypicals[:55]- hashTableItemToAddress <-- [key: SwitchTermocamino - value: 3 - Slot 4]
+03:16:16.099 INFO  o.o.b.s.i.n.t.SoulissTypicals[:61]- hashTableAddressToTypicals <-- [key: 340 - value: org.openhab.binding.souliss.internal.network.typicals.SoulissT11@138503e]
+03:16:16.101 INFO  o.o.b.s.i.n.t.SoulissTypicals[:51]- Add Item: Boiler_TC_Automode - Typ: 11, Node: 3, Slot: 6
+03:16:16.103 INFO  o.o.b.s.i.n.t.SoulissTypicals[:55]- hashTableItemToAddress <-- [key: Boiler_TC_Automode - value: 3 - Slot 6]
+03:16:16.104 INFO  o.o.b.s.i.n.t.SoulissTypicals[:61]- hashTableAddressToTypicals <-- [key: 360 - value: org.openhab.binding.souliss.internal.network.typicals.SoulissT11@759c79]
+03:16:16.109 INFO  o.o.b.s.i.n.t.TypicalFactory[:165]- Add parameter to T31/T12 : setasmeasured
+03:16:16.111 INFO  o.o.b.s.i.n.t.SoulissTypicals[:51]- Add Item: setasmeasured - Typ: 31, Node: 3, Slot: 7
+03:16:16.112 INFO  o.o.b.s.i.n.t.SoulissTypicals[:55]- hashTableItemToAddress <-- [key: setasmeasured - value: 3 - Slot 7]
+03:16:16.114 INFO  o.o.b.s.i.n.t.SoulissTypicals[:61]- hashTableAddressToTypicals <-- [key: 370 - value: org.openhab.binding.souliss.internal.network.typicals.SoulissT31@7d2bc1]
+03:16:16.116 INFO  o.o.b.s.i.n.t.TypicalFactory[:165]- Add parameter to T31/T12 : setpoint
+03:16:16.118 INFO  o.o.b.s.i.n.t.SoulissTypicals[:51]- Add Item: Temperature_Termocamino_SetPoint - Typ: 31, Node: 3, Slot: 7
+03:16:16.120 INFO  o.o.b.s.i.n.t.SoulissTypicals[:55]- hashTableItemToAddress <-- [key: Temperature_Termocamino_SetPoint - value: 3 - Slot 7]
+03:16:16.121 INFO  o.o.b.s.i.n.t.SoulissTypicals[:61]- hashTableAddressToTypicals <-- [key: 370 - value: org.openhab.binding.souliss.internal.network.typicals.SoulissT31@7d2bc1]
+03:16:16.123 INFO  o.o.b.s.i.n.t.TypicalFactory[:165]- Add parameter to T31/T12 : heating
+03:16:16.125 INFO  o.o.b.s.i.n.t.SoulissTypicals[:51]- Add Item: riscaldamento_tutto - Typ: 31, Node: 3, Slot: 7
+03:16:16.127 INFO  o.o.b.s.i.n.t.SoulissTypicals[:55]- hashTableItemToAddress <-- [key: riscaldamento_tutto - value: 3 - Slot 7]
+03:16:16.128 INFO  o.o.b.s.i.n.t.SoulissTypicals[:61]- hashTableAddressToTypicals <-- [key: 370 - value: org.openhab.binding.souliss.internal.network.typicals.SoulissT31@7d2bc1]
+03:16:16.130 INFO  o.o.b.s.i.n.t.TypicalFactory[:165]- Add parameter to T31/T12 : measured
+03:16:16.132 INFO  o.o.b.s.i.n.t.SoulissTypicals[:51]- Add Item: Temperature_Termostato - Typ: 31, Node: 6, Slot: 0
+03:16:16.134 INFO  o.o.b.s.i.n.t.SoulissTypicals[:55]- hashTableItemToAddress <-- [key: Temperature_Termostato - value: 6 - Slot 0]
+03:16:16.135 INFO  o.o.b.s.i.n.t.SoulissTypicals[:61]- hashTableAddressToTypicals <-- [key: 600 - value: org.openhab.binding.souliss.internal.network.typicals.SoulissT31@1f54643]
+03:16:16.137 INFO  o.o.b.s.i.n.t.TypicalFactory[:165]- Add parameter to T31/T12 : setpoint
+03:16:16.139 INFO  o.o.b.s.i.n.t.SoulissTypicals[:51]- Add Item: Temperature_Setpoint - Typ: 31, Node: 6, Slot: 0
+03:16:16.141 INFO  o.o.b.s.i.n.t.SoulissTypicals[:55]- hashTableItemToAddress <-- [key: Temperature_Setpoint - value: 6 - Slot 0]
+03:16:16.142 INFO  o.o.b.s.i.n.t.SoulissTypicals[:61]- hashTableAddressToTypicals <-- [key: 600 - value: org.openhab.binding.souliss.internal.network.typicals.SoulissT31@1f54643]
+03:16:16.144 INFO  o.o.b.s.i.n.t.TypicalFactory[:165]- Add parameter to T31/T12 : setasmeasured
+03:16:16.146 INFO  o.o.b.s.i.n.t.SoulissTypicals[:51]- Add Item: setasmeasured_termostato - Typ: 31, Node: 6, Slot: 0
+03:16:16.147 INFO  o.o.b.s.i.n.t.SoulissTypicals[:55]- hashTableItemToAddress <-- [key: setasmeasured_termostato - value: 6 - Slot 0]
+03:16:16.149 INFO  o.o.b.s.i.n.t.SoulissTypicals[:61]- hashTableAddressToTypicals <-- [key: 600 - value: org.openhab.binding.souliss.internal.network.typicals.SoulissT31@1f54643]
+03:16:16.151 INFO  o.o.b.s.i.n.t.TypicalFactory[:165]- Add parameter to T31/T12 : heating
+03:16:16.152 INFO  o.o.b.s.i.n.t.SoulissTypicals[:51]- Add Item: termostato_heating - Typ: 31, Node: 6, Slot: 0
+03:16:16.154 INFO  o.o.b.s.i.n.t.SoulissTypicals[:55]- hashTableItemToAddress <-- [key: termostato_heating - value: 6 - Slot 0]
+03:16:16.155 INFO  o.o.b.s.i.n.t.SoulissTypicals[:61]- hashTableAddressToTypicals <-- [key: 600 - value: org.openhab.binding.souliss.internal.network.typicals.SoulissT31@1f54643]
+03:16:16.157 INFO  o.o.b.s.i.n.t.TypicalFactory[:165]- Add parameter to T31/T12 : heatingcooling
+03:16:16.159 INFO  o.o.b.s.i.n.t.SoulissTypicals[:51]- Add Item: heatingmode - Typ: 31, Node: 6, Slot: 0
+03:16:16.161 INFO  o.o.b.s.i.n.t.SoulissTypicals[:55]- hashTableItemToAddress <-- [key: heatingmode - value: 6 - Slot 0]
+03:16:16.162 INFO  o.o.b.s.i.n.t.SoulissTypicals[:61]- hashTableAddressToTypicals <-- [key: 600 - value: org.openhab.binding.souliss.internal.network.typicals.SoulissT31@1f54643]
+03:16:16.164 INFO  o.o.b.s.i.n.t.TypicalFactory[:165]- Add parameter to T31/T12 : power
+03:16:16.166 INFO  o.o.b.s.i.n.t.SoulissTypicals[:51]- Add Item: power - Typ: 31, Node: 6, Slot: 0
+03:16:16.168 INFO  o.o.b.s.i.n.t.SoulissTypicals[:55]- hashTableItemToAddress <-- [key: power - value: 6 - Slot 0]
+03:16:16.169 INFO  o.o.b.s.i.n.t.SoulissTypicals[:61]- hashTableAddressToTypicals <-- [key: 600 - value: org.openhab.binding.souliss.internal.network.typicals.SoulissT31@1f54643]
+03:16:16.171 INFO  o.o.b.s.i.n.t.SoulissTypicals[:51]- Add Item: Umidita_Termostato - Typ: 53, Node: 6, Slot: 7
+03:16:16.173 INFO  o.o.b.s.i.n.t.SoulissTypicals[:55]- hashTableItemToAddress <-- [key: Umidita_Termostato - value: 6 - Slot 7]
+03:16:16.174 INFO  o.o.b.s.i.n.t.SoulissTypicals[:61]- hashTableAddressToTypicals <-- [key: 670 - value: org.openhab.binding.souliss.internal.network.typicals.SoulissT53@1d52e3]
+03:16:16.177 INFO  o.o.b.s.i.n.t.SoulissTypicals[:51]- Add Item: DisplayBright - Typ: 19, Node: 6, Slot: 9
+03:16:16.179 INFO  o.o.b.s.i.n.t.SoulissTypicals[:55]- hashTableItemToAddress <-- [key: DisplayBright - value: 6 - Slot 9]
+03:16:16.181 INFO  o.o.b.s.i.n.t.SoulissTypicals[:61]- hashTableAddressToTypicals <-- [key: 690 - value: org.openhab.binding.souliss.internal.network.typicals.SoulissT19@e197cd]
+03:16:16.183 INFO  o.o.b.s.i.n.t.SoulissTypicals[:51]- Add Item: powerSwitch1 - Typ: 11, Node: 5, Slot: 0
+03:16:16.185 INFO  o.o.b.s.i.n.t.SoulissTypicals[:55]- hashTableItemToAddress <-- [key: powerSwitch1 - value: 5 - Slot 0]
+03:16:16.186 INFO  o.o.b.s.i.n.t.SoulissTypicals[:61]- hashTableAddressToTypicals <-- [key: 500 - value: org.openhab.binding.souliss.internal.network.typicals.SoulissT11@13d9d73]
+03:16:16.189 INFO  o.o.b.s.i.n.t.SoulissTypicals[:51]- Add Item: HEALTHNodo1_GF_Servizio - Typ: 98, Node: 1, Slot: 998
+03:16:16.191 INFO  o.o.b.s.i.n.t.SoulissTypicals[:55]- hashTableItemToAddress <-- [key: HEALTHNodo1_GF_Servizio - value: 1 - Slot 998]
+03:16:16.193 INFO  o.o.b.s.i.n.t.SoulissTypicals[:61]- hashTableAddressToTypicals <-- [key: 19980 - value: org.openhab.binding.souliss.internal.network.typicals.SoulissTServiceNODE_HEALTY@3911c9]
+03:16:16.195 INFO  o.o.b.s.i.n.t.SoulissTypicals[:51]- Add Item: HEALTHNodo2_GF_Servizio - Typ: 98, Node: 2, Slot: 998
+03:16:16.196 INFO  o.o.b.s.i.n.t.SoulissTypicals[:55]- hashTableItemToAddress <-- [key: HEALTHNodo2_GF_Servizio - value: 2 - Slot 998]
+03:16:16.198 INFO  o.o.b.s.i.n.t.SoulissTypicals[:61]- hashTableAddressToTypicals <-- [key: 29980 - value: org.openhab.binding.souliss.internal.network.typicals.SoulissTServiceNODE_HEALTY@61dca7]
+03:16:16.200 INFO  o.o.b.s.i.n.t.SoulissTypicals[:51]- Add Item: HEALTHNodo3_GF_Servizio - Typ: 98, Node: 3, Slot: 998
+03:16:16.202 INFO  o.o.b.s.i.n.t.SoulissTypicals[:55]- hashTableItemToAddress <-- [key: HEALTHNodo3_GF_Servizio - value: 3 - Slot 998]
+03:16:16.203 INFO  o.o.b.s.i.n.t.SoulissTypicals[:61]- hashTableAddressToTypicals <-- [key: 39980 - value: org.openhab.binding.souliss.internal.network.typicals.SoulissTServiceNODE_HEALTY@606b19]
+03:16:16.205 INFO  o.o.b.s.i.n.t.SoulissTypicals[:51]- Add Item: HEALTHNodo4_GF_Servizio - Typ: 98, Node: 4, Slot: 998
+03:16:16.208 INFO  o.o.b.s.i.n.t.SoulissTypicals[:55]- hashTableItemToAddress <-- [key: HEALTHNodo4_GF_Servizio - value: 4 - Slot 998]
+03:16:16.210 INFO  o.o.b.s.i.n.t.SoulissTypicals[:61]- hashTableAddressToTypicals <-- [key: 49980 - value: org.openhab.binding.souliss.internal.network.typicals.SoulissTServiceNODE_HEALTY@1f7a423]
+03:16:16.212 INFO  o.o.b.s.i.n.t.SoulissTypicals[:51]- Add Item: HEALTHNodo6_GF_Servizio - Typ: 98, Node: 6, Slot: 998
+03:16:16.214 INFO  o.o.b.s.i.n.t.SoulissTypicals[:55]- hashTableItemToAddress <-- [key: HEALTHNodo6_GF_Servizio - value: 6 - Slot 998]
+03:16:16.216 INFO  o.o.b.s.i.n.t.SoulissTypicals[:61]- hashTableAddressToTypicals <-- [key: 69980 - value: org.openhab.binding.souliss.internal.network.typicals.SoulissTServiceNODE_HEALTY@1e65ecd]
+03:16:16.218 INFO  o.o.b.s.i.n.t.SoulissTypicals[:51]- Add Item: HEALTHNodo5_GF_Servizio - Typ: 98, Node: 5, Slot: 998
+03:16:16.220 INFO  o.o.b.s.i.n.t.SoulissTypicals[:55]- hashTableItemToAddress <-- [key: HEALTHNodo5_GF_Servizio - value: 5 - Slot 998]
+03:16:16.222 INFO  o.o.b.s.i.n.t.SoulissTypicals[:61]- hashTableAddressToTypicals <-- [key: 59980 - value: org.openhab.binding.souliss.internal.network.typicals.SoulissTServiceNODE_HEALTY@1d03e32]
+03:16:16.224 INFO  o.o.b.s.i.n.t.SoulissTypicals[:51]- Add Item: TIMESTAMP_Nodo1_GF_Servizio - Typ: 99, Node: 1, Slot: 999
+03:16:16.226 INFO  o.o.b.s.i.n.t.SoulissTypicals[:55]- hashTableItemToAddress <-- [key: TIMESTAMP_Nodo1_GF_Servizio - value: 1 - Slot 999]
+03:16:16.228 INFO  o.o.b.s.i.n.t.SoulissTypicals[:61]- hashTableAddressToTypicals <-- [key: 19990 - value: org.openhab.binding.souliss.internal.network.typicals.SoulissTServiceNODE_TIMESTAMP@9b372]
+03:16:16.230 INFO  o.o.b.s.i.n.t.SoulissTypicals[:51]- Add Item: TIMESTAMP_Nodo2_GF_Servizio - Typ: 99, Node: 2, Slot: 999
+03:16:16.232 INFO  o.o.b.s.i.n.t.SoulissTypicals[:55]- hashTableItemToAddress <-- [key: TIMESTAMP_Nodo2_GF_Servizio - value: 2 - Slot 999]
+03:16:16.234 INFO  o.o.b.s.i.n.t.SoulissTypicals[:61]- hashTableAddressToTypicals <-- [key: 29990 - value: org.openhab.binding.souliss.internal.network.typicals.SoulissTServiceNODE_TIMESTAMP@c1d32c]
+03:16:16.237 INFO  o.o.b.s.i.n.t.SoulissTypicals[:51]- Add Item: TIMESTAMP_Nodo3_GF_Servizio - Typ: 99, Node: 3, Slot: 999
+03:16:16.239 INFO  o.o.b.s.i.n.t.SoulissTypicals[:55]- hashTableItemToAddress <-- [key: TIMESTAMP_Nodo3_GF_Servizio - value: 3 - Slot 999]
+03:16:16.240 INFO  o.o.b.s.i.n.t.SoulissTypicals[:61]- hashTableAddressToTypicals <-- [key: 39990 - value: org.openhab.binding.souliss.internal.network.typicals.SoulissTServiceNODE_TIMESTAMP@1e6fccf]
+03:16:16.242 INFO  o.o.b.s.i.n.t.SoulissTypicals[:51]- Add Item: TIMESTAMP_Nodo4_GF_Servizio - Typ: 99, Node: 4, Slot: 999
+03:16:16.244 INFO  o.o.b.s.i.n.t.SoulissTypicals[:55]- hashTableItemToAddress <-- [key: TIMESTAMP_Nodo4_GF_Servizio - value: 4 - Slot 999]
+03:16:16.246 INFO  o.o.b.s.i.n.t.SoulissTypicals[:61]- hashTableAddressToTypicals <-- [key: 49990 - value: org.openhab.binding.souliss.internal.network.typicals.SoulissTServiceNODE_TIMESTAMP@1f17caf]
+03:16:16.248 INFO  o.o.b.s.i.n.t.SoulissTypicals[:51]- Add Item: TIMESTAMP_Nodo6_GF_Servizio - Typ: 99, Node: 6, Slot: 999
+03:16:16.250 INFO  o.o.b.s.i.n.t.SoulissTypicals[:55]- hashTableItemToAddress <-- [key: TIMESTAMP_Nodo6_GF_Servizio - value: 6 - Slot 999]
+03:16:16.251 INFO  o.o.b.s.i.n.t.SoulissTypicals[:61]- hashTableAddressToTypicals <-- [key: 69990 - value: org.openhab.binding.souliss.internal.network.typicals.SoulissTServiceNODE_TIMESTAMP@78c4c0]
+03:16:16.253 INFO  o.o.b.s.i.n.t.SoulissTypicals[:51]- Add Item: TIMESTAMP_Nodo5_GF_Servizio - Typ: 99, Node: 5, Slot: 999
+03:16:16.255 INFO  o.o.b.s.i.n.t.SoulissTypicals[:55]- hashTableItemToAddress <-- [key: TIMESTAMP_Nodo5_GF_Servizio - value: 5 - Slot 999]
+03:16:16.256 INFO  o.o.b.s.i.n.t.SoulissTypicals[:61]- hashTableAddressToTypicals <-- [key: 59990 - value: org.openhab.binding.souliss.internal.network.typicals.SoulissTServiceNODE_TIMESTAMP@662510]
+03:16:16.275 INFO  o.o.b.s.i.SoulissBinding[:83]- PARAMETER: IP_LAN = 192.168.1.105
+03:16:16.277 INFO  o.o.b.s.i.SoulissBinding[:83]- PARAMETER: NODE_INDEX = 133
+03:16:16.278 INFO  o.o.b.s.i.SoulissBinding[:83]- PARAMETER: REFRESH_DBSTRUCT_TIME = 600000
+03:16:16.280 INFO  o.o.b.s.i.SoulissBinding[:83]- PARAMETER: REFRESH_HEALTY_TIME = 60000
+03:16:16.281 INFO  o.o.b.s.i.SoulissBinding[:83]- PARAMETER: REFRESH_MONITOR_TIME = 500
+03:16:16.282 INFO  o.o.b.s.i.SoulissBinding[:83]- PARAMETER: REFRESH_SUBSCRIPTION_TIME = 120000
+03:16:16.283 INFO  o.o.b.s.i.SoulissBinding[:83]- PARAMETER: SECURE_SEND_TIMEOUT_TO_REMOVE_PACKET = 30000
+03:16:16.285 INFO  o.o.b.s.i.SoulissBinding[:83]- PARAMETER: SECURE_SEND_TIMEOUT_TO_REQUEUE = 5000
+03:16:16.290 INFO  o.o.b.s.i.SoulissBinding[:83]- PARAMETER: SEND_DELAY = 1500
+03:16:16.293 INFO  o.o.b.s.i.SoulissBinding[:83]- PARAMETER: SEND_MIN_DELAY = 100
+03:16:16.294 INFO  o.o.b.s.i.SoulissBinding[:83]- PARAMETER: SERVERPORT = 
+03:16:16.296 INFO  o.o.b.s.i.SoulissBinding[:83]- PARAMETER: service.pid = org.openhab.souliss
+03:16:16.297 INFO  o.o.b.s.i.SoulissBinding[:83]- PARAMETER: USER_INDEX = 72
+03:16:16.298 INFO  o.o.b.s.i.SoulissBinding[:323]- START
+03:16:16.321 INFO  o.o.b.s.i.n.u.UDPServerThread[:45]- Start UDPServerThread - Server in ascolto sulla porta 54333
+03:16:16.331 INFO  o.o.b.s.i.n.typicals.Monitor[:38]- Start MonitorThread
+03:16:16.351 INFO  o.o.b.s.i.n.udp.SendDispatcher[:49]- Start SendDispatcherThread
+03:16:16.355 INFO  o.o.b.s.i.n.t.RefreshSUBSCRIPTION[:34]- Start RefreshSUBSCRIPTIONThread
+03:16:16.382 INFO  o.o.b.s.i.n.t.RefreshHEALTY[:37]- Start RefreshDBSTRUCTThread
+03:16:16.385 INFO  o.o.c.s.AbstractActiveService[:169]- Souliss Refresh Service has been started
+03:16:16.481 WARN  o.o.c.p.i.PersistenceManager[:396]- Failed to restore item states as persistence service 'myopenhab' can not be queried.
+03:16:16.617 WARN  o.o.c.p.i.PersistenceManager[:396]- Failed to restore item states as persistence service 'myopenhab' can not be queried.
+03:16:16.648 WARN  o.o.c.p.i.PersistenceManager[:396]- Failed to restore item states as persistence service 'myopenhab' can not be queried.
+03:16:20.495 WARN  o.o.c.i.e.EventPublisherImpl[:80]- given new state is NULL, couldn't post update for 'Umidita_GF_Giardino'
+03:16:20.501 INFO  o.o.m.c.i.ModelRepositoryImpl[:80]- Loading model 'default.rules'
+03:16:20.539 WARN  o.o.c.i.e.EventPublisherImpl[:80]- given new state is NULL, couldn't post update for 'Temperature_GF_Giardino'
+03:16:22.489 ERROR o.o.m.r.i.e.RuleTriggerManager[:320]- Cannot create timer for rule 'Periodically check presence': CronExpression '*/30 * * * ?' is invalid,.
+03:16:22.491 ERROR o.o.m.r.i.e.RuleTriggerManager[:320]- Cannot create timer for rule 'Coming home': CronExpression '*/30 * * * ?' is invalid,.
+03:16:28.322 INFO  o.o.i.m.internal.MyOHClient[:205]- Connected to my.openHAB service (UUID = f944b2bf-e0d4-40fa-aabd-72f9a5f97972, base URL = http://localhost:8080)
+03:16:28.750 WARN  o.a.cpr.DefaultBroadcaster[:1369]- Duplicate resource 4de1a1d1-155b-4e66-a601-da80cc670fe4. Could be caused by a dead connection not detected by your server. Replacing the old one with the fresh one
+03:16:38.526 WARN  o.a.cpr.DefaultBroadcaster[:1369]- Duplicate resource d4ed0974-ef23-431d-bbe8-1aba32ca7698. Could be caused by a dead connection not detected by your server. Replacing the old one with the fresh one
+03:17:14.887 WARN  o.a.cpr.DefaultBroadcaster[:1369]- Duplicate resource d4ed0974-ef23-431d-bbe8-1aba32ca7698. Could be caused by a dead connection not detected by your server. Replacing the old one with the fresh one
+03:18:20.803 WARN  o.o.c.i.e.EventPublisherImpl[:80]- given new state is NULL, couldn't post update for 'Umidita_GF_Giardino'
+03:18:20.805 WARN  o.o.c.i.e.EventPublisherImpl[:80]- given new state is NULL, couldn't post update for 'Temperature_GF_Giardino'
+03:18:53.889 WARN  o.a.cpr.DefaultBroadcaster[:1369]- Duplicate resource d4ed0974-ef23-431d-bbe8-1aba32ca7698. Could be caused by a dead connection not detected by your server. Replacing the old one with the fresh one
+03:19:27.948 INFO  o.o.m.c.i.ModelRepositoryImpl[:98]- Refreshing model 'default.rules'
+03:19:28.296 ERROR o.o.m.r.i.e.RuleTriggerManager[:320]- Cannot create timer for rule 'Periodically check presence': CronExpression '*/30 * * * ?' is invalid,.
+03:19:28.299 ERROR o.o.m.r.i.e.RuleTriggerManager[:320]- Cannot create timer for rule 'Coming home': CronExpression '*/30 * * * ?' is invalid,.
+03:20:17.046 WARN  o.o.c.i.e.EventPublisherImpl[:80]- given new state is NULL, couldn't post update for 'Umidita_GF_Giardino'
+03:20:17.048 WARN  o.o.c.i.e.EventPublisherImpl[:80]- given new state is NULL, couldn't post update for 'Temperature_GF_Giardino'
+03:20:42.815 WARN  o.a.cpr.DefaultBroadcaster[:1369]- Duplicate resource d4ed0974-ef23-431d-bbe8-1aba32ca7698. Could be caused by a dead connection not detected by your server. Replacing the old one with the fresh one
+03:21:10.934 WARN  o.o.u.i.i.ItemUIRegistryImpl[:471]- Cannot find page for id 'tonino'.
+03:22:06.407 WARN  o.a.cpr.DefaultBroadcaster[:1369]- Duplicate resource d4ed0974-ef23-431d-bbe8-1aba32ca7698. Could be caused by a dead connection not detected by your server. Replacing the old one with the fresh one
+03:22:11.419 INFO  o.o.m.c.i.ModelRepositoryImpl[:98]- Refreshing model 'default.rules'
+03:22:11.759 ERROR o.o.m.r.i.e.RuleTriggerManager[:320]- Cannot create timer for rule 'Periodically check presence': CronExpression '*/30 * * * ?' is invalid,.
+03:22:11.762 ERROR o.o.m.r.i.e.RuleTriggerManager[:320]- Cannot create timer for rule 'Coming home': CronExpression '*/30 * * * ?' is invalid,.
+03:22:18.867 WARN  o.o.c.i.e.EventPublisherImpl[:80]- given new state is NULL, couldn't post update for 'Umidita_GF_Giardino'
+03:22:18.869 WARN  o.o.c.i.e.EventPublisherImpl[:80]- given new state is NULL, couldn't post update for 'Temperature_GF_Giardino'
+03:22:51.490 WARN  o.a.cpr.DefaultBroadcaster[:1369]- Duplicate resource d4ed0974-ef23-431d-bbe8-1aba32ca7698. Could be caused by a dead connection not detected by your server. Replacing the old one with the fresh one
+03:23:24.890 INFO  o.o.m.c.i.ModelRepositoryImpl[:98]- Refreshing model 'default.rules'
+03:24:21.343 WARN  o.o.c.i.e.EventPublisherImpl[:80]- given new state is NULL, couldn't post update for 'Umidita_GF_Giardino'
+03:24:21.345 WARN  o.o.c.i.e.EventPublisherImpl[:80]- given new state is NULL, couldn't post update for 'Temperature_GF_Giardino'
+03:24:30.888 WARN  o.a.cpr.DefaultBroadcaster[:1369]- Duplicate resource d4ed0974-ef23-431d-bbe8-1aba32ca7698. Could be caused by a dead connection not detected by your server. Replacing the old one with the fresh one
+03:26:04.902 WARN  o.a.cpr.DefaultBroadcaster[:1369]- Duplicate resource d4ed0974-ef23-431d-bbe8-1aba32ca7698. Could be caused by a dead connection not detected by your server. Replacing the old one with the fresh one
+03:26:10.958 WARN  o.o.u.i.i.ItemUIRegistryImpl[:471]- Cannot find page for id 'tonino'.
+03:26:22.439 WARN  o.o.c.i.e.EventPublisherImpl[:80]- given new state is NULL, couldn't post update for 'Umidita_GF_Giardino'
+03:26:22.441 WARN  o.o.c.i.e.EventPublisherImpl[:80]- given new state is NULL, couldn't post update for 'Temperature_GF_Giardino'
+03:26:38.028 INFO  o.o.m.c.i.ModelRepositoryImpl[:98]- Refreshing model 'default.rules'
+03:28:18.717 WARN  o.o.c.i.e.EventPublisherImpl[:80]- given new state is NULL, couldn't post update for 'Umidita_GF_Giardino'
+03:28:18.719 WARN  o.o.c.i.e.EventPublisherImpl[:80]- given new state is NULL, couldn't post update for 'Temperature_GF_Giardino'
+03:28:21.113 INFO  o.o.m.c.i.ModelRepositoryImpl[:98]- Refreshing model 'default.rules'
+03:30:07.078 WARN  o.a.cpr.DefaultBroadcaster[:1369]- Duplicate resource d4ed0974-ef23-431d-bbe8-1aba32ca7698. Could be caused by a dead connection not detected by your server. Replacing the old one with the fresh one
+03:30:21.022 WARN  o.o.c.i.e.EventPublisherImpl[:80]- given new state is NULL, couldn't post update for 'Umidita_GF_Giardino'
+03:30:21.024 WARN  o.o.c.i.e.EventPublisherImpl[:80]- given new state is NULL, couldn't post update for 'Temperature_GF_Giardino'
+03:31:10.974 WARN  o.o.u.i.i.ItemUIRegistryImpl[:471]- Cannot find page for id 'tonino'.
+03:31:44.263 INFO  o.o.m.c.i.ModelRepositoryImpl[:98]- Refreshing model 'default.rules'
+03:32:00.315 INFO  o.o.model.script.PresenceCheck[:53]- No phone within reach, checking for flapping
+03:32:01.467 ERROR o.o.m.r.i.e.ExecuteRuleJob[:57]- Error during the execution of rule Periodically check presence
+java.lang.RuntimeException: The name 'Network' cannot be resolved to an item or type.
+	at org.openhab.model.script.interpreter.ScriptInterpreter.internalFeatureCallDispatch(ScriptInterpreter.java:67)
+	at org.eclipse.xtext.xbase.interpreter.impl.XbaseInterpreter._evaluateAbstractFeatureCall(XbaseInterpreter.java:658)
+	at sun.reflect.GeneratedMethodAccessor39.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:483)
+	at org.eclipse.xtext.util.PolymorphicDispatcher.invoke(PolymorphicDispatcher.java:291)
+03:32:22.263 WARN  o.o.c.i.e.EventPublisherImpl[:80]- given new state is NULL, couldn't post update for 'Umidita_GF_Giardino'
+03:32:22.265 WARN  o.o.c.i.e.EventPublisherImpl[:80]- given new state is NULL, couldn't post update for 'Temperature_GF_Giardino'
+03:32:30.012 INFO  o.o.model.script.PresenceCheck[:53]- No phone within reach, checking for flapping
+03:32:30.906 ERROR o.o.m.r.i.e.ExecuteRuleJob[:57]- Error during the execution of rule Periodically check presence
+java.lang.RuntimeException: The name 'Network' cannot be resolved to an item or type.
+	at org.openhab.model.script.interpreter.ScriptInterpreter.internalFeatureCallDispatch(ScriptInterpreter.java:67)
+	at org.eclipse.xtext.xbase.interpreter.impl.XbaseInterpreter._evaluateAbstractFeatureCall(XbaseInterpreter.java:658)
+	at sun.reflect.GeneratedMethodAccessor39.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:483)
+	at org.eclipse.xtext.util.PolymorphicDispatcher.invoke(PolymorphicDispatcher.java:291)
+03:32:58.013 WARN  o.a.cpr.DefaultBroadcaster[:1369]- Duplicate resource d4ed0974-ef23-431d-bbe8-1aba32ca7698. Could be caused by a dead connection not detected by your server. Replacing the old one with the fresh one
+03:33:00.021 INFO  o.o.model.script.PresenceCheck[:53]- No phone within reach, checking for flapping
+03:33:01.439 ERROR o.o.m.r.i.e.ExecuteRuleJob[:57]- Error during the execution of rule Periodically check presence
+java.lang.RuntimeException: The name 'Network' cannot be resolved to an item or type.
+	at org.openhab.model.script.interpreter.ScriptInterpreter.internalFeatureCallDispatch(ScriptInterpreter.java:67)
+	at org.eclipse.xtext.xbase.interpreter.impl.XbaseInterpreter._evaluateAbstractFeatureCall(XbaseInterpreter.java:658)
+	at sun.reflect.GeneratedMethodAccessor39.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:483)
+	at org.eclipse.xtext.util.PolymorphicDispatcher.invoke(PolymorphicDispatcher.java:291)
+03:33:30.011 INFO  o.o.model.script.PresenceCheck[:53]- No phone within reach, checking for flapping
+03:33:30.952 ERROR o.o.m.r.i.e.ExecuteRuleJob[:57]- Error during the execution of rule Periodically check presence
+java.lang.RuntimeException: The name 'Network' cannot be resolved to an item or type.
+	at org.openhab.model.script.interpreter.ScriptInterpreter.internalFeatureCallDispatch(ScriptInterpreter.java:67)
+	at org.eclipse.xtext.xbase.interpreter.impl.XbaseInterpreter._evaluateAbstractFeatureCall(XbaseInterpreter.java:658)
+	at sun.reflect.GeneratedMethodAccessor39.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:483)
+	at org.eclipse.xtext.util.PolymorphicDispatcher.invoke(PolymorphicDispatcher.java:291)
+03:34:00.018 INFO  o.o.model.script.PresenceCheck[:53]- No phone within reach, checking for flapping
+03:34:00.945 ERROR o.o.m.r.i.e.ExecuteRuleJob[:57]- Error during the execution of rule Periodically check presence
+java.lang.RuntimeException: The name 'Network' cannot be resolved to an item or type.
+	at org.openhab.model.script.interpreter.ScriptInterpreter.internalFeatureCallDispatch(ScriptInterpreter.java:67)
+	at org.eclipse.xtext.xbase.interpreter.impl.XbaseInterpreter._evaluateAbstractFeatureCall(XbaseInterpreter.java:658)
+	at sun.reflect.GeneratedMethodAccessor39.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:483)
+	at org.eclipse.xtext.util.PolymorphicDispatcher.invoke(PolymorphicDispatcher.java:291)
+03:34:18.111 WARN  o.o.c.i.e.EventPublisherImpl[:80]- given new state is NULL, couldn't post update for 'Umidita_GF_Giardino'
+03:34:18.113 WARN  o.o.c.i.e.EventPublisherImpl[:80]- given new state is NULL, couldn't post update for 'Temperature_GF_Giardino'
+03:34:30.015 INFO  o.o.model.script.PresenceCheck[:53]- No phone within reach, checking for flapping
+03:34:30.967 ERROR o.o.m.r.i.e.ExecuteRuleJob[:57]- Error during the execution of rule Periodically check presence
+java.lang.RuntimeException: The name 'Network' cannot be resolved to an item or type.
+	at org.openhab.model.script.interpreter.ScriptInterpreter.internalFeatureCallDispatch(ScriptInterpreter.java:67)
+	at org.eclipse.xtext.xbase.interpreter.impl.XbaseInterpreter._evaluateAbstractFeatureCall(XbaseInterpreter.java:658)
+	at sun.reflect.GeneratedMethodAccessor39.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:483)
+	at org.eclipse.xtext.util.PolymorphicDispatcher.invoke(PolymorphicDispatcher.java:291)
+03:34:57.729 INFO  o.o.m.c.i.ModelRepositoryImpl[:98]- Refreshing model 'default.rules'
+03:35:01.450 INFO  o.o.model.script.PresenceCheck[:53]- No phone within reach, checking for flapping
+03:35:03.766 WARN  o.a.cpr.DefaultBroadcaster[:1369]- Duplicate resource d4ed0974-ef23-431d-bbe8-1aba32ca7698. Could be caused by a dead connection not detected by your server. Replacing the old one with the fresh one
+03:35:30.017 INFO  o.o.model.script.PresenceCheck[:53]- No phone within reach, checking for flapping
+03:35:31.232 INFO  o.o.m.c.i.ModelRepositoryImpl[:98]- Refreshing model 'default.rules'
+03:35:38.227 WARN  o.o.c.i.e.EventPublisherImpl[:80]- given new state is NULL, couldn't post update for 'Umidita_GF_Giardino'
+03:35:38.229 WARN  o.o.c.i.e.EventPublisherImpl[:80]- given new state is NULL, couldn't post update for 'Temperature_GF_Giardino'
+03:36:00.570 INFO  o.o.model.script.PresenceCheck[:53]- No phone within reach, checking for flapping
+03:36:10.990 WARN  o.o.u.i.i.ItemUIRegistryImpl[:471]- Cannot find page for id 'tonino'.
+03:36:12.926 WARN  o.a.cpr.DefaultBroadcaster[:1369]- Duplicate resource d4ed0974-ef23-431d-bbe8-1aba32ca7698. Could be caused by a dead connection not detected by your server. Replacing the old one with the fresh one
+03:36:18.836 WARN  o.a.cpr.DefaultBroadcaster[:1369]- Duplicate resource d4ed0974-ef23-431d-bbe8-1aba32ca7698. Could be caused by a dead connection not detected by your server. Replacing the old one with the fresh one
+03:36:19.003 WARN  o.o.c.i.e.EventPublisherImpl[:80]- given new state is NULL, couldn't post update for 'Umidita_GF_Giardino'
+03:36:19.004 WARN  o.o.c.i.e.EventPublisherImpl[:80]- given new state is NULL, couldn't post update for 'Temperature_GF_Giardino'
+03:36:30.221 INFO  o.o.model.script.PresenceCheck[:53]- No phone within reach, checking for flapping
+03:36:56.095 INFO  o.o.m.c.i.ModelRepositoryImpl[:98]- Refreshing model 'default.rules'
+03:37:00.678 INFO  o.o.model.script.PresenceCheck[:53]- No phone within reach, checking for flapping
+03:37:13.872 ERROR o.o.c.s.ScriptExecutionThread[:48]- Error during the execution of rule 'Send to Emoncms - Consumo'
+java.lang.NullPointerException: null
+	at org.openhab.model.script.interpreter.ScriptInterpreter.internalFeatureCallDispatch(ScriptInterpreter.java:66)
+	at org.eclipse.xtext.xbase.interpreter.impl.XbaseInterpreter._evaluateMemberFeatureCall(XbaseInterpreter.java:549)
+	at sun.reflect.GeneratedMethodAccessor40.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:483)
+	at org.eclipse.xtext.util.PolymorphicDispatcher.invoke(PolymorphicDispatcher.java:291)
+03:37:23.240 ERROR o.o.c.s.ScriptExecutionThread[:48]- Error during the execution of rule 'Send to Emoncms - Consumo'
+java.lang.NullPointerException: null
+	at org.openhab.model.script.interpreter.ScriptInterpreter.internalFeatureCallDispatch(ScriptInterpreter.java:66)
+	at org.eclipse.xtext.xbase.interpreter.impl.XbaseInterpreter._evaluateMemberFeatureCall(XbaseInterpreter.java:549)
+	at sun.reflect.GeneratedMethodAccessor40.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:483)
+	at org.eclipse.xtext.util.PolymorphicDispatcher.invoke(PolymorphicDispatcher.java:291)
+03:37:24.007 WARN  o.a.cpr.DefaultBroadcaster[:1369]- Duplicate resource d4ed0974-ef23-431d-bbe8-1aba32ca7698. Could be caused by a dead connection not detected by your server. Replacing the old one with the fresh one
+03:37:30.260 INFO  o.o.model.script.PresenceCheck[:53]- No phone within reach, checking for flapping
+03:37:46.357 ERROR o.o.c.s.ScriptExecutionThread[:48]- Error during the execution of rule 'Send to Emoncms - Consumo'
+java.lang.NullPointerException: null
+	at org.openhab.model.script.interpreter.ScriptInterpreter.internalFeatureCallDispatch(ScriptInterpreter.java:66)
+	at org.eclipse.xtext.xbase.interpreter.impl.XbaseInterpreter._evaluateMemberFeatureCall(XbaseInterpreter.java:549)
+	at sun.reflect.GeneratedMethodAccessor40.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:483)
+	at org.eclipse.xtext.util.PolymorphicDispatcher.invoke(PolymorphicDispatcher.java:291)
+03:37:54.905 ERROR o.o.c.s.ScriptExecutionThread[:48]- Error during the execution of rule 'Send to Emoncms - Consumo'
+java.lang.NullPointerException: null
+	at org.openhab.model.script.interpreter.ScriptInterpreter.internalFeatureCallDispatch(ScriptInterpreter.java:66)
+	at org.eclipse.xtext.xbase.interpreter.impl.XbaseInterpreter._evaluateMemberFeatureCall(XbaseInterpreter.java:549)
+	at sun.reflect.GeneratedMethodAccessor40.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:483)
+	at org.eclipse.xtext.util.PolymorphicDispatcher.invoke(PolymorphicDispatcher.java:291)
+03:38:00.337 INFO  o.o.model.script.PresenceCheck[:53]- No phone within reach, checking for flapping
+03:38:09.698 INFO  o.o.m.c.i.ModelRepositoryImpl[:98]- Refreshing model 'default.rules'
+03:38:21.896 WARN  o.o.c.i.e.EventPublisherImpl[:80]- given new state is NULL, couldn't post update for 'Umidita_GF_Giardino'
+03:38:21.898 WARN  o.o.c.i.e.EventPublisherImpl[:80]- given new state is NULL, couldn't post update for 'Temperature_GF_Giardino'
+03:38:30.422 INFO  o.o.model.script.PresenceCheck[:53]- No phone within reach, checking for flapping
+03:38:36.552 WARN  o.a.cpr.DefaultBroadcaster[:1369]- Duplicate resource d4ed0974-ef23-431d-bbe8-1aba32ca7698. Could be caused by a dead connection not detected by your server. Replacing the old one with the fresh one
+03:38:36.642 ERROR o.o.c.s.ScriptExecutionThread[:50]- Error during the execution of rule 'Send to Emoncms - Consumo': The name '<XFeatureCallImplCustom>.state' cannot be resolved to an item or type.
+03:39:00.283 INFO  o.o.model.script.PresenceCheck[:53]- No phone within reach, checking for flapping
+03:39:30.224 INFO  o.o.model.script.PresenceCheck[:53]- No phone within reach, checking for flapping
+03:40:00.684 INFO  o.o.model.script.PresenceCheck[:53]- No phone within reach, checking for flapping
+03:40:14.524 INFO  o.o.m.c.i.ModelRepositoryImpl[:98]- Refreshing model 'default.rules'
