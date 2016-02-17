@@ -26,6 +26,7 @@ Group	G_TemperaturaGiardino	"Giardino"	<temperature>	(All)
 Group	G_Sitemap_Consumi	"Consumi"	<energy>	(All)	
 Group	G_Sitemap_Fotovoltaico	"Fotovoltaico"	<energy>	(All)
 Group	TermostatoSoggiorno	(All)
+Group	TermostatoPianoTerra	(All)
 
 Group	rientrocasa	(All)
 Group	GoogleCalendar	(All)
@@ -81,17 +82,17 @@ Switch setasmeasured_TermostatoSoggiorno "Set as measured" <temperature> (Termos
 Contact heating_TermostatoSoggiorno "riscaldamento" (TermostatoSoggiorno, TechnicView_Node6) {souliss="T31:6:0:heating"}
 Switch heatingmode_TermostatoSoggiorno_ "Heating Mode" (TermostatoSoggiorno, TechnicView_Node6) {souliss="T31:6:0:heatingcooling", autoupdate="false"}
 Switch power_TermostatoSoggiorno_ "Power" (TermostatoSoggiorno, TechnicView_Node6) {souliss="T31:6:0:power"}
-Number	Umidita_TermostatoSoggiorno	"Umidità TermostatoSoggiorno [%.1f %%]"	<temperature>	(TermostatoSoggiorno,TechnicView_Node6)		{ souliss="T53:6:7" }
-Dimmer	DisplayBright_TermostatoSoggiorno	"Lum. Display" (TermostatoSoggiorno,TechnicView_Node6)		{ souliss="T19:6:9" }
+Number	umidita_TermostatoSoggiorno	"Umidità TermostatoSoggiorno [%.1f %%]"	<temperature>	(TermostatoSoggiorno,TechnicView_Node6)		{ souliss="T53:6:7" }
+Dimmer	displayBright_TermostatoSoggiorno	"Lum. Display" (TermostatoSoggiorno,TechnicView_Node6)		{ souliss="T19:6:9" }
 
-Number temperature_TermostatoPianoTerra 	"Temperatura G_Soggiorno [%.1f °C]"	<temperature> (TermostatoSoggiorno, TechnicView_Node7) {souliss="T31:6:0:measured"}
-Number temperature_Setpoint_TermostatoPianoTerra	"Temp Set Point [%.1f °C]" 	<temperature> (TermostatoSoggiorno, TechnicView_Node7) {souliss="T31:6:0:setpoint"}
-Switch setasmeasured_TermostatoPianoTerra "Set as measured" <temperature> (TermostatoSoggiorno, TechnicView_Node7) {souliss="T31:6:0:setasmeasured"}
-Contact heating_TermostatoPianoTerra "riscaldamento" (TermostatoSoggiorno, TechnicView_Node7) {souliss="T31:6:0:heating"}
-Switch heatingmode_TermostatoPianoTerra_ "Heating Mode" (TermostatoSoggiorno, TechnicView_Node7) {souliss="T31:6:0:heatingcooling", autoupdate="false"}
-Switch power_TermostatoPianoTerra_ "Power" (TermostatoSoggiorno, TechnicView_Node7) {souliss="T31:6:0:power"}
-Number	Umidita_TermostatoPianoTerra	"Umidità TermostatoSoggiorno [%.1f %%]"	<temperature>	(TermostatoSoggiorno,TechnicView_Node7)		{ souliss="T53:6:7" }
-Dimmer	DisplayBright_TermostatoPianoTerra	"Lum. Display" (TermostatoSoggiorno,TechnicView_Node7)		{ souliss="T19:6:9" }
+Number temperature_TermostatoPianoTerra 	"Temperatura G_Soggiorno [%.1f °C]"	<temperature> (TermostatoPianoTerra, TechnicView_Node7) {souliss="T31:7:0:measured"}
+Number temperature_Setpoint_TermostatoPianoTerra	"Temp Set Point [%.1f °C]" 	<temperature> (TermostatoPianoTerra, TechnicView_Node7) {souliss="T31:7:0:setpoint"}
+Switch setasmeasured_TermostatoPianoTerra "Set as measured" <temperature> (TermostatoPianoTerra, TechnicView_Node7) {souliss="T31:7:0:setasmeasured"}
+Contact heating_TermostatoPianoTerra "riscaldamento" (TermostatoPianoTerra, TechnicView_Node7) {souliss="T31:7:0:heating"}
+Switch heatingmode_TermostatoPianoTerra_ "Heating Mode" (TermostatoPianoTerra, TechnicView_Node7) {souliss="T31:7:0:heatingcooling", autoupdate="false"}
+Switch power_TermostatoPianoTerra_ "Power" (TermostatoPianoTerra, TechnicView_Node7) {souliss="T31:7:0:power"}
+Number	Umidita_TermostatoPianoTerra	"Umidità TermostatoPianoTerra [%.1f %%]"	<temperature>	(TermostatoPianoTerra,TechnicView_Node7)		{ souliss="T53:7:7" }
+Dimmer	DisplayBright_TermostatoPianoTerra	"Lum. Display" (TermostatoPianoTerra,TechnicView_Node7)		{ souliss="T19:7:9" }
 
 
 Switch	milight_switch	"Luci divano"	(Luci, G_Soggiorno)		{ milight="bridge1;0" }

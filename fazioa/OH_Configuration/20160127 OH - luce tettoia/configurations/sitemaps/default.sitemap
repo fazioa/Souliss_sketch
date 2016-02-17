@@ -83,14 +83,28 @@ sitemap tonino label="Main Menu"
 	}
 	
 	Frame label="Termostato" {
-		Text label="Termostato" icon="dimmer" {
-			Setpoint item=Temperature_Setpoint step=0.5 minValue=10 maxValue=30
-			Text item=Temperature_Termostato 
-			Switch item=setasmeasured_termostato mappings=[ON="Set"] 
-			Text item=termostato_heating label="Riscaldamento" icon="homeRed"
-			Switch item=heatingmode  label="Mod. Riscaldamento" mappings=[ON="ON"] icon="siren"
-			Switch item=power  label="Power" mappings=[ON="OFF"] icon="powerIcon"
-			Slider item=DisplayBright
+		Text label="Termostato soggiorno" icon="dimmer" {
+			Setpoint item=temperature_Setpoint_TermostatoSoggiorno label="Setpoint" step=0.5 minValue=10 maxValue=30
+			Text item=temperature_TermostatoSoggiorno label="Temperatura"
+			Text item=umidita_TermostatoSoggiorno label="Umidità"
+			Switch item=setasmeasured_TermostatoSoggiorno mappings=[ON="Set"] 
+			Text item=heating_TermostatoSoggiorno label="Riscaldamento" icon="homeRed"
+			Switch item=heatingmode_TermostatoSoggiorno_  label="Power ON" mappings=[ON="SET"] icon="siren"
+			Switch item=power_TermostatoSoggiorno_  label="Power OFF" mappings=[ON="SET"] icon="powerIcon"
+			Slider item=displayBright_TermostatoSoggiorno label="Luminosità minima display"
+			
+			Text item=TIMESTAMP_Nodo6_GF_Servizio label="Aggiornato: [%1$td.%1$tm.%1$tY %1$tk:%1$tM:%1$tS]" icon="icon16x16"
+		}	
+		Text label="Termostato piano terra" icon="dimmer" {
+			Setpoint item=temperature_Setpoint_TermostatoPianoTerra label="Setpoint" step=0.5 minValue=10 maxValue=30
+			Text item=temperature_TermostatoPianoTerra label="Temperatura"
+			Text item=umidita_TermostatoPianoTerra label="Umidità"
+			Switch item=setasmeasured_TermostatoPianoTerra mappings=[ON="Set"] 
+			Text item=heating_TermostatoPianoTerra label="Riscaldamento" icon="homeRed"
+			Switch item=heatingmode_TermostatoPianoTerra_  label="Power ON" mappings=[ON="SET"] icon="siren"
+			Switch item=power_TermostatoPianoTerra_  label="Power OFF" mappings=[ON="SET"] icon="powerIcon"
+			Slider item=displayBright_TermostatoPianoTerra label="Luminosità minima display"
+			
 			Text item=TIMESTAMP_Nodo6_GF_Servizio label="Aggiornato: [%1$td.%1$tm.%1$tY %1$tk:%1$tM:%1$tS]" icon="icon16x16"
 		}	
 	}
