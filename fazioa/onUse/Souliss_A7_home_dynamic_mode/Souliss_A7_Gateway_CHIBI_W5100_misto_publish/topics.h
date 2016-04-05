@@ -1,0 +1,8 @@
+#include <Arduino.h>
+
+//PUBLISH&SUBSCRIBE TOPICS
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+#define ENERGY_TOPIC 0xF001,0x05
+#define SOLAR_TOPIC 0xF001,0x06
+#define TEMPERATURE_TOPIC 0xF001,0x07
+
