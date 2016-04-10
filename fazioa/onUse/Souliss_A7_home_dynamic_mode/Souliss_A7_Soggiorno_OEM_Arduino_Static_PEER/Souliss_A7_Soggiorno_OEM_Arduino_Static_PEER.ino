@@ -1,3 +1,6 @@
+// Let the IDE point to the Souliss framework
+#include "SoulissFramework.h"
+
 // Configure the framework
 #include "bconf/StandardArduino.h"          // Use a standard Arduino
 #include "conf/ethW5100.h"                  // Ethernet through Wiznet W5100
@@ -6,6 +9,8 @@
 #include "Typicals.h"
 #include <SPI.h>
 #include "DHT.h"
+#include "topics.h"
+
 #include "EmonLib.h"             // Include Emon Library
 EnergyMonitor emon1;             // Create an instance
 
@@ -20,6 +25,9 @@ EnergyMonitor emon1;             // Create an instance
 #define TEMPERATURE				0			// This is the memory slot used for the execution of the logic in network_address1
 #define HUMIDITY				2			// This is the memory slot used for the execution of the logic
 #define SLOT_Watt                               4
+#define     SLOT_Voltage               8
+#define     SLOT_Current               11
+
 #define SLOT_REMOTE_CONTROLLER                  6
 #define SLOT_APRIPORTA                          7
 
@@ -38,11 +46,15 @@ DHT dht(PIN_DHT, DHTTYPE, 2);
 
 #define SIZE 6
 float fPowerValues[SIZE];
+uint8_t valByteArray[2];
+float fVal;
+uint16_t output16;
 int i = 0;
 float iMedia = 0;
+
 void setup()
 {
- // Serial.begin(9600);
+  // Serial.begin(9600);
 
   digitalWrite(PIN_OUTPUT_REMOTE_CONTROLLER, HIGH);
   digitalWrite(PIN_OUTPUT_APRIPORTA, HIGH);
@@ -57,11 +69,13 @@ void setup()
   Set_T52(TEMPERATURE);
   Set_T53(HUMIDITY);
   Set_T57(SLOT_Watt);
+  Set_Voltage(SLOT_Voltage); //T55
+  Set_Current(SLOT_Current); //T56
 
   pinMode(PIN_VOLTAGE, INPUT);
   pinMode(PIN_CURRENT, INPUT);
-  emon1.voltage(PIN_VOLTAGE, 226, 1.7);  // Voltage: input pin, calibration, phase_shift
-  emon1.current(PIN_CURRENT, 6);       // Current: input pin, calibration.
+  emon1.voltage(PIN_VOLTAGE, 221, 1.7);  // Voltage: input pin, calibration, phase_shift
+  emon1.current(PIN_CURRENT, 5);       // Current: input pin, calibration.
 
   Set_PulseOutput(SLOT_REMOTE_CONTROLLER);
   Set_PulseOutput(SLOT_APRIPORTA);
@@ -71,7 +85,6 @@ void setup()
   dht.begin();
 }
 
-float fVal;
 
 void loop()
 {
@@ -86,10 +99,10 @@ void loop()
     }
 
     FAST_710ms() {
-      Logic_T14(SLOT_REMOTE_CONTROLLER);
-      Souliss_LowDigOut(PIN_OUTPUT_REMOTE_CONTROLLER, Souliss_T1n_Coil, memory_map, SLOT_REMOTE_CONTROLLER);
-      Souliss_Logic_T14(memory_map, SLOT_APRIPORTA, &data_changed);
-      Souliss_LowDigOut(PIN_OUTPUT_APRIPORTA, Souliss_T1n_Coil, memory_map, SLOT_APRIPORTA);
+      Logic_PulseOutput(SLOT_REMOTE_CONTROLLER);
+      LowDigOut(PIN_OUTPUT_REMOTE_CONTROLLER, Souliss_T1n_Coil, SLOT_REMOTE_CONTROLLER);
+      Logic_PulseOutput(SLOT_APRIPORTA);
+      LowDigOut(PIN_OUTPUT_APRIPORTA, Souliss_T1n_Coil, SLOT_APRIPORTA);
     }
 
 
@@ -106,10 +119,24 @@ void loop()
         }
         iMedia = round(iMedia / SIZE);
         ImportAnalog(SLOT_Watt, &iMedia);
-        Logic_T57(SLOT_Watt);
+        Logic_Power(SLOT_Watt);
+
+        //scelgo di fare pubblicare il valore direttamente dal nodo invece che dal GW
+        float16(&output16, &iMedia);
+        valByteArray[0] = C16TO8L(output16);
+        valByteArray[1] = C16TO8H(output16);
+        publishdata(ENERGY_TOPIC, valByteArray, 2);
+
         i = 0;
         iMedia = 0;
       }
+      fVal = emon1.Vrms;
+      ImportAnalog(SLOT_Voltage, &fVal);
+      Logic_Voltage(SLOT_Voltage);
+
+      fVal = emon1.Irms;
+      ImportAnalog(SLOT_Current, &fVal);
+      Logic_Current(SLOT_Current);
 
     }
 

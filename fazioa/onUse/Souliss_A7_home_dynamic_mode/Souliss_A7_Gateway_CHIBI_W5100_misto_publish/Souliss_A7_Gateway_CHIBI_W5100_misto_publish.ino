@@ -85,7 +85,7 @@ void setup()
 
 //lastin configuration
 float valEnergy = 0;
-uint8_t valByteArray[10];
+uint8_t valByteArray[2];
 uint8_t vNode_Energy = 1;
 uint8_t vNode_slotEnergy = 4;
 
@@ -116,14 +116,16 @@ void loop()
         LastIn_ClearData(1);
       }
     }
-    SHIFT_7110ms(0) {
-      float16(&output16, &valEnergy);
-      valByteArray[0] = C16TO8L(output16);
-      valByteArray[1] = C16TO8H(output16);
-      Serial.print("Float: "); Serial.print(valEnergy);
-      Serial.print(", Publish ENERGY_TOPIC: "); Serial.print( valByteArray[0]); Serial.print(" "); Serial.println( valByteArray[1]);
-      publishdata(ENERGY_TOPIC, valByteArray, 2);
-    }
+
+    //Scelgo di fare pubblicare il valore direttamente dal nodo invece che dal GW
+//    SHIFT_7110ms(0) {
+//      float16(&output16, &valEnergy);
+//      valByteArray[0] = C16TO8L(output16);
+//      valByteArray[1] = C16TO8H(output16);
+//      Serial.print("Float: "); Serial.print(valEnergy);
+//      Serial.print(", Publish ENERGY_TOPIC: "); Serial.print( valByteArray[0]); Serial.print(" "); Serial.println( valByteArray[1]);
+//      publishdata(ENERGY_TOPIC, valByteArray, 2);
+//    }
 
     SHIFT_7110ms(250) {
       float16(&output16, &valSolar);
