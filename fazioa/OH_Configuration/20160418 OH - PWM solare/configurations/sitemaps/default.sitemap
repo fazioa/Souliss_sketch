@@ -1,0 +1,133 @@
+sitemap tonino label="Main Menu"
+{
+	Frame label="Comandi rietro a casa" {
+		Switch item=SwitchPortoncino mappings=[ON="Apri"]
+		Switch item=SwitchCancello mappings=[ON="Apri"]
+	}
+
+	Frame label="Temperature"{
+			Group item=G_TemperaturaSoggiorno  icon="temperature"
+			Group item=G_TemperaturaGiardino icon="temperature"
+	}
+	
+	Frame label="Consumi"{
+	Group item=G_Sitemap_Consumi icon="energy"
+	Group item=G_Sitemap_Fotovoltaico icon="sun"
+	}
+
+	Frame label="Presenza"  {
+		Group item=G_Network label="Network" icon="network"
+	}
+	
+	
+	Frame label="Grafici" {
+	Text label="Consumi / Produzione" icon="energy" {
+	Switch item=Chart_Period label="" mappings=[0="Hour", 1="Day", 2="Week", 3="Month"] 
+				Chart item=Graph_Consumi_accoppiata_prelievo_produzione period=h refresh=6000 visibility=[Chart_Period==0, Chart_Period=="Uninitialized"]  
+				Chart item=Graph_Consumi_accoppiata_prelievo_produzione period=D refresh=30000 visibility=[Chart_Period==1]  
+				Chart item=Graph_Consumi_accoppiata_prelievo_produzione period=W refresh=21600000 visibility=[Chart_Period==2]  
+				Chart item=Graph_Consumi_accoppiata_prelievo_produzione period=M refresh=21600000 visibility=[Chart_Period==3]  
+			}
+	Text label="Produzione - Rate gruppi pannelli" icon="energy" {
+	Switch item=Chart_Period label="" mappings=[0="Hour", 1="Day", 2="Week", 3="Month"] 
+				Chart item=Graph_RatePannelli period=h refresh=6000 visibility=[Chart_Period==0, Chart_Period=="Uninitialized"]  
+				Chart item=Graph_RatePannelli period=D refresh=30000 visibility=[Chart_Period==1]
+				Chart item=Graph_RatePannelli period=W refresh=21600000 visibility=[Chart_Period==2]
+				Chart item=Graph_RatePannelli period=M refresh=21600000 visibility=[Chart_Period==3]
+			}
+	Text label="Temp int/est" icon="temperature" {
+				Switch item=Chart_Period label="" mappings=[1="Day", 2="Week", 3="Month", 4="4 Months"]
+				Chart item=Graph_Temp_accoppiata_interno_esterno period=D refresh=30000 visibility=[Chart_Period==1, Chart_Period=="Uninitialized"]
+				Chart item=Graph_Temp_accoppiata_interno_esterno period=W refresh=21600000 visibility=[Chart_Period==2]
+				Chart item=Graph_Temp_accoppiata_interno_esterno period=M refresh=21600000 visibility=[Chart_Period==3]
+				Chart item=Graph_Temp_accoppiata_interno_esterno period=4M refresh=86400000 visibility=[Chart_Period==4]
+			}
+
+	Text label="Presenza" icon="parents" {
+				Chart item=G_Network period=D refresh=30000
+			}
+	}
+	
+	Frame label="Termocamino / Boiler Solare" {
+	
+		Text label="Impostazioni" icon="settings"  {
+			Setpoint item=Temperature_Termocamino_SetPoint step=1 minValue=5 maxValue=90
+			Switch item=setasmeasured label="Set Temp. attuale" mappings=[ON="Set"]
+			Switch item=setpoint65 label="Set 65 °C" mappings=[ON="Set"]
+			Switch item=setpoint70 label="Set 70 °C" mappings=[ON="Set"]
+			Switch item=setpoint80 label="Set 80 °C" mappings=[ON="Set"]
+			Text item=TIMESTAMP_Nodo3_GF_Servizio label="Aggiornato: [%1$td.%1$tm.%1$tY %1$tk:%1$tM:%1$tS]" icon="icon16x16"
+		}
+		Text label="Dati" icon="attic" {		
+		Text item=Temperature_Boiler_Solare_Termico label="Solare [%.1f °C]"
+		Text item=Temperature_Termocamino label="Termocamino [%.1f °C]"
+		 
+		Text item=riscaldamento_tutto label="Riscaldamento - Tutto" icon="homeRed"
+		Switch item=SwitchTermocamino label="Acqua" icon="check" mappings=[ON="Termocamino", OFF="Solare"]
+		Switch item=Boiler_TC_Automode label="Modalità" icon="automatic" mappings=[ON="Auto", OFF="Man"]
+		Text item=TIMESTAMP_Nodo3_GF_Servizio label="Aggiornato: [%1$td.%1$tm.%1$tY %1$tk:%1$tM:%1$tS]" icon="icon16x16"
+		}
+		
+		Text label="Graf. Temp TC/Boiler" icon="temperature" {
+				Switch item=Chart_Period label="" mappings=[1="Day", 2="Week", 3="Month", 4="4 Months" ] 
+				Chart item=Graph_Temp_Termocamino_Boiler period=D refresh=30000 visibility=[Chart_Period==1, Chart_Period=="Uninitialized"]  
+				Chart item=Graph_Temp_Termocamino_Boiler period=W refresh=21600000 visibility=[Chart_Period==2] //1 settimana
+				Chart item=Graph_Temp_Termocamino_Boiler period=M refresh=21600000 visibility=[Chart_Period==3] //1 mese
+				Chart item=Graph_Temp_Termocamino_Boiler period=4M refresh=86400000 visibility=[Chart_Period==4]//4 mesi
+			}	
+		Text label="Graf. Passaggio acqua a termocamino" icon="temperature" {
+				Switch item=Chart_Period label="" mappings=[1="Day", 2="Week", 3="Month", 4="4 Months" ] 
+				Chart item=SwitchTermocamino period=D refresh=30000 visibility=[Chart_Period==1, Chart_Period=="Uninitialized"]  
+				Chart item=SwitchTermocamino period=W refresh=21600000 visibility=[Chart_Period==2]
+				Chart item=SwitchTermocamino period=M refresh=21600000 visibility=[Chart_Period==3]
+				Chart item=SwitchTermocamino period=4M refresh=86400000 visibility=[Chart_Period==4]
+			}	
+	}
+	
+	Frame label="Power Switch" {
+		Switch item=powerSwitch1 label="Power Switch"
+	}
+	
+	Frame label="Termostato" {
+		Text label="Termostato soggiorno" icon="termostato" {
+			Setpoint item=temperature_Setpoint_TermostatoSoggiorno step=0.5 minValue=10 maxValue=30
+			Text item=temperature_TermostatoSoggiorno
+			Text item=umidita_TermostatoSoggiorno
+			Switch item=setasmeasured_TermostatoSoggiorno mappings=[ON="Set"] 
+			Text item=heating_TermostatoSoggiorno icon="homeRed"
+			Switch item=heatingmode_TermostatoSoggiorno   mappings=[ON="SET"] icon="siren"
+			Switch item=power_TermostatoSoggiorno  mappings=[ON="SET"] icon="powerIcon"
+			Slider item=displayBright_TermostatoSoggiorno
+			
+			Text item=TIMESTAMP_Nodo6_GF_Servizio label="Aggiornato: [%1$td.%1$tm.%1$tY %1$tk:%1$tM:%1$tS]" icon="icon16x16"
+		}	
+		Text label="Termostato piano terra" icon="termostato" {
+			Setpoint item=temperature_Setpoint_TermostatoPianoTerra step=0.5 minValue=10 maxValue=30
+			Text item=temperature_TermostatoPianoTerra
+			Text item=umidita_TermostatoPianoTerra 
+			Switch item=setasmeasured_TermostatoPianoTerra mappings=[ON="Set"] 
+			Text item=heating_TermostatoPianoTerra  icon="homeRed"
+			Switch item=heatingmode_TermostatoPianoTerra   mappings=[ON="SET"] icon="siren"
+			Switch item=power_TermostatoPianoTerra mappings=[ON="SET"] icon="powerIcon"
+			Slider item=displayBright_TermostatoPianoTerra
+			
+			Text item=TIMESTAMP_Nodo7_GF_Servizio label="Aggiornato: [%1$td.%1$tm.%1$tY %1$tk:%1$tM:%1$tS]" icon="icon16x16"
+		}	
+	}
+	Frame label="Diagnostica e Vista Tecnica" {
+		Group item=Diagnostic label="Salute ed aggiornamenti" icon="icon16x16"
+		Text label="Struttura Nodi" icon="icon16x16"  {	
+			Group item=TechnicView_Node1 label="Nodo 1" icon="icon16x16"
+			Group item=TechnicView_Node2 label="Nodo 2" icon="icon16x16"
+			Group item=TechnicView_Node3 label="Nodo 3" icon="icon16x16"
+			Group item=TechnicView_Node4 label="Nodo 4" icon="icon16x16"
+			Group item=TechnicView_Node5 label="Nodo 5" icon="icon16x16"
+			Group item=TechnicView_Node6 label="Nodo 6" icon="icon16x16"
+			Group item=TechnicView_Node7 label="Nodo 7" icon="icon16x16"
+		}
+		Text label="Grafici Salute Nodi" icon="icon16x16"  {	
+			Chart item=Health label="Salute Nodi" period=3D refresh=60000
+		}	
+	}
+}
+
