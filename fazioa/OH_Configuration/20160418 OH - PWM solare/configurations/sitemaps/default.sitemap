@@ -107,7 +107,7 @@ sitemap tonino label="Main Menu"
 			Text item=umidita_TermostatoPianoTerra 
 			Switch item=setasmeasured_TermostatoPianoTerra mappings=[ON="Set"] 
 			Text item=heating_TermostatoPianoTerra  icon="homeRed"
-			Switch item=heatingmode_TermostatoPianoTerra   mappings=[ON="SET"] icon="siren"
+			Switch item=heatingmodeSet_TermostatoPianoTerra   mappings=[ON="SET"] icon="coolingMode"
 			Switch item=power_TermostatoPianoTerra mappings=[ON="SET"] icon="powerIcon"
 			Slider item=displayBright_TermostatoPianoTerra
 			

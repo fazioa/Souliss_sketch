@@ -93,7 +93,7 @@ Number temperature_TermostatoPianoTerra 	"Temperatura [%.1f °C]"	<temperature> 
 Number temperature_Setpoint_TermostatoPianoTerra	"Setpoint [%.1f °C]" 	<temperature> (TermostatoPianoTerra, TechnicView_Node7) {souliss="T31:7:0:setpoint"}
 Switch setasmeasured_TermostatoPianoTerra "Set temp. attuale" <temperature> (TermostatoPianoTerra, TechnicView_Node7) {souliss="T31:7:0:setasmeasured"}
 Contact heating_TermostatoPianoTerra "Riscaldamento" (TermostatoPianoTerra, TechnicView_Node7) {souliss="T31:7:0:heating"}
-Switch heatingmode_TermostatoPianoTerra "Power ON" (TermostatoPianoTerra, TechnicView_Node7) {souliss="T31:7:0:heatingcooling", autoupdate="false"}
+Switch heatingmodeSet_TermostatoPianoTerra "Power ON" (TermostatoPianoTerra, TechnicView_Node7) {souliss="T31:7:0:heatingcooling", autoupdate="false"}
 Switch power_TermostatoPianoTerra "Power OFF" (TermostatoPianoTerra, TechnicView_Node7) {souliss="T31:7:0:power"}
 Number	Umidita_TermostatoPianoTerra "Umidità [%.1f %%]"	<temperature>	(TermostatoPianoTerra,TechnicView_Node7)		{ souliss="T53:7:7" }
 Dimmer	DisplayBright_TermostatoPianoTerra	"Lumin.min. display" (TermostatoPianoTerra,TechnicView_Node7)		{ souliss="T19:7:9" }
