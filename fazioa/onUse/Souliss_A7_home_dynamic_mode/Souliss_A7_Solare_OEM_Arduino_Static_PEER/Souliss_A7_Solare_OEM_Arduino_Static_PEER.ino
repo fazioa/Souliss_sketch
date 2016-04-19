@@ -16,13 +16,13 @@ EnergyMonitor emon1;             // Create an instance
 //**********************************************
 #include "PID_v1_mod.h"
 //Define Variables we'll be connecting to
-double Setpoint, Input, Output;
+double Setpoint, Input, Output, powerOutRate;
 //Setpoint: è il bilanciamento tra produzione solare e consumo. Si può mettere a zero o poco più, per evitare l'immissione in rete
 //Input: è il consumo di casa. E' già uguale alla differenza tra la produzione ed il fabbisogno dell'abitazione
 //Outpun: è la spinta da dare ai pannelli solari. Es: Se il prelievo dalla rete è 500W allora i pannelli devono essere al massimo, per produrre di più ed abbassare la quantità di energia prelevata
 
 //Specify the links and initial tuning parameters
-PID myPID(&Input, &Output, &Setpoint, 2, 5, 1, DIRECT);
+PID myPID(&Input, &Output, &Setpoint, 2, 5, 1, REVERSE);
 
 //*********************************************************
 //***********  DEFINE  ************************************
@@ -40,12 +40,12 @@ PID myPID(&Input, &Output, &Setpoint, 2, 5, 1, DIRECT);
 #define     SLOT_Voltage               2
 #define     SLOT_Current               4
 #define     SLOT_RELE_GROUP_ONE_PERCENT   6
-#define     SLOT_RELE_GROUP_TWO_PERCENT   7
+#define     SLOT_RELE_GROUP_TWO_PERCENT   8
 
 #define     PIN_VOLTAGE             A1 //15
 #define     PIN_CURRENT             A0 //14
 #define     PIN_RELE_GROUP_1             9 //9 AND 10, THAT NOT cause the delay() and millis() functions to stop working
-#define     PIN_RELE_GROUP_2             10
+#define     PIN_RELE_GROUP_2             3 //in chibiduino avaiable only 3 and 9 for PWM 31Hz
 
 #define SIZE 2
 float fPowerValues[SIZE];
@@ -58,14 +58,13 @@ float fI = 0;
 float fPannelliGruppo1_percento = 100;
 float fPannelliGruppo2_percento = 100;
 
-int iPWM_Val_1 = 255;
-int iPWM_Val_2 = 255;
+float iPWM_Val_1 = 255;
+float iPWM_Val_2 = 255;
 
 
 float fTopic_HomePower;
 uint8_t mypayload_len = 0;
 uint8_t mypayload[2];
-
 void setup()
 {
   // Init Serial
@@ -79,8 +78,8 @@ void setup()
   Set_Power(SLOT_Watt);
   Set_Voltage(SLOT_Voltage);
   Set_Current(SLOT_Current);
-  Set_DigitalInput(SLOT_RELE_GROUP_ONE_PERCENT);
-  Set_DigitalInput(SLOT_RELE_GROUP_TWO_PERCENT);
+  Set_T51(SLOT_RELE_GROUP_ONE_PERCENT);
+  Set_T51(SLOT_RELE_GROUP_TWO_PERCENT);
 
   pinMode(PIN_RELE_GROUP_1, OUTPUT);
   pinMode(PIN_RELE_GROUP_2, OUTPUT);
@@ -100,7 +99,6 @@ void setup()
   //turn the PID on
   myPID.SetMode(AUTOMATIC);
 }
-
 float fVal;
 
 void loop()
@@ -113,8 +111,8 @@ void loop()
       if (i < SIZE) {
         emon1.calcVI(20, 200);  //esegue il campionamento // Calculate all. No.of wavelengths, time-out
         fVal = emon1.realPower;
-        float fV = emon1.Vrms;
-        float fI  = emon1.Irms;
+        fV = emon1.Vrms;
+        fV  = emon1.Irms;
 
         fPowerValues[i++] = fVal;
       } else {
@@ -123,13 +121,15 @@ void loop()
           fMedia += fPowerValues[j];
         }
         fMedia = round(fMedia / SIZE);
-        ImportAnalog(SLOT_Watt, &fMedia);
 
         //se il consumo rilevato è <1 (oppure anche inferiore a zero) allora viene posto a zero, e di conseguenza non dovrebbero esserci aggiornamenti sul bus
         if (fMedia < 1) {
           fMedia = 0;
+          fV = 0;
+          fI = 0;
         }
 
+        ImportAnalog(SLOT_Watt, &fMedia);
         Logic_Power(SLOT_Watt);
 
         ImportAnalog(SLOT_Voltage, &fV);
@@ -142,12 +142,12 @@ void loop()
         i = 0;
         fMedia = 0;
 
-
-        ImportAnalog(SLOT_RELE_GROUP_ONE_PERCENT, &fPannelliGruppo2_percento);
-        Logic_DigitalInput(SLOT_RELE_GROUP_ONE_PERCENT);
+        ImportAnalog(SLOT_RELE_GROUP_ONE_PERCENT, &fPannelliGruppo1_percento);
+        Read_T51(SLOT_RELE_GROUP_ONE_PERCENT);
 
         ImportAnalog(SLOT_RELE_GROUP_TWO_PERCENT, &fPannelliGruppo2_percento);
-        Logic_DigitalInput(SLOT_RELE_GROUP_TWO_PERCENT);
+        Read_T51(SLOT_RELE_GROUP_TWO_PERCENT);
+
       }
     }
 
@@ -158,7 +158,6 @@ void loop()
     SHIFT_1110ms(2) {
       //Livellamento
       Input = fTopic_HomePower;
-
       //qui gestisco
       // fPannelliGruppo1_percento
       // fPannelliGruppo2_percento
@@ -166,14 +165,21 @@ void loop()
       //a questo punto in Output ho il valore, compreso tra 0-254 con il quale regolare la produzione
 
       //la scala viene ampliata 0-511. Il primo PWM ha priorità e va presto a 255, il secondo solo quando serve, ed è il primo a cui viene tolta potenza. In questo modo è più probabile che venga modulato in PWM soltanto una parte dei relè, e non tutti.
-      Output = Output / 255 * 511; //trasforma la scala a 256*2 valori
-      iPWM_Val_1 = Output;
+      Serial.print("Input: "); Serial.println(Input);
+      Serial.print("Output: "); Serial.println(Output);
+      powerOutRate = (Output / 255) * 511; //trasforma la scala a 256*2 valori
+      Serial.print("Output ampliato: "); Serial.println(powerOutRate);
+      iPWM_Val_1 = powerOutRate;
       if (iPWM_Val_1 > 255) iPWM_Val_1 = 255; //il massimo valore puà essere 255
-      fPannelliGruppo1_percento=iPWM_Val_1/255*100; //trasformo il valore in percentuale per passarlo al tipico di Souliss. E' più semplice rappresentare il dato in percentuale
+      fPannelliGruppo1_percento = (int) ((iPWM_Val_1 / 255) * 100); //trasformo il valore in percentuale per passarlo al tipico di Souliss. E' più semplice rappresentare il dato in percentuale
 
-          iPWM_Val_2 = Output - 255;
+      iPWM_Val_2 = powerOutRate - 256;
       if (iPWM_Val_2 < 0) iPWM_Val_2 = 0; //il minimo valore può essere 0
-      fPannelliGruppo2_percento=iPWM_Val_2/255*100;
+      fPannelliGruppo2_percento = (int) ((iPWM_Val_2 / 255) * 100);
+
+      Serial.print("fPannelliGruppo1_percento: "); Serial.println(fPannelliGruppo1_percento);
+      Serial.print("fPannelliGruppo2_percento: "); Serial.println(fPannelliGruppo2_percento);
+
 
     }
 
