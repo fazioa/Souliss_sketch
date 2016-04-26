@@ -44,7 +44,7 @@ EnergyMonitor emon1;             // Create an instance
 // Initialize DHT sensor for normal 8mhz Arduino
 DHT dht(PIN_DHT, DHTTYPE, 2);
 
-#define SIZE 6
+#define SIZE 2
 float fPowerValues[SIZE];
 uint8_t valByteArray[2];
 float fVal;
@@ -108,28 +108,29 @@ void loop()
 
     //acquisizione valori
     FAST_1110ms() {
-      if (i < SIZE) {
-        emon1.calcVI(20, 200);  //esegue il campionamento // Calculate all. No.of wavelengths, time-out
-        fVal = emon1.realPower;
-        fPowerValues[i++] = fVal;
-      } else {
-        //calcola media ed acquisisce il valore
-        for (int j = 0; j < SIZE; j++) {
-          iMedia += fPowerValues[j];
-        }
-        iMedia = round(iMedia / SIZE);
-        ImportAnalog(SLOT_Watt, &iMedia);
-        Logic_Power(SLOT_Watt);
+      //  if (i < SIZE) {
+      emon1.calcVI(30, 300);  //esegue il campionamento // Calculate all. No.of wavelengths, time-out
+      fVal = emon1.realPower;
+      //      fPowerValues[i++] = fVal;
+      //   } else {
+      //calcola media ed acquisisce il valore
+      //      for (int j = 0; j < SIZE; j++) {
+      //        iMedia += fPowerValues[j];
+      //      }
+      //      iMedia = round(iMedia / SIZE);
+      iMedia = round(fVal);
+      ImportAnalog(SLOT_Watt, &iMedia);
+      Logic_Power(SLOT_Watt);
 
-        //scelgo di fare pubblicare il valore direttamente dal nodo invece che dal GW
-        float16(&output16, &iMedia);
-        valByteArray[0] = C16TO8L(output16);
-        valByteArray[1] = C16TO8H(output16);
-        publishdata(ENERGY_TOPIC, valByteArray, 2);
+      //scelgo di fare pubblicare il valore direttamente dal nodo invece che dal GW
+      float16(&output16, &iMedia);
+      valByteArray[0] = C16TO8L(output16);
+      valByteArray[1] = C16TO8H(output16);
+      publishdata(ENERGY_TOPIC, valByteArray, 2);
 
-        i = 0;
-        iMedia = 0;
-      }
+      //    i = 0;
+      //    iMedia = 0;
+      //  }
       fVal = emon1.Vrms;
       ImportAnalog(SLOT_Voltage, &fVal);
       Logic_Voltage(SLOT_Voltage);
