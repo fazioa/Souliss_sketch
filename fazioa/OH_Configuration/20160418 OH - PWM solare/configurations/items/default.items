@@ -52,8 +52,8 @@ Number	ProduzioneFotovoltaico	"Fotovoltaico [%.1f W]"	<sun>	(G_Sitemap_Fotovolta
 Number	ProduzioneFotovoltaico_Max	"Oggi massimo [%.1f W]"	<sun>	(G_Sitemap_Fotovoltaico)	
 Number	ProduzioneFotovoltaico_Min	"Oggi minimo [%.1f W]"	<sun>	(G_Sitemap_Fotovoltaico)	
 Number	ProduzioneFotovoltaico_medio_x_minuti	"Media 10 minuti [%.1f W]"	<sun>	(G_Sitemap_Fotovoltaico)
-Number	ProduzioneFotovoltaico_Pannelli_Gruppo1 	"Pannelli Gruppo 1 [%.1f %%]"	<sun>	(G_Sitemap_Fotovoltaico,Graph_RatePannelli,TechnicView_Node4)		{ souliss="T57:4:6" }
-Number	ProduzioneFotovoltaico_Pannelli_Gruppo2 	"Pannelli Gruppo 1 [%.1f %%]"	<sun>	(G_Sitemap_Fotovoltaico,Graph_RatePannelli,TechnicView_Node4)		{ souliss="T57:4:8" }
+Number	Pannelli_Gruppo1 	"Pannelli Gruppo 1 [%d %%]"	<sun>	(G_Sitemap_Fotovoltaico,Graph_RatePannelli,TechnicView_Node4)		{ souliss="T57:4:6" }
+Number	Pannelli_Gruppo2 	"Pannelli Gruppo 2 [%d %%]"	<sun>	(G_Sitemap_Fotovoltaico,Graph_RatePannelli,TechnicView_Node4)		{ souliss="T57:4:8" }
 
 
 Number nInstantPower	"CE Instant Power [%.0f Watts]" <energy> (G_Sitemap_Consumi,Graph_Consumi_accoppiata_prelievo_produzione) { http="<[http://192.168.1.111:11011/command.cgi?attr=2&param=0&param2=105:60000:JS(getHexValue.js)]"}
@@ -84,7 +84,7 @@ Number temperature_TermostatoSoggiorno 	"Temperatura [%.1f °C]"	<temperature> (
 Number temperature_Setpoint_TermostatoSoggiorno	"Setpoint [%.1f °C]" 	<temperature> (TermostatoSoggiorno, TechnicView_Node6) {souliss="T31:6:0:setpoint"}
 Switch setasmeasured_TermostatoSoggiorno "Set temp. attuale" <temperature> (TermostatoSoggiorno, TechnicView_Node6) {souliss="T31:6:0:setasmeasured"}
 Contact heating_TermostatoSoggiorno "Riscaldamento" (TermostatoSoggiorno, TechnicView_Node6) {souliss="T31:6:0:heating"}
-Switch heatingmode_TermostatoSoggiorno "Power ON" (TermostatoSoggiorno, TechnicView_Node6) {souliss="T31:6:0:heatingcooling", autoupdate="false"}
+Switch heatingmodeSet_TermostatoSoggiorno "Power ON" (TermostatoSoggiorno, TechnicView_Node6) {souliss="T31:6:0:heatingcooling", autoupdate="false"}
 Switch power_TermostatoSoggiorno "Power OFF" (TermostatoSoggiorno, TechnicView_Node6) {souliss="T31:6:0:power"}
 Number	umidita_TermostatoSoggiorno	"Umidità [%.1f %%]"	<temperature>	(TermostatoSoggiorno,TechnicView_Node6)		{ souliss="T53:6:7" }
 Dimmer	displayBright_TermostatoSoggiorno	"Lumin.min. display" (TermostatoSoggiorno,TechnicView_Node6)		{ souliss="T19:6:9" }

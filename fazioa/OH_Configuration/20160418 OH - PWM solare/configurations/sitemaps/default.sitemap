@@ -28,7 +28,7 @@ sitemap tonino label="Main Menu"
 				Chart item=Graph_Consumi_accoppiata_prelievo_produzione period=W refresh=21600000 visibility=[Chart_Period==2]  
 				Chart item=Graph_Consumi_accoppiata_prelievo_produzione period=M refresh=21600000 visibility=[Chart_Period==3]  
 			}
-	Text label="Produzione - Rate gruppi pannelli" icon="energy" {
+	Text label="Produzione - Rate pannelli" icon="energy" {
 	Switch item=Chart_Period label="" mappings=[0="Hour", 1="Day", 2="Week", 3="Month"] 
 				Chart item=Graph_RatePannelli period=h refresh=6000 visibility=[Chart_Period==0, Chart_Period=="Uninitialized"]  
 				Chart item=Graph_RatePannelli period=D refresh=30000 visibility=[Chart_Period==1]
@@ -95,7 +95,7 @@ sitemap tonino label="Main Menu"
 			Text item=umidita_TermostatoSoggiorno
 			Switch item=setasmeasured_TermostatoSoggiorno mappings=[ON="Set"] 
 			Text item=heating_TermostatoSoggiorno icon="homeRed"
-			Switch item=heatingmode_TermostatoSoggiorno   mappings=[ON="SET"] icon="siren"
+			Switch item=heatingmodeSet_TermostatoSoggiorno   mappings=[ON="SET"] icon="coolingMode"
 			Switch item=power_TermostatoSoggiorno  mappings=[ON="SET"] icon="powerIcon"
 			Slider item=displayBright_TermostatoSoggiorno
 			

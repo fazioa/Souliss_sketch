@@ -248,16 +248,16 @@ end
 
 rule "Send to Emoncms - ProduzioneFotovoltaico_Pannelli_Gruppo1"
        when
-               Item ProduzioneFotovoltaico_Pannelli_Gruppo1 changed
+               Item Pannelli_Gruppo1 changed
        then
-               sendHttpGetRequest("http://emoncms.org/input/post.json?json=%7BProduzioneFotovoltaico_Pannelli_Gruppo1:" + ProduzioneFotovoltaico_Pannelli_Gruppo1.state + "%7D&apikey=" + apikey) 
+               sendHttpGetRequest("http://emoncms.org/input/post.json?json=%7BPannelli_Gruppo1:" + Pannelli_Gruppo1.state + "%7D&apikey=" + apikey) 
 end
 
 rule "Send to Emoncms - ProduzioneFotovoltaico_Pannelli_Gruppo2"
        when
-               Item ProduzioneFotovoltaico_Pannelli_Gruppo2 changed
+               Item Pannelli_Gruppo2 changed
        then
-               sendHttpGetRequest("http://emoncms.org/input/post.json?json=%7BProduzioneFotovoltaico_Pannelli_Gruppo2:" + ProduzioneFotovoltaico_Pannelli_Gruppo2.state + "%7D&apikey=" + apikey) 
+               sendHttpGetRequest("http://emoncms.org/input/post.json?json=%7BPannelli_Gruppo2:" + Pannelli_Gruppo2.state + "%7D&apikey=" + apikey) 
 end
 
 rule "Send to Emoncms - Temperature_Soggiorno"
