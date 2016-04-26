@@ -19,7 +19,7 @@ EnergyMonitor emon1;             // Create an instance
 double Setpoint, Input, Output, powerOutRate;
 //Setpoint: è il bilanciamento tra produzione solare e consumo. Si può mettere a zero o poco più, per evitare l'immissione in rete
 //Input: è il consumo di casa. E' già uguale alla differenza tra la produzione ed il fabbisogno dell'abitazione
-//Outpun: è la spinta da dare ai pannelli solari. Es: Se il prelievo dalla rete è 500W allora i pannelli devono essere al massimo, per produrre di più ed abbassare la quantità di energia prelevata
+//Output: è la spinta da dare ai pannelli solari. Es: Se il prelievo dalla rete è 500W allora i pannelli devono essere al massimo, per produrre di più ed abbassare la quantità di energia prelevata
 
 //Specify the links and initial tuning parameters
 PID myPID(&Input, &Output, &Setpoint, 2, 5, 1, REVERSE);
@@ -65,11 +65,12 @@ float iPWM_Val_2 = 255;
 float fTopic_HomePower;
 uint8_t mypayload_len = 0;
 uint8_t mypayload[2];
+int actual_SolarProduction,start_SolarProduction,iStart_HomePower;
 void setup()
 {
   // Init Serial
-  Serial.begin(9600);
-  Serial.println("POWER METER - VER.2 - Souliss");
+//  Serial.begin(9600);
+//  Serial.println("POWER METER - VER.2 - Souliss");
 
   Initialize();
   // Set network parameters
@@ -149,6 +150,7 @@ void loop()
         Read_T51(SLOT_RELE_GROUP_TWO_PERCENT);
 
       }
+      actual_SolarProduction = fMedia;
     }
 
     SHIFT_1110ms(1) {
@@ -157,18 +159,22 @@ void loop()
 
     SHIFT_1110ms(2) {
       //Livellamento
-      Input = fTopic_HomePower;
+      //Il valore dell'input è determinato tenendo conto del valore del consumo di casa ricevuto via rete Souliss l'ultima volta
+      //l'indice è aggiornato in continuazione anche sulla base della produzione solare
+      //uso questo metodo perchè i valori trasmessi con publish&subscribe non sembre hanno la costanza di 1 secondo. Spesso mancano per 3 o 4 secondi
+      //e ciò causa l'intervento incisivo di adattamenti PID non desiderati, dovuti alla mancanza di feedback
+      Input = iStart_HomePower - actual_SolarProduction + start_SolarProduction;
+
       //qui gestisco
       // fPannelliGruppo1_percento
       // fPannelliGruppo2_percento
       myPID.Compute();
       //a questo punto in Output ho il valore, compreso tra 0-254 con il quale regolare la produzione
-
       //la scala viene ampliata 0-511. Il primo PWM ha priorità e va presto a 255, il secondo solo quando serve, ed è il primo a cui viene tolta potenza. In questo modo è più probabile che venga modulato in PWM soltanto una parte dei relè, e non tutti.
-      Serial.print("Input: "); Serial.println(Input);
-      Serial.print("Output: "); Serial.println(Output);
+//      Serial.print("Input: "); Serial.println(Input);
+//      Serial.print("Output: "); Serial.println(Output);
       powerOutRate = (Output / 255) * 511; //trasforma la scala a 256*2 valori
-      Serial.print("Output ampliato: "); Serial.println(powerOutRate);
+//      Serial.print("Output ampliato: "); Serial.println(powerOutRate);
       iPWM_Val_1 = powerOutRate;
       if (iPWM_Val_1 > 255) iPWM_Val_1 = 255; //il massimo valore puà essere 255
       fPannelliGruppo1_percento = (int) ((iPWM_Val_1 / 255) * 100); //trasformo il valore in percentuale per passarlo al tipico di Souliss. E' più semplice rappresentare il dato in percentuale
@@ -177,8 +183,8 @@ void loop()
       if (iPWM_Val_2 < 0) iPWM_Val_2 = 0; //il minimo valore può essere 0
       fPannelliGruppo2_percento = (int) ((iPWM_Val_2 / 255) * 100);
 
-      Serial.print("fPannelliGruppo1_percento: "); Serial.println(fPannelliGruppo1_percento);
-      Serial.print("fPannelliGruppo2_percento: "); Serial.println(fPannelliGruppo2_percento);
+//      Serial.print("fPannelliGruppo1_percento: "); Serial.println(fPannelliGruppo1_percento);
+//      Serial.print("fPannelliGruppo2_percento: "); Serial.println(fPannelliGruppo2_percento);
 
 
     }
@@ -203,7 +209,13 @@ void loop()
 void subscribeTopics() {
   if (subscribedata(ENERGY_TOPIC, mypayload, &mypayload_len)) {
     float32((uint16_t*) mypayload,  &fTopic_HomePower);
-    Serial.print("ENERGY_TOPIC: "); Serial.println(fTopic_HomePower);
+//    Serial.print("ENERGY_TOPIC: "); Serial.println(fTopic_HomePower);
+
+    //Se esiste comunicazione del consumo di casa allora aggiorno le variabili usate per la rideterminazione dei rate dei gruppi di pannelli, che viene eseguito ogni secondo
+    //tengo traccia della produzione solare e del consumo attuale al momento dell'acquisizione del consumo di casa (che è già al netto della produzione solare)
+    iStart_HomePower = fTopic_HomePower;
+    //start_SolarProduction impostata sopra
+    start_SolarProduction = actual_SolarProduction;
   }
 }
 
