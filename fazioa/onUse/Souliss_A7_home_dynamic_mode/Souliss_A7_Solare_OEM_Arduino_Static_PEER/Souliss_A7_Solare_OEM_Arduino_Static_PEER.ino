@@ -22,7 +22,7 @@ double Setpoint, Input, Output, powerOutRate;
 //Output: è la spinta da dare ai pannelli solari. Es: Se il prelievo dalla rete è 500W allora i pannelli devono essere al massimo, per produrre di più ed abbassare la quantità di energia prelevata
 
 //Specify the links and initial tuning parameters
-PID myPID(&Input, &Output, &Setpoint, 2, 5, 1, REVERSE);
+PID myPID(&Input, &Output, &Setpoint, 1, 0.01, 0.1, REVERSE);
 
 //*********************************************************
 //***********  DEFINE  ************************************
@@ -47,9 +47,9 @@ PID myPID(&Input, &Output, &Setpoint, 2, 5, 1, REVERSE);
 #define     PIN_RELE_GROUP_1             9 //9 AND 10, THAT NOT cause the delay() and millis() functions to stop working
 #define     PIN_RELE_GROUP_2             3 //in chibiduino avaiable only 3 and 9 for PWM 31Hz
 
-#define SIZE 2
-float fPowerValues[SIZE];
-int i = 0;
+//#define SIZE 2
+//float fPowerValues[SIZE];
+//int i = 0;
 float fMedia = 0;
 
 float fV = 0;
@@ -109,19 +109,20 @@ void loop()
 
     //acquisizione valori
     SHIFT_1110ms(0) {
-      if (i < SIZE) {
+     // if (i < SIZE) {
         emon1.calcVI(20, 200);  //esegue il campionamento // Calculate all. No.of wavelengths, time-out
         fVal = emon1.realPower;
         fV = emon1.Vrms;
         fV  = emon1.Irms;
 
-        fPowerValues[i++] = fVal;
-      } else {
+    //    fPowerValues[i++] = fVal;
+   //   } else {
         //calcola media ed acquisisce il valore
-        for (int j = 0; j < SIZE; j++) {
-          fMedia += fPowerValues[j];
-        }
-        fMedia = round(fMedia / SIZE);
+  //      for (int j = 0; j < SIZE; j++) {
+ //         fMedia += fPowerValues[j];
+  //      }
+ //       fMedia = round(fMedia / SIZE);
+        fMedia = round(fVal);
 
         //se il consumo rilevato è <1 (oppure anche inferiore a zero) allora viene posto a zero, e di conseguenza non dovrebbero esserci aggiornamenti sul bus
         if (fMedia < 1) {
@@ -140,7 +141,7 @@ void loop()
         ImportAnalog(SLOT_Current, &fI);
         Logic_Current(SLOT_Current);
         //        Serial.print(fI); LOG.println(" CURRENT");
-        i = 0;
+      //  i = 0;
         fMedia = 0;
 
         ImportAnalog(SLOT_RELE_GROUP_ONE_PERCENT, &fPannelliGruppo1_percento);
@@ -149,7 +150,7 @@ void loop()
         ImportAnalog(SLOT_RELE_GROUP_TWO_PERCENT, &fPannelliGruppo2_percento);
         Read_T51(SLOT_RELE_GROUP_TWO_PERCENT);
 
-      }
+  //    }
       actual_SolarProduction = fMedia;
     }
 
