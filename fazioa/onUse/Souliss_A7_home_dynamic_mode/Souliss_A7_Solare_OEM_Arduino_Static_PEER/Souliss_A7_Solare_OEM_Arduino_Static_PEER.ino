@@ -22,7 +22,7 @@ double Setpoint, Input, Output, powerOutRate;
 //Output: è la spinta da dare ai pannelli solari. Es: Se il prelievo dalla rete è 500W allora i pannelli devono essere al massimo, per produrre di più ed abbassare la quantità di energia prelevata
 
 //Specify the links and initial tuning parameters
-PID myPID(&Input, &Output, &Setpoint, 1, 0.01, 0.1, REVERSE);
+PID myPID(&Input, &Output, &Setpoint, 0.5, 0.5, 0, REVERSE);
 
 //*********************************************************
 //***********  DEFINE  ************************************
@@ -47,11 +47,6 @@ PID myPID(&Input, &Output, &Setpoint, 1, 0.01, 0.1, REVERSE);
 #define     PIN_RELE_GROUP_1             9 //9 AND 10, THAT NOT cause the delay() and millis() functions to stop working
 #define     PIN_RELE_GROUP_2             3 //in chibiduino avaiable only 3 and 9 for PWM 31Hz
 
-//#define SIZE 2
-//float fPowerValues[SIZE];
-//int i = 0;
-float fMedia = 0;
-
 float fV = 0;
 float fI = 0;
 
@@ -65,12 +60,12 @@ float iPWM_Val_2 = 255;
 float fTopic_HomePower;
 uint8_t mypayload_len = 0;
 uint8_t mypayload[2];
-int actual_SolarProduction,start_SolarProduction,iStart_HomePower;
+int actual_SolarProduction, start_SolarProduction, iStart_HomePower;
 void setup()
 {
   // Init Serial
-//  Serial.begin(9600);
-//  Serial.println("POWER METER - VER.2 - Souliss");
+  //  Serial.begin(9600);
+  //  Serial.println("POWER METER - VER.2 - Souliss");
 
   Initialize();
   // Set network parameters
@@ -108,62 +103,48 @@ void loop()
     UPDATEFAST();
 
     //acquisizione valori
-    SHIFT_1110ms(0) {
-     // if (i < SIZE) {
-        emon1.calcVI(20, 200);  //esegue il campionamento // Calculate all. No.of wavelengths, time-out
-        fVal = emon1.realPower;
-        fV = emon1.Vrms;
-        fV  = emon1.Irms;
+   SHIFT_210ms(0) {
+      emon1.calcVI(20, 200);  //esegue il campionamento // Calculate all. No.of wavelengths, time-out
+      fVal = emon1.realPower;
+      fV = emon1.Vrms;
+      fI  = emon1.Irms;
 
-    //    fPowerValues[i++] = fVal;
-   //   } else {
-        //calcola media ed acquisisce il valore
-  //      for (int j = 0; j < SIZE; j++) {
- //         fMedia += fPowerValues[j];
-  //      }
- //       fMedia = round(fMedia / SIZE);
-        fMedia = round(fVal);
+      //se il consumo rilevato è <1 (oppure anche inferiore a zero) allora viene posto a zero, e di conseguenza non dovrebbero esserci aggiornamenti sul bus
+      if (fVal < 1 || fV < 0 ) {
+        fVal = 0;
+        fV = 0;
+        fI = 0;
+      }
 
-        //se il consumo rilevato è <1 (oppure anche inferiore a zero) allora viene posto a zero, e di conseguenza non dovrebbero esserci aggiornamenti sul bus
-        if (fMedia < 1) {
-          fMedia = 0;
-          fV = 0;
-          fI = 0;
-        }
+      fVal = round(fVal);
+      ImportAnalog(SLOT_Watt, &fVal);
+      Logic_Power(SLOT_Watt);
 
-        ImportAnalog(SLOT_Watt, &fMedia);
-        Logic_Power(SLOT_Watt);
+      ImportAnalog(SLOT_Voltage, &fV);
+      Logic_Voltage(SLOT_Voltage);
 
-        ImportAnalog(SLOT_Voltage, &fV);
-        Logic_Voltage(SLOT_Voltage);
-        //        Serial.print("emon: "); Serial.print(i); Serial.print(" - ");
-        //        Serial.print(fV); LOG.print(" VOLTAGE - ");
-        ImportAnalog(SLOT_Current, &fI);
-        Logic_Current(SLOT_Current);
-        //        Serial.print(fI); LOG.println(" CURRENT");
-      //  i = 0;
-        fMedia = 0;
+      ImportAnalog(SLOT_Current, &fI);
+      Logic_Current(SLOT_Current);
 
-        ImportAnalog(SLOT_RELE_GROUP_ONE_PERCENT, &fPannelliGruppo1_percento);
-        Read_T51(SLOT_RELE_GROUP_ONE_PERCENT);
+      ImportAnalog(SLOT_RELE_GROUP_ONE_PERCENT, &fPannelliGruppo1_percento);
+      Read_T51(SLOT_RELE_GROUP_ONE_PERCENT);
 
-        ImportAnalog(SLOT_RELE_GROUP_TWO_PERCENT, &fPannelliGruppo2_percento);
-        Read_T51(SLOT_RELE_GROUP_TWO_PERCENT);
+      ImportAnalog(SLOT_RELE_GROUP_TWO_PERCENT, &fPannelliGruppo2_percento);
+      Read_T51(SLOT_RELE_GROUP_TWO_PERCENT);
 
-  //    }
-      actual_SolarProduction = fMedia;
+      actual_SolarProduction = fVal;
     }
 
-    SHIFT_1110ms(1) {
+    SHIFT_210ms(1) {
       subscribeTopics();
     }
 
-    SHIFT_1110ms(2) {
+    SHIFT_210ms(2) {
       //Livellamento
-      //Il valore dell'input è determinato tenendo conto del valore del consumo di casa ricevuto via rete Souliss l'ultima volta
+      //Il valore dell'input è determinato tenendo conto del valore del consumo di casa ricevuto via rete Souliss
       //l'indice è aggiornato in continuazione anche sulla base della produzione solare
       //uso questo metodo perchè i valori trasmessi con publish&subscribe non sembre hanno la costanza di 1 secondo. Spesso mancano per 3 o 4 secondi
-      //e ciò causa l'intervento incisivo di adattamenti PID non desiderati, dovuti alla mancanza di feedback
+      //e ciò causa l'intervento incisivo di adattamenti PID non desiderati dovuti alla mancanza di feedback
       Input = iStart_HomePower - actual_SolarProduction + start_SolarProduction;
 
       //qui gestisco
@@ -172,20 +153,20 @@ void loop()
       myPID.Compute();
       //a questo punto in Output ho il valore, compreso tra 0-254 con il quale regolare la produzione
       //la scala viene ampliata 0-511. Il primo PWM ha priorità e va presto a 255, il secondo solo quando serve, ed è il primo a cui viene tolta potenza. In questo modo è più probabile che venga modulato in PWM soltanto una parte dei relè, e non tutti.
-//      Serial.print("Input: "); Serial.println(Input);
-//      Serial.print("Output: "); Serial.println(Output);
+      //      Serial.print("Input: "); Serial.println(Input);
+      //      Serial.print("Output: "); Serial.println(Output);
       powerOutRate = (Output / 255) * 511; //trasforma la scala a 256*2 valori
-//      Serial.print("Output ampliato: "); Serial.println(powerOutRate);
+      //      Serial.print("Output ampliato: "); Serial.println(powerOutRate);
       iPWM_Val_1 = powerOutRate;
-      if (iPWM_Val_1 > 255) iPWM_Val_1 = 255; //il massimo valore puà essere 255
+      if (iPWM_Val_1 > 255) iPWM_Val_1 = 255; //il massimo valore può essere 255
       fPannelliGruppo1_percento = (int) ((iPWM_Val_1 / 255) * 100); //trasformo il valore in percentuale per passarlo al tipico di Souliss. E' più semplice rappresentare il dato in percentuale
 
       iPWM_Val_2 = powerOutRate - 256;
       if (iPWM_Val_2 < 0) iPWM_Val_2 = 0; //il minimo valore può essere 0
       fPannelliGruppo2_percento = (int) ((iPWM_Val_2 / 255) * 100);
 
-//      Serial.print("fPannelliGruppo1_percento: "); Serial.println(fPannelliGruppo1_percento);
-//      Serial.print("fPannelliGruppo2_percento: "); Serial.println(fPannelliGruppo2_percento);
+      //      Serial.print("fPannelliGruppo1_percento: "); Serial.println(fPannelliGruppo1_percento);
+      //      Serial.print("fPannelliGruppo2_percento: "); Serial.println(fPannelliGruppo2_percento);
 
 
     }
@@ -210,7 +191,7 @@ void loop()
 void subscribeTopics() {
   if (subscribedata(ENERGY_TOPIC, mypayload, &mypayload_len)) {
     float32((uint16_t*) mypayload,  &fTopic_HomePower);
-//    Serial.print("ENERGY_TOPIC: "); Serial.println(fTopic_HomePower);
+    //    Serial.print("ENERGY_TOPIC: "); Serial.println(fTopic_HomePower);
 
     //Se esiste comunicazione del consumo di casa allora aggiorno le variabili usate per la rideterminazione dei rate dei gruppi di pannelli, che viene eseguito ogni secondo
     //tengo traccia della produzione solare e del consumo attuale al momento dell'acquisizione del consumo di casa (che è già al netto della produzione solare)

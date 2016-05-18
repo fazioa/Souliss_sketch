@@ -41,6 +41,8 @@ uint8_t ip_gateway[4]  = {192, 168, 1, 1};
 #define peer_chibi_address_fotovoltaico	0x6514 //fotovoltaico
 #define peer_eth_address_soggiorno  0x0010 //soggiorno
 #define peer_wifi_address_luceTettoia  0xAB11 //soggiorno
+#define peer_wifi_address_LYT1  0xAB13 //LYT
+#define peer_wifi_address_LYT2  0xAB14 //LYT
 #define peer_wifi_address_termostato_soggiorno  0xAB20 //termostato soggiorno
 #define peer_wifi_address_termostato_piano_terra  0xAB21 //termostato piano terra
 
@@ -76,6 +78,8 @@ void setup()
   SetAsPeerNode(peer_wifi_address_luceTettoia, 5);
   SetAsPeerNode(peer_wifi_address_termostato_soggiorno, 6);
   SetAsPeerNode(peer_wifi_address_termostato_piano_terra, 7);
+  SetAsPeerNode(peer_wifi_address_LYT1, 8);
+  SetAsPeerNode(peer_wifi_address_LYT2, 9);
 
   // This node will serve all the others in the network providing an address
   SetAddressingServer();
