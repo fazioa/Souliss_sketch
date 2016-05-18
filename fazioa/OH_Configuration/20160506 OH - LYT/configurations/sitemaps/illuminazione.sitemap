@@ -19,4 +19,9 @@ Frame label="Tettoia"  {
 	Selection item=Light_scene mappings=[0="weiß", 1="rot", 2="gelb", 3="grün", 4="dunkelgrün", 5="cyan", 6="blau", 7="magenta"]
 	Switch item=milight_RGB_NightMode mappings=[ON="Night"]
 }
+
+Frame label="LYT"  {
+	Color item=LYT1 label="LYT 1"
+}
+
 }
