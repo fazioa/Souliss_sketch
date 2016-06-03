@@ -18,7 +18,7 @@ Group	G_Network	(All)
 
 Group	Graph_Temp_accoppiata_interno_esterno	(All)	
 Group	Graph_Consumi_accoppiata_prelievo_produzione	(All)	
-Group   Graph_Prelievo_produzione_Rate_Pannelli
+Group   Graph_Prelievo_produzione_Rate_Pannelli (All)
 Group	Graph_RatePannelli	(All)	
 Group	Graph_Temp_Termocamino_Boiler	(All)	
 

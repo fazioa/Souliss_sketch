@@ -17,8 +17,8 @@ Strategies {
  */
 Items {
 	Graph_Temp_accoppiata_interno_esterno* : strategy = every30Minutes, everyChange, restoreOnStartup
-	Graph_Consumi_accoppiata_prelievo_produzione* : strategy = everyMinute, restoreOnStartup
-	Graph_RatePannelli* : strategy = everyMinute, restoreOnStartup
+	Graph_Consumi_accoppiata_prelievo_produzione* : strategy = everyMinute,everyChange, restoreOnStartup
+	Graph_RatePannelli* : strategy = everyMinute, everyChange, restoreOnStartup
 	
 	Health* : strategy = every30Minutes, everyChange, restoreOnStartup
 	G_Network* : strategy = every05Minutes, everyChange, restoreOnStartup
