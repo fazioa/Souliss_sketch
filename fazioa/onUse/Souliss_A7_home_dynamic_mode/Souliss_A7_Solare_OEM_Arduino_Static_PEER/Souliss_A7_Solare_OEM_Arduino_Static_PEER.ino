@@ -108,15 +108,15 @@ void loop()
       fVal = emon1.realPower;
       fV = emon1.Vrms;
       fI  = emon1.Irms;
-
-      //se il consumo rilevato è <1 (oppure anche inferiore a zero) allora viene posto a zero, e di conseguenza non dovrebbero esserci aggiornamenti sul bus
-      if (fVal < 1 || fV < 0 ) {
+      fVal = round(fVal);
+      
+      //se il consumo rilevato è <5 (oppure anche inferiore a zero) allora viene posto a zero, e di conseguenza non dovrebbero esserci aggiornamenti sul bus
+      if (fVal < 5) {
         fVal = 0;
-        fV = 0;
         fI = 0;
       }
 
-      fVal = round(fVal);
+
       ImportAnalog(SLOT_Watt, &fVal);
       Logic_Power(SLOT_Watt);
 
@@ -161,7 +161,7 @@ void loop()
       if (iPWM_Val_1 > 255) iPWM_Val_1 = 255; //il massimo valore può essere 255
       fPannelliGruppo1_percento = (int) ((iPWM_Val_1 / 255) * 100); //trasformo il valore in percentuale per passarlo al tipico di Souliss. E' più semplice rappresentare il dato in percentuale
 
-      iPWM_Val_2 = powerOutRate - 256;
+      iPWM_Val_2 = powerOutRate - 255;
       if (iPWM_Val_2 < 0) iPWM_Val_2 = 0; //il minimo valore può essere 0
       fPannelliGruppo2_percento = (int) ((iPWM_Val_2 / 255) * 100);
 
