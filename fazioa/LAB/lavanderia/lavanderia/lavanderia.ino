@@ -32,16 +32,18 @@
 
 // This identify the number of the LED logic
 #define slotT22_saracinesca 0
+#define slotT11_WARNINGLIGHT 2
+#define slotT13_CURTAINLIGHT 3
 
-#define pinInputOPEN   2
-#define pinInputCLOSE   3
+#define pinInputOPEN   2   //used internal pull up resistor
+#define pinInputCLOSE   3 //used internal pull up resistor
+
 #define pinOutputReleOPEN   4
 #define pinOutputReleCLOSE   5
 #define pinOutputReleWARNINGLIGHT   6
+#define pinInputCURTAINLIGHT   7  //need pull down resistor
 
-#define Souliss_T2n_Timer_Val      0xA3
-
-U8 bOut = HIGH;
+#define timer_saracinesca      0x12 //18 DEC - Circa 20 secondi
 
 void setup()
 {
@@ -51,22 +53,17 @@ void setup()
   GetIPAddress();
   SetAsGateway(myvNet_dhcp);       // Set this node as gateway for SoulissApp
 
-  Set_Windows(slotT22_saracinesca);
-
-
-  // We connect a pushbutton between 5V and pin2 with a pulldown resistor
-  // between pin2 and GND, the LED is connected to pin9 with a resistor to
-  // limit the current amount
-
   pinMode(pinInputOPEN, INPUT_PULLUP);
-  // digitalWrite(pinInputOPEN, LOW);
-
   pinMode(pinInputCLOSE, INPUT_PULLUP);
-  //   digitalWrite(pinInputCLOSE, LOW);
+  pinMode(pinInputCURTAINLIGHT, INPUT);
 
   pinMode(pinOutputReleOPEN, OUTPUT);
   pinMode(pinOutputReleCLOSE, OUTPUT);
   pinMode(pinOutputReleWARNINGLIGHT, OUTPUT);
+
+  Set_Windows(slotT22_saracinesca);
+  Set_SimpleLight(slotT11_WARNINGLIGHT); //luce lampeggiante di sicurezza
+  Set_DigitalInput(slotT13_CURTAINLIGHT); //barriera infrarosso di sicurezza - E' impostata solo per avere lo stato in SoulissApp
 }
 
 void loop()
@@ -76,19 +73,26 @@ void loop()
     UPDATEFAST();
 
     FAST_50ms() {   // We process the logic and relevant input and output every 50 milliseconds
-      DigIn2State(pinInputOPEN, Souliss_T2n_StopCmd, Souliss_T2n_OpenCmd_Local, slotT22_saracinesca);
-      DigIn2State(pinInputCLOSE, Souliss_T2n_StopCmd, Souliss_T2n_CloseCmd_Local, slotT22_saracinesca);
-      Souliss_Logic_T22(memory_map, slotT22_saracinesca, &data_changed, Souliss_T2n_Timer_Val + 10);                      // Drive the LED as per command
+      DigIn(pinInputOPEN, Souliss_T2n_OpenCmd_Local, slotT22_saracinesca);
+      DigIn(pinInputCLOSE, Souliss_T2n_CloseCmd_Local, slotT22_saracinesca);
+      DigIn(pinInputCURTAINLIGHT, Souliss_T2n_StopCmd, slotT22_saracinesca);  //collega il pin di input del sensore di sicurezza allo slot della saracinesca. Passa il comando STOP in caso di attivazione
 
-      DigOut(pinOutputReleOPEN, Souliss_T2n_OpenCmd, slotT22_saracinesca);
-      DigOut(pinOutputReleCLOSE, Souliss_T2n_CloseCmd, slotT22_saracinesca);
+      Souliss_Logic_T22(memory_map, slotT22_saracinesca, &data_changed, timer_saracinesca);
+      Logic_SimpleLight(slotT11_WARNINGLIGHT); //processa la logica per la luce lampeggiante di sicurezza
+      Logic_T13(slotT13_CURTAINLIGHT);   //processa la logica per la barriera infrarosso di sicurezza
+
+      DigOut(pinOutputReleOPEN, Souliss_T2n_Coil_Open, slotT22_saracinesca); //pone a 1 il PIN di OUTPUT quando lo stato di uscita dello slot è Souliss_T2n_Coil_Open
+      DigOut(pinOutputReleCLOSE, Souliss_T2n_Coil_Close, slotT22_saracinesca); //pone a 1 il PIN di OUTPUT quando lo stato di uscita dello slot è Souliss_T2n_Coil_Close
     }
+
     FAST_510ms() {
-      if (mOutput(slotT22_saracinesca)  == Souliss_T2n_OpenCmd || mOutput(slotT22_saracinesca)  == Souliss_T2n_CloseCmd) {
-      digitalWrite(pinOutputReleWARNINGLIGHT, bOut);
-        bOut = !bOut;
-      } else digitalWrite(pinOutputReleWARNINGLIGHT, LOW);
+      if (mOutput(slotT22_saracinesca)  == Souliss_T2n_Coil_Open || mOutput(slotT22_saracinesca)  == Souliss_T2n_Coil_Close) {
+        mInput(slotT11_WARNINGLIGHT) = Souliss_T1n_OnCmd;
+      } else {
+        mInput(slotT11_WARNINGLIGHT) = Souliss_T1n_OffCmd;
+      }
     }
+
 
 
     FAST_1110ms() {
