@@ -43,10 +43,12 @@
 #define pinOutputReleWARNINGLIGHT   6
 #define pinInputCURTAINLIGHT   7  //need pull down resistor
 
-#define timer_saracinesca      0x12 //18 DEC - Circa 20 secondi
+#define timer_saracinesca      Souliss_T2n_Timer_Off+0x12 //18 DEC - Circa 20 secondi
 
+U8 precPositionT22;
 void setup()
 {
+  Serial.begin(9600);
   Initialize();
 
   // Get the IP address from DHCP
@@ -62,8 +64,11 @@ void setup()
   pinMode(pinOutputReleWARNINGLIGHT, OUTPUT);
 
   Set_Windows(slotT22_saracinesca);
+
+
   Set_SimpleLight(slotT11_WARNINGLIGHT); //luce lampeggiante di sicurezza
   Set_DigitalInput(slotT13_CURTAINLIGHT); //barriera infrarosso di sicurezza - E' impostata solo per avere lo stato in SoulissApp
+  mInput(slotT22_saracinesca) = Souliss_T2n_StopCmd;
 }
 
 void loop()
@@ -75,22 +80,35 @@ void loop()
     FAST_50ms() {   // We process the logic and relevant input and output every 50 milliseconds
       DigIn(pinInputOPEN, Souliss_T2n_OpenCmd_Local, slotT22_saracinesca);
       DigIn(pinInputCLOSE, Souliss_T2n_CloseCmd_Local, slotT22_saracinesca);
-      DigIn(pinInputCURTAINLIGHT, Souliss_T2n_StopCmd, slotT22_saracinesca);  //collega il pin di input del sensore di sicurezza allo slot della saracinesca. Passa il comando STOP in caso di attivazione
+      DigIn2State(pinInputCURTAINLIGHT, Souliss_T1n_OnCmd, Souliss_T1n_OffCmd,  slotT13_CURTAINLIGHT); //sensore a tenda
 
       Souliss_Logic_T22(memory_map, slotT22_saracinesca, &data_changed, timer_saracinesca);
       Logic_SimpleLight(slotT11_WARNINGLIGHT); //processa la logica per la luce lampeggiante di sicurezza
-      Logic_T13(slotT13_CURTAINLIGHT);   //processa la logica per la barriera infrarosso di sicurezza
+      Logic_DigitalInput(slotT13_CURTAINLIGHT);   //processa la logica per la barriera infrarosso di sicurezza
 
+
+      DigOut(pinOutputReleWARNINGLIGHT, Souliss_T1n_OnCoil, slotT11_WARNINGLIGHT); //processa la logica per la luce di sicurezza
       DigOut(pinOutputReleOPEN, Souliss_T2n_Coil_Open, slotT22_saracinesca); //pone a 1 il PIN di OUTPUT quando lo stato di uscita dello slot è Souliss_T2n_Coil_Open
       DigOut(pinOutputReleCLOSE, Souliss_T2n_Coil_Close, slotT22_saracinesca); //pone a 1 il PIN di OUTPUT quando lo stato di uscita dello slot è Souliss_T2n_Coil_Close
+
+
+      if (mOutput(slotT13_CURTAINLIGHT) == Souliss_T1n_OnCoil) {
+        mInput(slotT22_saracinesca) = Souliss_T2n_StopCmd; //ferma il movimento se il sensore a tenda è attivato
+      }
     }
 
     FAST_510ms() {
+
+    
+       
       if (mOutput(slotT22_saracinesca)  == Souliss_T2n_Coil_Open || mOutput(slotT22_saracinesca)  == Souliss_T2n_Coil_Close) {
-        mInput(slotT11_WARNINGLIGHT) = Souliss_T1n_OnCmd;
-      } else {
-        mInput(slotT11_WARNINGLIGHT) = Souliss_T1n_OffCmd;
+        mInput(slotT11_WARNINGLIGHT) = Souliss_T1n_OnCmd;  //accende la luce di sicurezza quando la saracinesca è in movimento
+       } else if (mOutput(slotT22_saracinesca) != precPositionT22) {
+        mInput(slotT11_WARNINGLIGHT) = Souliss_T1n_OffCmd;   //spegne la lampada solo se è rilevata una variazione dello stato del T22
+        Serial.println("slotT11_WARNINGLIGHT = Souliss_T1n_OffCmd");
       }
+  precPositionT22 = mOutput(slotT22_saracinesca);
+  Serial.print("precPositionT22 -->"); Serial.println(precPositionT22);
     }
 
 
