@@ -28,7 +28,7 @@
     At this time the network is up and you can run it.  
     
 ***************************************************************************/
-
+#include "SoulissFramework.h"
 #include "bconf/StandardArduino.h"          // Use a standard Arduino
 #include "conf/ethW5100.h"                  // Ethernet through Wiznet W5100
 #include "conf/Gateway.h"                   // The main node is the Gateway, we have just one node
