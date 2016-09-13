@@ -16,7 +16,6 @@ with ERASE EEPROM
 
 #include "bconf/MCU_ESP8266.h"              // Load the code directly on the ESP8266
 #include "conf/RuntimeGateway.h"            // This node is a Peer and can became a Gateway at runtime
-#include "conf/DynamicAddressing.h"         // Use dynamically assigned addresses
 /*** All configuration includes should be above this line ***/ 
 #include "Souliss.h"
    
