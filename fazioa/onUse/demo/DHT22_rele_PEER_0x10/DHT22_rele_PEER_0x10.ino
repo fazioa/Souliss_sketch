@@ -9,6 +9,7 @@
 #include "Typicals.h"
 #include <SPI.h>
 #include "DHT.h"
+#include "topics.h"
 
 
 uint8_t Gateway_address[4]  = {192, 168, 20, 20};
@@ -38,6 +39,8 @@ uint8_t ip_gateway[4]  = {192, 168, 20, 1};
 
 // Initialize DHT sensor for normal 8mhz Arduino
 DHT dht(PIN_DHT, DHTTYPE, 2);
+uint16_t output16;
+uint8_t valByteArray[2];
 
 void setup()
 {
@@ -58,17 +61,16 @@ void setup()
 
   pinMode(PIN_T11_ONE_IN, INPUT_PULLUP);
   pinMode(PIN_T11_TWO_IN, INPUT_PULLUP);
-  
+
 
   pinMode(PIN_T11_ONE_OUT, OUTPUT);
   digitalWrite(PIN_T11_ONE_OUT, LOW);
 
   pinMode(PIN_T11_TWO_OUT, OUTPUT);
   digitalWrite(PIN_T11_TWO_OUT, LOW);
-  
+
   Set_SimpleLight(SLOT_T11_ONE);
   Set_SimpleLight(SLOT_T11_TWO);
-
 }
 
 void loop()
@@ -100,7 +102,7 @@ void loop()
     FAST_PeerComms();
   }
 
-  EXECUTESLOW() {
+    EXECUTESLOW() {
     UPDATESLOW();
     SLOW_10s() {
 
@@ -108,9 +110,22 @@ void loop()
       float temperature = dht.readTemperature();
       ImportAnalog(TEMPERATURE, &temperature);
 
+      //PUBLISH
+      float16(&output16, &temperature);
+      valByteArray[0] = C16TO8L(output16);
+      valByteArray[1] = C16TO8H(output16);
+      publishdata(TEMPERATURE_TOPIC_NODE_DHT_RELE, valByteArray, 2);
+
+
       // Read humidity value from DHT sensor and convert from single-precision to half-precision
       float humidity = dht.readHumidity();
       ImportAnalog(HUMIDITY, &humidity);
+
+  //PUBLISH
+      float16(&output16, &humidity);
+      valByteArray[0] = C16TO8L(output16);
+      valByteArray[1] = C16TO8H(output16);
+      publishdata(HUMIDITY_TOPIC_NODE_DHT_RELE, valByteArray, 2);
 
       Timer_SimpleLight(SLOT_T11_ONE);
       Timer_SimpleLight(SLOT_T11_TWO);

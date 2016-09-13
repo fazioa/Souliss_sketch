@@ -33,8 +33,8 @@ uint8_t ip_gateway[4]  = {192, 168, 20, 1};
 #define peer_eth_address_DHT_rele  0x10
 #define peer_wifi_address_SST 0xAB21 //SST
 
-//#define peer_wifi_address_LYT1  0xAB13 //LYT
-//#define peer_wifi_address_LYT2  0xAB14 //LYT
+#define peer_wifi_address_LYT1  0xAB13 //LYT
+#define peer_wifi_address_LYT2  0xAB14 //LYT
 //#define peer_wifi_address_termostato_soggiorno  0xAB20 //termostato soggiorno
 
 
@@ -54,8 +54,8 @@ void setup()
   SetAsPeerNode(peer_eth_address_DHT_rele, 2);
 SetAsPeerNode(peer_wifi_address_SST, 3);
 
-  //SetAsPeerNode(peer_wifi_address_LYT1, 8);
-  //SetAsPeerNode(peer_wifi_address_LYT2, 9);
+  SetAsPeerNode(peer_wifi_address_LYT1, 4);
+  SetAsPeerNode(peer_wifi_address_LYT2, 5);
   Set_SimpleLight(0);
 }
 

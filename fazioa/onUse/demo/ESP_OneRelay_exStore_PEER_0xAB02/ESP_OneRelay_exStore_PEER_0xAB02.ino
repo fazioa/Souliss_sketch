@@ -63,6 +63,8 @@
 OneWire oneWire(PIN_ONEWIRE_SENSORS);
 DallasTemperature sensors(&oneWire);
 
+uint16_t output16;
+uint8_t valByteArray[2];
 void setup()
 {
   Serial.begin(9600);
