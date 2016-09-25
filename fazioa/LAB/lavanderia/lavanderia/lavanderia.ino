@@ -78,8 +78,8 @@ void loop()
     UPDATEFAST();
 
     FAST_50ms() {   // We process the logic and relevant input and output every 50 milliseconds
-      DigIn(pinInputOPEN, Souliss_T2n_OpenCmd_Local, slotT22_saracinesca);
-      DigIn(pinInputCLOSE, Souliss_T2n_CloseCmd_Local, slotT22_saracinesca);
+      LowDigIn(pinInputOPEN, Souliss_T2n_OpenCmd_Local, slotT22_saracinesca);
+      LowDigIn(pinInputCLOSE, Souliss_T2n_CloseCmd_Local, slotT22_saracinesca);
       DigIn2State(pinInputCURTAINLIGHT, Souliss_T1n_OnCmd, Souliss_T1n_OffCmd,  slotT13_CURTAINLIGHT); //sensore a tenda
 
       Souliss_Logic_T22(memory_map, slotT22_saracinesca, &data_changed, timer_saracinesca);
