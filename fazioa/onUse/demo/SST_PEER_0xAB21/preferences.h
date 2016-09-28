@@ -50,8 +50,8 @@
 // **** Define the WiFi name and password ****
 //Only for DYNAMIC_CONNECTION = 0
 #define WIFICONF_INSKETCH
-#define WiFi_SSID               "Souliss"
-#define WiFi_Password           ""  
+#define WiFi_SSID               "souliss"
+#define WiFi_Password           "souliss01"  
 
 // Define the network configuration according to your router settingsuration according to your router settings
 // and the other on the wireless oneless one
@@ -72,28 +72,28 @@
 //ucg.setColor(0, 255, 255);   //light blue
 
 #define C1_COLOR()  ucg.setColor(255, 0, 0); // Red
-#define C1_AREA_UNITY "'C"
-#define C1_AREA_TEXT " DHT"
+#define C1_AREA_UNITY "C"
+#define C1_AREA_TEXT " ds18"
 #define C1_AREA_TEXT_COLOR_LAYOUT2() ucg.setColor(255, 0, 0); //red
 
 #define C2_COLOR()  ucg.setColor(255, 255, 102);    // Yellow
-#define C2_AREA_UNITY "%"
-#define C2_AREA_TEXT " H DHT"
+#define C2_AREA_UNITY "C"
+#define C2_AREA_TEXT " ds18"
 #define C2_AREA_TEXT_COLOR_LAYOUT2() ucg.setColor(255, 0, 0); //red
 
 #define C3_COLOR()  ucg.setColor(0, 255, 255);   //light blue
-#define C3_AREA_UNITY "'C" 
-#define C3_AREA_TEXT " ds18b20"
+#define C3_AREA_UNITY "" 
+#define C3_AREA_TEXT ""
 #define C3_AREA_TEXT_COLOR_LAYOUT2() ucg.setColor(255, 0, 0); //red
 
 #define C4_COLOR()  ucg.setColor(255, 255, 255);    // White
-#define C4_AREA_UNITY "'C"
-#define C4_AREA_TEXT " ds18b20"
+#define C4_AREA_UNITY "C"
+#define C4_AREA_TEXT " DHT"
 #define C4_AREA_TEXT_COLOR_LAYOUT2() ucg.setColor(255, 0, 0); //red
 
 #define C5_COLOR()  ucg.setColor(255, 255, 255);     // White
-#define C5_AREA_UNITY " "
-#define C5_AREA_TEXT " "
+#define C5_AREA_UNITY "%"
+#define C5_AREA_TEXT " DHT"
 #define C5_AREA_TEXT_COLOR_LAYOUT2() ucg.setColor(255, 0, 0); //red
 
 #define C6_COLOR()  ucg.setColor(255, 255, 255);    // White

@@ -20,11 +20,12 @@
 #include <EEPROM.h>
 #include "bconf/MCU_ESP8266.h"              // Load the code directly on the ESP8266
 #include "conf/IPBroadcast.h"
+#include "topics.h"
 
 // **** Define the WiFi name and password ****
 #define WIFICONF_INSKETCH
-#define WiFi_SSID               "Souliss"
-#define WiFi_Password           ""
+#define WiFi_SSID               "souliss"
+#define WiFi_Password           "souliss01"
 
 
 // Include framework code and libraries
@@ -65,6 +66,7 @@ DallasTemperature sensors(&oneWire);
 
 uint16_t output16;
 uint8_t valByteArray[2];
+float temperature;
 void setup()
 {
   Serial.begin(9600);
@@ -125,16 +127,32 @@ void loop()
   }
 
 
-  FAST_2110ms() {
+  SHIFT_2110ms(0) {
     sensors.requestTemperatures(); // Send the command to get temperatures
 
-    float temperature = sensors.getTempCByIndex(0);
+    temperature = sensors.getTempCByIndex(0);
     Serial.println(temperature);
     ImportAnalog(SLOT_TEMPERATURE_ONE, &temperature);
+
+    //PUBLISH
+    float16(&output16, &temperature);
+    valByteArray[0] = C16TO8L(output16);
+    valByteArray[1] = C16TO8H(output16);
+    publishdata(TEMPERATURE_TOPIC_NODE_ESP_EXSTORE_ds18b20_SENSOR_1, valByteArray, 2);
+
+  }
+
+  SHIFT_2110ms(100) {
     temperature = sensors.getTempCByIndex(1);
     Serial.println(temperature);
     ImportAnalog(SLOT_TEMPERATURE_TWO, &temperature);
 
+
+    //PUBLISH
+    float16(&output16, &temperature);
+    valByteArray[0] = C16TO8L(output16);
+    valByteArray[1] = C16TO8H(output16);
+    publishdata(TEMPERATURE_TOPIC_NODE_ESP_EXSTORE_ds18b20_SENSOR_2, valByteArray, 2);
   }
 
   EXECUTESLOW() {

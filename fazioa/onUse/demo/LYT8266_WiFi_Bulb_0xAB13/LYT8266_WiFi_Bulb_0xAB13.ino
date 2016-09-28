@@ -19,8 +19,8 @@
 
 // **** Define the WiFi name and password ****
 #define WIFICONF_INSKETCH
-#define WiFi_SSID               "Souliss"
-#define WiFi_Password           ""
+#define WiFi_SSID               "souliss"
+#define WiFi_Password           "souliss01"
 
 #include <ESP8266WiFi.h>
 #include <ESP8266WebServer.h>

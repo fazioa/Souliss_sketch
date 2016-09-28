@@ -48,15 +48,23 @@ void setup()
   SetIPAddress(ip_address, subnet_mask, ip_gateway);
   SetAsGateway(myvNet_address);                                   // Set this node as gateway for SoulissApp
   SetAddress(0xAB01, 0xFF00, 0x0000);
- 
+
   // This node as gateway will get data from the Peer
   SetAsPeerNode(peer_wifi_address_DHT, 1);
   SetAsPeerNode(peer_eth_address_DHT_rele, 2);
-SetAsPeerNode(peer_wifi_address_SST, 3);
+  SetAsPeerNode(peer_wifi_address_SST, 3);
 
   SetAsPeerNode(peer_wifi_address_LYT1, 4);
   SetAsPeerNode(peer_wifi_address_LYT2, 5);
   Set_SimpleLight(0);
+  Set_SimpleLight(1);
+  Set_SimpleLight(2);
+  Set_SimpleLight(3);
+
+  pinMode(A0, OUTPUT);                  // Hardware pulldown required
+  pinMode(A1, OUTPUT);                 // Power the LED
+  pinMode(A2, OUTPUT);                  // Hardware pulldown required
+  pinMode(A3, OUTPUT);                 // Power the LED
 }
 
 
@@ -67,6 +75,13 @@ void loop()
 
     FAST_50ms() {
       Logic_SimpleLight(0);
+      Logic_SimpleLight(1);
+      Logic_SimpleLight(2);
+      Logic_SimpleLight(3);
+      DigOut(A0, Souliss_T1n_Coil, 0);
+      DigOut(A1 , Souliss_T1n_Coil, 1);
+      DigOut(A2, Souliss_T1n_Coil, 2);
+      DigOut(A3 , Souliss_T1n_Coil, 3);
     }
 
     // This node does just networking, bridging the Peer node to the Ethernet network

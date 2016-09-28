@@ -23,7 +23,7 @@ uint8_t ip_gateway[4]  = {192, 168, 20, 1};
 
 #define PIN_DHT      2
 #define PIN_T11_ONE_IN      3
-#define PIN_T11_TWO_IN      4
+#define PIN_T11_TWO_IN      7
 #define PIN_T11_ONE_OUT      5
 #define PIN_T11_TWO_OUT      6
 
@@ -64,10 +64,8 @@ void setup()
 
 
   pinMode(PIN_T11_ONE_OUT, OUTPUT);
-  digitalWrite(PIN_T11_ONE_OUT, LOW);
 
   pinMode(PIN_T11_TWO_OUT, OUTPUT);
-  digitalWrite(PIN_T11_TWO_OUT, LOW);
 
   Set_SimpleLight(SLOT_T11_ONE);
   Set_SimpleLight(SLOT_T11_TWO);
