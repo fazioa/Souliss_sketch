@@ -29,10 +29,11 @@ uint8_t ip_gateway[4]  = {192, 168, 20, 1};
 #define myvNet_subnet   0xFF00
 #define myvNet_supern   myvNet_address
 
-#define peer_wifi_address_DHT	0xAB02
+#define peer_wifi_address_DHT	0xAB15
 #define peer_eth_address_DHT_rele  0x10
-#define peer_wifi_address_SST 0xAB21 //SST
+#define peer_wifi_address_SST 0xAB30 //SST
 
+#define peer_wifi_address_power_socket  0xAB12 //LYT
 #define peer_wifi_address_LYT1  0xAB13 //LYT
 #define peer_wifi_address_LYT2  0xAB14 //LYT
 //#define peer_wifi_address_termostato_soggiorno  0xAB20 //termostato soggiorno
@@ -47,7 +48,7 @@ void setup()
   // GetIPAddress();
   SetIPAddress(ip_address, subnet_mask, ip_gateway);
   SetAsGateway(myvNet_address);                                   // Set this node as gateway for SoulissApp
-  SetAddress(0xAB01, 0xFF00, 0x0000);
+  SetAddress(0xAB10, 0xFF00, 0x0000);
 
   // This node as gateway will get data from the Peer
   SetAsPeerNode(peer_wifi_address_DHT, 1);
@@ -56,6 +57,7 @@ void setup()
 
   SetAsPeerNode(peer_wifi_address_LYT1, 4);
   SetAsPeerNode(peer_wifi_address_LYT2, 5);
+  SetAsPeerNode(peer_wifi_address_power_socket, 6);
   Set_SimpleLight(0);
   Set_SimpleLight(1);
   Set_SimpleLight(2);

@@ -48,7 +48,7 @@
 //#define peer_wifi_address_LYT  0xAB13 //LYT
 #define peer_wifi_address_LYT  0xAB14 //LYT
 #define myvNet_subnet 0xFF00
-#define wifi_bridge_address    0xAB01 //gateway
+#define wifi_bridge_address    0xAB10 //gateway
 #define myvNet_supern wifi_bridge_address
 //*************************************************************************
 

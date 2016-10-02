@@ -39,9 +39,9 @@
 //*************************************************************************
 // Define the network configuration according to your router settingsuration according to your router settings
 // and the other on the wireless oneless one
-#define peer_address  0xAB02
+#define peer_address  0xAB15
 #define myvNet_subnet 0xFF00
-#define myvNet_supern 0xAB01
+#define myvNet_supern 0xAB10
 
 //*************************************************************************
 

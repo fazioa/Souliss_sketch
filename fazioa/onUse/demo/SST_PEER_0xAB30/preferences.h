@@ -56,9 +56,9 @@
 // Define the network configuration according to your router settingsuration according to your router settings
 // and the other on the wireless oneless one
 //Only for DYNAMIC_CONNECTION = 0
-#define peer_address  0xAB21
+#define peer_address  0xAB30
 #define myvNet_subnet 0xFF00
-#define wifi_bridge_address    0xAB01 //gateway
+#define wifi_bridge_address    0xAB10 //gateway
 
 
 //TOPICS PUBLISH&SUBSCRIBE
@@ -71,30 +71,30 @@
 //ucg.setColor(255, 255, 102);    // Yellow
 //ucg.setColor(0, 255, 255);   //light blue
 
-#define C1_COLOR()  ucg.setColor(255, 0, 0); // Red
+#define C1_COLOR()  ucg.setColor(255, 255, 255); // White
 #define C1_AREA_UNITY "C"
-#define C1_AREA_TEXT " ds18"
+#define C1_AREA_TEXT " DHT"
 #define C1_AREA_TEXT_COLOR_LAYOUT2() ucg.setColor(255, 0, 0); //red
 
-#define C2_COLOR()  ucg.setColor(255, 255, 102);    // Yellow
-#define C2_AREA_UNITY "C"
-#define C2_AREA_TEXT " ds18"
-#define C2_AREA_TEXT_COLOR_LAYOUT2() ucg.setColor(255, 0, 0); //red
+#define C2_COLOR()  ucg.setColor(0, 255, 255);    // light blue
+#define C2_AREA_UNITY "%"
+#define C2_AREA_TEXT " DHT"
+#define C2_AREA_TEXT_COLOR_LAYOUT2() ucg.setColor(0, 255, 255); //light blued
 
 #define C3_COLOR()  ucg.setColor(0, 255, 255);   //light blue
 #define C3_AREA_UNITY "" 
 #define C3_AREA_TEXT ""
-#define C3_AREA_TEXT_COLOR_LAYOUT2() ucg.setColor(255, 0, 0); //red
+#define C3_AREA_TEXT_COLOR_LAYOUT2() ucg.setColor(255, 0, 0); //light blue
 
-#define C4_COLOR()  ucg.setColor(255, 255, 255);    // White
+#define C4_COLOR()  ucg.setColor(255, 0, 0);    // Red
 #define C4_AREA_UNITY "C"
-#define C4_AREA_TEXT " DHT"
+#define C4_AREA_TEXT " ds18"
 #define C4_AREA_TEXT_COLOR_LAYOUT2() ucg.setColor(255, 0, 0); //red
 
-#define C5_COLOR()  ucg.setColor(255, 255, 255);     // White
-#define C5_AREA_UNITY "%"
-#define C5_AREA_TEXT " DHT"
-#define C5_AREA_TEXT_COLOR_LAYOUT2() ucg.setColor(255, 0, 0); //red
+#define C5_COLOR()  ucg.setColor(255, 255, 102);     // Yellow
+#define C5_AREA_UNITY "C"
+#define C5_AREA_TEXT " ds18"
+#define C5_AREA_TEXT_COLOR_LAYOUT2() ucg.setColor(255, 255, 102); //Yellow
 
 #define C6_COLOR()  ucg.setColor(255, 255, 255);    // White
 #define C6_AREA_UNITY " "
