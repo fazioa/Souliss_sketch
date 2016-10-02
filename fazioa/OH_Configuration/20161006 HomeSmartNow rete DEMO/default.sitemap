@@ -1,0 +1,78 @@
+sitemap tonino label="Main Menu"
+{
+	
+	Frame label="LED Gateway" {
+		Switch item=N0_switch1 mappings=[ON="Accendi", OFF="Spegni"]
+		Switch item=N0_switch2 mappings=[ON="Apri", OFF="Chiudi"]
+		Switch item=N0_switch3 mappings=[ON="Sinistra", OFF="Destra"]
+		Switch item=N0_switch4
+		}
+
+	Frame label="ExStore" {
+		Text item=Temperatura_1_exstore label="Sonda 2 [%.1f °C]" icon="temperature"
+		Text item=Temperatura_2_exstore label="Sonda 2 [%.1f °C]" icon="temperature"
+		Switch item=N1_switch1 label="Boiler" icon="fire"
+	}
+	
+	Frame label="DHT22 - Relè 1 - Relè 2" {
+		Text item=TemperatureDHT22 label="Sonda 1 [%.1f °C]" icon="temperature"
+		Text item=UmiditaDHT22 label="Sonda 2 [%.1f %%]" icon="water"
+		Switch item=N2_switch1 label="Relè 1"
+		Switch item=N2_switch2 label="Relè 2"
+	}
+	
+	Frame label="Termostato" {
+		Text label="Termostato soggiorno" icon="termostato" {
+			Setpoint item=setpoint_SST step=0.5 minValue=10 maxValue=30
+			Text item=temperature_SST
+			Text item=umidita_SST
+			Switch item=setasmeasured_SST mappings=[ON="Set"] 
+			Text item=heating_SST icon="homeRed"
+			Switch item=heatingmodeSet_SST   mappings=[ON="SET"] icon="coolingMode"
+			Switch item=power_SST  mappings=[ON="SET"] icon="powerIcon"
+			Slider item=displayBright_SST
+			
+			Text item=TIMESTAMP_Nodo3 label="Aggiornato: [%1$td.%1$tm.%1$tY %1$tk:%1$tM:%1$tS]" icon="icon16x16"
+		}
+}		
+	
+Frame label="LYT8266"  {
+	Colorpicker item=LYT1 label="LYT8266 1" icon="colorwheel"
+	Colorpicker item=LYT2 label="LYT8266 2" icon="colorwheel"
+}
+
+	Frame label="Power Socket" {
+		Switch item=N6_switch1 label="Albero di Natale"
+	}
+	
+	Frame label="Diagnostica e Vista Tecnica" {
+		Group item=Diagnostic label="Salute ed aggiornamenti" icon="icon16x16"
+		Text label="Struttura Nodi" icon="icon16x16"  {	
+			Group item=TechnicView_Node0 label="Nodo 0 - GW" icon="icon16x16"
+			Group item=TechnicView_Node1 label="Nodo 1 - exStore" icon="icon16x16"
+			Group item=TechnicView_Node2 label="Nodo 2 - DHT - Relè 1-2" icon="icon16x16"
+			Group item=TechnicView_Node3 label="Nodo 3 - SST" icon="icon16x16"
+			Group item=TechnicView_Node4 label="Nodo 4 - LYT 1" icon="icon16x16"
+			Group item=TechnicView_Node5 label="Nodo 5 - LYT 2" icon="icon16x16"
+		}
+	}
+		
+		Frame label="Grafici" {
+		Text label="Temp - sonda exStore 1-2, DHT22" icon="temperature" {
+				Switch item=Chart_Period label="" mappings=[1="Day", 2="Week", 3="Month", 4="4 Months"]
+				Chart item=Graph_Temp period=D refresh=30000 visibility=[Chart_Period==1, Chart_Period=="Uninitialized"]
+				Chart item=Graph_Temp period=W refresh=21600000 visibility=[Chart_Period==2]
+				Chart item=Graph_Temp period=M refresh=21600000 visibility=[Chart_Period==3]
+				Chart item=Graph_Temp period=4M refresh=86400000 visibility=[Chart_Period==4]
+			}
+			
+		Text label="Grafici Salute Nodi" icon="icon16x16"  {	
+			Switch item=Chart_Period label="" mappings=[1="Day", 2="Week", 3="Month", 4="4 Months" ] 
+				Chart item=G_Health period=D refresh=30000 visibility=[Chart_Period==1, Chart_Period=="Uninitialized"]  
+				Chart item=G_Health period=W refresh=21600000 visibility=[Chart_Period==2]
+				Chart item=G_Health period=M refresh=21600000 visibility=[Chart_Period==3]
+				Chart item=G_Health period=4M refresh=86400000 visibility=[Chart_Period==4]
+		}	
+	}
+}
+
