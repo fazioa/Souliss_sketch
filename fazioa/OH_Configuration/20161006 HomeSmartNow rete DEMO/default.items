@@ -15,6 +15,7 @@ Group	TechnicView_Node2	(All)
 Group	TechnicView_Node3	(All)
 Group	TechnicView_Node4	(All)
 Group	TechnicView_Node5	(All)
+Group	TechnicView_Node6	(All)
 Group	Diagnostic	(All)
 
 
@@ -60,7 +61,7 @@ Color LYT1 "LYT8266 1" <slider> (TechnicView_Node4)  {souliss="T16:4:0", autoupd
 Color LYT2 "LYT8266 2" <slider> (TechnicView_Node5)  {souliss="T16:5:0", autoupdate=false}
 
 //NODO 6
-Switch	N6_switch1	"GW Led_1" <natale> (TechnicView_Node0, GWLed)		{ souliss="T11:6:0", autoupdate="false" }
+Switch	N6_switch1	"GW Led_1" <natale> (TechnicView_Node6, GWLed)		{ souliss="T11:6:0", autoupdate="false" }
 
 
 Number	HEALTHNodo0	"Health Nodo 0 - Gateway [%1d]"	<keyring>	(Diagnostic,TechnicView_Node0, G_Health)		{souliss="D98:0:998" }
@@ -75,4 +76,5 @@ Number	HEALTHNodo4	"Health Nodo 4 - LYT8622 2 [%1d]"	<keyring>	(Diagnostic,Techn
 String	TIMESTAMP_Nodo4	"Aggiorn.Nodo4 [%1$td.%1$tm.%1$tY %1$tk:%1$tM:%1$tS]"	<keyring>	(Diagnostic, TechnicView_Node4)		{ souliss="D99:4:999" }
 Number	HEALTHNodo5	"Health Nodo 5 - LYT8622 2 [%1d]"	<keyring>	(Diagnostic,TechnicView_Node5, G_Health)		{souliss="D98:5:998" }
 String	TIMESTAMP_Nodo5	"Aggiorn.Nodo5 [%1$td.%1$tm.%1$tY %1$tk:%1$tM:%1$tS]"	<keyring>	(Diagnostic, TechnicView_Node5)		{ souliss="D99:5:999" }
-
+Number	HEALTHNodo6	"Health Nodo 6 - Power Socket [%1d]"	<keyring>	(Diagnostic,TechnicView_Node6, G_Health)		{souliss="D98:6:998" }
+String	TIMESTAMP_Nodo6	"Aggiorn.Nodo6 [%1$td.%1$tm.%1$tY %1$tk:%1$tM:%1$tS]"	<keyring>	(Diagnostic, TechnicView_Node6)		{ souliss="D99:6:999" }

@@ -54,6 +54,7 @@ Frame label="LYT8266"  {
 			Group item=TechnicView_Node3 label="Nodo 3 - SST" icon="icon16x16"
 			Group item=TechnicView_Node4 label="Nodo 4 - LYT 1" icon="icon16x16"
 			Group item=TechnicView_Node5 label="Nodo 5 - LYT 2" icon="icon16x16"
+			Group item=TechnicView_Node6 label="Nodo 6 - Power Socket" icon="icon16x16"
 		}
 	}
 		
@@ -75,4 +76,5 @@ Frame label="LYT8266"  {
 		}	
 	}
 }
+
 

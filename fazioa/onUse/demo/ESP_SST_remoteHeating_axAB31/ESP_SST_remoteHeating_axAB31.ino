@@ -25,6 +25,8 @@
 
 #define SLOT_POWERSOCKET 0
 #define PIN_POWERSOCKET 1
+#define PIN_ACTIVITYLED 3
+bool bActivityLed=LOW;
 
 uint8_t mypayload_len = 0;
 U8 mypayload;
@@ -43,6 +45,7 @@ void setup()
 
   // Define output pins
   pinMode(PIN_POWERSOCKET, OUTPUT);    // Relè
+   pinMode(PIN_ACTIVITYLED, OUTPUT);    // Activity Led
 }
 
 void loop()
@@ -51,9 +54,11 @@ void loop()
     UPDATEFAST();
 
     FAST_50ms() {
-      Serial.print(".");
       subcriptionHeating_ON_OFF();
-
+    }
+    FAST_2110ms(){
+      bActivityLed=!bActivityLed;
+      digitalWrite(PIN_ACTIVITYLED, bActivityLed);
     }
 
     FAST_PeerComms();
