@@ -1,0 +1,314 @@
+import org.openhab.core.library.types.*
+import org.openhab.core.persistence.*
+import org.openhab.model.script.actions.*
+val string apikey = "aab865b2ea7bfc8342941894837b621b"
+
+
+rule "Media consumo 10 minuti"
+when
+	Time cron "0 */10 * * * ?" or  // every 10 minutes
+	System started
+then
+	postUpdate(Consumo_medio_x_minuti,Consumo_Soggiorno.averageSince(now.minusMinutes(10)).intValue )
+end
+
+rule "Media fotovoltaico 10 minuti"
+when
+	Time cron "0 */10 * * * ?" or  // every 10 minutes
+	System started
+then
+	postUpdate(ProduzioneFotovoltaico_medio_x_minuti,ProduzioneFotovoltaico.averageSince(now.minusMinutes(10)).intValue )
+end
+
+rule "Update max and min Temp Giardino"
+when
+	Item Temperature_GF_Giardino changed or
+	Time cron "0 */30 * * * ?" or  // every 30 minutes
+	System started
+then	
+	postUpdate(Temperature_GF_Giardino_Max, Temperature_GF_Giardino.maximumSince(now.toDateMidnight).state)
+	postUpdate(Temperature_GF_Giardino_Min, Temperature_GF_Giardino.minimumSince(now.toDateMidnight).state)
+end
+
+
+rule "Update max and min consumo"
+when
+	Item Consumo_Soggiorno changed or
+	Time cron "0 */30 * * * ?" or  // every 30 minutes
+	System started
+then	
+	postUpdate(Consumo_Soggiorno_Max, Consumo_Soggiorno.maximumSince(now.toDateMidnight).state)
+	postUpdate(Consumo_Soggiorno_Min, Consumo_Soggiorno.minimumSince(now.toDateMidnight).state)
+end
+
+rule "Update max and min fotovoltaico"
+when
+	Item ProduzioneFotovoltaico changed or
+	Time cron "0 */30 * * * ?" or  // every 30 minutes
+	System started
+then	
+	postUpdate(ProduzioneFotovoltaico_Max, ProduzioneFotovoltaico.maximumSince(now.toDateMidnight).state)
+	postUpdate(ProduzioneFotovoltaico_Min, ProduzioneFotovoltaico.minimumSince(now.toDateMidnight).state)
+end
+
+rule "Update max and min Temp Sogg"
+when
+	Item Temperature_Soggiorno changed or
+	Time cron "0 */30 * * * ?" or  // every 30 minutes
+	System started
+then	
+	postUpdate(Temperature_Soggiorno_Max, Temperature_Soggiorno.maximumSince(now.toDateMidnight).state)
+	postUpdate(Temperature_Soggiorno_Min, Temperature_Soggiorno.minimumSince(now.toDateMidnight).state)
+end
+
+rule "Periodically check presence"
+when
+	Time cron "0 */1 * * * ?" or  // every 30 minutes
+then
+        if (Presence.state == ON)
+        {
+            logInfo("PresenceCheck", "No phone within reach, checking for flapping")
+            if(G_Network.members.filter(s |  s.state == ON ).size == 0) {
+                logInfo("PresenceCheck", "Nobody is at home")
+                sendCommand(Presence, OFF)
+            }
+        }
+end
+
+rule "Coming home"
+when
+        Time cron "*/30 * * * * ?"
+then
+        if (Presence.state != ON) 
+		{
+                if(G_Network.members.filter(s | s.state == ON).size > 0) {
+                        logInfo("PresenceCheck", "Somebody is home")
+                        sendCommand(Presence, ON)
+                }
+        }
+end
+
+rule "Apertura Cancello"
+when
+	Item SwitchCancello received command ON 
+then	
+	sendNotification("fazioa@gmail.com", "Ricevuto. Apertura cancello...")
+	sendNotification("cristinapucci@gmail.com", "Ricevuto. Apertura cancello...")
+	sendTelegram("bot1", "Ricevuto. Apertura cancello...")
+end
+
+rule "Apertura Portoncino"
+when
+	Item SwitchPortoncino received command ON 
+then	
+	sendNotification("fazioa@gmail.com", "Ricevuto. Apertura portoncino...")
+	sendNotification("cristinapucci@gmail.com", "Ricevuto. Apertura portoncino...")
+	sendTelegram("bot1", "Ricevuto. Apertura portoncino...")
+end
+
+rule "Set Point 65"
+when
+	Item setpoint65 received command ON
+then
+	sendCommand(Temperature_Termocamino_SetPoint, 65)
+end
+
+rule "Set Point 70"
+when
+	Item setpoint70 received command ON
+then
+	sendCommand(Temperature_Termocamino_SetPoint, 70)
+end
+
+rule "Set Point 80"
+when
+	Item setpoint80 received command ON
+then
+	sendCommand(Temperature_Termocamino_SetPoint, 80)
+end
+
+rule "Riscaldamento-Tutto"
+when
+	Item riscaldamento_tutto received update ON 
+then	
+	sendNotification("fazioa@gmail.com", "Riscaldamento - Apertura tutte valvole di zona")
+end
+
+rule "Riscaldamento-Ripristino valvole zona"
+when
+	Item riscaldamento_tutto received update OFF 
+then	
+	sendNotification("fazioa@gmail.com", "Riscaldamento - Ripristino valvole di zona")
+end
+
+rule "Acqua <- Solare"
+when
+	Item SwitchTermocamino received command OFF 
+then	
+	sendNotification("fazioa@gmail.com", "Acqua: Solare")
+	sendTelegram("bot1", "Acqua: Solare")
+end
+
+rule "Acqua <- Termocamino"
+when
+	Item SwitchTermocamino received command ON 
+then	
+	sendNotification("fazioa@gmail.com", "Acqua: Termocamino")
+	sendTelegram("bot1", "Acqua: Termocamino")
+end
+
+rule "Light Scenes"
+when
+	Item Light_scene received command 
+then
+if (receivedCommand==0) { 
+    sendCommand(Light_scene_ColorSelect, new HSBType(new DecimalType(0),new PercentType(0),new PercentType(100)))
+}
+if (receivedCommand==1) { 
+    sendCommand(Light_scene_ColorSelect, new HSBType(new DecimalType(0),new PercentType(100),new PercentType(100)))
+}
+if (receivedCommand==2) { 
+    sendCommand(Light_scene_ColorSelect, new HSBType(new DecimalType(60),new PercentType(100),new PercentType(100)))
+}
+if (receivedCommand==3) { 
+    sendCommand(Light_scene_ColorSelect, new HSBType(new DecimalType(120),new PercentType(100),new PercentType(100)))
+}
+if (receivedCommand==4) { 
+    sendCommand(Light_scene_ColorSelect, new HSBType(new DecimalType(120),new PercentType(100),new PercentType(50)))
+}
+if (receivedCommand==5) { 
+    sendCommand(Light_scene_ColorSelect, new HSBType(new DecimalType(180),new PercentType(100),new PercentType(100)))
+}
+if (receivedCommand==6) { 
+    sendCommand(Light_scene_ColorSelect, new HSBType(new DecimalType(240),new PercentType(100),new PercentType(100)))
+}
+if (receivedCommand==7) { 
+    sendCommand(Light_scene_ColorSelect, new HSBType(new DecimalType(300),new PercentType(100),new PercentType(100)))
+}
+end
+
+rule "Milight Brightness Scenes"
+when
+	Item milight_brightness_scenes received command 
+then
+if (receivedCommand==1) { 
+    sendCommand(milight_brightness, new DecimalType(10))
+}
+if (receivedCommand==2) { 
+    sendCommand(milight_brightness, new DecimalType(30))
+}
+if (receivedCommand==3) { 
+    sendCommand(milight_brightness, new DecimalType(50))
+}
+if (receivedCommand==4) { 
+    sendCommand(milight_brightness, new DecimalType(70))
+}
+if (receivedCommand==5) { 
+    sendCommand(milight_brightness, new DecimalType(80))
+}
+if (receivedCommand==6) { 
+    sendCommand(milight_brightness, new DecimalType(100))
+}
+end
+
+rule "Milight RGB Brightness Scenes"
+when
+	Item milight_RBG_brightness_scenes received command 
+then
+if (receivedCommand==0) { 
+    sendCommand(milight_RGB_brightness, new DecimalType(20))
+}
+if (receivedCommand==1) { 
+    sendCommand(milight_RGB_brightness,new DecimalType(30))
+}
+if (receivedCommand==2) { 
+    sendCommand(milight_RGB_brightness, new DecimalType(50))
+}
+if (receivedCommand==3) { 
+    sendCommand(milight_RGB_brightness, new DecimalType(70))
+}
+if (receivedCommand==4) { 
+    sendCommand(milight_RGB_brightness, new DecimalType(90))
+}
+if (receivedCommand==5) { 
+    sendCommand(milight_RGB_brightness, new DecimalType(100))
+}
+end
+
+rule "Emoncms-Consumo"
+       when
+               Item Consumo_Soggiorno changed 
+       then
+	   var string myItem = "Consumo_Soggiorno"
+               sendHttpGetRequest("http://emoncms.org/input/post.json?json=%7BConsumo_Soggiorno:" + Consumo_Soggiorno.state + "%7D&apikey=" + apikey) 
+end
+
+rule "Emoncms-ProduzioneFotovoltaico"
+       when
+               Item ProduzioneFotovoltaico changed
+       then
+               sendHttpGetRequest("http://emoncms.org/input/post.json?json=%7BProduzioneFotovoltaico:" + ProduzioneFotovoltaico.state + "%7D&apikey=" + apikey) 
+end
+
+rule "Emoncms-ProduzioneFotovoltaico_Pannelli_Gruppo1"
+       when
+               Item Pannelli_Gruppo1 changed
+       then
+               sendHttpGetRequest("http://emoncms.org/input/post.json?json=%7BPannelli_Gruppo1:" + Pannelli_Gruppo1.state + "%7D&apikey=" + apikey) 
+end
+
+rule "Emoncms-ProduzioneFotovoltaico_Pannelli_Gruppo2"
+       when
+               Item Pannelli_Gruppo2 changed
+       then
+               sendHttpGetRequest("http://emoncms.org/input/post.json?json=%7BPannelli_Gruppo2:" + Pannelli_Gruppo2.state + "%7D&apikey=" + apikey) 
+end
+
+rule "Emoncms-Temperature_Soggiorno"
+       when
+               Item Temperature_Soggiorno changed or
+				Time cron "0 */30 * * * ?" or  // every 30 minutes
+       then
+               sendHttpGetRequest("http://emoncms.org/input/post.json?json=%7BTemperature_Soggiorno:" + Temperature_Soggiorno.state + "%7D&apikey=" + apikey) 
+end
+
+rule "Emoncms-Temperature_GF_Giardino"
+       when
+               Item Temperature_GF_Giardino changed or
+				Time cron "0 */30 * * * ?" or  // every 30 minutes
+       then
+               sendHttpGetRequest("http://emoncms.org/input/post.json?json=%7BTemperature_GF_Giardino:" + Temperature_GF_Giardino.state + "%7D&apikey=" + apikey) 
+end
+
+
+rule "Emoncms-Umidita_Soggiorno"
+       when
+               Item Umidita_Soggiorno changed or 
+				Time cron "0 */30 * * * ?" or  // every 30 minutes
+       then
+				sendHttpGetRequest("http://emoncms.org/input/post.json?json=%7BUmidita_Soggiorno:" + Umidita_Soggiorno.state + "%7D&apikey=" + apikey) 
+end
+
+rule "Emoncms-Umidita_GF_Giardino"
+       when
+               Item Umidita_GF_Giardino changed or 
+				Time cron "0 */30 * * * ?" or  // every 30 minutes
+       then
+               sendHttpGetRequest("http://emoncms.org/input/post.json?json=%7BUmidita_GF_Giardino:" + Umidita_GF_Giardino.state + "%7D&apikey=" + apikey) 
+end
+
+rule "Emoncms-Temperature_Boiler_Solare_Termico"
+       when
+               Item Temperature_Boiler_Solare_Termico changed or 
+				Time cron "0 */30 * * * ?" or  // every 30 minutes
+       then
+               sendHttpGetRequest("http://emoncms.org/input/post.json?json=%7BTemperature_Boiler_Solare_Termico:" + Temperature_Boiler_Solare_Termico.state + "%7D&apikey=" + apikey) 
+end
+
+rule "Emoncms-Temperature_Termocamino"
+       when
+               Item Temperature_Termocamino changed or 
+				Time cron "0 */30 * * * ?" or  // every 30 minutes
+       then
+               sendHttpGetRequest("http://emoncms.org/input/post.json?json=%7BTemperature_Termocamino:" + Temperature_Termocamino.state + "%7D&apikey=" + apikey) 
+end
