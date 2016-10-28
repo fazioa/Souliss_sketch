@@ -110,6 +110,7 @@ sitemap tonino label="Main Menu"
 		Text label="Termostato piano terra" icon="termostato" {
 			Setpoint item=temperature_Setpoint_TermostatoPianoTerra step=0.5 minValue=10 maxValue=30
 			Text item=temperature_TermostatoPianoTerra
+			Text item=temperatureT52_TermostatoPianoTerra
 			Text item=umidita_TermostatoPianoTerra 
 			Switch item=setasmeasured_TermostatoPianoTerra mappings=[ON="Set"] 
 			Text item=heating_TermostatoPianoTerra  icon="homeRed"

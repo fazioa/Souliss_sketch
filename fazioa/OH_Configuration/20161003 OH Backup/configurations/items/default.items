@@ -94,6 +94,7 @@ Switch power_TermostatoSoggiorno "Power OFF" (gcalendar, TermostatoSoggiorno, Te
 Number	umidita_TermostatoSoggiorno	"Umidità [%.1f %%]"	<temperature>	(TermostatoSoggiorno,TechnicView_Node6)		{ souliss="T53:6:7" }
 Dimmer	displayBright_TermostatoSoggiorno	"Lumin.min. display" (TermostatoSoggiorno,TechnicView_Node6)		{ souliss="T19:6:9" }
 
+Number temperatureT52_TermostatoPianoTerra 	"Temperatura T52 [%.1f °C]"	<temperature> (TermostatoPianoTerra, TechnicView_Node7) {souliss="T52:7:5"}
 Number temperature_TermostatoPianoTerra 	"Temperatura [%.1f °C]"	<temperature> (TermostatoPianoTerra, TechnicView_Node7) {souliss="T31:7:0:measured"}
 Number temperature_Setpoint_TermostatoPianoTerra	"Setpoint [%.1f °C]" 	<temperature> (gcalendar, TermostatoPianoTerra, TechnicView_Node7) {souliss="T31:7:0:setpoint"}
 Switch setasmeasured_TermostatoPianoTerra "Set temp. attuale" <temperature> (TermostatoPianoTerra, TechnicView_Node7) {souliss="T31:7:0:setasmeasured"}
