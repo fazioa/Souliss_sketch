@@ -1,17 +1,11 @@
 /**************************************************************************
-    Souliss - Hello World
+    Souliss - Serranda Lavanderia
 
-    This is the basic example, control one LED via a push-button or Android
-    using SoulissApp (get it from Play Store).
 
     Run this code on one of the following boards:
+	  - Arduino Uno
       - Arduino Ethernet (W5100)
-      - Arduino with Ethernet Shield (W5100)
 
-    As option you can run the same code on the following, just changing the
-    relevant configuration file at begin of the sketch
-      - Arduino with W5200 Ethernet Shield
-      - Arduino with W5500 Ethernet Shield
 
 ***************************************************************************/
 
@@ -22,13 +16,22 @@
 #include "bconf/StandardArduino.h"          // Use a standard Arduino
 #include "conf/ethW5100.h"                  // Ethernet through Wiznet W5100
 #include "conf/Gateway.h"                   // The main node is the Gateway, we have just one node
-#include "conf/Webhook.h"                   // Enable DHCP and DNS
+//#include "conf/Webhook.h"                   // Enable DHCP and DNS
 
 // Include framework code and libraries
 #include <SPI.h>
 
 /*** All configuration includes should be above this line ***/
 #include "Souliss.h"
+
+// Define the network configuration according to your router settings
+uint8_t ip_address[4]  = {192, 168, 1, 39};
+uint8_t subnet_mask[4] = {255, 255, 255, 0};
+uint8_t ip_gateway[4]  = {192, 168, 1, 1};
+#define myvNet_address  ip_address[3]       // The last byte of the IP address (77) is also the vNet address
+#define myvNet_subnet   0xFF00
+
+
 
 // This identify the number of the LED logic
 #define slotT22_saracinesca 0
@@ -52,7 +55,9 @@ void setup()
   Initialize();
 
   // Get the IP address from DHCP
-  GetIPAddress();
+  //GetIPAddress();
+   // Set network parameters
+  Souliss_SetIPAddress(ip_address, subnet_mask, ip_gateway);
   SetAsGateway(myvNet_dhcp);       // Set this node as gateway for SoulissApp
 
   pinMode(pinInputOPEN, INPUT_PULLUP);
@@ -98,17 +103,14 @@ void loop()
     }
 
     FAST_510ms() {
-
-    
-       
       if (mOutput(slotT22_saracinesca)  == Souliss_T2n_Coil_Open || mOutput(slotT22_saracinesca)  == Souliss_T2n_Coil_Close) {
         mInput(slotT11_WARNINGLIGHT) = Souliss_T1n_OnCmd;  //accende la luce di sicurezza quando la saracinesca è in movimento
        } else if (mOutput(slotT22_saracinesca) != precPositionT22) {
         mInput(slotT11_WARNINGLIGHT) = Souliss_T1n_OffCmd;   //spegne la lampada solo se è rilevata una variazione dello stato del T22
-        Serial.println("slotT11_WARNINGLIGHT = Souliss_T1n_OffCmd");
+  //      Serial.println("slotT11_WARNINGLIGHT = Souliss_T1n_OffCmd");
       }
   precPositionT22 = mOutput(slotT22_saracinesca);
-  Serial.print("precPositionT22 -->"); Serial.println(precPositionT22);
+ // Serial.print("precPositionT22 -->"); Serial.println(precPositionT22);
     }
 
 
