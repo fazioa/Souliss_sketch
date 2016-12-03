@@ -11,6 +11,12 @@
 // Let the IDE point to the Souliss framework
 #include "SoulissFramework.h"
 
+//new customs Souliss_T3n_DeadBand and Souliss_T3n_Hysteresis
+#define T3N_DEADBAND_INSKETCH
+	#define Souliss_T3n_DeadBand      0.1     // Degrees Deadband
+#define T3N_HYSTERESIS_INSKETCH
+	#define Souliss_T3n_Hysteresis      0.1     // Degrees Hysteresis
+
 #include <ESP8266WiFi.h>
 #include <ESP8266WebServer.h>
 #include <ESP8266mDNS.h>
@@ -18,6 +24,7 @@
 #include "FS.h" //SPIFFS
 #include <WiFiUdp.h>
 #include <ArduinoOTA.h>
+#include <MenuSystem.h>
 #include <DHT.h>
 
 // Configure the Souliss framework
@@ -48,7 +55,6 @@
 #include "language.h"
 #include "ntp.h"
 #include <TimeLib.h>
-#include <MenuSystem.h>
 #include "menu.h"
 #include "crono.h"
 #include "read_save.h"
@@ -111,22 +117,22 @@ void EEPROM_Reset() {
 }
 
 void subscribeTopics() {
-  if (subscribedata(TOPIC1, mypayload, &mypayload_len)) {
+  if (sbscrbdata(TOPIC1, mypayload, &mypayload_len)) {
     float32((uint16_t*) mypayload,  &fTopic_C1_Output);
     SERIAL_OUT.print("TOPIC1: "); SERIAL_OUT.println(fTopic_C1_Output);
-  } else if (subscribedata(TOPIC2, mypayload, &mypayload_len)) {
+  } else if (sbscrbdata(TOPIC2, mypayload, &mypayload_len)) {
     float32((uint16_t*) mypayload,  &fTopic_C2_Output);
     SERIAL_OUT.print("TOPIC2: "); SERIAL_OUT.println(fTopic_C2_Output);
-  } else if (subscribedata(TOPIC3, mypayload, &mypayload_len)) {
+  } else if (sbscrbdata(TOPIC3, mypayload, &mypayload_len)) {
     float32((uint16_t*) mypayload,  &fTopic_C3_Output);
     SERIAL_OUT.print("TOPIC3: "); SERIAL_OUT.println(fTopic_C3_Output);
-  } else if (subscribedata(TOPIC4, mypayload, &mypayload_len)) {
+  } else if (sbscrbdata(TOPIC4, mypayload, &mypayload_len)) {
     float32((uint16_t*) mypayload,  &fTopic_C4_Output);
     SERIAL_OUT.print("TOPIC4: "); SERIAL_OUT.println(fTopic_C4_Output);
-  } else if (subscribedata(TOPIC5, mypayload, &mypayload_len)) {
+  } else if (sbscrbdata(TOPIC5, mypayload, &mypayload_len)) {
     float32((uint16_t*) mypayload,  &fTopic_C5_Output);
     SERIAL_OUT.print("TOPIC5: "); SERIAL_OUT.println(fTopic_C5_Output);
-  } else if (subscribedata(TOPIC6, mypayload, &mypayload_len)) {
+  } else if (sbscrbdata(TOPIC6, mypayload, &mypayload_len)) {
     float32((uint16_t*) mypayload,  &fTopic_C6_Output);
     SERIAL_OUT.print("TOPIC6: "); SERIAL_OUT.println(fTopic_C6_Output);
   }
@@ -245,9 +251,9 @@ void publishHeating_ON_OFF() {
   //nDigOut(RELE, Souliss_T3n_HeatingOn, SLOT_THERMOSTAT);    // Heater
 
   if (memory_map[MaCaco_OUT_s + SLOT_THERMOSTAT] & Souliss_T3n_HeatingOn)
-    publishdata(SST_HEAT_ONOFF, &HEAT_ON, 1);
+    pblshdata(SST_HEAT_ONOFF, &HEAT_ON, 1);
   else
-    publishdata(SST_HEAT_ONOFF, &HEAT_OFF, 1);
+    pblshdata(SST_HEAT_ONOFF, &HEAT_OFF, 1);
 }
 
 
@@ -412,7 +418,8 @@ void loop()
             if (getLayout1()) {
               SERIAL_OUT.println("display_setpointPage - layout 1");
               display_layout1_background(ucg, arrotonda(getEncoderValue()) - arrotonda(setpoint));
-              display_layout1_setpointPage(ucg, getEncoderValue(), Souliss_SinglePrecisionFloating(memory_map + MaCaco_OUT_s + SLOT_THERMOSTAT + 1), humidity, getSoulissSystemState());
+			  
+              display_layout1_setpointPage(ucg, getEncoderValue(), temperature, humidity, getSoulissSystemState());
             }
             else if (getLayout2()) {
               SERIAL_OUT.println("display_setpointPage - layout 2");
@@ -583,6 +590,7 @@ void loop()
       //*************************************************************************
       //*************************************************************************
       Logic_Thermostat(SLOT_THERMOSTAT);
+            
       // Start the heater and the fans
       nDigOut(RELE, Souliss_T3n_HeatingOn, SLOT_THERMOSTAT);    // Heater
 

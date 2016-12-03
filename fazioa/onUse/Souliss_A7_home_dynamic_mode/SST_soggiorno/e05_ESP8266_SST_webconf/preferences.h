@@ -25,7 +25,7 @@
 //DISPLAY BRIGHT
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #define BRIGHT_MAX 100         
-#define BRIGHT_MIN_DEFAULT 55  
+#define BRIGHT_MIN_DEFAULT 45  
 #define BRIGHT_STEP_FADE_IN 20 
 #define BRIGHT_STEP_FADE_OUT 1
 
@@ -64,7 +64,7 @@
 //TOPICS PUBLISH&SUBSCRIBE
 //Define if you want topics on display
 #define ACTIVATETOPICSPAGE 1 
-#define TOPICSPAGESNUMBER 2 // 1 if you have less than 3 topics subscribed, 2 if you have more than 3 topics subscribed
+#define TOPICSPAGESNUMBER 1 // 1 if you have less than 3 topics subscribed, 2 if you have more than 3 topics subscribed
 
 //ucg.setColor(255, 255, 255);    // White
 //ucg.setColor(255, 0, 0); // Red
