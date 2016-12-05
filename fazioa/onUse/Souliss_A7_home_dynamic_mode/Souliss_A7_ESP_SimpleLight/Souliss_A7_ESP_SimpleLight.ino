@@ -8,11 +8,15 @@ Author: Tonino Fazio
 ESP Core 1.6.5 Staging 1.6.5-1160-gef26c5f
  This example is only supported on ESP8266.
 ***************************************************************************/
+// Let the IDE point to the Souliss framework
+#include "SoulissFramework.h"
+
 #include <ESP8266WiFi.h>
 #include <ESP8266WebServer.h>
 #include <ESP8266mDNS.h>
 #include <EEPROM.h>
 #include <WiFiUdp.h>
+#include <ArduinoOTA.h>
 
 // Configure the Souliss framework
 #include "bconf/MCU_ESP8266.h"              // Load the code directly on the ESP8266
@@ -28,12 +32,10 @@ ESP Core 1.6.5 Staging 1.6.5-1160-gef26c5f
 #define SLOT_POWERSOCKET 0
 #define PIN_POWERSOCKET 14
 
-// Setup the libraries for Over The Air Update
-OTA_Setup();
 void setup()
 {
   //delay 30 seconds
-  delay(30000);
+  delay(10000);
   Initialize();
 
   // Read the IP configuration from the EEPROM, if not available start
@@ -74,8 +76,9 @@ void setup()
   // Define output pins
   pinMode(PIN_POWERSOCKET, OUTPUT);    // Relè
 
-  // Init the OTA
-  OTA_Init();
+    // Init the OTA
+    ArduinoOTA.setHostname("souliss-nodename");    
+    ArduinoOTA.begin(); 
 }
 
 void loop()
@@ -103,8 +106,9 @@ void loop()
     if (!IsRuntimeGateway())
       SLOW_PeerJoin();
   }
-  // Look for a new sketch to update over the air
-  OTA_Process();
+
+    // Look for a new sketch to update over the air
+    ArduinoOTA.handle();  
 }
 
 
