@@ -1,12 +1,9 @@
 /**************************************************************************
     Souliss - Serranda Lavanderia
 
-
     Run this code on one of the following boards:
 	  - Arduino Uno
       - Arduino Ethernet (W5100)
-
-
 ***************************************************************************/
 
 // Let the IDE point to the Souliss framework
@@ -51,14 +48,14 @@ uint8_t ip_gateway[4]  = {192, 168, 1, 1};
 U8 precPositionT22;
 void setup()
 {
-  Serial.begin(9600);
+  //Serial.begin(9600);
   Initialize();
 
   // Get the IP address from DHCP
   //GetIPAddress();
-   // Set network parameters
+  // Set network parameters
   Souliss_SetIPAddress(ip_address, subnet_mask, ip_gateway);
-  SetAsGateway(myvNet_dhcp);       // Set this node as gateway for SoulissApp
+  SetAsGateway(myvNet_address);       // Set this node as gateway for SoulissApp
 
   pinMode(pinInputOPEN, INPUT_PULLUP);
   pinMode(pinInputCLOSE, INPUT_PULLUP);
@@ -105,12 +102,12 @@ void loop()
     FAST_510ms() {
       if (mOutput(slotT22_saracinesca)  == Souliss_T2n_Coil_Open || mOutput(slotT22_saracinesca)  == Souliss_T2n_Coil_Close) {
         mInput(slotT11_WARNINGLIGHT) = Souliss_T1n_OnCmd;  //accende la luce di sicurezza quando la saracinesca è in movimento
-       } else if (mOutput(slotT22_saracinesca) != precPositionT22) {
+      } else if (mOutput(slotT22_saracinesca) != precPositionT22) {
         mInput(slotT11_WARNINGLIGHT) = Souliss_T1n_OffCmd;   //spegne la lampada solo se è rilevata una variazione dello stato del T22
-  //      Serial.println("slotT11_WARNINGLIGHT = Souliss_T1n_OffCmd");
+        //      Serial.println("slotT11_WARNINGLIGHT = Souliss_T1n_OffCmd");
       }
-  precPositionT22 = mOutput(slotT22_saracinesca);
- // Serial.print("precPositionT22 -->"); Serial.println(precPositionT22);
+      precPositionT22 = mOutput(slotT22_saracinesca);
+      // Serial.print("precPositionT22 -->"); Serial.println(precPositionT22);
     }
 
 
@@ -120,13 +117,10 @@ void loop()
       Timer_Windows(slotT22_saracinesca);
     }
     // Here we handle here the communication with Android, commands and notification
-    // are automatically assigned to MYLEDLOGIC
+    // are automatically assigned to slots
     FAST_GatewayComms();
-
   }
   EXECUTESLOW() {
     UPDATESLOW();
-
-
   }
 }
