@@ -1,32 +1,38 @@
 #define HOST_NAME_INSKETCH
-#define HOST_NAME "Souliss-Power_Socket-v1"
+#define HOST_NAME "Souliss-Power_Socket-v1-dhcp-staticVNETaddress"
 
 /**************************************************************************
-Sketch: POWER SOCKET - VER.1 - Souliss - Web Configuration
-Author: Tonino Fazio
+  Sketch: POWER SOCKET - VER.1 - Souliss - Web Configuration
+  Author: Tonino Fazio
 
-ESP Core 1.6.5 Staging 1.6.5-1160-gef26c5f
- This example is only supported on ESP8266.
+  ESP Core 2.3.0
+  This example is only supported on ESP8266.
+  Programm it with "Generic ESP8266 Module with 4M (1M SPIFFS)
 ***************************************************************************/
-// Let the IDE point to the Souliss framework
 #include "SoulissFramework.h"
-
-#include <ESP8266WiFi.h>
-#include <ESP8266WebServer.h>
 #include <ESP8266mDNS.h>
 #include <EEPROM.h>
-#include <WiFiUdp.h>
-#include <ArduinoOTA.h>
-
-// Configure the Souliss framework
 #include "bconf/MCU_ESP8266.h"              // Load the code directly on the ESP8266
-#include "conf/RuntimeGateway.h"            // This node is a Peer and can became a Gateway at runtime
-#include "conf/DynamicAddressing.h"         // Use dynamically assigned addresses
-#include "conf/WEBCONFinterface.h"          // Enable the WebConfig interface
+#include "conf/IPBroadcast.h"
 
+// **** Define the WiFi name and password ****
+#define WIFICONF_INSKETCH
+#define WiFi_SSID               "asterix"
+#define WiFi_Password           "ttony2013"
+
+
+// Include framework code and libraries
+#include <ESP8266WiFi.h>
 #include "Souliss.h"
 
+#include <ArduinoOTA.h>
+
 //*************************************************************************
+// Define the network configuration according to your router settingsuration according to your router settings
+// and the other on the wireless oneless one
+#define peer_address  0xAB12
+#define myvNet_subnet 0xFF00
+#define myvNet_supern 0xAB10
 //*************************************************************************
 
 #define SLOT_POWERSOCKET 0
@@ -34,40 +40,12 @@ ESP Core 1.6.5 Staging 1.6.5-1160-gef26c5f
 
 void setup()
 {
-  //delay 30 seconds
+  //delay 10 seconds
   delay(10000);
   Initialize();
+  GetIPAddress();
 
-  // Read the IP configuration from the EEPROM, if not available start
-  // the node as access point
-  if (!ReadIPConfiguration())
-  {
-    // Start the node as access point with a configuration WebServer
-    SetAccessPoint();
-    startWebServer();
-    // We have nothing more than the WebServer for the configuration
-    // to run, once configured the node will quit this.
-    while (1)
-    {
-      yield();
-      runWebServer();
-    }
-
-  }
-
-  if (IsRuntimeGateway())
-  {
-    // Connect to the WiFi network and get an address from DHCP
-    SetAsGateway(myvNet_dhcp);       // Set this node as gateway for SoulissApp
-    SetAddressingServer();
-  }
-  else
-  {
-    // This board request an address to the gateway at runtime, no need
-    // to configure any parameter here.
-    SetDynamicAddressing();
-    GetAddress();
-  }
+  SetAddress(peer_address, myvNet_subnet, myvNet_supern);          // Address on the wireless interface
 
   //*************************************************************************
   //*************************************************************************
@@ -76,9 +54,9 @@ void setup()
   // Define output pins
   pinMode(PIN_POWERSOCKET, OUTPUT);    // Relè
 
-    // Init the OTA
-    ArduinoOTA.setHostname("souliss-nodename");    
-    ArduinoOTA.begin(); 
+  // Init the OTA
+  ArduinoOTA.setHostname("souliss-powerswitch");
+  ArduinoOTA.begin();
 }
 
 void loop()
@@ -90,11 +68,7 @@ void loop()
       Logic_SimpleLight(SLOT_POWERSOCKET);
       DigOut(PIN_POWERSOCKET, Souliss_T1n_Coil, SLOT_POWERSOCKET);
     }
-    // Run communication as Gateway or Peer
-    if (IsRuntimeGateway())
-      FAST_GatewayComms();
-    else
-      FAST_PeerComms();
+    FAST_PeerComms();
   }
 
   EXECUTESLOW() {
@@ -102,13 +76,10 @@ void loop()
     SLOW_10s() {  // Process the timer every 10 seconds
       Timer_SimpleLight(SLOT_POWERSOCKET);
     }
-    // If running as Peer
-    if (!IsRuntimeGateway())
-      SLOW_PeerJoin();
   }
 
-    // Look for a new sketch to update over the air
-    ArduinoOTA.handle();  
+  // Look for a new sketch to update over the air
+  ArduinoOTA.handle();
 }
 
 
