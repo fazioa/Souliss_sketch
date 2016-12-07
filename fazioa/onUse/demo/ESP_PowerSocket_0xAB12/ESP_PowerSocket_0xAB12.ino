@@ -28,7 +28,7 @@
 
 void setup()
 {
-  //delay 30 seconds
+  //delay 10 seconds
   delay(10000);
   Initialize();
   GetIPAddress();
