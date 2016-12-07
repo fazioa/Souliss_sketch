@@ -41,6 +41,7 @@ uint8_t ip_gateway[4]  = {192, 168, 1, 1};
 #define peer_chibi_address_fotovoltaico	0x6514 //fotovoltaico
 #define peer_eth_address_soggiorno  0x0010 //soggiorno
 #define peer_wifi_address_luceTettoia  0xAB11 //soggiorno
+#define peer_wifi_address_PowerSocket  0xAB12 //soggiorno
 #define peer_wifi_address_LYT1  0xAB13 //LYT
 #define peer_wifi_address_LYT2  0xAB14 //LYT
 #define peer_wifi_address_termostato_soggiorno  0xAB20 //termostato soggiorno
@@ -80,6 +81,7 @@ void setup()
   SetAsPeerNode(peer_wifi_address_termostato_piano_terra, 7);
   SetAsPeerNode(peer_wifi_address_LYT1, 8);
   SetAsPeerNode(peer_wifi_address_LYT2, 9);
+  SetAsPeerNode(peer_wifi_address_PowerSocket, 10);
 
   // This node will serve all the others in the network providing an address
   SetAddressingServer();
@@ -122,14 +124,14 @@ void loop()
     }
 
     //Scelgo di fare pubblicare il valore direttamente dal nodo invece che dal GW
-//    SHIFT_7110ms(0) {
-//      float16(&output16, &valEnergy);
-//      valByteArray[0] = C16TO8L(output16);
-//      valByteArray[1] = C16TO8H(output16);
-//      Serial.print("Float: "); Serial.print(valEnergy);
-//      Serial.print(", Publish ENERGY_TOPIC: "); Serial.print( valByteArray[0]); Serial.print(" "); Serial.println( valByteArray[1]);
-//      publishdata(ENERGY_TOPIC, valByteArray, 2);
-//    }
+    //    SHIFT_7110ms(0) {
+    //      float16(&output16, &valEnergy);
+    //      valByteArray[0] = C16TO8L(output16);
+    //      valByteArray[1] = C16TO8H(output16);
+    //      Serial.print("Float: "); Serial.print(valEnergy);
+    //      Serial.print(", Publish ENERGY_TOPIC: "); Serial.print( valByteArray[0]); Serial.print(" "); Serial.println( valByteArray[1]);
+    //      publishdata(ENERGY_TOPIC, valByteArray, 2);
+    //    }
 
     SHIFT_7110ms(250) {
       float16(&output16, &valSolar);
@@ -137,7 +139,7 @@ void loop()
       valByteArray[1] = C16TO8H(output16);
       Serial.print("Float: "); Serial.print(valSolar);
       Serial.print(", Publish SOLAR_TOPIC: "); Serial.print( valByteArray[0]); Serial.print(" "); Serial.println( valByteArray[1]);
-      publishdata(SOLAR_TOPIC, valByteArray, 2);
+      pblshdata(SOLAR_TOPIC, valByteArray, 2);
     }
 
     SHIFT_7110ms(500) {
@@ -146,7 +148,7 @@ void loop()
       valByteArray[1] = C16TO8H(output16);
       Serial.print("Float: "); Serial.print(valTemp);
       Serial.print(", Publish TEMPERATURE_TOPIC: "); Serial.print( valByteArray[0]); Serial.print(" "); Serial.println( valByteArray[1]);
-      publishdata(TEMPERATURE_TOPIC, valByteArray, 2);
+      pblshdata(TEMPERATURE_TOPIC, valByteArray, 2);
       // publish(Cloudy);
       //publish(Alarm);
     }
