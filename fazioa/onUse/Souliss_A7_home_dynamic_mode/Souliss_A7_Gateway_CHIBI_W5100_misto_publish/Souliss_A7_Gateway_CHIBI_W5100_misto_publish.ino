@@ -13,13 +13,13 @@
 #include "conf/ethW5100.h"                  // Ethernet through Wiznet W5100
 //#include "conf/Gateway.h"                   // The main node is the Gateway, we have just one node
 #include "conf/Gateway_wLastin.h"
-#include "conf/Webhook.h"                   // Enable DHCP and DNS
+//#include "conf/Webhook.h"                   // Enable DHCP and DNS
 
-#include "conf/DynamicAddressing.h"         // Use dynamic address
+//#include "conf/DynamicAddressing.h"         // Use dynamic address
 #include "conf/IPBroadcast.h"
 
 #include <SPI.h>
-#include <EEPROM.h>
+//#include <EEPROM.h>
 #include "Souliss.h"
 
 
@@ -51,23 +51,23 @@ uint8_t ip_gateway[4]  = {192, 168, 1, 1};
 
 void setup()
 {
-  Serial.begin(9600);
+ // Serial.begin(9600);
 
   digitalWrite(PIN_RESET, HIGH);
   pinMode(PIN_RESET, INPUT); // to gnd for eeprom reset
 
-  Serial.println(F("Delay 3s"));
+  //Serial.println(F("Delay 3s"));
   //delay 3 seconds
-  delay(3000);
-  check_for_reset_now();
-  Serial.println(F("Start"));
+//  delay(3000);
+//  check_for_reset_now();
+//  Serial.println(F("Start"));
   Initialize();
   // Set network parameters
   SetIPAddress(ip_address, subnet_mask, ip_gateway);
-  SetAsGateway(myvNet_address);                                   // Set this node as gateway for SoulissApp
+  SetAsGateway(Gateway_address);                                   // Set this node as gateway for SoulissApp
 
-  SetAddress(chibi_bridge_address, myvNet_subnet, 0x0000);	// Address on the wireless interface
-  SetAddress(wifi_bridge_address, myvNet_subnet, 0x0000);
+  SetAddress(chibi_bridge_address, myvNet_subnet, Gateway_address);	// Address on the wireless interface
+  SetAddress(wifi_bridge_address, myvNet_subnet, Gateway_address);
 
 
 
@@ -137,8 +137,8 @@ void loop()
       float16(&output16, &valSolar);
       valByteArray[0] = C16TO8L(output16);
       valByteArray[1] = C16TO8H(output16);
-      Serial.print("Float: "); Serial.print(valSolar);
-      Serial.print(", Publish SOLAR_TOPIC: "); Serial.print( valByteArray[0]); Serial.print(" "); Serial.println( valByteArray[1]);
+//      Serial.print("Float: "); Serial.print(valSolar);
+//      Serial.print(", Publish SOLAR_TOPIC: "); Serial.print( valByteArray[0]); Serial.print(" "); Serial.println( valByteArray[1]);
       pblshdata(SOLAR_TOPIC, valByteArray, 2);
     }
 
@@ -146,8 +146,8 @@ void loop()
       float16(&output16, &valTemp);
       valByteArray[0] = C16TO8L(output16);
       valByteArray[1] = C16TO8H(output16);
-      Serial.print("Float: "); Serial.print(valTemp);
-      Serial.print(", Publish TEMPERATURE_TOPIC: "); Serial.print( valByteArray[0]); Serial.print(" "); Serial.println( valByteArray[1]);
+//      Serial.print("Float: "); Serial.print(valTemp);
+//      Serial.print(", Publish TEMPERATURE_TOPIC: "); Serial.print( valByteArray[0]); Serial.print(" "); Serial.println( valByteArray[1]);
       pblshdata(TEMPERATURE_TOPIC, valByteArray, 2);
       // publish(Cloudy);
       //publish(Alarm);
@@ -162,13 +162,13 @@ void loop()
   }
 }
 
-void check_for_reset_now() {
-  if (!digitalRead(PIN_RESET)) {
-    Serial.println("");
-    Serial.println(F("Reset"));
-    Store_Init();
-    Store_Clear();
-    Store_Commit();
-    Serial.println(F("OK"));
-  }
-}
+//void check_for_reset_now() {
+//  if (!digitalRead(PIN_RESET)) {
+//    Serial.println("");
+//    Serial.println(F("Reset"));
+//    Store_Init();
+//    Store_Clear();
+//    Store_Commit();
+//    Serial.println(F("OK"));
+//  }
+//}
