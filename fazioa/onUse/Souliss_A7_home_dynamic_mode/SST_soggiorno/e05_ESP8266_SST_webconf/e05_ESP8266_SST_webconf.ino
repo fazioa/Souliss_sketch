@@ -4,12 +4,8 @@
     -ILI9341 with SPI connection, via UEXT connector
     -Rotary Encoder with pushbutton & status LED
     -DHT22 Temperature & Humidity Sensor
-
   This example is only supported on ESP8266.
   Developed by mcbittech & fazioa
-
-SPIFFS Data, info here:
-  https://github.com/esp8266/Arduino/blob/master/doc/filesystem.md
 ***************************************************************************/
 // Let the IDE point to the Souliss framework
 #include "SoulissFramework.h"
@@ -19,21 +15,6 @@ SPIFFS Data, info here:
 	#define Souliss_T3n_DeadBand      0.1     // Degrees Deadband
 #define T3N_HYSTERESIS_INSKETCH
 	#define Souliss_T3n_Hysteresis      0.1     // Degrees Hysteresis
-/**************************************************************************
-  Wi-Fi Smart Thermostat based on Souliss IoT Framework
-    -Olimex ESP8266-EVB
-    -ILI9341 with SPI connection, via UEXT connector
-    -Rotary Encoder with pushbutton & status LED
-    -DHT22 Temperature & Humidity Sensor
-
-  This example is only supported on ESP8266.
-  Developed by mcbittech & fazioa
-
-SPIFFS Data, info here:
-  https://github.com/esp8266/Arduino/blob/master/doc/filesystem.md
-***************************************************************************/
-// Let the IDE point to the Souliss framework
-#include "SoulissFramework.h"
 
 #include <ESP8266WiFi.h>
 #include <ESP8266mDNS.h>
@@ -73,7 +54,7 @@ SPIFFS Data, info here:
 #include "displayTopics.h"
 #include "language.h"
 #include "ntp.h"
-#include <Time.h>
+#include <TimeLib.h>
 #include <MenuSystem.h>
 #include "menu.h"
 #include "crono.h"
@@ -233,10 +214,17 @@ void setup()
   /////////////////////////////////////////////////////////////////////////////////////////////////////////
   initMenu();
   myMenu = getMenu();
-  
-  //OTA-WBServer
+   //OTA-WBServer
   setup_OTA_WBServer();
-  
+
+  // Init the OTA
+  // Set Hostname.
+  String hostname(HOSTNAME);
+  hostname += String(ESP.getChipId(), HEX);
+  SERIAL_OUT.print("set OTA hostname: "); SERIAL_OUT.println(hostname);
+  ArduinoOTA.setHostname((const char *)hostname.c_str());
+  ArduinoOTA.begin();
+
   // Init HomeScreen
   initScreen();
 }
