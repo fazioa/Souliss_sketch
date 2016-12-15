@@ -1,8 +1,8 @@
 #include <Arduino.h>
 #include <ESP8266WiFi.h>
 
-#define VERSION "v 1.1"
-#define HOSTNAME "SST-Soggiorno-OTA-" ///< Hostename. The setup function adds the Chip ID at the end.
+#define VERSION "v 1.2"
+#define HOSTNAME "SST-Thermostat-OTA_" ///< Hostename. The setup_OTA_WBServer function adds the Chip ID at the end.
 //DHT22
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #define DHTPIN 12
@@ -58,7 +58,13 @@
 #define TIMER_DISPLAY_SETPOINT 4000
 
 //AWAY
-#define TEMP_MINUS 1
+#define AWAY_RELATIVE
+//#define AWAY_FIXED
+
+//POWERFULL
+#define POWERFULL_RELATIVE
+//#define POWERFULL_FIXED
+
 
 #define SERIAL_OUT Serial
 

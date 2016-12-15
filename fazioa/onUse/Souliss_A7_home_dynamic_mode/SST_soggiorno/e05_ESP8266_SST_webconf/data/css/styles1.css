@@ -1,0 +1,96 @@
+body {
+    font-size: 20pt;
+    font-family:"Segoe UI", Verdana, Helvetica, Sans-Serif;
+}
+#body {
+    clear: both;
+    margin: 0 auto;
+    max-width: 1000px;
+}
+table {
+    border-collapse: collapse;
+    border-spacing: 1px;
+    margin-top: 1em;
+    border: double #666666;
+    margin-top:5px;
+    padding: 10px 1px 10px 1px;
+    background-color:#FFFFFF;
+}
+body td {
+    padding:10px 1px 5px 1px;
+}
+
+input[type="submit"]{
+  background-color: #6358C2; /* colore di sfondo    */
+  color: #fff;               /* colore del testo    */
+  font-weight: bold;         /* testo in grassetto  */
+  padding: 0;                /* padding             */
+  height: 30px;              /* altezza             */
+  width: 80px;               /* larghezza           */
+}
+input[type="submit"]:hover{
+	background-color: #F3AC25;
+}	
+caption {
+  font-size:20px;
+  text-align: center;
+  border-style: solid;
+  border-width: 1px;
+  border-color: #666666;
+  background-color:#FFFFFF;
+  
+}
+ /* Style the list */
+ul.tab {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    border: 0;
+    background-color: #ffffff;
+    margin-top:0px;
+    margin-bottom:10px;
+}
+
+/* Float the list items side by side */
+ul.tab li {float: left;}
+
+/* Style the links inside the list items */
+ul.tab li a {
+    display:inline-block;
+    color: black;
+    text-align: center;
+    padding: 4px 8px;
+    text-decoration: none;
+    transition: 0.5s;
+    font-size:12pt;
+    font-weight:bold;    
+}
+
+/* Change background color of links on hover */
+ul.tab li a:hover {background-color: #EED755;}
+
+/* Create an active/current tablink class */
+ul.tab li a:focus, .active {
+background-color: #F3AC25;
+}
+
+.area_style {
+    background-color:#F3AC25;
+    padding:0px 0px 2px 0px;    
+}
+/* Style the tab content */
+.tabcontent {
+    display: none;
+    padding: 2px 4px;
+    border: 0;
+    border-top: none;
+}
+
+img{
+    height: 100%;
+    width: 100%; 
+}
+td:nth-child(2n+0) {
+    padding-right: 10px;
+}​

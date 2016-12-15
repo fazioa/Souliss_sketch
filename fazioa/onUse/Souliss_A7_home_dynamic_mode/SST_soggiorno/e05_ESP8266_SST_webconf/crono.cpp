@@ -12,7 +12,7 @@
 
 
 //GENERAL
-///////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 bool pushed = 0;
 bool changeday = 0;
 bool changebox = 0;
@@ -36,9 +36,9 @@ int i;
 int ii;
 
 //LAYOUT
-///////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 byte start_x = 12;        //Start Position Layout X (pixel)
-byte start_y = 110;        //Start Position Layout Y (pixel)
+byte start_y = 110;       //Start Position Layout Y (pixel)
 byte offset_x = 25;       //Offset between  columns (pixel)
 byte offset_y = 75;       //Offset between  rows (pixel)
 byte offset_text = 25;    //Offset between Text (pixel)
@@ -51,16 +51,16 @@ byte spacing = 1;         //Spacing between columns (pixel)
 byte spacing1 = 0;
 
 //SELECTION
-///////////////////////////////////////////////////////////
-byte dDaysel = 1;         //Day Selected
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+byte dDaysel = 1;                                                                           //Day Selected
 byte lastDaysel = 0;
 byte lastBoxsel = 0;
 byte line = 0;
-byte dHourSel[8][48] = {0};   //Array Matrix
-byte dHourSelCP[1][48] = {0}; //Array Matrix
-float setP[5] = { 18.0, 20.0, 21.5, 23.0 };               //Setpoint Eco,Normal,Comfort,Comfort+
-char* descP[5] = {"Eco", "Normal", "Comfort", "Comfort+"}; //Setpoint Eco,Normal,Comfort,Comfort+
-int colour[4][3] = { { 102, 255, 0 }, { 255, 255, 153 }, { 255, 204, 0 }, { 255, 0, 0 } }; //da sx +chiaro a -chiaro
+byte dHourSel[8][48] = {0};                                                                 //Array Matrix
+byte dHourSelCP[1][48] = {0};                                                               //Array Matrix
+float setP[9] = { 18.0, 20.0, 21.5, 23.0, 0.0, 0.0, -1.5, 2.5};                             //Setpoint Eco,Normal,Comfort,Comfort+,Reserved,Reserved,Offset Away,Offset PowerFull :-)
+char* descP[9] = {"Eco", "Normal", "Comfort", "Comfort+"};                                  //Setpoint Eco,Normal,Comfort,Comfort+
+int colour[4][3] = { { 102, 255, 0 }, { 255, 255, 153 }, { 255, 204, 0 }, { 255, 0, 0 } };  //da sx +chiaro a -chiaro
 
 
 
@@ -740,7 +740,7 @@ float checkNTPcrono(Ucglib_ILI9341_18x240x320_HWSPI ucg) {
     ucg.setColor(colour[pointernow - 1][0], colour[pointernow - 1][1], colour[pointernow - 1][2]);  //Colore Variabile
     switch (pointernow) {
       case 0:
-        getsetpoint = (setP[0] - 2.0);         //da sistemare con taglio uscita T31
+        getsetpoint = (setP[0] + setP[6]);         
         Serial.println("CRONO: Off");
         break;
       case 1:
@@ -765,6 +765,29 @@ float checkNTPcrono(Ucglib_ILI9341_18x240x320_HWSPI ucg) {
   }
   return getsetpoint;
 }
+
+
+float getAWAYtemperature() {
+  #ifdef AWAY_RELATIVE
+    return setP[0] + setP[6];
+  #endif
+  #ifdef AWAY_FIXED
+    return setP[6];
+  #endif
+}
+
+
+float getPOWERFULLtemperature() {
+  #ifdef POWERFULL_RELATIVE
+    return setP[3] + setP[7];
+  #endif
+  #ifdef POWERFULL_FIXED
+    return setP[7];
+  #endif
+    
+}
+
+
 float checkCronoStatus(Ucglib_ILI9341_18x240x320_HWSPI ucg) {
   float getsetpoint;
   int deyweek = getNTPday();

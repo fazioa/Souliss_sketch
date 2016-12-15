@@ -52,6 +52,8 @@
 #define WIFICONF_INSKETCH
 #define WiFi_SSID               "asterix"
 #define WiFi_Password           "ttony2013"  
+#define http_username           "admin"
+#define http_password           "admin"
 
 // Define the network configuration according to your router settingsuration according to your router settings
 // and the other on the wireless oneless one
