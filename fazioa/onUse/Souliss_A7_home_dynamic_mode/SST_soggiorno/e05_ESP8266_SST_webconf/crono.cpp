@@ -740,7 +740,7 @@ float checkNTPcrono(Ucglib_ILI9341_18x240x320_HWSPI ucg) {
     ucg.setColor(colour[pointernow - 1][0], colour[pointernow - 1][1], colour[pointernow - 1][2]);  //Colore Variabile
     switch (pointernow) {
       case 0:
-        getsetpoint = (setP[0] + setP[6]);         
+        getsetpoint = CRONO_OFF;         
         Serial.println("CRONO: Off");
         break;
       case 1:

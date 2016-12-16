@@ -659,9 +659,12 @@ void loop()
           B_is_powerfull_WBS=0;
           mOutput(SLOT_AWAY)=Souliss_T1n_OffCmd;
           Serial.println("CRONO: aggiornamento");
+          if( checkNTPcrono(ucg)!= CRONO_OFF){          
           setSetpoint(checkNTPcrono(ucg));
           setEncoderValue(checkNTPcrono(ucg));
           Serial.print("CRONO: setpoint: "); Serial.println(setpoint);
+          }
+          
         }
       }else{
         //getAWAYtemperature
