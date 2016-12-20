@@ -106,8 +106,8 @@ sitemap tonino label="Main Menu"
 			Text item=umidita_TermostatoSoggiorno
 			Switch item=setasmeasured_TermostatoSoggiorno mappings=[ON="Set"] 
 			Text item=heating_TermostatoSoggiorno icon="homeRed"
-			Switch item=heatingmodeSet_TermostatoSoggiorno   mappings=[ON="SET"] icon="coolingMode"
-			Switch item=power_TermostatoSoggiorno  mappings=[ON="SET"] icon="powerIcon"
+			Switch item=heatingmodeSet_TermostatoSoggiorno   mappings=[OFF="SET"] icon="coolingMode"
+			Switch item=power_TermostatoSoggiorno  mappings=[OFF="SET"] icon="powerIcon"
 			Slider item=displayBright_TermostatoSoggiorno
 			
 			Text item=TIMESTAMP_Nodo6_GF_Servizio label="Aggiornato: [%1$td.%1$tm.%1$tY %1$tk:%1$tM:%1$tS]" icon="icon16x16"
@@ -119,7 +119,7 @@ sitemap tonino label="Main Menu"
 			Text item=umidita_TermostatoPianoTerra 
 			Switch item=setasmeasured_TermostatoPianoTerra mappings=[ON="Set"] 
 			Text item=heating_TermostatoPianoTerra  icon="homeRed"
-			Switch item=heatingmodeSet_TermostatoPianoTerra   mappings=[ON="SET"] icon="coolingMode"
+			Switch item=heatingmodeSet_TermostatoPianoTerra   mappings=[OFF="SET"] icon="coolingMode"
 			Switch item=power_TermostatoPianoTerra mappings=[ON="SET"] icon="powerIcon"
 			Slider item=displayBright_TermostatoPianoTerra
 			
