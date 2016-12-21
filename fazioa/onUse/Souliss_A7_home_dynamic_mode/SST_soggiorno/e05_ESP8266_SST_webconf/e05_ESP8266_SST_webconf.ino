@@ -4,6 +4,7 @@
     -ILI9341 with SPI connection, via UEXT connector
     -Rotary Encoder with pushbutton & status LED
     -DHT22 Temperature & Humidity Sensor
+
   This example is only supported on ESP8266.
   Developed by mcbittech & fazioa
 ***************************************************************************/
@@ -21,6 +22,7 @@
 #include <ArduinoOTA.h>
 #include <FS.h>
 #include <Hash.h>
+#include <ESP8266HTTPClient.h>
 #include <ESPAsyncTCP.h>
 #include <ESPAsyncWebServer.h>
 #include <SPIFFSEditor.h>
@@ -215,15 +217,16 @@ void setup()
   initMenu();
   myMenu = getMenu();
    //OTA-WBServer
+  
   setup_OTA_WBServer();
 
-  // Init the OTA
-  // Set Hostname.
-  String hostname(HOSTNAME);
-  hostname += String(ESP.getChipId(), HEX);
-  SERIAL_OUT.print("set OTA hostname: "); SERIAL_OUT.println(hostname);
-  ArduinoOTA.setHostname((const char *)hostname.c_str());
-  ArduinoOTA.begin();
+//  // Init the OTA
+//  // Set Hostname.
+//  String hostname(HOSTNAME);
+//  hostname += String(ESP.getChipId(), HEX);
+//  SERIAL_OUT.print("set OTA hostname: "); SERIAL_OUT.println(hostname);
+//  ArduinoOTA.setHostname((const char *)hostname.c_str());
+//  ArduinoOTA.begin();
 
   // Init HomeScreen
   initScreen();
@@ -659,12 +662,8 @@ void loop()
           B_is_powerfull_WBS=0;
           mOutput(SLOT_AWAY)=Souliss_T1n_OffCmd;
           Serial.println("CRONO: aggiornamento");
-          if( checkNTPcrono(ucg)!= CRONO_OFF){          
-          setSetpoint(checkNTPcrono(ucg));
-          setEncoderValue(checkNTPcrono(ucg));
-          Serial.print("CRONO: setpoint: "); Serial.println(setpoint);
-          }
-          
+          setSetpoint(checkNTPcrono(ucg, setpoint));
+          setEncoderValue(checkNTPcrono(ucg, setpoint));
         }
       }else{
         //getAWAYtemperature
@@ -834,6 +833,7 @@ void getTemp() {
   }
 }
 
+
 void initScreen() {
   ucg.clearScreen();
   SERIAL_OUT.println("clearScreen ok");
@@ -857,9 +857,13 @@ void initScreen() {
     display_layout2_print_circle_green(ucg);
   }
 }
+
+
 void setSetpoint(float setpoint) {
   Souliss_HalfPrecisionFloating((memory_map + MaCaco_OUT_s + SLOT_THERMOSTAT + 3), &setpoint);
 }
+
+
 void bright(int lum) {
   int val = ((float)lum / 100) * 1023;
   if (val > 1023) val = 1023;
@@ -963,3 +967,4 @@ void handleBody(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_
   }
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
+

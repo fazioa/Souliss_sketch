@@ -35,6 +35,9 @@ byte gS = 0;
 int i;
 int ii;
 
+//CRONO CHECK TEMP
+float fNextValForCronoOFF;
+
 //LAYOUT
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 byte start_x = 12;        //Start Position Layout X (pixel)
@@ -716,13 +719,14 @@ void pasteDay(int dayPaste) {
   }
 }
 
+boolean bFlag = false;
 //Hook crono data from NTP Time
 /*
   byte dHourSel[8][48]={0};   //Array Matrix
   float setP[5] = { 18.0,20.0,21.5,23.0 };                  //Setpoint Eco,Normal,Comfort,Comfort+
   char* descP[5] = {"Eco","Normal","Comfort","Comfort+"};   //Setpoint Eco,Normal,Comfort,Comfort+
 */
-float checkNTPcrono(Ucglib_ILI9341_18x240x320_HWSPI ucg) {
+float checkNTPcrono(Ucglib_ILI9341_18x240x320_HWSPI ucg, float setpoint) {
   float getsetpoint;
   int deyweek = getNTPday();
   int hourday = getNTPhour();
@@ -740,24 +744,44 @@ float checkNTPcrono(Ucglib_ILI9341_18x240x320_HWSPI ucg) {
     ucg.setColor(colour[pointernow - 1][0], colour[pointernow - 1][1], colour[pointernow - 1][2]);  //Colore Variabile
     switch (pointernow) {
       case 0:
-        getsetpoint = CRONO_OFF;         
+        //CRONO OFF
         Serial.println("CRONO: Off");
+        //se bFlag è vero vuol dire che stiamo uscendo dai case 1..4
+        if (bFlag) {
+          Serial.println("Set Setpoint before CRONO");
+          Serial.print("Set: ");Serial.println(fNextValForCronoOFF);
+          getsetpoint = fNextValForCronoOFF; 
+          bFlag = false;
+        } else {
+          Serial.println("Save setpoint");
+          Serial.print("Save: ");Serial.println(setpoint);
+          fNextValForCronoOFF = setpoint;
+          getsetpoint=setpoint;
+        }
         break;
       case 1:
+        bFlag = true;
         getsetpoint = setP[0];
         Serial.println("CRONO: Attivo Eco");
+        Serial.print("Set: ");Serial.println(getsetpoint);
         break;
       case 2:
+        bFlag = true;
         getsetpoint = setP[1];
         Serial.println("CRONO: Attivo Normal");
+        Serial.print("Set: ");Serial.println(getsetpoint);
         break;
       case 3:
+        bFlag = true;
         getsetpoint = setP[2];
         Serial.println("CRONO: Attivo Comfort");
+        Serial.print("Set: ");Serial.println(getsetpoint);
         break;
       case 4:
+        bFlag = true;
         getsetpoint = setP[3];
         Serial.println("CRONO: Attivo Comfort+");
+        Serial.print("Set: ");Serial.println(getsetpoint);
         break;
       default:
         break;
@@ -768,23 +792,23 @@ float checkNTPcrono(Ucglib_ILI9341_18x240x320_HWSPI ucg) {
 
 
 float getAWAYtemperature() {
-  #ifdef AWAY_RELATIVE
-    return setP[0] + setP[6];
-  #endif
-  #ifdef AWAY_FIXED
-    return setP[6];
-  #endif
+#ifdef AWAY_RELATIVE
+  return setP[0] + setP[6];
+#endif
+#ifdef AWAY_FIXED
+  return setP[6];
+#endif
 }
 
 
 float getPOWERFULLtemperature() {
-  #ifdef POWERFULL_RELATIVE
-    return setP[3] + setP[7];
-  #endif
-  #ifdef POWERFULL_FIXED
-    return setP[7];
-  #endif
-    
+#ifdef POWERFULL_RELATIVE
+  return setP[3] + setP[7];
+#endif
+#ifdef POWERFULL_FIXED
+  return setP[7];
+#endif
+
 }
 
 
@@ -795,7 +819,7 @@ float checkCronoStatus(Ucglib_ILI9341_18x240x320_HWSPI ucg) {
   int minuteday = getNTPminute();
   int minute_30_59;
   int pointernow = dHourSel[deyweek][(hourday * 2) + minute_30_59];
-  
+
   return dHourSel[deyweek][(hourday * 2) + minute_30_59];;
 }
 

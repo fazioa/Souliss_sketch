@@ -62,6 +62,8 @@
 #define myvNet_subnet 0xFF00
 #define wifi_bridge_address    0xAB10 //gateway
 
+//GOOGLE ANALYTICS
+#define TTD 0 
 
 //TOPICS PUBLISH&SUBSCRIBE
 //Define if you want topics on display

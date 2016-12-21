@@ -16,7 +16,7 @@ void SaveCronoMatrixSPIFFS(Ucglib_ILI9341_18x240x320_HWSPI);
 void ReadCronoMatrixSPIFFS();
 void copyDay(int);
 void pasteDay(int);
-float checkNTPcrono(Ucglib_ILI9341_18x240x320_HWSPI);
+float checkNTPcrono(Ucglib_ILI9341_18x240x320_HWSPI, float);
 float checkCronoStatus(Ucglib_ILI9341_18x240x320_HWSPI);
 float getAWAYtemperature();
 float getPOWERFULLtemperature();
