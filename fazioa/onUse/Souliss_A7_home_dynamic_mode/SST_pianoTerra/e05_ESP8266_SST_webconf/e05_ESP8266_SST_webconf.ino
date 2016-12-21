@@ -220,13 +220,13 @@ void setup()
   
   setup_OTA_WBServer();
 
-  // Init the OTA
-  // Set Hostname.
-  String hostname(HOSTNAME);
-  hostname += String(ESP.getChipId(), HEX);
-  SERIAL_OUT.print("set OTA hostname: "); SERIAL_OUT.println(hostname);
-  ArduinoOTA.setHostname((const char *)hostname.c_str());
-  ArduinoOTA.begin();
+//  // Init the OTA
+//  // Set Hostname.
+//  String hostname(HOSTNAME);
+//  hostname += String(ESP.getChipId(), HEX);
+//  SERIAL_OUT.print("set OTA hostname: "); SERIAL_OUT.println(hostname);
+//  ArduinoOTA.setHostname((const char *)hostname.c_str());
+//  ArduinoOTA.begin();
 
   // Init HomeScreen
   initScreen();
