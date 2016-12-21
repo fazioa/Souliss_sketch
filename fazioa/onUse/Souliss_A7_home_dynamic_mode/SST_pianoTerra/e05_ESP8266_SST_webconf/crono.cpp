@@ -746,7 +746,7 @@ float checkNTPcrono(Ucglib_ILI9341_18x240x320_HWSPI ucg, float setpoint) {
       case 0:
         //CRONO OFF
         Serial.println("CRONO: Off");
-        //se bFlag Ã¨ vero vuol dire che stiamo uscendo dai case 1..4
+        //se bFlag è vero vuol dire che stiamo uscendo dai case 1..4
         if (bFlag) {
           Serial.println("Set Setpoint before CRONO");
           Serial.print("Set: ");Serial.println(fNextValForCronoOFF);
