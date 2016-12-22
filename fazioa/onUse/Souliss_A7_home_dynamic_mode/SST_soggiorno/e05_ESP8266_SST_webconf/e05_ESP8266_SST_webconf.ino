@@ -219,8 +219,6 @@ void setup()
   /////////////////////////////////////////////////////////////////////////////////////////////////////////
   initMenu();
   myMenu = getMenu();
-  
-  //OTA-WBServer
   setup_OTA_WBServer();
   
   // Init HomeScreen
@@ -854,6 +852,15 @@ void initScreen() {
 void setSetpoint(float setpoint) {
   Souliss_HalfPrecisionFloating((memory_map + MaCaco_OUT_s + SLOT_THERMOSTAT + 3), &setpoint);
 }
+
+void setStartSetpoint(float l_setpoint) {
+  setpoint = l_setpoint;
+  setEncoderValue(setpoint);
+  setSetpoint(setpoint);
+  
+}
+
+
 void bright(int lum) {
   int val = ((float)lum / 100) * 1023;
   if (val > 1023) val = 1023;
