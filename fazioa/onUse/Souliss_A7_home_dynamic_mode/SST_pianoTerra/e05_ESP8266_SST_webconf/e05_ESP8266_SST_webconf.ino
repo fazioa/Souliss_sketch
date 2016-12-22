@@ -25,12 +25,13 @@ SPIFFS Data, info here:
 #include <ArduinoOTA.h>
 #include <FS.h>
 #include <Hash.h>
+#include <ESP8266HTTPClient.h>
 #include <ESPAsyncTCP.h>
 #include <ESPAsyncWebServer.h>
 #include <SPIFFSEditor.h>
 #include <ArduinoJson.h>
+
 #include <WiFiUdp.h>
-#include <ESP8266HTTPClient.h>
 #include <DHT.h>
 
 // Configure the Souliss framework
@@ -218,9 +219,6 @@ void setup()
   /////////////////////////////////////////////////////////////////////////////////////////////////////////
   initMenu();
   myMenu = getMenu();
-
-  
-  //OTA-WBServer  
   setup_OTA_WBServer();
   
   // Init HomeScreen
@@ -828,7 +826,6 @@ void getTemp() {
   }
 }
 
-
 void initScreen() {
   ucg.clearScreen();
   SERIAL_OUT.println("clearScreen ok");
@@ -852,10 +849,15 @@ void initScreen() {
     display_layout2_print_circle_green(ucg);
   }
 }
-
-
 void setSetpoint(float setpoint) {
   Souliss_HalfPrecisionFloating((memory_map + MaCaco_OUT_s + SLOT_THERMOSTAT + 3), &setpoint);
+}
+
+void setStartSetpoint(float l_setpoint) {
+  setpoint = l_setpoint;
+  setEncoderValue(setpoint);
+  setSetpoint(setpoint);
+  
 }
 
 
@@ -962,4 +964,3 @@ void handleBody(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_
   }
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
-
