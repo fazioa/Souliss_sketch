@@ -220,7 +220,8 @@ void setup()
   initMenu();
   myMenu = getMenu();
   setup_OTA_WBServer();
-  
+
+  setStartSetpoint(SETPOINT_START);
   // Init HomeScreen
   initScreen();
 }
