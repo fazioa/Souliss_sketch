@@ -25,6 +25,7 @@ SPIFFS Data, info here:
 #include <ArduinoOTA.h>
 #include <FS.h>
 #include <Hash.h>
+#include <ESP8266HTTPClient.h>
 #include <ESPAsyncTCP.h>
 #include <ESPAsyncWebServer.h>
 #include <SPIFFSEditor.h>
