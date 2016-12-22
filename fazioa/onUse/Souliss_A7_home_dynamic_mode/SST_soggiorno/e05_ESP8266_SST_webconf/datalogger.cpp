@@ -1,9 +1,7 @@
 #include "constants.h"
-#include "preferences.h"
 #include "datalogger.h"
 #include "FS.h"
 #include "ntp.h"
-#include <ESP8266HTTPClient.h>
 #include <ArduinoJson.h>
 
 /*getNTPday()
@@ -44,20 +42,6 @@ void save_datalogger(float setpoint,float temperature,float humidity,bool relays
   yield();
   sst_datalogger.close();
   iDay_prev = getNTPday();
-  ////////////////////////
-  #ifdef TTD
-   ///*
-      Serial.println("SEND KEEPALIVE");
-      HTTPClient clienthttp_SST;
-      const char* host="http://www.google-analytics.com/collect";
-      String eventData = "v=1&t=event&tid=UA-89261240-1&cid=555&ec=SST"+String(VERSION)+"&ea=KEEPALIVE&el="+String(ESP.getChipId(), HEX);
-      clienthttp_SST.begin(host);
-      clienthttp_SST.addHeader("User-agent", "Mozilla/5.0 (X11; Linux x86_64; rv:12.0) Gecko/20100101 Firefox/21.0");
-      clienthttp_SST.POST(eventData);
-      clienthttp_SST.writeToStream(&Serial);
-      clienthttp_SST.end();
-      Serial.println("KEEPALIVE CLOSED");
-      //*/
-  #endif    
 }
+
 
