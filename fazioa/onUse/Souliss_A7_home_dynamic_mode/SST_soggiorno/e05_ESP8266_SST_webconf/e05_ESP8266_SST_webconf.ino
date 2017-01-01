@@ -25,13 +25,12 @@ SPIFFS Data, info here:
 #include <ArduinoOTA.h>
 #include <FS.h>
 #include <Hash.h>
-#include <ESP8266HTTPClient.h>
 #include <ESPAsyncTCP.h>
 #include <ESPAsyncWebServer.h>
 #include <SPIFFSEditor.h>
 #include <ArduinoJson.h>
-
 #include <WiFiUdp.h>
+#include <ESP8266HTTPClient.h>
 #include <DHT.h>
 
 // Configure the Souliss framework
@@ -128,20 +127,24 @@ bool B_is_powerfull_WBS=0;
 
 void setup()
 {
-
-  SERIAL_OUT.begin(115200);
+#ifdef DEBUG || DEBUG_DEV
+  Serial.begin(115200);
   Serial.setDebugOutput(true);  //debug WBServer
-
+#endif
   
   //SPIFFS
   /////////////////////////////////////////////////////////////////////////////////////////////////////////
   SPIFFS.begin();
   File  sst_spiffs_verifica = SPIFFS.open("/sst_settings.json", "r");
   if (!sst_spiffs_verifica) {
-    Serial.println(" ");
-    Serial.println("Non riesco a leggere sst_settings.json! formatto la SPIFFS...");
+    #ifdef DEBUG
+      Serial.println(" ");
+      Serial.println("Non riesco a leggere sst_settings.json! formatto la SPIFFS...");
+    #endif
     SPIFFS.format();
-    Serial.println("Spiffs formatted");
+    #ifdef DEBUG || DEBUG_DEV
+      Serial.println("Spiffs formatted");
+    #endif
     ReadAllSettingsFromPreferences();
     ReadCronoMatrixSPIFFS();
   }
@@ -219,8 +222,11 @@ void setup()
   /////////////////////////////////////////////////////////////////////////////////////////////////////////
   initMenu();
   myMenu = getMenu();
-  setup_OTA_WBServer();
 
+  
+  //OTA-WBServer  
+  setup_OTA_WBServer();
+  
   setStartSetpoint(SETPOINT_START);
   // Init HomeScreen
   initScreen();
@@ -281,12 +287,16 @@ void loop()
             //SETPOINT PAGE ////////////////////////////////////////////////////////////////
 
             if (getLayout1()) {
-              SERIAL_OUT.println("display_setpointPage - layout 1");
+              #ifdef DEBUG || DEBUG_DEV
+                Serial.println("display_setpointPage - layout 1");
+              #endif
               display_layout1_background(ucg, arrotonda(getEncoderValue()) - arrotonda(setpoint));
               display_layout1_setpointPage(ucg, getEncoderValue(), Souliss_SinglePrecisionFloating(memory_map + MaCaco_OUT_s + SLOT_THERMOSTAT + 1), humidity, getSoulissSystemState());
             }
             else if (getLayout2()) {
-              SERIAL_OUT.println("display_setpointPage - layout 2");
+              #ifdef DEBUG || DEBUG_DEV
+                Serial.println("display_setpointPage - layout 2");
+              #endif
               display_layout2_Setpoint(ucg, getEncoderValue(), getSoulissSystemState(), bChildLock);
             }
           }
@@ -324,11 +334,18 @@ void loop()
       //Al click in base al valore attuale di SSTPage, si imposta la pagina successiva
 
       int b = checkButton(ENCODER_SWITCH);
-      if (b == 2) SERIAL_OUT.println("Double Click");
+      if (b == 2)
+        #ifdef DEBUG || DEBUG_DEV 
+          Serial.println("Double Click");
+        #endif
       if (b == 3) {
-        SERIAL_OUT.println("Hold");
+        #ifdef DEBUG || DEBUG_DEV
+          Serial.println("Hold");
+        #endif
         bChildLock = !bChildLock;
-        SERIAL_OUT.print("Child Lock: "); SERIAL_OUT.println(bChildLock);
+        #ifdef DEBUG || DEBUG_DEV
+          Serial.print("Child Lock: "); Serial.println(bChildLock);
+        #endif
         ucg.clearScreen();
         setUIChanged();
         if (getLayout2()) {
@@ -336,54 +353,71 @@ void loop()
           initScreen();
         }
       }
-      if (b == 4) SERIAL_OUT.println("Long Hold");
-
+      if (b == 4) 
+        #ifdef DEBUG || DEBUG_DEV  
+          Serial.println("Long Hold");
+        #endif
       if (b == 1) {
         switch (SSTPage.actualPage) {
           case PAGE_HOME:
             if (ACTIVATETOPICSPAGE > 0) {
-              SERIAL_OUT.println("from PAGE_HOME to PAGE_TOPICS1");
+              #ifdef DEBUG || DEBUG_DEV
+                Serial.println("from PAGE_HOME to PAGE_TOPICS1");
+              #endif
               SSTPage.actualPage = PAGE_TOPICS1;
               setUIChanged();
             } else {
-              SERIAL_OUT.println("from PAGE_HOME to PAGE_MENU");
+              #ifdef DEBUG || DEBUG_DEV
+                Serial.println("from PAGE_HOME to PAGE_MENU");
+              #endif
               SSTPage.actualPage = PAGE_MENU;
               setUIChanged();
               ucg.clearScreen();
               setMenuEnabled();
               //se system and UI changed
               setUIChanged();
-              SERIAL_OUT.println("Print Menu");
+              #ifdef DEBUG || DEBUG_DEV
+                Serial.println("Print Menu");
+              #endif
               printMenu(ucg);
             }
             break;
           case PAGE_TOPICS1:
             if (TOPICSPAGESNUMBER == 1) {
-              SERIAL_OUT.println("from PAGE_TOPICS1 to PAGE_MENU");
+              #ifdef DEBUG || DEBUG_DEV  
+                Serial.println("from PAGE_TOPICS1 to PAGE_MENU");
+              #endif
               SSTPage.actualPage = PAGE_MENU;
 
               setUIChanged();
               ucg.clearScreen();
               setMenuEnabled();
-
-              SERIAL_OUT.println("Print Menu");
+              #ifdef DEBUG || DEBUG_DEV
+                Serial.println("Print Menu");
+              #endif
               printMenu(ucg);
             }
             else if (TOPICSPAGESNUMBER == 2) {
-              SERIAL_OUT.println("from PAGE_TOPICS1 to PAGE_TOPICS2");
+              #ifdef DEBUG || DEBUG_DEV
+                Serial.println("from PAGE_TOPICS1 to PAGE_TOPICS2");
+              #endif
               SSTPage.actualPage = PAGE_TOPICS2;
               setUIChanged();
             }
             break;
           case PAGE_TOPICS2:
-            SERIAL_OUT.println("from PAGE_TOPICS2 to PAGE_MENU");
+            #ifdef DEBUG || DEBUG_DEV
+              Serial.println("from PAGE_TOPICS2 to PAGE_MENU");
+            #endif
             SSTPage.actualPage = PAGE_MENU;
             setUIChanged();
             ucg.clearScreen();
             setMenuEnabled();
             //se system and UI changed
             setUIChanged();
-            SERIAL_OUT.println("Print Menu");
+            #ifdef DEBUG || DEBUG_DEV
+              Serial.println("Print Menu");
+            #endif
             printMenu(ucg);
             break;
           case PAGE_MENU:
@@ -398,10 +432,14 @@ void loop()
         if (getProgCrono()) {
           SSTPage.actualPage = PAGE_CRONO;
           byte menu;
-          SERIAL_OUT.println("Crono");
+          #ifdef DEBUG || DEBUG_DEV
+            Serial.println("Crono");
+          #endif
           ucg.clearScreen();
           drawCrono(ucg);
-          SERIAL_OUT.println("drawCrono ok");
+          #ifdef DEBUG || DEBUG_DEV
+            Serial.println("drawCrono ok");
+          #endif
           menu = 1;
           //save encoder value before crono programmation
           setpoint = getEncoderValue();
@@ -411,7 +449,9 @@ void loop()
             setBoxes(ucg);
             if (exitmainmenu())
             {
-              SERIAL_OUT.println("from PAGE_CRONO to PAGE_HOME");
+              #ifdef DEBUG || DEBUG_DEV
+                Serial.println("from PAGE_CRONO to PAGE_HOME");
+              #endif
               SSTPage.actualPage = PAGE_HOME;
               initScreen();
               setUIChanged();
@@ -488,25 +528,33 @@ void loop()
         //EXIT MENU - Actions
         //write min bright on T19
         memory_map[MaCaco_OUT_s + SLOT_BRIGHT_DISPLAY + 1] = getDisplayBright();
-        SERIAL_OUT.print("Set Display Bright: "); SERIAL_OUT.println(memory_map[MaCaco_OUT_s + SLOT_BRIGHT_DISPLAY + 1]);
+        #ifdef DEBUG || DEBUG_DEV
+          Serial.print("Set Display Bright: "); Serial.println(memory_map[MaCaco_OUT_s + SLOT_BRIGHT_DISPLAY + 1]);
+        #endif
 
         //write system ON/OFF
         if (getLocalSystem()) {
 
           //ON
-          SERIAL_OUT.println("Set system ON ");
+          #ifdef DEBUG || DEBUG_DEV
+            Serial.println("Set system ON ");
+          #endif
           set_ThermostatModeOn(SLOT_THERMOSTAT);        // Set System On
 
         } else {
 
           //OFF
-          SERIAL_OUT.println("Set system OFF ");
+          #ifdef DEBUG || DEBUG_DEV
+            Serial.println("Set system OFF ");
+          #endif
           set_ThermostatOff(SLOT_THERMOSTAT);
         }
         memory_map[MaCaco_IN_s + SLOT_THERMOSTAT] = Souliss_T3n_RstCmd;          // Reset
         // Trig the next change of the state
         setSoulissDataChanged();
-        SERIAL_OUT.println("Init Screen");
+        #ifdef DEBUG || DEBUG_DEV
+          Serial.println("Init Screen");
+        #endif
         setUIChanged();
         initScreen();
 
@@ -655,18 +703,23 @@ void loop()
           B_is_away_WBS=0;
           B_is_powerfull_WBS=0;
           mOutput(SLOT_AWAY)=Souliss_T1n_OffCmd;
-          Serial.println("CRONO: aggiornamento");
+          #ifdef DEBUG || DEBUG_DEV
+            Serial.println("CRONO-> aggiornamento");
+          #endif
           setSetpoint(checkNTPcrono(ucg, setpoint));
           setEncoderValue(checkNTPcrono(ucg, setpoint));
+          #ifdef DEBUG || DEBUG_DEV
+            Serial.print("CRONO-> setpoint: "); Serial.println(setpoint);
+          #endif
         }
       }else{
-        //getAWAYtemperature
-        //getPOWERFULLtemperature
         if (B_is_away_WBS==1 && memory_map[MaCaco_OUT_s + SLOT_AWAY]==0) {
           B_away_WBS=0;
           B_is_away_WBS=0;
           mOutput(SLOT_AWAY)=Souliss_T1n_OffCmd;
-          Serial.println("AWAY function OFF");
+          #ifdef DEBUG || DEBUG_DEV
+            Serial.println("AWAY function OFF");
+          #endif
         }
         if (B_away_WBS==1 || memory_map[MaCaco_OUT_s + SLOT_AWAY]==1) {
           B_is_away_WBS=1;
@@ -675,15 +728,19 @@ void loop()
           mOutput(SLOT_AWAY)=Souliss_T1n_OnCmd;
           setSetpoint(getAWAYtemperature());
           setEncoderValue(getAWAYtemperature());
-          Serial.print("AWAY function ON, Setpoint to: ");Serial.println(setpoint);
+          #ifdef DEBUG || DEBUG_DEV
+            Serial.print("AWAY function ON, Setpoint to: ");Serial.println(setpoint);
+          #endif
         }
         if (B_powerfull_WBS==1) {
           B_away_WBS=0;
           B_is_away_WBS=0;          
           B_is_powerfull_WBS=1;
           setSetpoint(getPOWERFULLtemperature());
-          setEncoderValue(getPOWERFULLtemperature());          
-          Serial.print("Powerfull function ON, Setpoint to: ");Serial.println(setpoint);
+          setEncoderValue(getPOWERFULLtemperature());   
+          #ifdef DEBUG || DEBUG_DEV       
+            Serial.print("Powerfull function ON, Setpoint to: ");Serial.println(setpoint);
+          #endif
         }
       }
       
@@ -738,35 +795,48 @@ void SST_Reset() {
 void subscribeTopics() {
   if (sbscrbdata(TOPIC1, mypayload, &mypayload_len)) {
     float32((uint16_t*) mypayload,  &fTopic_C1_Output);
-    SERIAL_OUT.print("TOPIC1: "); SERIAL_OUT.println(fTopic_C1_Output);
+    #ifdef DEBUG || DEBUG_DEV
+      Serial.print("TOPIC1: "); Serial.println(fTopic_C1_Output);
+    #endif  
   } else if (sbscrbdata(TOPIC2, mypayload, &mypayload_len)) {
     float32((uint16_t*) mypayload,  &fTopic_C2_Output);
-    SERIAL_OUT.print("TOPIC2: "); SERIAL_OUT.println(fTopic_C2_Output);
+    #ifdef DEBUG || DEBUG_DEV
+      Serial.print("TOPIC2: "); Serial.println(fTopic_C2_Output);
+    #endif
   } else if (sbscrbdata(TOPIC3, mypayload, &mypayload_len)) {
     float32((uint16_t*) mypayload,  &fTopic_C3_Output);
-    SERIAL_OUT.print("TOPIC3: "); SERIAL_OUT.println(fTopic_C3_Output);
+    #ifdef DEBUG || DEBUG_DEV
+      Serial.print("TOPIC3: "); Serial.println(fTopic_C3_Output);
+    #endif
   } else if (sbscrbdata(TOPIC4, mypayload, &mypayload_len)) {
     float32((uint16_t*) mypayload,  &fTopic_C4_Output);
-    SERIAL_OUT.print("TOPIC4: "); SERIAL_OUT.println(fTopic_C4_Output);
+    #ifdef DEBUG || DEBUG_DEV
+      Serial.print("TOPIC4: "); Serial.println(fTopic_C4_Output);
+    #endif
   } else if (sbscrbdata(TOPIC5, mypayload, &mypayload_len)) {
     float32((uint16_t*) mypayload,  &fTopic_C5_Output);
-    SERIAL_OUT.print("TOPIC5: "); SERIAL_OUT.println(fTopic_C5_Output);
+    #ifdef DEBUG || DEBUG_DEV
+      Serial.print("TOPIC5: "); Serial.println(fTopic_C5_Output);
+    #endif
   } else if (sbscrbdata(TOPIC6, mypayload, &mypayload_len)) {
     float32((uint16_t*) mypayload,  &fTopic_C6_Output);
-    SERIAL_OUT.print("TOPIC6: "); SERIAL_OUT.println(fTopic_C6_Output);
+    #ifdef DEBUG || DEBUG_DEV
+      Serial.print("TOPIC6: "); Serial.println(fTopic_C6_Output);
+    #endif
   }
 }
 
 
 void setSoulissDataChanged() {
   if (data_changed != Souliss_TRIGGED) {
-
     data_changed = Souliss_TRIGGED;
   }
 }
 
 void set_ThermostatModeOn(U8 slot) {
-  SERIAL_OUT.println("set_ThermostatModeOn");
+  #ifdef DEBUG || DEBUG_DEV
+    Serial.println("set_ThermostatModeOn");
+  #endif
   memory_map[MaCaco_OUT_s + slot] |= Souliss_T3n_SystemOn;
   memory_map[MaCaco_OUT_s + slot] &= ~Souliss_T3n_HeatingMode;
 
@@ -798,7 +868,9 @@ boolean bFlagBegin = false;
 void getTemp() {
   // Read temperature value from DHT sensor and convert from single-precision to half-precision
   fVal = dht.readTemperature();
-  SERIAL_OUT.print("acquisizione Temperature: "); SERIAL_OUT.println(fVal);
+  #ifdef DEBUG || DEBUG_DEV
+    Serial.print("acquisizione Temperature: "); Serial.println(fVal);
+  #endif
   if (!isnan(fVal)) {
     temperature = fVal; //memorizza temperatura se non è Not A Number
     //Import temperature into T31 Thermostat
@@ -811,7 +883,9 @@ void getTemp() {
 
   // Read humidity value from DHT sensor and convert from single-precision to half-precision
   fVal = dht.readHumidity();
-  SERIAL_OUT.print("acquisizione Humidity: "); SERIAL_OUT.println(fVal);
+  #ifdef DEBUG || DEBUG_DEV
+    Serial.print("acquisizione Humidity: "); Serial.println(fVal);
+  #endif
   if (!isnan(fVal)) {
     humidity = fVal;
     ImportAnalog(SLOT_HUMIDITY, &humidity);
@@ -822,22 +896,33 @@ void getTemp() {
 
   if ( bFlagBegin) {
     //if DHT fail then try to reinit
+    yield();
     dht.begin();
-    SERIAL_OUT.println(" dht.begin();");
+    #ifdef DEBUG || DEBUG_DEV
+      Serial.println(">>>>dht.begin();");
+    #endif
+    yield();
   }
 }
 
+
 void initScreen() {
   ucg.clearScreen();
-  SERIAL_OUT.println("clearScreen ok");
+  #ifdef DEBUG || DEBUG_DEV
+    Serial.println("clearScreen ok");
+  #endif
   if (getLayout1()) {
-    SERIAL_OUT.println("HomeScreen Layout 1");
-
+    #ifdef DEBUG || DEBUG_DEV
+      Serial.println("HomeScreen Layout 1");
+    #endif
+    
     display_layout1_HomeScreen(ucg, temperature, humidity, setpoint, getSoulissSystemState(), bChildLock);
     getTemp();
   }
   else if (getLayout2()) {
-    SERIAL_OUT.println("HomeScreen Layout 2");
+    #ifdef DEBUG || DEBUG_DEV
+      Serial.println("HomeScreen Layout 2");
+    #endif
     getTemp();
     display_layout2_HomeScreen(ucg, temperature, humidity, setpoint);
     display_layout2_print_circle_white(ucg);
@@ -850,6 +935,8 @@ void initScreen() {
     display_layout2_print_circle_green(ucg);
   }
 }
+
+
 void setSetpoint(float setpoint) {
   Souliss_HalfPrecisionFloating((memory_map + MaCaco_OUT_s + SLOT_THERMOSTAT + 3), &setpoint);
 }
@@ -860,7 +947,6 @@ void setStartSetpoint(float l_setpoint) {
   setSetpoint(setpoint);
   
 }
-
 
 void bright(int lum) {
   int val = ((float)lum / 100) * 1023;
@@ -963,5 +1049,7 @@ void handleBody(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_
   if(index + len == total){
     Serial.printf("BodyEnd: %u B\n", total);
   }
+  yield();
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
+

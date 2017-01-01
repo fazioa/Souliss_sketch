@@ -1,6 +1,7 @@
 #include <Arduino.h>
 #include "Ucglib.h"
 #include "constants.h"
+#include "preferences.h"
 #include "menu.h"
 #include "crono.h"
 #include "ntp.h"
@@ -120,7 +121,9 @@ void setSetpoint(Ucglib_ILI9341_18x240x320_HWSPI ucg) {
   ucg.setFontMode(UCG_FONT_MODE_SOLID);
   setSelected = 0;
   setEncoderValue(setP[setSelected]);
+#ifdef DEBUG_DEV
   Serial.print("setSetpoint setEncoderValue"); Serial.print(" P:"); Serial.print(setSelected); Serial.print(" "); Serial.println(setP[setSelected]);
+#endif
   while (pushed == 0 && setSelected < 4) {
     ucg.setColor(255, 255, 255);                                //Bianco
     ucg.drawBox((start_x * 2) + (72 * setSelected) , 50 , dim_x * 5 , dim_y);
@@ -136,7 +139,9 @@ void setSetpoint(Ucglib_ILI9341_18x240x320_HWSPI ucg) {
     if ((digitalRead(ENCODER_SWITCH) == LOW && (ns == HIGH)) && setSelected < 3) {
       setSelected++;
       setEncoderValue(setP[setSelected]);
+#ifdef DEBUG_DEV
       Serial.print("setSetpoint setEncoderValue"); Serial.print(" P:"); Serial.print(setSelected); Serial.print(" "); Serial.println(setP[setSelected]);
+#endif
       delay(250);
     }
     ns = digitalRead(ENCODER_SWITCH);
@@ -168,7 +173,9 @@ void setSetpoint(Ucglib_ILI9341_18x240x320_HWSPI ucg) {
 //setDay
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void setDay(Ucglib_ILI9341_18x240x320_HWSPI ucg) {
+#ifdef DEBUG_DEV
   Serial.print("MENU' setDay ");
+#endif
   ucg.setColor(102, 255, 0);           // Verde Chiaro
   ucg.setFontMode(UCG_FONT_MODE_TRANSPARENT);
   ucg.setFont(ucg_font_helvB14_hf);
@@ -177,7 +184,9 @@ void setDay(Ucglib_ILI9341_18x240x320_HWSPI ucg) {
   changeday = 1;
   while (pushed == 0) {
     if (changeday == 1) {
+#ifdef DEBUG_DEV
       Serial.print("dDaysel "); Serial.println(dDaysel);
+#endif
       ucg.setColor(0, 0, 0);            //Nero
       ucg.setPrintPos(160, 235);
       ucg.drawBox(155, 220, 150, 20);
@@ -262,7 +271,9 @@ void setDay(Ucglib_ILI9341_18x240x320_HWSPI ucg) {
   ucg.print("GIORNO:");
   pushed = 0;
   daySelected = dDaysel;
+#ifdef DEBUG_DEV
   Serial.print("daySelected="); Serial.println(daySelected);
+#endif
   delay(250);
 }
 
@@ -270,7 +281,9 @@ void setDay(Ucglib_ILI9341_18x240x320_HWSPI ucg) {
 //drawBoxes from array
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void drawBoxes(Ucglib_ILI9341_18x240x320_HWSPI ucg) {
+#ifdef DEBUG_DEV
   Serial.println("MENU' drawBoxes ");
+#endif
   for (byte nv = 0; nv < 2; nv++) {
     //Serial.print("VERTICALE ");Serial.println(nv);
     for (byte nh = 0; nh < 12; nh++) {
@@ -328,7 +341,9 @@ void drawBoxes(Ucglib_ILI9341_18x240x320_HWSPI ucg) {
 //setBoxes
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void setBoxes(Ucglib_ILI9341_18x240x320_HWSPI ucg) {
+#ifdef DEBUG_DEV
   Serial.println("MENU' setBoxes ");
+#endif
   while (pushed == 0) {
     if (changebox == 1) {
       ucg.setColor(102, 255, 0);           // Verde Chiaro
@@ -457,10 +472,12 @@ void setBoxes(Ucglib_ILI9341_18x240x320_HWSPI ucg) {
         boxPointer = 0;
         line = 0;
       }
+#ifdef DEBUG_DEV
       //Serial.print("boxPointer= ");Serial.println(boxPointer);
       //Serial.print("boxPointerView= ");Serial.println(boxPointerView);
       //Serial.print("spacing1= ");Serial.println(spacing1);
       //Serial.print("line= ");Serial.println(line);
+#endif
       changebox = 1;
     }
 
@@ -475,7 +492,9 @@ void setBoxes(Ucglib_ILI9341_18x240x320_HWSPI ucg) {
       ucg.setColor(0, 0, 0);                 //Nero
       ucg.drawBox(3, 217, 60, 21);           //Rettangolo basso sx
       longpress = 0;
+#ifdef DEBUG_DEV
       Serial.println("longpress 1");
+#endif
       exitmain = 0;
       break;
     }
@@ -488,7 +507,9 @@ void setBoxes(Ucglib_ILI9341_18x240x320_HWSPI ucg) {
       ucg.setColor(0, 0, 0);                 //Nero
       ucg.drawBox(3, 217, 60, 21);           //Rettangolo basso sx
       longpress = 0;
+#ifdef DEBUG_DEV
       Serial.println("longpress 3");
+#endif
       copyDay(daySelected);
       exitmain = 0;
       break;
@@ -502,7 +523,9 @@ void setBoxes(Ucglib_ILI9341_18x240x320_HWSPI ucg) {
       ucg.setColor(0, 0, 0);                 //Nero
       ucg.drawBox(3, 217, 60, 21);           //Rettangolo basso sx
       longpress = 0;
+#ifdef DEBUG_DEV
       Serial.println("longpress 4");
+#endif
       pasteDay(daySelected);
       exitmain = 0;
       break;
@@ -516,8 +539,10 @@ void setBoxes(Ucglib_ILI9341_18x240x320_HWSPI ucg) {
       ucg.setColor(0, 0, 0);                 //Nero
       ucg.drawBox(3, 217, 60, 21);           //Rettangolo basso sx
       longpress = 0;
+#ifdef DEBUG_DEV
       Serial.println("Saving Crono Program... ");
       Serial.println("longpress 2");
+#endif
       //SPIFFS SAVE
       SaveCronoMatrixSPIFFS(ucg);
       exitmain = 0;
@@ -527,8 +552,10 @@ void setBoxes(Ucglib_ILI9341_18x240x320_HWSPI ucg) {
     //ESCAPE TO MAIN
     if ((longpress >= 500 & longpress < 600) & np == HIGH) {
       longpress = 0;
+#ifdef DEBUG_DEV
       Serial.println("Exit to main... ");
       Serial.println("longpress 0");
+#endif
       pushed = 1;
       exitmain = 1;
       break;
@@ -537,7 +564,9 @@ void setBoxes(Ucglib_ILI9341_18x240x320_HWSPI ucg) {
     //ESCAPE COUNTER
     if (np == LOW) {
       longpress++;
+#ifdef DEBUG_DEV
       //Serial.print("longpress ");Serial.println(longpress);
+#endif
     } else {
       longpress = 0;
       ucg.setColor(0, 0, 0);                 //Nero
@@ -628,9 +657,11 @@ void SaveCronoMatrixSPIFFS (Ucglib_ILI9341_18x240x320_HWSPI ucg) {
       ucg.print("SAVING");
       cronomatrix.add(dHourSel[dS][gS]);
       byte pS = dHourSel[dS][gS];
+#ifdef DEBUG_DEV
       Serial.print("Saving in SPIFFS : "); Serial.print(i); Serial.print(" day "); Serial.print(dS); Serial.print(" hour/2 "); Serial.print(gS); Serial.print(" value "); Serial.println(pS);
       //testati delay fino a 100 !
-      delay(1);
+#endif
+      yield();
       i++;
       ucg.setColor(0, 0, 0);                  //Nero
       ucg.drawBox(3, 217, 60, 21);            //Rettangolo basso sx
@@ -645,28 +676,37 @@ void SaveCronoMatrixSPIFFS (Ucglib_ILI9341_18x240x320_HWSPI ucg) {
   root.printTo(Serial);
   char buffer[1000];
   root.printTo(buffer, sizeof(buffer));
+#ifdef DEBUG_DEV
   Serial.println();
+#endif
 
   // open file for writing
   File sst_spiffs = SPIFFS.open("/sst_crono_matrix.json", "w");
   if (!sst_spiffs) {
+#ifdef DEBUG_DEV
     Serial.println("Failed to open sst_crono_matrix.json");
+#endif
     return;
   }
   //qui salvo il buffer su file
   sst_spiffs.println(buffer);
+#ifdef DEBUG_DEV
   Serial.println("Salvo in SPIFFS il buffer con i settings :"); Serial.println(buffer);
+#endif
   delay(1);
   //chiudo il file
   sst_spiffs.close();
 }
 
 void ReadCronoMatrixSPIFFS() {
-
+#ifdef DEBUG_DEV
   Serial.println("Read Crono Settings from SPIFFS...");
+#endif
   File  cronomatrix_inlettura = SPIFFS.open("/sst_crono_matrix.json", "r");
   if (!cronomatrix_inlettura) {
+#ifdef DEBUG_DEV
     Serial.println("Failed to open sst_crono_matrix.json");
+#endif
     return;
   }
 
@@ -675,13 +715,17 @@ void ReadCronoMatrixSPIFFS() {
   //Serial.print("Ho letto dal file : ");Serial.println(risultatocronomatrix);
   char jsoncronomatrix[1000];
   risultatocronomatrix.toCharArray(jsoncronomatrix, 1000);
+#ifdef DEBUG_DEV
   Serial.print("Imposto i setpoint del crono: "); Serial.println(jsoncronomatrix);
+#endif
   //StaticJsonBuffer<200> jsonBuffer_cronomatrix_inlettura;
   DynamicJsonBuffer jsonBuffer_cronomatrix_inlettura;
 
   JsonObject& rootcronomatrix_inlettura = jsonBuffer_cronomatrix_inlettura.parseObject(jsoncronomatrix);
   if (!rootcronomatrix_inlettura.success()) {
+#ifdef DEBUG_DEV
     Serial.println("parseObject() failed");
+#endif
   }
   setP[0] = rootcronomatrix_inlettura["Sp0"];
   setP[1] = rootcronomatrix_inlettura["Sp1"];
@@ -695,8 +739,10 @@ void ReadCronoMatrixSPIFFS() {
     for (byte gS = 0; gS < 48; gS++) {
       dHourSel[dS][gS] = rootcronomatrix_inlettura["cronomatrix"][ii];
       byte pS = dHourSel[dS][gS];
+#ifdef DEBUG_DEV
       Serial.print("Reading from SPIFFS : "); Serial.print(" day "); Serial.print(dS); Serial.print(" hour/2 "); Serial.print(gS); Serial.print(" value "); Serial.println(pS);
-      delay(1);
+#endif
+      yield();
       ii++;
     }
     gS = 0;
@@ -738,50 +784,54 @@ float checkNTPcrono(Ucglib_ILI9341_18x240x320_HWSPI ucg, float setpoint) {
   } else {
     minute_30_59 = 0;
   }
+#ifdef DEBUG_DEV
   //Serial.print("dayweek: ");Serial.print(deyweek);Serial.print("  hourday*2: ");Serial.print(hourday*2);Serial.print("  minuteday: ");Serial.println(minute_30_59);
   //Serial.print("pointernow ");Serial.println(pointernow);
+#endif
   if (pointernow >= 0 && pointernow <= 4) {
     ucg.setColor(colour[pointernow - 1][0], colour[pointernow - 1][1], colour[pointernow - 1][2]);  //Colore Variabile
     switch (pointernow) {
       case 0:
-        //CRONO OFF
+
+#ifdef DEBUG_DEV
         Serial.println("CRONO: Off");
-        //se bFlag è vero vuol dire che stiamo uscendo dai case 1..4
+#endif
         if (bFlag) {
           Serial.println("Set Setpoint before CRONO");
-          Serial.print("Set: ");Serial.println(fNextValForCronoOFF);
-          getsetpoint = fNextValForCronoOFF; 
+          Serial.print("Set: "); Serial.println(fNextValForCronoOFF);
+          getsetpoint = fNextValForCronoOFF;
           bFlag = false;
         } else {
           Serial.println("Save setpoint");
-          Serial.print("Save: ");Serial.println(setpoint);
+          Serial.print("Save: "); Serial.println(setpoint);
           fNextValForCronoOFF = setpoint;
-          getsetpoint=setpoint;
+          getsetpoint = setpoint;
         }
         break;
       case 1:
         bFlag = true;
         getsetpoint = setP[0];
+#ifdef DEBUG_DEV
         Serial.println("CRONO: Attivo Eco");
-        Serial.print("Set: ");Serial.println(getsetpoint);
+#endif
         break;
       case 2:
-        bFlag = true;
         getsetpoint = setP[1];
+#ifdef DEBUG_DEV
         Serial.println("CRONO: Attivo Normal");
-        Serial.print("Set: ");Serial.println(getsetpoint);
+#endif
         break;
       case 3:
-        bFlag = true;
         getsetpoint = setP[2];
+#ifdef DEBUG_DEV
         Serial.println("CRONO: Attivo Comfort");
-        Serial.print("Set: ");Serial.println(getsetpoint);
+#endif
         break;
       case 4:
-        bFlag = true;
         getsetpoint = setP[3];
+#ifdef DEBUG_DEV
         Serial.println("CRONO: Attivo Comfort+");
-        Serial.print("Set: ");Serial.println(getsetpoint);
+#endif
         break;
       default:
         break;

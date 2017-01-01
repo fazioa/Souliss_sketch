@@ -4,12 +4,13 @@
 
 
 void setup_OTA_WBServer(){
-
   // Init the OTA + WebServer
   // Set Hostname.
   String hostNAME(HOSTNAME);
   hostNAME += String(ESP.getChipId(), HEX);
-  SERIAL_OUT.print("set OTA+WiFi hostname: "); SERIAL_OUT.println(hostNAME);
+  #ifdef DEBUG
+    Serial.print("set OTA+WiFi hostname: "); Serial.println(hostNAME);
+  #endif
   WiFi.hostname(hostNAME);
   ArduinoOTA.onStart([]() { events.send("Update Start", "ota"); });
   ArduinoOTA.onEnd([]() { events.send("Update End", "ota"); });
@@ -150,6 +151,16 @@ void setup_OTA_WBServer(){
       }
       else {
         Serial.printf("Crono trovato: %s\n", h->value().c_str());
+        cerca=(char*)data;
+        int totale=cerca.indexOf("]}");
+        totale = totale +2;
+        String cerca_stringa=cerca.substring(0,totale)+"\n";
+        Serial.printf("Body: %u\n", total);
+        Serial.printf("Body cerca: %u\n", totale);
+        #ifdef DEBUG_DEV
+          Serial.println("cerca: "+cerca+"\n");
+          Serial.println("cerca1: "+cerca_stringa+"\n");
+        #endif
         if(!index)
           Serial.printf("Request : ",request);
           Serial.printf("BodyStart: %u\n", index);
@@ -158,15 +169,16 @@ void setup_OTA_WBServer(){
           String S_filena_WBS = "/sst_crono_matrix.json";
           fsUploadFile = SPIFFS.open(S_filena_WBS, "w");
           if (!fsUploadFile) 
-            Serial.println("file open failed");
-          fsUploadFile.printf("%s",(const char*)data);  
-          if(index + len == total)
-            Serial.printf("BodyEnd: %u\n", total);
-            fsUploadFile.close();
-            delay (1000);
-            request->redirect("/salvato.htm");
-            delay (1000);
-            ReadCronoMatrixSPIFFS();
+            #ifdef DEBUG_DEV
+              Serial.println("file open failed");
+            #endif
+          fsUploadFile.println(cerca_stringa); 
+          Serial.printf("BodyEnd: %u\n",totale);
+          fsUploadFile.close();
+          delay (1000);
+          request->redirect("/salvato.htm");
+          delay (1000);
+          ReadCronoMatrixSPIFFS();
         }
         if (cerca.indexOf("setting")==-1)
         { 
@@ -193,14 +205,16 @@ void setup_OTA_WBServer(){
               ReadAllSettingsFromSPIFFS();
         } 
   });
-  yield();
+  
 
 
 
   //Client
   ///////////////////////////////////////////////////////////////////////////////////////////////////////
   #ifdef TTD
-    Serial.println("SEND BOOTUP");
+    #ifdef DEBUG_DEV
+      Serial.println("SEND BOOTUP");
+    #endif
     HTTPClient clienthttp_SST;
     const char* host="http://www.google-analytics.com/collect";
     String eventData = "v=1&t=event&tid=UA-89261240-1&cid=555&ec=SST"+String(VERSION)+"&ea=BOOTUP&el="+String(ESP.getChipId(),HEX);
@@ -209,10 +223,12 @@ void setup_OTA_WBServer(){
     clienthttp_SST.POST(eventData);
     clienthttp_SST.writeToStream(&Serial);
     clienthttp_SST.end();
-    Serial.println("BOOTUP CLOSED");
+    #ifdef DEBUG_DEV
+      Serial.println("BOOTUP CLOSED");
+    #endif
   #endif
-  delay(100);
   ///////////////////////////////////////////////////////////////////////////////////////////////////////
   server.begin();
   ///////////////////////////////////////////////////////////////////////////////////////////////////////
 }  
+
