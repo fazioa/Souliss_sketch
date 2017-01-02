@@ -334,10 +334,11 @@ void loop()
       //Al click in base al valore attuale di SSTPage, si imposta la pagina successiva
 
       int b = checkButton(ENCODER_SWITCH);
-      if (b == 2)
+      if (b == 2){
         #ifdef DEBUG || DEBUG_DEV 
           Serial.println("Double Click");
         #endif
+      }
       if (b == 3) {
         #ifdef DEBUG || DEBUG_DEV
           Serial.println("Hold");
@@ -353,10 +354,11 @@ void loop()
           initScreen();
         }
       }
-      if (b == 4) 
+      if (b == 4){ 
         #ifdef DEBUG || DEBUG_DEV  
           Serial.println("Long Hold");
         #endif
+      }
       if (b == 1) {
         switch (SSTPage.actualPage) {
           case PAGE_HOME:
