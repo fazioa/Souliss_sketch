@@ -43,7 +43,7 @@ uint8_t ip_gateway[4]  = {192, 168, 1, 1};
 #define pinOutputReleWARNINGLIGHT   6
 #define pinInputCURTAINLIGHT   7  //need pull down resistor
 
-#define timer_saracinesca      Souliss_T2n_Timer_Off+0x12 //18 DEC - Circa 20 secondi
+#define timer_saracinesca      Souliss_T2n_Timer_Off+0x20 //32 DEC - Circa 35 secondi
 
 U8 precPositionT22;
 void setup()
