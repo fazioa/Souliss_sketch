@@ -1,3 +1,5 @@
+#define DEBUG_DEV 0
+#define DEBUG 0
 /**************************************************************************
   Wi-Fi Smart Thermostat based on Souliss IoT Framework
     -Olimex ESP8266-EVB
