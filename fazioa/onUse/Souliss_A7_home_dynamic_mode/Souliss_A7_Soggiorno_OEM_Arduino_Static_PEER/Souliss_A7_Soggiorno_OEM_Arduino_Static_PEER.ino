@@ -14,13 +14,14 @@
 #include "EmonLib.h"             // Include Emon Library
 EnergyMonitor emon1;             // Create an instance
 
+// Define the network configuration according to your router settings
+uint8_t ip_address[4]  = {192, 168, 1, 105}; //IP GATEWAY
 
-// Define the network configuration according to your router settingsuration according to your router settings
-#define  Gateway_address 0x6511        // The Gateway node has two address, one on the Ethernet side 69        // The Gateway node has two address, one on the Ethernet side
+#define Gateway_address ip_address[3]              // The Gateway node has two address, one on the Ethernet side
+
 // and the other on the wireless oneless one
-#define peer_address  0x0010
+#define peer_address  0x0010 //192.168.1.16 IP Fisso
 #define myvNet_subnet 0xFF00
-#define myvNet_supern Gateway_address
 
 #define TEMPERATURE				0			// This is the memory slot used for the execution of the logic in network_address1
 #define HUMIDITY				2			// This is the memory slot used for the execution of the logic
@@ -63,7 +64,7 @@ void setup()
 
   Initialize();
   // Set network parameters
-  Souliss_SetAddress(peer_address, myvNet_subnet, myvNet_supern);          // Address on the wireless interface
+  Souliss_SetAddress(peer_address, myvNet_subnet, Gateway_address);          // Address on the wireless interface
 
   // Set the typical to use
   Set_T52(TEMPERATURE);
