@@ -765,7 +765,7 @@ void pasteDay(int dayPaste) {
   }
 }
 
-boolean bFlag = false;
+boolean bFlag = false; // used to memorize setpoint before crono setting and to restore it after
 //Hook crono data from NTP Time
 /*
   byte dHourSel[8][48]={0};   //Array Matrix
@@ -778,7 +778,8 @@ float checkNTPcrono(Ucglib_ILI9341_18x240x320_HWSPI ucg, float setpoint) {
   int hourday = getNTPhour();
   int minuteday = getNTPminute();
   int minute_30_59;
-  int pointernow = dHourSel[deyweek][(hourday * 2) + minute_30_59];
+ // int pointernow = dHourSel[deyweek][(hourday * 2) + minute_30_59];
+  int pointernow = checkCronoStatus(ucg)
   if (minuteday > 30) {
     minute_30_59 = 1;
   } else {
@@ -816,18 +817,21 @@ float checkNTPcrono(Ucglib_ILI9341_18x240x320_HWSPI ucg, float setpoint) {
 #endif
         break;
       case 2:
+        bFlag = true;
         getsetpoint = setP[1];
 #ifdef DEBUG_DEV
         Serial.println("CRONO: Attivo Normal");
 #endif
         break;
       case 3:
+        bFlag = true;
         getsetpoint = setP[2];
 #ifdef DEBUG_DEV
         Serial.println("CRONO: Attivo Comfort");
 #endif
         break;
       case 4:
+        bFlag = true;
         getsetpoint = setP[3];
 #ifdef DEBUG_DEV
         Serial.println("CRONO: Attivo Comfort+");
@@ -870,7 +874,7 @@ float checkCronoStatus(Ucglib_ILI9341_18x240x320_HWSPI ucg) {
   int minute_30_59;
   int pointernow = dHourSel[deyweek][(hourday * 2) + minute_30_59];
 
-  return dHourSel[deyweek][(hourday * 2) + minute_30_59];;
+  return pointernow;
 }
 
 
