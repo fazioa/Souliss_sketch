@@ -778,7 +778,8 @@ float checkNTPcrono(Ucglib_ILI9341_18x240x320_HWSPI ucg, float setpoint) {
   int hourday = getNTPhour();
   int minuteday = getNTPminute();
   int minute_30_59;
-  int pointernow = dHourSel[deyweek][(hourday * 2) + minute_30_59];
+ // int pointernow = dHourSel[deyweek][(hourday * 2) + minute_30_59];
+  int pointernow = checkCronoStatus(ucg)
   if (minuteday > 30) {
     minute_30_59 = 1;
   } else {
@@ -873,7 +874,7 @@ float checkCronoStatus(Ucglib_ILI9341_18x240x320_HWSPI ucg) {
   int minute_30_59;
   int pointernow = dHourSel[deyweek][(hourday * 2) + minute_30_59];
 
-  return dHourSel[deyweek][(hourday * 2) + minute_30_59];;
+  return pointernow;
 }
 
 
