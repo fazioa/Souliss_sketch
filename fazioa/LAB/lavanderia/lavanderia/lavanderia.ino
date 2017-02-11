@@ -5,13 +5,16 @@
 	  - Arduino Uno
       - Arduino Ethernet (W5100)
 ***************************************************************************/
+// If in debug mode - print debug information in Serial. Comment in production code, this bring performance.
+// This method is good for development and verification of results. But increases the amount of code and decreases productivity.
+//#define DEBUG
+
 
 // Let the IDE point to the Souliss framework
 #include "SoulissFramework.h"
 
 // Configure the framework
-#include "bconf/StandardArduino.h"          // Use a standard Arduino
-#include "conf/ethW5100.h"                  // Ethernet through Wiznet W5100
+#include "bconf/DINo_v2.h"                  // Define the board type
 #include "conf/Gateway.h"                   // The main node is the Gateway, we have just one node
 //#include "conf/Webhook.h"                   // Enable DHCP and DNS
 
@@ -35,23 +38,26 @@ uint8_t ip_gateway[4]  = {192, 168, 1, 1};
 #define slotT11_WARNINGLIGHT 2
 #define slotT13_CURTAIN_SENSOR 3
 
-#define pinInputOPEN   2   //used internal pull up resistor
-#define pinInputCLOSE   3 //used internal pull up resistor
+#define pinInputOPEN   IN1   //used internal pull up resistor
+#define pinInputCLOSE   IN2 //used internal pull up resistor
 
-#define pinOutputReleOPEN   8
-#define pinOutputReleCLOSE   5
-#define pinOutputReleWARNINGLIGHT   6
-#define pinInputCURTAIN_SENSOR   7  //need pull down resistor
+#define pinOutputReleOPEN   RELAY1
+#define pinOutputReleCLOSE   RELAY2
+#define pinOutputReleWARNINGLIGHT   RELAY3
+#define pinInputCURTAIN_SENSOR   IN3  //need pull down resistor
 
 #define timer_saracinesca      Souliss_T2n_Timer_Off+0x20 //32 DEC - Circa 35 secondi
 
 U8 precPositionT22;
 void setup()
 {
-  //Serial.begin(9600);
-  //Serial.println("Start");
-  Initialize();
+#ifdef DEBUG
+  Serial.begin(9600);
+#endif
 
+
+  //Initialize();
+  InitDINo();
   // Get the IP address from DHCP
   //GetIPAddress();
   // Set network parameters
@@ -60,7 +66,7 @@ void setup()
 
   pinMode(pinInputOPEN, INPUT_PULLUP);
   pinMode(pinInputCLOSE, INPUT_PULLUP);
-  pinMode(pinInputCURTAIN_SENSOR, INPUT);
+  pinMode(pinInputCURTAIN_SENSOR, INPUT); //need pull down resistor
 
   pinMode(pinOutputReleOPEN, OUTPUT);
   pinMode(pinOutputReleCLOSE, OUTPUT);
@@ -74,6 +80,12 @@ void setup()
   mInput(slotT22_saracinesca) = Souliss_T2n_StopCmd;
 
 
+#ifdef DEBUG
+  Serial.println("Start");
+#endif
+  // Set and turn ON the status LED
+  SetLED();
+  TurnOnLED();
 }
 
 void loop()
@@ -93,7 +105,10 @@ void loop()
       DigOut(pinOutputReleCLOSE, Souliss_T2n_Coil_Close, slotT22_saracinesca); //pone a 1 il PIN di OUTPUT quando lo stato di uscita dello slot è Souliss_T2n_Coil_Close
 
       if (mOutput(slotT13_CURTAIN_SENSOR) == Souliss_T1n_OnCoil && mOutput(slotT22_saracinesca) != Souliss_T2n_Coil_Stop) {
-        //    Serial.println("Souliss_T2n_StopCmd");
+
+#ifdef DEBUG
+        Serial.println("Attivazione sensore a tenda. STOP movimento saracinesca");
+#endif
         mInput(slotT22_saracinesca) = Souliss_T2n_StopCmd; //ferma il movimento se il sensore a tenda è attivato
       }
     }
@@ -106,12 +121,17 @@ void loop()
     FAST_510ms() {
       if (mOutput(slotT22_saracinesca)  == Souliss_T2n_Coil_Open || mOutput(slotT22_saracinesca)  == Souliss_T2n_Coil_Close) {
         mInput(slotT11_WARNINGLIGHT) = Souliss_T1n_OnCmd;  //accende la luce di sicurezza quando la saracinesca è in movimento
+#ifdef DEBUG
+        Serial.println("Saracinesca in movimento. Forza accensione luce di sicurezza");
+#endif
       } else if (mOutput(slotT22_saracinesca) != precPositionT22) {
         mInput(slotT11_WARNINGLIGHT) = Souliss_T1n_OffCmd;   //spegne la lampada solo se è rilevata una variazione dello stato del T22
-        //      Serial.println("slotT11_WARNINGLIGHT = Souliss_T1n_OffCmd");
+#ifdef DEBUG
+        Serial.println("Saracinesca ferma. Spegnimento  luce di sicurezza");
+#endif
       }
       precPositionT22 = mOutput(slotT22_saracinesca);
-      // Serial.print("precPositionT22 -->"); Serial.println(precPositionT22);
+
     }
 
 
@@ -119,6 +139,8 @@ void loop()
     FAST_1110ms() {
       // Time out commands if no limit switches are received
       Timer_Windows(slotT22_saracinesca);
+      ToggleLED();
+
     }
     // Here we handle here the communication with Android, commands and notification
     // are automatically assigned to slots
