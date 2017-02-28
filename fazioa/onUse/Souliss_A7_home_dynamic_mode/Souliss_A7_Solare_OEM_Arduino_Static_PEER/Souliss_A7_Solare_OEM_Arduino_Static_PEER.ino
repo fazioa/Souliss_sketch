@@ -22,12 +22,18 @@ double Setpoint, Input, Output, powerOutRate;
 //Output: è la spinta da dare ai pannelli solari. Es: Se il prelievo dalla rete è 500W allora i pannelli devono essere al massimo, per produrre di più ed abbassare la quantità di energia prelevata
 
 //Specify the links and initial tuning parameters
-PID myPID(&Input, &Output, &Setpoint, 0.5, 0.5, 0, REVERSE);
+//double consKp=0.5, consKi=0.5, consKd=0;  OLD
+
+//Define the aggressive and conservative Tuning Parameters
+double aggKp=0.5, aggKi=0.5, aggKd=0.5;
+double consKp=0.2, consKi=0.35, consKd=0;
+
+PID myPID(&Input, &Output, &Setpoint, consKp, consKi, consKd, REVERSE);
 
 //*********************************************************
 //***********  DEFINE  ************************************
 //*********************************************************
-#define SETPOINT 30 //Watt
+#define SETPOINT 10 //Watt
 
 // Define the network configuration according to your router settingsuration according to your router settings
 #define  Gateway_address 0x6511        // The Gateway node has two address, one on the Ethernet side 69        // The Gateway node has two address, one on the Ethernet side
@@ -109,7 +115,7 @@ void loop()
       fV = emon1.Vrms;
       fI  = emon1.Irms;
 
-      //se il consumo rilevato è <5 (oppure anche inferiore a zero) allora viene posto a zero, e di conseguenza non dovrebbero esserci aggiornamenti sul bus
+      //se la produzione rilevata è <5 (oppure anche inferiore a zero) allora viene posto a zero, e di conseguenza non dovrebbero esserci aggiornamenti sul bus
       if (fVal < 5) {
         fVal = 0;
         fI = 0;
@@ -142,9 +148,26 @@ void loop()
       //Livellamento
       //Il valore dell'input è determinato tenendo conto del valore del consumo di casa ricevuto via rete Souliss
       //l'indice è aggiornato in continuazione anche sulla base della produzione solare
-      //uso questo metodo perchè i valori trasmessi con publish&subscribe non sembre hanno la costanza di 1 secondo. Spesso mancano per 3 o 4 secondi
+      //uso questo metodo perchè i valori trasmessi con publish&subscribe non sempre vengono trasmessi con costanza. Spesso mancano per 3 o 4 secondi
       //e ciò causa l'intervento incisivo di adattamenti PID non desiderati dovuti alla mancanza di feedback
       Input = iStart_HomePower - actual_SolarProduction + start_SolarProduction;
+
+// Stabilisce i parametri del PID, conservativi o aggressivi
+double gap = Input- Setpoint; //distance away from setpoint
+//se avviene immissione di corrente in rete allora vengono impostati dei parametri del PID leggermente più aggressivi
+  if(gap<0)
+  { 
+    //we're far from setpoint, use aggressive tuning parameters
+     myPID.SetTunings(aggKp, aggKi, aggKd); 
+  }
+  else
+  {
+//we're close to setpoint, use conservative tuning parameters
+    myPID.SetTunings(consKp, consKi, consKd);     
+  }
+
+
+
 
       //qui gestisco
       // fPannelliGruppo1_percento
@@ -191,7 +214,7 @@ void loop()
 }
 
 void subscribeTopics() {
-  if (subscribedata(ENERGY_TOPIC, mypayload, &mypayload_len)) {
+  if (sbscrbdata(ENERGY_TOPIC, mypayload, &mypayload_len)) {
     float32((uint16_t*) mypayload,  &fTopic_HomePower);
     Serial.print("ENERGY_TOPIC: "); Serial.println(fTopic_HomePower);
 
