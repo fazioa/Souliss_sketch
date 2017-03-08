@@ -16,7 +16,6 @@
 // Configure the framework
 #include "bconf/DINo_v2.h"                  // Define the board type
 #include "conf/Gateway.h"                   // The main node is the Gateway, we have just one node
-//#include "conf/Webhook.h"                   // Enable DHCP and DNS
 
 // Include framework code and libraries
 #include <SPI.h>
@@ -38,13 +37,14 @@ uint8_t ip_gateway[4]  = {192, 168, 1, 1};
 #define slotT11_WARNINGLIGHT 2
 #define slotT13_CURTAIN_SENSOR 3
 
-#define pinInputOPEN   IN1   //used internal pull up resistor
-#define pinInputCLOSE   IN2 //used internal pull up resistor
+// IN1 --> pinInputOPEN
+// IN2 --> pinInputCLOSE
+// IN3--> pinInputCURTAIN_SENSOR
 
-#define pinOutputReleOPEN   RELAY1
-#define pinOutputReleCLOSE   RELAY2
-#define pinOutputReleWARNINGLIGHT   RELAY3
-#define pinInputCURTAIN_SENSOR   IN3  //need pull down resistor
+// RELAY1 --> pinOutputReleOPEN
+// RELAY2 --> pinOutputReleCLOSE
+// RELAY3 --> pinOutputReleWARNINGLIGHT
+
 
 #define timer_saracinesca      Souliss_T2n_Timer_Off+0x20 //32 DEC - Circa 35 secondi
 
@@ -64,20 +64,20 @@ void setup()
   Souliss_SetIPAddress(ip_address, subnet_mask, ip_gateway);
   SetAsGateway(myvNet_address);       // Set this node as gateway for SoulissApp
 
-  pinMode(pinInputOPEN, INPUT_PULLUP);
-  pinMode(pinInputCLOSE, INPUT_PULLUP);
-  pinMode(pinInputCURTAIN_SENSOR, INPUT); //need pull down resistor
-
-  pinMode(pinOutputReleOPEN, OUTPUT);
-  pinMode(pinOutputReleCLOSE, OUTPUT);
-  pinMode(pinOutputReleWARNINGLIGHT, OUTPUT);
-
   Set_Windows(slotT22_saracinesca);
 
 
   Set_SimpleLight(slotT11_WARNINGLIGHT); //luce lampeggiante di sicurezza
   Set_DigitalInput(slotT13_CURTAIN_SENSOR); //barriera infrarosso di sicurezza - E' impostata solo per avere lo stato in SoulissApp
-  mInput(slotT22_saracinesca) = Souliss_T2n_StopCmd;
+
+    SetInput1(); // CURTAIN_SENSOR
+  SetInput2(); // up / dwn
+  SetInput3(); // up / dwn
+
+
+  SetRelay1(); //OPEN
+  SetRelay2(); // CLOSE
+  SetRelay3(); //WARNINGLIGHT
 
 
 #ifdef DEBUG
@@ -86,6 +86,9 @@ void setup()
   // Set and turn ON the status LED
   SetLED();
   TurnOnLED();
+
+  mInput(slotT22_saracinesca) = Souliss_T2n_StopCmd;
+  
 }
 
 void loop()
@@ -95,14 +98,14 @@ void loop()
     UPDATEFAST();
 
     FAST_90ms() {   // We process the logic and relevant input and output every 50 milliseconds
-      LowDigIn(pinInputOPEN, Souliss_T2n_OpenCmd_Local, slotT22_saracinesca);
-      LowDigIn(pinInputCLOSE, Souliss_T2n_CloseCmd_Local, slotT22_saracinesca);
-      DigIn2State(pinInputCURTAIN_SENSOR, Souliss_T1n_OnCmd, Souliss_T1n_OffCmd,  slotT13_CURTAIN_SENSOR); //sensore a tenda
+      DigIn(IN1, Souliss_T2n_OpenCmd_Local, slotT22_saracinesca);
+      DigIn(IN2, Souliss_T2n_CloseCmd_Local, slotT22_saracinesca);
+      DigIn2State(IN3, Souliss_T1n_OnCmd, Souliss_T1n_OffCmd,  slotT13_CURTAIN_SENSOR); //sensore a tenda
       Souliss_Logic_T22(memory_map, slotT22_saracinesca, &data_changed, timer_saracinesca);
       Logic_DigitalInput(slotT13_CURTAIN_SENSOR);   //processa la logica per la barriera infrarosso di sicurezza
 
-      DigOut(pinOutputReleOPEN, Souliss_T2n_Coil_Open, slotT22_saracinesca); //pone a 1 il PIN di OUTPUT quando lo stato di uscita dello slot è Souliss_T2n_Coil_Open
-      DigOut(pinOutputReleCLOSE, Souliss_T2n_Coil_Close, slotT22_saracinesca); //pone a 1 il PIN di OUTPUT quando lo stato di uscita dello slot è Souliss_T2n_Coil_Close
+      DigOut(RELAY1, Souliss_T2n_Coil_Open, slotT22_saracinesca); //pone a 1 il PIN di OUTPUT quando lo stato di uscita dello slot è Souliss_T2n_Coil_Open
+      DigOut(RELAY2, Souliss_T2n_Coil_Close, slotT22_saracinesca); //pone a 1 il PIN di OUTPUT quando lo stato di uscita dello slot è Souliss_T2n_Coil_Close
 
       if (mOutput(slotT13_CURTAIN_SENSOR) == Souliss_T1n_OnCoil && mOutput(slotT22_saracinesca) != Souliss_T2n_Coil_Stop) {
 
@@ -115,7 +118,7 @@ void loop()
 
     FAST_210ms() {
       Logic_SimpleLight(slotT11_WARNINGLIGHT); //processa la logica per la luce lampeggiante di sicurezza
-      DigOut(pinOutputReleWARNINGLIGHT, Souliss_T1n_OnCoil, slotT11_WARNINGLIGHT); //processa la logica per la luce di sicurezza
+      DigOut(RELAY3, Souliss_T1n_OnCoil, slotT11_WARNINGLIGHT); //processa la logica per la luce di sicurezza
     }
 
     FAST_510ms() {
