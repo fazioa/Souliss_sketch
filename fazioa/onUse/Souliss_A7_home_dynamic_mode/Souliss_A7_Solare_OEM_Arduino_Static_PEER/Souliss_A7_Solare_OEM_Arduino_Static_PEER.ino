@@ -25,8 +25,8 @@ double Setpoint, Input, Output, powerOutRate;
 //double consKp=0.5, consKi=0.5, consKd=0;  OLD
 
 //Define the aggressive and conservative Tuning Parameters
-double aggKp=0.5, aggKi=0.5, aggKd=0.5;
-double consKp=0.2, consKi=0.35, consKd=0;
+double aggKp = 0.5, aggKi = 0.2, aggKd = 0;
+double consKp = 0.2, consKi = 0.1, consKd = 0;
 
 PID myPID(&Input, &Output, &Setpoint, consKp, consKi, consKd, REVERSE);
 
@@ -34,6 +34,7 @@ PID myPID(&Input, &Output, &Setpoint, consKp, consKi, consKd, REVERSE);
 //***********  DEFINE  ************************************
 //*********************************************************
 #define SETPOINT 10 //Watt
+#define W_PASSAGGIO_AGG_TUNING 50 //Watt
 
 // Define the network configuration according to your router settingsuration according to your router settings
 #define  Gateway_address 0x6511        // The Gateway node has two address, one on the Ethernet side 69        // The Gateway node has two address, one on the Ethernet side
@@ -70,8 +71,8 @@ int actual_SolarProduction, start_SolarProduction, iStart_HomePower;
 void setup()
 {
   // Init Serial
-   // Serial.begin(9600);
-   //  Serial.println("POWER METER - VER.2 - Souliss");
+  // Serial.begin(9600);
+  //  Serial.println("POWER METER - VER.2 - Souliss");
 
   Initialize();
   // Set network parameters
@@ -116,20 +117,24 @@ void loop()
       fI  = emon1.Irms;
 
       //se la produzione rilevata è <5 (oppure anche inferiore a zero) allora viene posto a zero, e di conseguenza non dovrebbero esserci aggiornamenti sul bus
-      if (fVal < 5) {
-        fVal = 0;
-        fI = 0;
-      }
       fVal = round(fVal);
-
+       if (fVal < 5) {
+          fVal = 0;
+          fI = 0;
+         }
+      
       ImportAnalog(SLOT_Watt, &fVal);
-      Logic_Power(SLOT_Watt);
+      //Logic_Power(SLOT_Watt);
+      Souliss_Logic_T57(memory_map, SLOT_Watt, 5, &data_changed);
+
 
       ImportAnalog(SLOT_Voltage, &fV);
-      Logic_Voltage(SLOT_Voltage);
+      //Logic_Voltage(SLOT_Voltage);
+      Souliss_Logic_T55(memory_map, SLOT_Voltage, 1, &data_changed);
 
       ImportAnalog(SLOT_Current, &fI);
-      Logic_Current(SLOT_Current);
+      // Logic_Current(SLOT_Current);
+      Souliss_Logic_T56(memory_map, SLOT_Current, 0.3, &data_changed);
 
       ImportAnalog(SLOT_RELE_GROUP_ONE_PERCENT, &fPannelliGruppo1_percento);
       Read_T51(SLOT_RELE_GROUP_ONE_PERCENT);
@@ -152,19 +157,19 @@ void loop()
       //e ciò causa l'intervento incisivo di adattamenti PID non desiderati dovuti alla mancanza di feedback
       Input = iStart_HomePower - actual_SolarProduction + start_SolarProduction;
 
-// Stabilisce i parametri del PID, conservativi o aggressivi
-double gap = Input- Setpoint; //distance away from setpoint
-//se avviene immissione di corrente in rete allora vengono impostati dei parametri del PID leggermente più aggressivi
-  if(gap<0)
-  { 
-    //we're far from setpoint, use aggressive tuning parameters
-     myPID.SetTunings(aggKp, aggKi, aggKd); 
-  }
-  else
-  {
-//we're close to setpoint, use conservative tuning parameters
-    myPID.SetTunings(consKp, consKi, consKd);     
-  }
+      // Stabilisce i parametri del PID, conservativi o aggressivi
+      double gap = Input - Setpoint; //distance away from setpoint
+      //se avviene immissione di corrente in rete allora vengono impostati dei parametri del PID leggermente più aggressivi
+      if (gap < W_PASSAGGIO_AGG_TUNING) //se la potenza immessa supera i 50W allora il PID viene impostato in modalità più aggressiva
+      {
+        //we're far from setpoint, use aggressive tuning parameters
+        myPID.SetTunings(aggKp, aggKi, aggKd);
+      }
+      else
+      {
+        //we're close to setpoint, use conservative tuning parameters
+        myPID.SetTunings(consKp, consKi, consKd);
+      }
 
 
 
