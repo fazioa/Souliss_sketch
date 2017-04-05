@@ -100,7 +100,7 @@ void loop()
     FAST_90ms() {   // We process the logic and relevant input and output every 50 milliseconds
       DigIn(IN1, Souliss_T2n_OpenCmd_Local, slotT22_saracinesca);
       DigIn(IN2, Souliss_T2n_CloseCmd_Local, slotT22_saracinesca);
-      DigIn2State(IN3, Souliss_T1n_OnCmd, Souliss_T1n_OffCmd,  slotT13_CURTAIN_SENSOR); //sensore a tenda
+      DigIn2State(IN3, Souliss_T1n_OffCmd, Souliss_T1n_OnCmd,  slotT13_CURTAIN_SENSOR); //sensore a tenda
       Souliss_Logic_T22(memory_map, slotT22_saracinesca, &data_changed, timer_saracinesca);
       Logic_DigitalInput(slotT13_CURTAIN_SENSOR);   //processa la logica per la barriera infrarosso di sicurezza
 
