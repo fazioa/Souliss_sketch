@@ -25,8 +25,8 @@ double Setpoint, Input, Output, powerOutRate;
 //double consKp=0.5, consKi=0.5, consKd=0;  OLD
 
 //Define the aggressive and conservative Tuning Parameters
-double aggKp = 0.5, aggKi = 0.2, aggKd = 0;
-double consKp = 0.2, consKi = 0.1, consKd = 0;
+//double aggKp = 0.5, aggKi = 0.2, aggKd = 0.1;
+double consKp = 0, consKi = 0.2, consKd = 0;
 
 PID myPID(&Input, &Output, &Setpoint, consKp, consKi, consKd, REVERSE);
 
@@ -34,7 +34,7 @@ PID myPID(&Input, &Output, &Setpoint, consKp, consKi, consKd, REVERSE);
 //***********  DEFINE  ************************************
 //*********************************************************
 #define SETPOINT 10 //Watt
-#define W_PASSAGGIO_AGG_TUNING 50 //Watt
+#define W_PASSAGGIO_AGGRESSIVE_TUNING 150 //Watt
 
 // Define the network configuration according to your router settingsuration according to your router settings
 #define  Gateway_address 0x6511        // The Gateway node has two address, one on the Ethernet side 69        // The Gateway node has two address, one on the Ethernet side
@@ -109,8 +109,11 @@ void loop()
   EXECUTEFAST() {
     UPDATEFAST();
 
-    //acquisizione valori
-    SHIFT_210ms(0) {
+
+    FAST_210ms() {
+      //acquisizione valori
+      //********************************
+      //********************************
       emon1.calcVI(20, 200);  //esegue il campionamento // Calculate all. No.of wavelengths, time-out
       fVal = emon1.realPower;
       fV = emon1.Vrms;
@@ -118,11 +121,87 @@ void loop()
 
       //se la produzione rilevata è <5 (oppure anche inferiore a zero) allora viene posto a zero, e di conseguenza non dovrebbero esserci aggiornamenti sul bus
       fVal = round(fVal);
-       if (fVal < 5) {
-          fVal = 0;
-          fI = 0;
-         }
-      
+      if (fVal <= 5) {
+        fVal = 0;
+        fI = 0;
+      }
+
+      actual_SolarProduction = fVal;
+      //********************************
+      //********************************
+
+
+      //acquisizione comsuno casa
+      //********************************
+      //********************************
+      subscribeTopics();
+      //********************************
+      //********************************
+
+
+      //Livellamento
+      //********************************
+      //********************************
+      //Il valore dell'input è determinato tenendo conto del valore del consumo di casa ricevuto via rete Souliss
+      //l'indice è aggiornato in continuazione anche sulla base della produzione solare
+      //uso questo metodo perchè i valori trasmessi con publish&subscribe non sempre vengono trasmessi con costanza. Spesso mancano per 3 o 4 secondi
+      //e ciò causa l'intervento incisivo di adattamenti PID non desiderati dovuti alla mancanza di feedback
+      Input = iStart_HomePower - actual_SolarProduction + start_SolarProduction;
+
+      // Stabilisce i parametri del PID, conservativi o aggressivi
+      double gap = Input - Setpoint; //distance away from setpoint
+      //se avviene immissione di corrente in rete allora vengono impostati dei parametri del PID leggermente più aggressivi
+    //  if (gap < W_PASSAGGIO_AGGRESSIVE_TUNING) //se la potenza immessa supera i 50W allora il PID viene impostato in modalità più aggressiva
+    //  {
+        //we're far from setpoint, use aggressive tuning parameters
+    //    myPID.SetTunings(aggKp, aggKi, aggKd);
+  //    }
+  //    else
+ //     {
+        //we're close to setpoint, use conservative tuning parameters
+        myPID.SetTunings(consKp, consKi, consKd);
+ //     }
+
+
+      //qui gestisco
+      // fPannelliGruppo1_percento
+      // fPannelliGruppo2_percento
+      myPID.Compute();
+      //a questo punto in Output ho il valore, compreso tra 0-254 con il quale regolare la produzione
+      //la scala viene ampliata 0-511. Il primo PWM ha priorità e va presto a 255, il secondo solo quando serve, ed è il primo a cui viene tolta potenza. In questo modo è più probabile che venga modulato in PWM soltanto una parte dei relè, e non tutti.
+      //      Serial.print("Input: "); Serial.println(Input);
+      //      Serial.print("Output: "); Serial.println(Output);
+      powerOutRate = (Output / 255) * 511; //trasforma la scala a 256*2 valori
+      //      Serial.print("Output ampliato: "); Serial.println(powerOutRate);
+      iPWM_Val_1 = powerOutRate;
+      if (iPWM_Val_1 > 255) iPWM_Val_1 = 255; //il massimo valore può essere 255
+      fPannelliGruppo1_percento = (int) ((iPWM_Val_1 / 255) * 100); //trasformo il valore in percentuale per passarlo al tipico di Souliss. E' più semplice rappresentare il dato in percentuale
+
+      iPWM_Val_2 = powerOutRate - 256;
+      if (iPWM_Val_2 < 0) iPWM_Val_2 = 0; //il minimo valore può essere 0
+      fPannelliGruppo2_percento = (int) ((iPWM_Val_2 / 255) * 100);
+
+      //      Serial.print("fPannelliGruppo1_percento: "); Serial.println(fPannelliGruppo1_percento);
+      //      Serial.print("fPannelliGruppo2_percento: "); Serial.println(fPannelliGruppo2_percento);
+
+      //invio valore PWM al pin
+      //********************************
+      //********************************
+
+      analogWrite(PIN_RELE_GROUP_1, iPWM_Val_1);
+      analogWrite(PIN_RELE_GROUP_2, iPWM_Val_2);
+
+      //      Serial.print("iPWM_Val_1: "); Serial.println(iPWM_Val_1);
+      //      Serial.print("iPWM_Val_2: "); Serial.println(iPWM_Val_2);
+    }
+
+
+
+
+    FAST_1110ms(){
+      //invio valori a Souliss
+      //********************************
+      //********************************
       ImportAnalog(SLOT_Watt, &fVal);
       //Logic_Power(SLOT_Watt);
       Souliss_Logic_T57(memory_map, SLOT_Watt, 5, &data_changed);
@@ -136,76 +215,15 @@ void loop()
       // Logic_Current(SLOT_Current);
       Souliss_Logic_T56(memory_map, SLOT_Current, 0.3, &data_changed);
 
+
       ImportAnalog(SLOT_RELE_GROUP_ONE_PERCENT, &fPannelliGruppo1_percento);
       Read_T51(SLOT_RELE_GROUP_ONE_PERCENT);
 
       ImportAnalog(SLOT_RELE_GROUP_TWO_PERCENT, &fPannelliGruppo2_percento);
       Read_T51(SLOT_RELE_GROUP_TWO_PERCENT);
 
-      actual_SolarProduction = fVal;
     }
 
-    SHIFT_210ms(1) {
-      subscribeTopics();
-    }
-
-    SHIFT_210ms(2) {
-      //Livellamento
-      //Il valore dell'input è determinato tenendo conto del valore del consumo di casa ricevuto via rete Souliss
-      //l'indice è aggiornato in continuazione anche sulla base della produzione solare
-      //uso questo metodo perchè i valori trasmessi con publish&subscribe non sempre vengono trasmessi con costanza. Spesso mancano per 3 o 4 secondi
-      //e ciò causa l'intervento incisivo di adattamenti PID non desiderati dovuti alla mancanza di feedback
-      Input = iStart_HomePower - actual_SolarProduction + start_SolarProduction;
-
-      // Stabilisce i parametri del PID, conservativi o aggressivi
-      double gap = Input - Setpoint; //distance away from setpoint
-      //se avviene immissione di corrente in rete allora vengono impostati dei parametri del PID leggermente più aggressivi
-      if (gap < W_PASSAGGIO_AGG_TUNING) //se la potenza immessa supera i 50W allora il PID viene impostato in modalità più aggressiva
-      {
-        //we're far from setpoint, use aggressive tuning parameters
-        myPID.SetTunings(aggKp, aggKi, aggKd);
-      }
-      else
-      {
-        //we're close to setpoint, use conservative tuning parameters
-        myPID.SetTunings(consKp, consKi, consKd);
-      }
-
-
-
-
-      //qui gestisco
-      // fPannelliGruppo1_percento
-      // fPannelliGruppo2_percento
-      myPID.Compute();
-      //a questo punto in Output ho il valore, compreso tra 0-254 con il quale regolare la produzione
-      //la scala viene ampliata 0-511. Il primo PWM ha priorità e va presto a 255, il secondo solo quando serve, ed è il primo a cui viene tolta potenza. In questo modo è più probabile che venga modulato in PWM soltanto una parte dei relè, e non tutti.
-      Serial.print("Input: "); Serial.println(Input);
-      Serial.print("Output: "); Serial.println(Output);
-      powerOutRate = (Output / 255) * 511; //trasforma la scala a 256*2 valori
-      Serial.print("Output ampliato: "); Serial.println(powerOutRate);
-      iPWM_Val_1 = powerOutRate;
-      if (iPWM_Val_1 > 255) iPWM_Val_1 = 255; //il massimo valore può essere 255
-      fPannelliGruppo1_percento = (int) ((iPWM_Val_1 / 255) * 100); //trasformo il valore in percentuale per passarlo al tipico di Souliss. E' più semplice rappresentare il dato in percentuale
-
-      iPWM_Val_2 = powerOutRate - 256;
-      if (iPWM_Val_2 < 0) iPWM_Val_2 = 0; //il minimo valore può essere 0
-      fPannelliGruppo2_percento = (int) ((iPWM_Val_2 / 255) * 100);
-
-      Serial.print("fPannelliGruppo1_percento: "); Serial.println(fPannelliGruppo1_percento);
-      Serial.print("fPannelliGruppo2_percento: "); Serial.println(fPannelliGruppo2_percento);
-
-
-    }
-
-    FAST_110ms() {
-      //qui devo inviare il valore PWM al pin
-      analogWrite(PIN_RELE_GROUP_1, iPWM_Val_1);
-      analogWrite(PIN_RELE_GROUP_2, iPWM_Val_2);
-
-      Serial.print("iPWM_Val_1: "); Serial.println(iPWM_Val_1);
-      Serial.print("iPWM_Val_2: "); Serial.println(iPWM_Val_2);
-    }
 
     // Process the communication
     FAST_PeerComms();
@@ -221,7 +239,7 @@ void loop()
 void subscribeTopics() {
   if (sbscrbdata(ENERGY_TOPIC, mypayload, &mypayload_len)) {
     float32((uint16_t*) mypayload,  &fTopic_HomePower);
-    Serial.print("ENERGY_TOPIC: "); Serial.println(fTopic_HomePower);
+    //    Serial.print("ENERGY_TOPIC: "); Serial.println(fTopic_HomePower);
 
     //Se esiste comunicazione del consumo di casa allora aggiorno le variabili usate per la rideterminazione dei rate dei gruppi di pannelli, che viene eseguito ogni secondo
     //tengo traccia della produzione solare e del consumo attuale al momento dell'acquisizione del consumo di casa (che è già al netto della produzione solare)
