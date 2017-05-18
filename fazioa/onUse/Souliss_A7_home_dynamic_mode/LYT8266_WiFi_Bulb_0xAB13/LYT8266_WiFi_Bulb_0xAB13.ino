@@ -1,16 +1,8 @@
 /**************************************************************************
    Souliss - LYT8266 WiFi RGBW LED Bulb
-
-    This is the basic sketch for an LYT8266 a WiFi LED Bulb based on ESP8266,
-    at first boot it starts as access point with a basic web interface to
-    allow WiFi and Souliss configuration.
-    Info are stored in the module and used at next boot.
-
-    Configure one module as Gateway for your network and all the other as
-    Peer. Before load this sketch, run the e02_LYT8266_WiFi_Erase to erase
-    the memory.
-
-    Once configured, can be accessed via SoulissApp or openHAB.
+Upload:
+Generic ESP8266
+Flash 4Mb (1Mb SPIFFS)
 
 ***************************************************************************/
 
@@ -45,8 +37,8 @@
 //*************************************************************************
 // Define the network configuration according to your router settingsuration according to your router settings
 // and the other on the wireless oneless one
-//#define peer_wifi_address_LYT  0xAB13 //LYT
-#define peer_wifi_address_LYT  0xAB14 //LYT
+#define peer_wifi_address_LYT  0xAB13 //LYT
+//#define peer_wifi_address_LYT  0xAB14 //LYT
 #define myvNet_subnet 0xFF00
 #define wifi_bridge_address    0xAB10 //gateway
 #define myvNet_supern wifi_bridge_address

@@ -46,22 +46,24 @@ uint8_t ip_gateway[4]  = {192, 168, 1, 1};
 #define peer_wifi_address_LYT2  0xAB14 //LYT
 #define peer_wifi_address_termostato_soggiorno  0xAB20 //termostato soggiorno
 #define peer_wifi_address_termostato_piano_terra  0xAB21 //termostato piano terra
-#define peer_wifi_address_ex_store_birra  0xAB22 //termostato piano terra
+#define peer_wifi_address_ex_store_birra  0xAB22 //nodo controllo temperatura birra
+#define peer_wifi_address_ESP_test  0xAB23 //nodo test ESP
+
 
 #define PIN_RESET A0
 
 void setup()
 {
- // Serial.begin(9600);
+  // Serial.begin(9600);
 
   digitalWrite(PIN_RESET, HIGH);
   pinMode(PIN_RESET, INPUT); // to gnd for eeprom reset
 
   //Serial.println(F("Delay 3s"));
   //delay 3 seconds
-//  delay(3000);
-//  check_for_reset_now();
-//  Serial.println(F("Start"));
+  //  delay(3000);
+  //  check_for_reset_now();
+  //  Serial.println(F("Start"));
   Initialize();
   // Set network parameters
   SetIPAddress(ip_address, subnet_mask, ip_gateway);
@@ -84,9 +86,7 @@ void setup()
   SetAsPeerNode(peer_wifi_address_LYT2, 9);
   SetAsPeerNode(peer_wifi_address_PowerSocket, 10);
   SetAsPeerNode(peer_wifi_address_ex_store_birra, 11);
-
-
-
+  SetAsPeerNode(peer_wifi_address_ESP_test, 12);
 
   // This node will serve all the others in the network providing an address
   SetAddressingServer();
@@ -138,21 +138,21 @@ void loop()
     //      publishdata(ENERGY_TOPIC, valByteArray, 2);
     //    }
 
-    SHIFT_7110ms(250) {
+    FAST_7110ms() {
       float16(&output16, &valSolar);
       valByteArray[0] = C16TO8L(output16);
       valByteArray[1] = C16TO8H(output16);
-//      Serial.print("Float: "); Serial.print(valSolar);
-//      Serial.print(", Publish SOLAR_TOPIC: "); Serial.print( valByteArray[0]); Serial.print(" "); Serial.println( valByteArray[1]);
+      //      Serial.print("Float: "); Serial.print(valSolar);
+      //      Serial.print(", Publish SOLAR_TOPIC: "); Serial.print( valByteArray[0]); Serial.print(" "); Serial.println( valByteArray[1]);
       pblshdata(SOLAR_TOPIC, valByteArray, 2);
     }
 
-    SHIFT_7110ms(500) {
+    FAST_21110ms() {
       float16(&output16, &valTemp);
       valByteArray[0] = C16TO8L(output16);
       valByteArray[1] = C16TO8H(output16);
-//      Serial.print("Float: "); Serial.print(valTemp);
-//      Serial.print(", Publish TEMPERATURE_TOPIC: "); Serial.print( valByteArray[0]); Serial.print(" "); Serial.println( valByteArray[1]);
+      //      Serial.print("Float: "); Serial.print(valTemp);
+      //      Serial.print(", Publish TEMPERATURE_TOPIC: "); Serial.print( valByteArray[0]); Serial.print(" "); Serial.println( valByteArray[1]);
       pblshdata(TEMPERATURE_TOPIC, valByteArray, 2);
       // publish(Cloudy);
       //publish(Alarm);

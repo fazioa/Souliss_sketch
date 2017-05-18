@@ -1,8 +1,8 @@
 //#define VNET_DEBUG_INSKETCH
 //#define VNET_DEBUG  1
-//#define  SOULISS_DEBUG_INSKETCH
+//#define SOULISS_DEBUG_INSKETCH
 //#define SOULISS_DEBUG      1
-//#define  MaCaco_DEBUG_INSKETCH
+//#define MaCaco_DEBUG_INSKETCH
 //#define MaCaco_DEBUG      1
 /**************************************************************************
   Sketch: ESP8266 WiFi Relay V3 - Souliss
@@ -76,7 +76,7 @@ uint8_t valByteArray[2];
 float temperature;
 void setup()
 {
-  Serial.begin(9600);
+ // Serial.begin(9600);
   Initialize();
   GetIPAddress();
 
@@ -142,7 +142,7 @@ void loop()
     sensors.requestTemperatures(); // Send the command to get temperatures
 
     temperature = sensors.getTempCByIndex(0);
-    Serial.println(temperature);
+   // Serial.println(temperature);
     ImportAnalog(SLOT_TEMPERATURE_ONE, &temperature);
 
     //    //PUBLISH
@@ -155,7 +155,7 @@ void loop()
 
   SHIFT_2110ms(100) {
     temperature = sensors.getTempCByIndex(1);
-    Serial.println(temperature);
+  //  Serial.println(temperature);
     ImportAnalog(SLOT_TEMPERATURE_TWO, &temperature);
 
 
