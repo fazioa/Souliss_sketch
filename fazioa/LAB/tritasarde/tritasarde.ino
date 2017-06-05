@@ -1,3 +1,5 @@
+//#define DEBUG
+
 //TRITASARDE
 //@author Tonino Fazio - 2016
 //@email: fazioa@gmail.com
@@ -14,6 +16,7 @@ const long MAXTIMESECONDS = 240;
 #define MotionLedPin 3
 #define PauseLedPin 4
 #define releOut 5
+#define ManualPlayInputPin 6
 
 unsigned long previousSeconds = 0;
 unsigned long currentSeconds = 0;
@@ -22,13 +25,17 @@ long MotionIntervalSeconds; //in seconds
 long PauseIntervalSeconds; //in seconds
 int tempVal;
 boolean bMotionState = true;
+boolean bManualPlay = false;
 
 void setup()
 {
+#ifdef DEBUG
   Serial.begin(9600);
+#endif
   pinMode(PauseLedPin, OUTPUT);
   pinMode(MotionLedPin, OUTPUT);
   pinMode(releOut, OUTPUT);
+  pinMode(ManualPlayInputPin, INPUT_PULLUP);
 
   pinMode(MotionPotentiometerPin, INPUT);
   pinMode(PausePotentiometerPin, INPUT);
@@ -55,20 +62,28 @@ void loop()
   //read new values
   tempVal = analogRead(MotionPotentiometerPin);
   MotionIntervalSeconds = map(tempVal, 0, 1023, MINTIMESECONDS, MAXTIMESECONDS);
+#ifdef DEBUG
   Serial.print("Motion ");
   Serial.print(MotionIntervalSeconds);
   Serial.print("  -  ");
+#endif
 
   tempVal = analogRead(PausePotentiometerPin);
   PauseIntervalSeconds = map(tempVal, 0, 1023, MINTIMESECONDS, MAXTIMESECONDS);
-
+#ifdef DEBUG
   Serial.print("Pause ");
   Serial.print(PauseIntervalSeconds);
   Serial.print("  -  ");
   Serial.print("bMotionState ");
   Serial.print(bMotionState);
 
-  if (bMotionState) {
+  Serial.print("  -  ");
+  Serial.print("bManualPlay ");
+  Serial.print(bManualPlay);
+#endif
+
+  bManualPlay = digitalRead(ManualPlayInputPin);
+  if (!bManualPlay || bMotionState ) {
     //MOTION
     start_motor();
   } else {
@@ -78,9 +93,11 @@ void loop()
 
   currentSeconds = millis() / 1000;
 
+#ifdef DEBUG
   Serial.print("  -  ");
   Serial.print("time ");
   Serial.println(currentSeconds - previousSeconds);
+#endif
 
   if (bMotionState) {
     //MOTION - timer
