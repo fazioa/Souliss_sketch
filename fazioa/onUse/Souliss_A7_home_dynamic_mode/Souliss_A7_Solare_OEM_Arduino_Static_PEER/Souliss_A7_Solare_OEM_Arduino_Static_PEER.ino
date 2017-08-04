@@ -8,6 +8,8 @@
 #include "topics.h"
 
 #include <SPI.h>
+#include <OneWire.h>
+#include "DallasTemperature.h"
 #include "EmonLib.h"             // Include Emon Library
 EnergyMonitor emon1;             // Create an instance
 
@@ -34,7 +36,12 @@ PID myPID(&Input, &Output, &Setpoint, consKp, consKi, consKd, REVERSE);
 //***********  DEFINE  ************************************
 //*********************************************************
 #define SETPOINT 10 //Watt
-#define W_PASSAGGIO_AGGRESSIVE_TUNING 150 //Watt
+//#define W_PASSAGGIO_AGGRESSIVE_TUNING 150 //Watt
+
+#define PIN_ONEWIRE_SENSORS 5
+
+float temperature_rele_1;
+float temperature_rele_2;
 
 // Define the network configuration according to your router settingsuration according to your router settings
 #define  Gateway_address 0x6511        // The Gateway node has two address, one on the Ethernet side 69        // The Gateway node has two address, one on the Ethernet side
@@ -48,6 +55,9 @@ PID myPID(&Input, &Output, &Setpoint, consKp, consKi, consKd, REVERSE);
 #define     SLOT_Current               4
 #define     SLOT_RELE_GROUP_ONE_PERCENT   6
 #define     SLOT_RELE_GROUP_TWO_PERCENT   8
+#define SLOT_TEMPERATURE_ONE        10     // This is the memory slot used for the execution of the logic in network_address1
+#define SLOT_TEMPERATURE_TWO     12
+
 
 #define     PIN_VOLTAGE             A1 //15
 #define     PIN_CURRENT             A0 //14
@@ -68,11 +78,16 @@ float fTopic_HomePower;
 uint8_t mypayload_len = 0;
 uint8_t mypayload[2];
 int actual_SolarProduction, start_SolarProduction, iStart_HomePower;
+
+// Initialize sensors
+OneWire oneWire(PIN_ONEWIRE_SENSORS);
+DallasTemperature sensors(&oneWire);
+
 void setup()
 {
   // Init Serial
-  // Serial.begin(9600);
-  //  Serial.println("POWER METER - VER.2 - Souliss");
+  Serial.begin(9600);
+  Serial.println("POWER METER - VER.3 - Souliss");
 
   Initialize();
   // Set network parameters
@@ -101,6 +116,11 @@ void setup()
   Setpoint = SETPOINT; //Il setpoint è il bilanciamento tra produzione solare e consumo
   //turn the PID on
   myPID.SetMode(AUTOMATIC);
+
+  Set_Temperature(SLOT_TEMPERATURE_ONE);
+  Set_Temperature(SLOT_TEMPERATURE_TWO);
+  sensors.begin(); // IC Default 9 bit. If you have troubles consider upping it 12.
+
 }
 float fVal;
 
@@ -144,42 +164,57 @@ void loop()
       //********************************
       //Il valore dell'input è determinato tenendo conto del valore del consumo di casa ricevuto via rete Souliss
       //l'indice è aggiornato in continuazione anche sulla base della produzione solare
-      //uso questo metodo perchè i valori trasmessi con publish&subscribe non sempre vengono trasmessi con costanza. Spesso mancano per 3 o 4 secondi
+      //uso questo metodo perchè i valori ricevuti con publish&subscribe non sempre vengono trasmessi con costanza. Spesso mancano per 3 o 4 secondi
       //e ciò causa l'intervento incisivo di adattamenti PID non desiderati dovuti alla mancanza di feedback
       Input = iStart_HomePower - actual_SolarProduction + start_SolarProduction;
 
       // Stabilisce i parametri del PID, conservativi o aggressivi
       double gap = Input - Setpoint; //distance away from setpoint
       //se avviene immissione di corrente in rete allora vengono impostati dei parametri del PID leggermente più aggressivi
-    //  if (gap < W_PASSAGGIO_AGGRESSIVE_TUNING) //se la potenza immessa supera i 50W allora il PID viene impostato in modalità più aggressiva
-    //  {
-        //we're far from setpoint, use aggressive tuning parameters
-    //    myPID.SetTunings(aggKp, aggKi, aggKd);
-  //    }
-  //    else
- //     {
-        //we're close to setpoint, use conservative tuning parameters
-        myPID.SetTunings(consKp, consKi, consKd);
- //     }
+      //  if (gap < W_PASSAGGIO_AGGRESSIVE_TUNING) //se la potenza immessa supera i 50W allora il PID viene impostato in modalità più aggressiva
+      //  {
+      //we're far from setpoint, use aggressive tuning parameters
+      //    myPID.SetTunings(aggKp, aggKi, aggKd);
+      //    }
+      //    else
+      //     {
+      //we're close to setpoint, use conservative tuning parameters
+      myPID.SetTunings(consKp, consKi, consKd);
+      //     }
 
 
       //qui gestisco
       // fPannelliGruppo1_percento
       // fPannelliGruppo2_percento
-      myPID.Compute();
+
+      myPID.Compute(); // By default this range is 0-255: the arduino PWM range.
       //a questo punto in Output ho il valore, compreso tra 0-254 con il quale regolare la produzione
       //la scala viene ampliata 0-511. Il primo PWM ha priorità e va presto a 255, il secondo solo quando serve, ed è il primo a cui viene tolta potenza. In questo modo è più probabile che venga modulato in PWM soltanto una parte dei relè, e non tutti.
       //      Serial.print("Input: "); Serial.println(Input);
       //      Serial.print("Output: "); Serial.println(Output);
-      powerOutRate = (Output / 255) * 511; //trasforma la scala a 256*2 valori
-      //      Serial.print("Output ampliato: "); Serial.println(powerOutRate);
-      iPWM_Val_1 = powerOutRate;
-      if (iPWM_Val_1 > 255) iPWM_Val_1 = 255; //il massimo valore può essere 255
-      fPannelliGruppo1_percento = (int) ((iPWM_Val_1 / 255) * 100); //trasformo il valore in percentuale per passarlo al tipico di Souliss. E' più semplice rappresentare il dato in percentuale
+      //********************************
+      //********************************
+      //usndo il codice seguente i due relè vengono comandati in modo graduale. Se è necessario diminuire la produzione ed il secondo relè è già a 0% allora comincio a diminuire anche il primo relè
+      /*
 
-      iPWM_Val_2 = powerOutRate - 256;
-      if (iPWM_Val_2 < 0) iPWM_Val_2 = 0; //il minimo valore può essere 0
+        powerOutRate = (Output / 255) * 511; //trasforma la scala a 256*2 valori
+        //      Serial.print("Output ampliato: "); Serial.println(powerOutRate);
+        iPWM_Val_1 = powerOutRate;
+        if (iPWM_Val_1 > 255) iPWM_Val_1 = 255; //il massimo valore può essere 255
+        fPannelliGruppo1_percento = (int) ((iPWM_Val_1 / 255) * 100); //trasformo il valore in percentuale per passarlo al tipico di Souliss. E' più semplice rappresentare il dato in percentuale
+
+        iPWM_Val_2 = powerOutRate - 256;
+        if (iPWM_Val_2 < 0) iPWM_Val_2 = 0; //il minimo valore può essere 0
+        fPannelliGruppo2_percento = (int) ((iPWM_Val_2 / 255) * 100);
+      */
+
+      //ho notato che uno dei due relè viene sempre caricato di più lavoro rispetto all'altro.
+      //non noto peggioramenti nel funzionamento facendo lavorare i due relè in modo simmetrico
+      iPWM_Val_1 = Output ;
+      iPWM_Val_2 = Output ;
+      fPannelliGruppo1_percento = (int) ((iPWM_Val_1 / 255) * 100); //trasformo il valore in percentuale per passarlo al tipico di Souliss. E' più semplice rappresentare il dato in percentuale
       fPannelliGruppo2_percento = (int) ((iPWM_Val_2 / 255) * 100);
+
 
       //      Serial.print("fPannelliGruppo1_percento: "); Serial.println(fPannelliGruppo1_percento);
       //      Serial.print("fPannelliGruppo2_percento: "); Serial.println(fPannelliGruppo2_percento);
@@ -188,6 +223,13 @@ void loop()
       //********************************
       //********************************
 
+      //se la temperatura supera i novanta gradi la percentuale viene dimezzata
+      if (temperature_rele_1 > 90) {
+        iPWM_Val_1 /= 2;
+      }
+      if (temperature_rele_2 > 90) {
+        iPWM_Val_2 /= 2;
+      }
       analogWrite(PIN_RELE_GROUP_1, iPWM_Val_1);
       analogWrite(PIN_RELE_GROUP_2, iPWM_Val_2);
 
@@ -198,7 +240,7 @@ void loop()
 
 
 
-    FAST_1110ms(){
+    FAST_1110ms() {
       //invio valori a Souliss
       //********************************
       //********************************
@@ -224,6 +266,23 @@ void loop()
 
     }
 
+    SHIFT_11110ms(0) {
+      sensors.requestTemperatures(); // Send the command to get temperatures
+
+      temperature_rele_1 = sensors.getTempCByIndex(0);
+      Serial.print("Temp 1: ");
+      Serial.println(temperature_rele_1);
+      ImportAnalog(SLOT_TEMPERATURE_ONE, &temperature_rele_1);
+      Logic_Temperature(SLOT_TEMPERATURE_ONE);
+    }
+
+    SHIFT_11110ms(100) {
+      temperature_rele_2 = sensors.getTempCByIndex(1);
+      Serial.print("Temp 2: ");
+      Serial.println(temperature_rele_2);
+      ImportAnalog(SLOT_TEMPERATURE_TWO, &temperature_rele_2);
+      Logic_Temperature(SLOT_TEMPERATURE_TWO);
+    }
 
     // Process the communication
     FAST_PeerComms();
