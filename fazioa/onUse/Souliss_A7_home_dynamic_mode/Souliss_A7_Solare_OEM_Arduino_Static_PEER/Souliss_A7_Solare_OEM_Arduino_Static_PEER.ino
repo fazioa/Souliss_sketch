@@ -28,7 +28,7 @@ double Setpoint, Input, Output, powerOutRate;
 
 //Define the aggressive and conservative Tuning Parameters
 //double aggKp = 0.5, aggKi = 0.2, aggKd = 0.1;
-double consKp = 0, consKi = 0.4, consKd = 0;
+double consKp = 0, consKi = 0.25, consKd = 0;
 
 PID myPID(&Input, &Output, &Setpoint, consKp, consKi, consKd, REVERSE);
 
