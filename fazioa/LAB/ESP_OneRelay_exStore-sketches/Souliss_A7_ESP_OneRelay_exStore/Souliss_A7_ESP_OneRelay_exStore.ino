@@ -12,11 +12,13 @@ This example is only supported on ESP8266.
 // pin 13: onboad relay OFF
 // pin 14: switch
 ***************************************************************************/
+#include "SoulissFramework.h"
 #include <ESP8266WiFi.h>
 #include <ESP8266WebServer.h>
 #include <ESP8266mDNS.h>
 #include <EEPROM.h>
 #include <WiFiUdp.h>
+#include <ArduinoOTA.h>
 
 // Configure the Souliss framework
 #include "bconf/MCU_ESP8266.h"              // Load the code directly on the ESP8266
@@ -40,8 +42,7 @@ This example is only supported on ESP8266.
 #define PIN_LED 2
 #define PIN_RESET 0
 
-// Setup the libraries for Over The Air Update
-OTA_Setup();
+
 void setup()
 {
   Serial.begin(115200);
@@ -112,8 +113,9 @@ void setup()
   Set_SimpleLight(SLOT_RELAY_0);
   mOutput(SLOT_RELAY_0) = Souliss_T1n_OnCoil; //Set output to ON, then first execution of DigIn2State cause a change state to OFF.
 
-  // Init the OTA
-  OTA_Init();
+    // Init the OTA
+    ArduinoOTA.setHostname("souliss-nodename");    
+    ArduinoOTA.begin(); 
 
   //End setup
   digitalWrite(PIN_LED, HIGH);
@@ -122,8 +124,6 @@ void setup()
 
 void loop()
 {
-  // Look for a new sketch to update over the air
-  OTA_Process();
 
   EXECUTEFAST() {
     UPDATEFAST();
@@ -161,6 +161,8 @@ void loop()
     if (!IsRuntimeGateway())
       SLOW_PeerJoin();
   }
+      // Look for a new sketch to update over the air
+    ArduinoOTA.handle();  
 }
 
 U8 led_status = 0;
