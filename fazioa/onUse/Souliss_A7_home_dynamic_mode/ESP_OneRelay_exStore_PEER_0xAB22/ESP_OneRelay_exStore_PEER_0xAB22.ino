@@ -65,7 +65,6 @@
 #define PIN_ONEWIRE_SENSORS 14
 
 #define DEADBAND        0.01    // Deadband value 1%
-#define DHTTYPE DHT22   // DHT 22 
 
 // Initialize DHT sensors
 OneWire oneWire(PIN_ONEWIRE_SENSORS);
