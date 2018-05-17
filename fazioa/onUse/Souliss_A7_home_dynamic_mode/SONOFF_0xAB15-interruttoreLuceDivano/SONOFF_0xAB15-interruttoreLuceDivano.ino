@@ -6,6 +6,8 @@
   This example is only supported on ESP8266.
   Programm it with "Generic ESP8266 Module with 4M (1M SPIFFS)
 ***************************************************************************/
+//#define SERIAL_DEBUG
+
 #include "SoulissFramework.h"
 #include <ESP8266mDNS.h>
 #include <ESP8266WiFi.h>
@@ -41,9 +43,20 @@
 #define PIN_BUTTON_0 0
 #define PIN_BUTTON_14 14
 
+//Variable to Handle WiFio Signal
+long rssi = 0;
+int bars = 0;
+#define T_WIFI_STRDB  1 //It takes 2 slots
+#define T_WIFI_STR    3 //It takes 2 slots
+
 boolean bLedState = false;
 void setup()
 {
+#ifdef SERIAL_DEBUG
+  Serial.begin(115200);
+  Serial.println("Node Starting");
+#endif
+
   // Define output pins
   pinMode(PIN_POWERSOCKET, OUTPUT);    // Relè
   pinMode(PIN_LED, OUTPUT);
@@ -64,10 +77,23 @@ void setup()
   Set_SimpleLight(SLOT_POWERSOCKET);
   mOutput(SLOT_POWERSOCKET) = Souliss_T1n_OnCoil;
 
+  Set_T51(T_WIFI_STRDB); //Imposto il tipico per contenere il segnale del Wifi in decibel
+  Set_T51(T_WIFI_STR); //Imposto il tipico per contenere il segnale del Wifi in barre da 1 a 5
+
   // Init the OTA
   ArduinoOTA.setHostname(HOSTNAME);
   ArduinoOTA.begin();
 
+#ifdef SERIAL_DEBUG
+  Serial.print("MAC: ");
+  Serial.println(WiFi.macAddress());
+  Serial.print("IP:  ");
+  Serial.println(WiFi.localIP());
+  Serial.print("Subnet: ");
+  Serial.println(WiFi.subnetMask());
+  Serial.print("Gateway: ");
+  Serial.println("Node Initialized");
+#endif
 }
 
 void loop()
@@ -86,6 +112,12 @@ void loop()
       digitalWrite(PIN_LED, bLedState);
     }
 
+    FAST_2110ms() {
+      //Processa le logiche per il segnale WiFi
+      Read_T51(T_WIFI_STRDB);
+      Read_T51(T_WIFI_STR);
+    }
+
     FAST_PeerComms();
   }
 
@@ -93,11 +125,48 @@ void loop()
     UPDATESLOW();
     SLOW_10s() {  // Process the timer every 10 seconds
       Timer_SimpleLight(SLOT_POWERSOCKET);
+       check_wifi_signal();
     }
   }
 
   // Look for a new sketch to update over the air
   ArduinoOTA.handle();
 }
+
+void check_wifi_signal() {
+  long rssi = WiFi.RSSI();
+  int bars = 0;
+
+  if (rssi > -55) {
+    bars = 5;
+  }
+  else if (rssi < -55 & rssi > -65) {
+    bars = 4;
+  }
+  else if (rssi < -65 & rssi > -70) {
+    bars = 3;
+  }
+  else if (rssi < -70 & rssi > -78) {
+    bars = 2;
+  }
+  else if (rssi < -78 & rssi > -82) {
+    bars = 1;
+  }
+  else {
+    bars = 0;
+  }
+  float f_rssi = (float)rssi;
+  float f_bars = (float)bars;
+  ImportAnalog(T_WIFI_STRDB, &f_rssi);
+  ImportAnalog(T_WIFI_STR, &f_bars);
+
+#ifdef SERIAL_DEBUG
+  Serial.print("wifi rssi:");
+  Serial.println(f_rssi);
+  Serial.print("wifi bars:");
+  Serial.println(f_bars);
+#endif
+}
+
 
 
