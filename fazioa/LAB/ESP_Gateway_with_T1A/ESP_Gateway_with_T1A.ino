@@ -22,7 +22,7 @@
 #include "Souliss.h"
 
 //*************************************************************************
-#define thisGW_address  0xAB20
+#define thisGW_address  0xAB50
 #define myvNet_subnet 0xFF00
 //*************************************************************************
 

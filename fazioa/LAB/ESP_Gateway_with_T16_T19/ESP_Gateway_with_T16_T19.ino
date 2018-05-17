@@ -22,7 +22,7 @@
 #include "Souliss.h"
 
 //*************************************************************************
-#define thisGW_address  0xAB20
+#define thisGW_address  0xAB50
 #define myvNet_subnet 0xFF00
 //*************************************************************************
 
@@ -40,6 +40,7 @@
 
 void setup()
 {
+  Serial.begin(9600);
   Initialize();
   GetIPAddress();
   SetAsGateway(myvNet_dhcp);
@@ -104,8 +105,6 @@ void loop()
       Timer_DimmableLight(SLOT_T16);
       Timer_LED_Strip(SLOT_T19);
     }
-
-
     FAST_GatewayComms();
   }
 

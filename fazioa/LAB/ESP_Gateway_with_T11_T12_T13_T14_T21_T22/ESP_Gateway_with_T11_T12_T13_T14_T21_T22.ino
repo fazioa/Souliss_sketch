@@ -109,7 +109,10 @@ void loop()
       Logic_Windows(slotT22); //input PIN -> INPUTPIN_LIMIT_OPENING_T22 and INPUTPIN_LIMIT_CLOSING_T22
 
       DigOut(OUTPUTPIN_pinT11, Souliss_T1n_Coil, slotT11);
-      DigOut(OUTPUTPIN_pinT12, Souliss_T1n_Coil, slotT12);
+      
+      DigOut(OUTPUTPIN_pinT12, Souliss_T1n_AutoOnCoil  , slotT12);
+      
+      
       DigOut(OUTPUTPIN_pinT14, Souliss_T1n_Coil, slotT14);
       DigOut(OUTPUTPIN_UP_pinT2n, Souliss_T2n_Coil_Open, slotT21); //set pin to HIGH when output state is Souliss_T2n_Coil_Open
       DigOut(OUTPUTPIN_DOWN_pinT2n, Souliss_T2n_Coil_Close, slotT21); //set pin to HIGH when output state is Souliss_T2n_Coil_Close
