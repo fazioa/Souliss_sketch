@@ -52,11 +52,11 @@ Player LG_TV0_Player    "Play TV"   <television>  (FamilyRoom)  ["Switchable"]  
 	
 
 Number termostatosoggiorno_temperatura  "Temperatura [%.1f °C]" <temperature> (TermostatoSoggiorno) {channel="souliss:t31:105:6-0:measured"}
-Number termostatosoggiorno_umidita "Umidità [%.1f %%]" <temperature>   (TermostatoSoggiorno)       {channel="souliss:t53:105:6-7:value" }
-Number termostatosoggiorno_setpoint "Setpoint [%.1f °C]"    <temperature> (TermostatoSoggiorno) {channel="souliss:t31:105:6-0:setpoint"}
-Switch termostatosoggiorno_setasmeasured "Set temp. attuale" <temperature> (TermostatoSoggiorno) {autoupdate="false", channel="souliss:t31:105:6-0:setAsMeasured"}
+Number termostatosoggiorno_umidita "Umidità [%.1f %%]" <humidity>   (TermostatoSoggiorno)       {channel="souliss:t53:105:6-7:value" }
+Number termostatosoggiorno_setpoint "Setpoint [%.1f °C]"    <heating> (TermostatoSoggiorno) {channel="souliss:t31:105:6-0:setpoint"}
+Switch termostatosoggiorno_setasmeasured "Set temp. attuale" <heating> (TermostatoSoggiorno) {autoupdate="false", channel="souliss:t31:105:6-0:setAsMeasured"}
 String termostatosoggiorno_modo "Modo" (TermostatoSoggiorno) {autoupdate="false", channel="souliss:t31:105:6-0:mode"}
-Contact termostatosoggiorno_stato "Stato [%s]" <homeRed> (TermostatoSoggiorno) {channel="souliss:t31:105:6-0:status"}
+Contact termostatosoggiorno_stato "Stato" (TermostatoSoggiorno) {channel="souliss:t31:105:6-0:status"}
 
 Dimmer  termostatoSoggiorno_displayBright   "Lumin.min. display" (TermostatoSoggiorno)      {channel="souliss:t19:105:6-9" }
 String termostatoSoggiorno_aggiornamento "Agg.[%1$td.%1$tm.%1$tY %1$tk:%1$tM:%1$tS]" <keyring> (TermostatoSoggiorno, Diagnostic)  {channel="souliss:t31:105:6-0:lastStatusStored"}
@@ -67,12 +67,12 @@ Number	termocaminoBoilerSolare_temperaturaBoilerSolare	"Solare [%.1f °C]"	<temp
 Number	termocaminoBoilerSolare_temperaturaTermocamino	"Termocamino [%.1f °C]"	<temperature>	(TermocaminoBoilerSolare, Grafico_temperatura_acqua)		{channel="souliss:t52:105:3-2:value" }
 Switch	termocaminoBoilerSolare_SwitchAcquaTermocamino	"Acqua Termocamino"	(TermocaminoBoilerSolare)		{ channel="souliss:t11:105:3-4:onoff", autoupdate="false" }
 Switch	termocaminoBoilerSolare_Boiler_TC_Automode	"Auto: Boiler / Termocamino"	(TermocaminoBoilerSolare)		{ channel="souliss:t11:105:3-6:onoff", autoupdate="false" }
-Switch	termocaminoBoilerSolare_setasmeasured	"Valvole - Allarme Termocamino - Set as measured"	<temperature>	(TermocaminoBoilerSolare)		{ channel="souliss:t31:105:3-7:setAsMeasured" }
+Switch	termocaminoBoilerSolare_setasmeasured	"Valvole - Allarme Termocamino - Set as measured"	<heating>	(TermocaminoBoilerSolare)		{ channel="souliss:t31:105:3-7:setAsMeasured" }
 Number	termocaminoBoilerSolare_Allarme_Termocamino_SetPoint	"Temp Set Point [%.1f °C]"	<heating>	(TermocaminoBoilerSolare)		{ souliss="souliss:t31:105:3-7:setpoint" }
 Switch	termocaminoBoilerSolare_setpoint65	"Set Point 65 °C"	<temperature>	(TermocaminoBoilerSolare)	
 Switch	termocaminoBoilerSolare_setpoint70	"Set Point 70 °C"	<temperature>	(TermocaminoBoilerSolare)	
 Switch	termocaminoBoilerSolare_setpoint80	"Set Point 80 °C"	<temperature>	(TermocaminoBoilerSolare)	
-Contact	termocaminoBoilerSolare_riscaldamento_tutto	"Riscaldamento - Tutto"	<homeRed> (TermocaminoBoilerSolare)		{ souliss="souliss:t31:105:3-7:status" }
+Contact	termocaminoBoilerSolare_riscaldamento_tutto	"Riscaldamento - Tutto"	<fire> (TermocaminoBoilerSolare)		{ souliss="souliss:t31:105:3-7:status" }
 String termocaminoBoilerSolare_aggiornamento "Agg.[%1$td.%1$tm.%1$tY %1$tk:%1$tM:%1$tS]" <keyring> (TermocaminoBoilerSolare, Diagnostic)  {channel="souliss:t31:105:3-7:lastStatusStored"}
 Number termocaminoBoilerSolare_healty "Salute [%1d]" <keyring> (TermocaminoBoilerSolare, Diagnostic )  {channel="souliss:t31:105:3-7:healty"}
 

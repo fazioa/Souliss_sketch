@@ -1,4 +1,5 @@
 sitemap default label="Tonino" {
+    
     Frame {
         Text label="Rientro casa" icon="light" {
            Switch item=portoncino mappings=[ON="Apri"]
@@ -74,7 +75,7 @@ Text label="Grafico" icon="chart" {
             Switch item=termostatosoggiorno_setasmeasured mappings=[ON="Set"]
             Switch item=termostatosoggiorno_modo label="Power On" mappings=[HEATING_MODE="Set"] 
             Switch item=termostatosoggiorno_modo label="Power Off" mappings=[POWEREDOFF_MODE="Set"] 
-            Text item=termostatosoggiorno_stato
+            Text item=termostatosoggiorno_stato label="Stato [%s]"
 			Text item=termostatoSoggiorno_aggiornamento label="Aggiornato: [%1$td.%1$tm.%1$tY %1$tk:%1$tM:%1$tS]" icon="icon16x16"
             Default item=termostatoSoggiorno_healty
             Slider item=termostatoSoggiorno_displayBright
@@ -83,7 +84,7 @@ Text label="Grafico" icon="chart" {
 Text label="Termocamino / Solare" icon="temperature" {
      Default item=termocaminoBoilerSolare_temperaturaBoilerSolare
             Default item=termocaminoBoilerSolare_temperaturaTermocamino
-Text item=termocaminoBoilerSolare_aggiornamento label="Aggiornato: [%1$td.%1$tm.%1$tY %1$tk:%1$tM:%1$tS]" icon="icon16x16"
+            Text item=termocaminoBoilerSolare_aggiornamento label="Aggiornato: [%1$td.%1$tm.%1$tY %1$tk:%1$tM:%1$tS]" icon="icon16x16"
 
             Text label="Impostazioni" icon="settings"  {
 			Setpoint item=termocaminoBoilerSolare_Allarme_Termocamino_SetPoint step=1 minValue=5 maxValue=90
