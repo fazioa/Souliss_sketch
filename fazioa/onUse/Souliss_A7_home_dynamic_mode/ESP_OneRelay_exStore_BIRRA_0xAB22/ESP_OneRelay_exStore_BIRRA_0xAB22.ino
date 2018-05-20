@@ -10,6 +10,12 @@
 
   This example is only supported on ESP8266.
 
+  OTA:
+  Flash Mode: DIO
+  Flash Size: 1 M(256K SPIFFS)
+  Crystal Frequency: 26MHz
+
+
   //Used pins
   // pin 12: onboad relay ON
   // pin 13: onboad relay OFF
@@ -32,6 +38,8 @@
 #include <EEPROM.h>
 #include <WiFiUdp.h>
 #include <ArduinoOTA.h>
+
+#define HOSTNAME "souliss-ex-store-birra"
 
 #include "bconf/MCU_ESP8266.h"              // Load the code directly on the ESP8266
 #include "conf/IPBroadcast.h"
@@ -66,6 +74,13 @@
 
 #define DEADBAND        0.01    // Deadband value 1%
 
+//Variable to Handle WiFio Signal
+long rssi = 0;
+int bars = 0;
+#define T_WIFI_STRDB  5 //It takes 2 slots
+#define T_WIFI_STR    7 //It takes 2 slots
+
+
 // Initialize DHT sensors
 OneWire oneWire(PIN_ONEWIRE_SENSORS);
 DallasTemperature sensors(&oneWire);
@@ -75,7 +90,14 @@ uint8_t valByteArray[2];
 float temperature;
 void setup()
 {
- // Serial.begin(9600);
+#ifdef SERIAL_DEBUG
+  Serial.begin(115200);
+  Serial.println("Node Starting");
+#endif
+
+  //delay 10 seconds
+  delay(10000);
+
   Initialize();
   GetIPAddress();
 
@@ -105,8 +127,11 @@ void setup()
   // Start up the library
   sensors.begin(); // IC Default 9 bit. If you have troubles consider upping it 12.
 
+  Set_T51(T_WIFI_STRDB); //Imposto il tipico per contenere il segnale del Wifi in decibel
+  Set_T51(T_WIFI_STR); //Imposto il tipico per contenere il segnale del Wifi in barre da 1 a 5
+
   // Init the OTA
-  ArduinoOTA.setHostname("ex-store-birra");
+  ArduinoOTA.setHostname(HOSTNAME);
   ArduinoOTA.begin();
 }
 
@@ -117,6 +142,12 @@ void loop()
 
     FAST_2110ms() {
       activity();
+    }
+
+    FAST_7110ms() {
+      //Processa le logiche per il segnale WiFi
+      Read_T51(T_WIFI_STRDB);
+      Read_T51(T_WIFI_STR);
     }
 
     FAST_50ms() {
@@ -141,7 +172,7 @@ void loop()
     sensors.requestTemperatures(); // Send the command to get temperatures
 
     temperature = sensors.getTempCByIndex(0);
-   // Serial.println(temperature);
+    // Serial.println(temperature);
     ImportAnalog(SLOT_TEMPERATURE_ONE, &temperature);
 
     //    //PUBLISH
@@ -154,21 +185,22 @@ void loop()
 
   SHIFT_2110ms(100) {
     temperature = sensors.getTempCByIndex(1);
-  //  Serial.println(temperature);
+    //  Serial.println(temperature);
     ImportAnalog(SLOT_TEMPERATURE_TWO, &temperature);
 
 
     //PUBLISH
-//    float16(&output16, &temperature);
-//    valByteArray[0] = C16TO8L(output16);
-//    valByteArray[1] = C16TO8H(output16);
-//    publishdata(TEMPERATURE_TOPIC_NODE_ESP_EXSTORE_ds18b20_SENSOR_2, valByteArray, 2);
+    //    float16(&output16, &temperature);
+    //    valByteArray[0] = C16TO8L(output16);
+    //    valByteArray[1] = C16TO8H(output16);
+    //    publishdata(TEMPERATURE_TOPIC_NODE_ESP_EXSTORE_ds18b20_SENSOR_2, valByteArray, 2);
   }
 
   EXECUTESLOW() {
     UPDATESLOW();
     SLOW_10s() {
       Timer_SimpleLight(SLOT_RELAY_0);
+      check_wifi_signal();
     }
   }
 
@@ -187,3 +219,40 @@ void activity() {
     activity_led_status = 0;
   }
 }
+
+
+void check_wifi_signal() {
+  long rssi = WiFi.RSSI();
+  int bars = 0;
+
+  if (rssi > -55) {
+    bars = 5;
+  }
+  else if (rssi < -55 & rssi > -65) {
+    bars = 4;
+  }
+  else if (rssi < -65 & rssi > -70) {
+    bars = 3;
+  }
+  else if (rssi < -70 & rssi > -78) {
+    bars = 2;
+  }
+  else if (rssi < -78 & rssi > -82) {
+    bars = 1;
+  }
+  else {
+    bars = 0;
+  }
+  float f_rssi = (float)rssi;
+  float f_bars = (float)bars;
+  ImportAnalog(T_WIFI_STRDB, &f_rssi);
+  ImportAnalog(T_WIFI_STR, &f_bars);
+
+#ifdef SERIAL_DEBUG
+  Serial.print("wifi rssi:");
+  Serial.println(f_rssi);
+  Serial.print("wifi bars:");
+  Serial.println(f_bars);
+#endif
+}
+

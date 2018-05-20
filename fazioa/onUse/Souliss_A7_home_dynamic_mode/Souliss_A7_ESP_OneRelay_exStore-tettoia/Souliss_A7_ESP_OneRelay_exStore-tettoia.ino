@@ -1,6 +1,3 @@
-#define HOST_NAME_INSKETCH
-#define HOST_NAME "ESP8266-WiFi-Relay-V3_OTA"
-
 /**************************************************************************
 Sketch: ESP8266 WiFi Relay V3 - Souliss - Web Configuration
 Author: Tonino Fazio
@@ -12,10 +9,16 @@ This example is only supported on ESP8266.
 // pin 13: onboad relay OFF
 // pin 14: switch
 ***************************************************************************/
+//#define SERIAL_DEBUG
+
 // Let the IDE point to the Souliss framework
 #include "SoulissFramework.h"
 #include <ESP8266mDNS.h>
-#include <EEPROM.h>
+#include <ESP8266WiFi.h>
+#include <WiFiUdp.h>
+#include <ArduinoOTA.h>
+
+#define HOSTNAME "souliss-EXSTORE-tettoia"
 
 // Configure the framework
 #include "bconf/MCU_ESP8266.h"              // Load the code directly on the ESP8266
@@ -26,17 +29,13 @@ This example is only supported on ESP8266.
 #define WiFi_SSID               "asterix"
 #define WiFi_Password           "ttony2013"
 
-// Include framework code and libraries
-#include <ESP8266WiFi.h>
-#include <EEPROM.h>
 #include "Souliss.h"
 //*************************************************************************
 // Define the network configuration according to your router settingsuration according to your router settings
 // and the other on the wireless oneless one
 #define peer_address  0xAB11
 #define myvNet_subnet 0xFF00
-#define wifi_bridge_address    0xAB10 //gateway
-#define myvNet_supern wifi_bridge_address
+#define myvNet_supern    0xAB10 //gateway
 //*************************************************************************
 
 #define SLOT_RELAY_0 0
@@ -50,18 +49,31 @@ This example is only supported on ESP8266.
 #define PIN_RELAY_OFF 13
 #define PIN_LED 2
 
-// Setup the libraries for Over The Air Update
-OTA_Setup();
+//Variable to Handle WiFio Signal
+long rssi = 0;
+int bars = 0;
+#define T_WIFI_STRDB  1 //It takes 2 slots
+#define T_WIFI_STR    3 //It takes 2 slots
+
 void setup()
 {
+#ifdef SERIAL_DEBUG
   Serial.begin(115200);
+  Serial.println("Node Starting");
+#endif
+
+  //delay 11 seconds
+  delay(11000);
+  
   Initialize();
-  Serial.println(F("Start"));
-  // Connect to the WiFi network and get an address from DHCP
+ 
+   // Connect to the WiFi network and get an address from DHCP
   GetIPAddress();
   // This is the vNet address for this node, used to communicate with other
   // nodes in your Souliss network
   SetAddress(peer_address, myvNet_subnet, myvNet_supern);          // Address on the wireless interface
+
+
 
   //*************************************************************************
   //*************************************************************************
@@ -85,26 +97,42 @@ void setup()
   Set_SimpleLight(SLOT_RELAY_0);
   mOutput(SLOT_RELAY_0) = Souliss_T1n_OnCoil; //Set output to ON, then first execution of DigIn2State cause a change state to OFF.
 
-  // Init the OTA
-  OTA_Init();
+  Set_T51(T_WIFI_STRDB); //Imposto il tipico per contenere il segnale del Wifi in decibel
+  Set_T51(T_WIFI_STR); //Imposto il tipico per contenere il segnale del Wifi in barre da 1 a 5
 
+  // Init the OTA
+  ArduinoOTA.setHostname(HOSTNAME);
+  ArduinoOTA.begin();
+  
   //End setup
   digitalWrite(PIN_LED, HIGH);
-  Serial.println(F("End setup"));
+  
+#ifdef SERIAL_DEBUG
+  Serial.print("MAC: ");
+  Serial.println(WiFi.macAddress());
+  Serial.print("IP:  ");
+  Serial.println(WiFi.localIP());
+  Serial.print("Subnet: ");
+  Serial.println(WiFi.subnetMask());
+  Serial.print("Gateway: ");
+  Serial.println("Node Initialized");
+#endif
 }
 
 void loop()
 {
-  // Look for a new sketch to update over the air
-  OTA_Process();
-
   EXECUTEFAST() {
     UPDATEFAST();
 
     FAST_2110ms() {
       activity();
     }
-
+ FAST_2110ms() {
+      //Processa le logiche per il segnale WiFi
+      Read_T51(T_WIFI_STRDB);
+      Read_T51(T_WIFI_STR);
+    }
+    
     FAST_50ms() {
       DigIn2State(PIN_SWITCH, Souliss_T1n_ToggleCmd, Souliss_T1n_ToggleCmd, SLOT_RELAY_0);
       Logic_SimpleLight(SLOT_RELAY_0);
@@ -118,6 +146,8 @@ void loop()
     }
     FAST_PeerComms();
   }
+    // Look for a new sketch to update over the air
+  ArduinoOTA.handle();
 }
 
 U8 activity_led_status = 0;
@@ -129,4 +159,39 @@ void activity() {
     digitalWrite(PIN_LED, LOW);
     activity_led_status = 0;
   }
+}
+
+void check_wifi_signal() {
+  long rssi = WiFi.RSSI();
+  int bars = 0;
+
+  if (rssi > -55) {
+    bars = 5;
+  }
+  else if (rssi < -55 & rssi > -65) {
+    bars = 4;
+  }
+  else if (rssi < -65 & rssi > -70) {
+    bars = 3;
+  }
+  else if (rssi < -70 & rssi > -78) {
+    bars = 2;
+  }
+  else if (rssi < -78 & rssi > -82) {
+    bars = 1;
+  }
+  else {
+    bars = 0;
+  }
+  float f_rssi = (float)rssi;
+  float f_bars = (float)bars;
+  ImportAnalog(T_WIFI_STRDB, &f_rssi);
+  ImportAnalog(T_WIFI_STR, &f_bars);
+
+#ifdef SERIAL_DEBUG
+  Serial.print("wifi rssi:");
+  Serial.println(f_rssi);
+  Serial.print("wifi bars:");
+  Serial.println(f_bars);
+#endif
 }
