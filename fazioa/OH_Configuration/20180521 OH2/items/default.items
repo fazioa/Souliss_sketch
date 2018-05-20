@@ -1,0 +1,85 @@
+Group    Home                 "Tonino"        <house>
+
+Group    FamilyRoom           "Soggiorno"     <parents_2_4>   (Home)
+Group    Divano               "Divano"        (Home)
+Group    Outside              "Esterno"   <garden>   (Home)
+Group    TV                   "TV"   <television>   (Home)
+Group    Elettricita     (Home)
+Group    Diagnostic      (Home)
+Group    TermostatoSoggiorno         (Home)
+Group    TermocaminoBoilerSolare     (Home)
+Group    Birra                       (Home)
+Group Grafico_energia
+Group Grafico_temperatura_acqua
+
+Number	Chart_Period	"Chart Period"
+
+Switch   tettoia  "Tettoia"  <light>    (Outside)   ["Lighting"]   {autoupdate="false", channel="souliss:t11:105:5-0:onoff"}
+String	 tettoia_aggiornamento	"Agg [%1$td.%1$tm.%1$tY %1$tk:%1$tM:%1$tS]"	<keyring> (Outside, Diagnostic)  {channel="souliss:t11:105:5-0:lastStatusStored"}
+
+Switch   portoncino         "Portoncino"          <light>         (FamilyRoom)         ["Lighting"]   {autoupdate="false",channel="souliss:t14:105:1-6:pulse"}
+Switch   cancello         "Cancello"          <light>         (FamilyRoom)         ["Lighting"]   {autoupdate="false",channel="souliss:t14:105:1-7:pulse"}
+
+
+Number   consumo      "Consumo [%.1f W]"       <energy>      (FamilyRoom, Elettricita, Grafico_energia)                     {channel="souliss:t57:105:1-4:value"}
+Number   fotovoltaico      "Fotovoltaico [%.1f W]"       <solarplant>      (FamilyRoom, Elettricita, Grafico_energia)                     {channel="souliss:t57:105:4-0:value"}
+String	aggiornamentoNodo1	"Agg.Consumi [%1$td.%1$tm.%1$tY %1$tk:%1$tM:%1$tS]"	<keyring> (FamilyRoom, Elettricita, Diagnostic)  {channel="souliss:t57:105:1-4:lastStatusStored"}
+String	aggiornamentoNodo4	"Agg.Fotovoltaico [%1$td.%1$tm.%1$tY %1$tk:%1$tM:%1$tS]"	<keyring> (FamilyRoom, Elettricita, Diagnostic)  {channel="souliss:t57:105:4-0:lastStatusStored"}
+                                  
+Switch divano "Divano" <light> (FamilyRoom, Divano ) ["Switchable"] {autoupdate="false", channel="souliss:t11:105:12-0:onoff"}
+String divano_aggiornamento	"Agg. [%1$td.%1$tm.%1$tY %1$tk:%1$tM:%1$tS]"	<keyring> (FamilyRoom, Divano, Diagnostic)  {channel="souliss:t11:105:12-0:lastStatusStored"}
+Number divano_healty	"Salute [%1d]"	<keyring> (FamilyRoom, Divano, Diagnostic)  {channel="souliss:t11:105:12-0:healty"}
+Dimmer lampade_divano "Lampade Divano" <light> (FamilyRoom, Divano) ["Lighting"] {channel="milight:whiteLed:ACCF2339A3EA:0:ledbrightness"}
+Dimmer colore "Temperatura Lampade Divano" <light> (FamilyRoom, Divano) ["Lighting"] {channel="milight:whiteLed:ACCF2339A3EA:0:ledtemperature"}
+
+Number divano_WIFI_DB "WiFi Decibel [%d db]" <network> (FamilyRoom, Divano, Diagnostic) {channel="souliss:t51:105:12-1:value"}
+Number divano_WIFI "WiFi Segnale [%.0f / 5]" <qualityofservice> (FamilyRoom, Diagnostic, Divano) {channel="souliss:t51:105:12-3:value"}
+
+
+Switch TV_ON_WOL (FamilyRoom) { wol="192.168.1.255#38-8C-50-90-08-AD" }
+
+Switch LG_TV0_Power "TV" <television> (FamilyRoom) ["Switchable"] { autoupdate="false", channel="lgwebos:WebOSTV:5c2ea7de-fe72-42a5-bd72-405aada98e80:power" }
+Switch LG_TV0_Mute  "silenzia TV"    <television>  (FamilyRoom)        ["Switchable"]  { channel="lgwebos:WebOSTV:5c2ea7de-fe72-42a5-bd72-405aada98e80:mute"}
+Dimmer LG_TV0_Volume "Audio TV [%S]"   <television>  (FamilyRoom)      ["Lighting"] { channel="lgwebos:WebOSTV:5c2ea7de-fe72-42a5-bd72-405aada98e80:volume" }
+Number LG_TV0_VolDummy "VolumeUpDown" <television>(FamilyRoom)
+Number LG_TV0_ChannelNo "Canale [%d]"   <television>   (FamilyRoom) { channel="lgwebos:WebOSTV:5c2ea7de-fe72-42a5-bd72-405aada98e80:channel" }
+Number LG_TV0_ChannelDummy "CanaleSuGiu" <television> (FamilyRoom)
+String LG_TV0_Channel "Canale [%S]"   <television>    (FamilyRoom)  { channel="lgwebos:WebOSTV:5c2ea7de-fe72-42a5-bd72-405aada98e80:channelName"}
+String LG_TV0_Toast              <television>      (FamilyRoom)      { channel="lgwebos:WebOSTV:5c2ea7de-fe72-42a5-bd72-405aada98e80:toast"}
+Switch LG_TV0_Stop "Stop TV"   <television>  (FamilyRoom) ["Switchable"]               { autoupdate="false", channel="lgwebos:WebOSTV:5c2ea7de-fe72-42a5-bd72-405aada98e80:mediaStop" }
+String LG_TV0_Application "Application [%s]"  <television> (FamilyRoom) { channel="lgwebos:WebOSTV:5c2ea7de-fe72-42a5-bd72-405aada98e80:appLauncher"}
+Player LG_TV0_Player    "Play TV"   <television>  (FamilyRoom)  ["Switchable"]        { channel="lgwebos:WebOSTV:5c2ea7de-fe72-42a5-bd72-405aada98e80:mediaPlayer"}
+	
+
+Number termostatosoggiorno_temperatura  "Temperatura [%.1f °C]" <temperature> (TermostatoSoggiorno) {channel="souliss:t31:105:6-0:measured"}
+Number termostatosoggiorno_umidita "Umidità [%.1f %%]" <temperature>   (TermostatoSoggiorno)       {channel="souliss:t53:105:6-7:value" }
+Number termostatosoggiorno_setpoint "Setpoint [%.1f °C]"    <temperature> (TermostatoSoggiorno) {channel="souliss:t31:105:6-0:setpoint"}
+Switch termostatosoggiorno_setasmeasured "Set temp. attuale" <temperature> (TermostatoSoggiorno) {autoupdate="false", channel="souliss:t31:105:6-0:setAsMeasured"}
+String termostatosoggiorno_modo "Modo" (TermostatoSoggiorno) {autoupdate="false", channel="souliss:t31:105:6-0:mode"}
+Contact termostatosoggiorno_stato "Stato [%s]" <homeRed> (TermostatoSoggiorno) {channel="souliss:t31:105:6-0:status"}
+
+Dimmer  termostatoSoggiorno_displayBright   "Lumin.min. display" (TermostatoSoggiorno)      {channel="souliss:t19:105:6-9" }
+String termostatoSoggiorno_aggiornamento "Agg.[%1$td.%1$tm.%1$tY %1$tk:%1$tM:%1$tS]" <keyring> (TermostatoSoggiorno, Diagnostic)  {channel="souliss:t31:105:6-0:lastStatusStored"}
+Number termostatoSoggiorno_healty "Salute [%1d]" <keyring> (TermostatoSoggiorno, Diagnostic )  {channel="souliss:t31:105:6-0:healty"}
+
+
+Number	termocaminoBoilerSolare_temperaturaBoilerSolare	"Solare [%.1f °C]"	<temperature>	(TermocaminoBoilerSolare, Grafico_temperatura_acqua)		{channel="souliss:t52:105:3-0:value" }
+Number	termocaminoBoilerSolare_temperaturaTermocamino	"Termocamino [%.1f °C]"	<temperature>	(TermocaminoBoilerSolare, Grafico_temperatura_acqua)		{channel="souliss:t52:105:3-2:value" }
+Switch	termocaminoBoilerSolare_SwitchAcquaTermocamino	"Acqua Termocamino"	(TermocaminoBoilerSolare)		{ channel="souliss:t11:105:3-4:onoff", autoupdate="false" }
+Switch	termocaminoBoilerSolare_Boiler_TC_Automode	"Auto: Boiler / Termocamino"	(TermocaminoBoilerSolare)		{ channel="souliss:t11:105:3-6:onoff", autoupdate="false" }
+Switch	termocaminoBoilerSolare_setasmeasured	"Valvole - Allarme Termocamino - Set as measured"	<temperature>	(TermocaminoBoilerSolare)		{ channel="souliss:t31:105:3-7:setAsMeasured" }
+Number	termocaminoBoilerSolare_Allarme_Termocamino_SetPoint	"Temp Set Point [%.1f °C]"	<heating>	(TermocaminoBoilerSolare)		{ souliss="souliss:t31:105:3-7:setpoint" }
+Switch	termocaminoBoilerSolare_setpoint65	"Set Point 65 °C"	<temperature>	(TermocaminoBoilerSolare)	
+Switch	termocaminoBoilerSolare_setpoint70	"Set Point 70 °C"	<temperature>	(TermocaminoBoilerSolare)	
+Switch	termocaminoBoilerSolare_setpoint80	"Set Point 80 °C"	<temperature>	(TermocaminoBoilerSolare)	
+Contact	termocaminoBoilerSolare_riscaldamento_tutto	"Riscaldamento - Tutto"	<homeRed> (TermocaminoBoilerSolare)		{ souliss="souliss:t31:105:3-7:status" }
+String termocaminoBoilerSolare_aggiornamento "Agg.[%1$td.%1$tm.%1$tY %1$tk:%1$tM:%1$tS]" <keyring> (TermocaminoBoilerSolare, Diagnostic)  {channel="souliss:t31:105:3-7:lastStatusStored"}
+Number termocaminoBoilerSolare_healty "Salute [%1d]" <keyring> (TermocaminoBoilerSolare, Diagnostic )  {channel="souliss:t31:105:3-7:healty"}
+
+Number	birra_sonda1	"Birra Sonda 1 [%.1f °C]"	<temperature>	(Birra)		{channel="souliss:t52:105:11-1:value"}
+Number	birra_sonda2	"Birra Sonda 2 [%.1f °C]"	<temperature>	(Birra)		{channel="souliss:t52:105:11-3:value"}
+Switch	birra_switch	"Birra - Switch"	<temperature>	(Birra)		{channel="souliss:t11:105:11-0:onoff"}
+String	birra_aggiornamento	"Agg.[%1$td.%1$tm.%1$tY %1$tk:%1$tM:%1$tS]" <keyring> (Birra, Diagnostic)	{channel="souliss:t52:105:11-1:lastStatusStored"}
+Number  birra_healty "Salute [%1d]" <keyring> (Birra, Diagnostic )  {channel="souliss:t52:105:11-1:healty"}
+Number birra_WIFI_DB "WiFi Decibel [%d db]" <network> (Birra, Diagnostic) {channel="souliss:t51:105:11-5:value"}
+Number birra_WIFI "WiFi Segnale [%.0f / 5]" <qualityofservice> (Birra, Diagnostic) {channel="souliss:t51:105:11-7:value"}
