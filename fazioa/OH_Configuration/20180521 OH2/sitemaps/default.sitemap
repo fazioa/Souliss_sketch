@@ -1,7 +1,7 @@
 sitemap default label="Tonino" {
     
     Frame {
-        Text label="Rientro casa" icon="light" {
+        Text label="Rientro casa" icon="smiley" {
            Switch item=portoncino mappings=[ON="Apri"]
            Switch item=cancello mappings=[ON="Apri"]
         }
@@ -9,13 +9,13 @@ sitemap default label="Tonino" {
         Group item=Outside
     
  
-        Text label="TV" icon="light" {
+        Text label="Televisione" icon="screen" {
 		   Switch item=LG_TV0_Power
         Switch item=LG_TV0_Mute
         Text item=LG_TV0_Volume
-        Switch item=LG_TV0_VolDummy icon="soundvolume"  mappings=[1="▲", 0="▼"]
+        Switch item=LG_TV0_VolDummy  mappings=[1="▲", 0="▼"]
         Text item=LG_TV0_ChannelNo
-        Switch item=LG_TV0_ChannelDummy icon="television"  mappings=[1="▲", 0="▼"]
+        Switch item=LG_TV0_ChannelDummy  mappings=[1="▲", 0="▼"]
         Text item=LG_TV0_Channel
         Default item=LG_TV0_Player
         Text item=LG_TV0_Application
@@ -32,7 +32,7 @@ sitemap default label="Tonino" {
             "com.webos.app.externalinput.av1" = "AV1"]
         }
 
-    Group item=Divano icon="light"
+    Group item=Divano icon="office"
     
 Text label="Consumi / Produzione" icon="energy" {
      Text item=consumo label="Consumo [%.1f W]"
