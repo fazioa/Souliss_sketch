@@ -20,4 +20,5 @@ Items {
 	termostatosoggiorno_umidita : strategy = everyChange, every30minutes, restoreOnStartup
 
 	Grafico_temperatura_acqua*  : strategy = everyChange, every30minutes, restoreOnStartup
+	Grafico_temperatura_rele_pannelli* : strategy = everyChange, every30minutes, restoreOnStartup
 }
