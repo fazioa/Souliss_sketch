@@ -1,8 +1,8 @@
 /**************************************************************************
    Souliss - LYT8266 WiFi RGBW LED Bulb
-  Upload:
-  Generic ESP8266
-  Flash 4Mb (1Mb SPIFFS)
+Upload:
+Generic ESP8266
+Flash 4Mb (1Mb SPIFFS)
 
 ***************************************************************************/
 
@@ -47,33 +47,44 @@
 
 
 // Define logic slots, multicolor lights use four slots
-#define LIGHT1  0
-#define LYTLIGHT1           1
+#define LYTLIGHT1           0
 
-#define RED_STARTUP         0x20
-#define GREEN_STARTUP       0x00
+#define RED_STARTUP         0x50
+#define GREEN_STARTUP       0x10
 #define BLUE_STARTUP        0x00
 
-U8 RED_VAL = RED_STARTUP;
-U8 GREEN_VAL = GREEN_STARTUP;
-U8 BLUE_VAL = GREEN_STARTUP;
-U8 brightness = 100;
 void setup()
 {
-  Serial.begin(57600);
   // Init the network stack and the bulb, turn on with a warm amber
   Initialize();
   InitLYT();
-SetColor(LYTLIGHT1, RED_STARTUP, GREEN_STARTUP, BLUE_STARTUP);
+
+  /****
+      Generally set a PWM output before the connection will lead the
+      ESP8266 to reboot for a conflict on the FLASH write access.
+
+      Here we do the configuration during the WebConfig and so we don't
+      need to write anything in the FLASH, and the module can connect
+      to the last used network.
+
+      If you don't use the WebConfig use a dummy sketch that connects to
+      your WiFi and then use this sketch
+  ****/
+  SetColor(LYTLIGHT1, RED_STARTUP, GREEN_STARTUP, BLUE_STARTUP);
+
+  // Read the IP configuration from the EEPROM, if not available start
+  // the node as access point.
+  //
+  // If you want to force the device in WebConfiguration mode, power OFF
+  // your router and power OFF and then ON the bulb, you will see an access
+  // point called Souliss.
 
   GetIPAddress();
   SetAddress(peer_wifi_address_LYT, myvNet_subnet, myvNet_supern);          // Address on the wireless interface
 
   // Define a logic to handle the bulb
   SetLYTLamps(LYTLIGHT1);
-  
 
-  Set_SimpleLight(LIGHT1);
   // Init the OTA
   ArduinoOTA.setHostname("souliss-LYT");
   ArduinoOTA.begin();
@@ -83,39 +94,11 @@ void loop()
 {
   EXECUTEFAST() {
     UPDATEFAST();
+
+    // Is an unusual approach, but to get fast response to color change we run the LYT logic and
+    // basic communication processing at maximum speed.
+    LogicLYTLamps(LYTLIGHT1);
     ProcessCommunication();
-    Logic_SimpleLight(LIGHT1);
-    //la lampada RGB funziona solo se lo switch allo slot 0 è ON, altrimenti funziona con l'automatismo notte
-    if (mOutput(LIGHT1) == Souliss_T1n_OnCoil)
-    {
-      LogicLYTLamps(LYTLIGHT1);
-    } else {
-
-      FAST_2110ms() {
-        if (RED_VAL < 225) RED_VAL = mOutput(LYTLIGHT1 + 1) + 1;
-        if (RED_VAL >= 220) {
-          if (GREEN_VAL < 225) GREEN_VAL = mOutput(LYTLIGHT1 + 2) + 2;
-          if (BLUE_VAL < 225) BLUE_VAL = mOutput(LYTLIGHT1 + 3) + 1;
-        }
-
-        if (BLUE_VAL >= 225 && GREEN_VAL >= 225 && RED_VAL >= 225) {
-          if (brightness < 255) ++brightness;
-          Souliss_SetWhite(memory_map, LYTLIGHT1, &data_changed, brightness);
-        } else
-        {
-          SetColor(LYTLIGHT1, RED_VAL, GREEN_VAL, BLUE_VAL);
-        }
-        Serial.print("Red: ");
-        Serial.println(RED_VAL);
-
-        Serial.print("Rreen: ");
-        Serial.println(GREEN_VAL);
-        Serial.print("Blue: ");
-        Serial.println(BLUE_VAL);
-        Serial.print("Brightness: ");
-        Serial.println(brightness);
-      }
-    }
 
     FAST_PeerComms();
   }
