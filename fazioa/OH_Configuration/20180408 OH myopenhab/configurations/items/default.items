@@ -1,0 +1,161 @@
+Group	All
+Group	Interruttori	(All)	
+Group	Luci	(All)	
+
+Group	TechnicView_Node1	(All)	
+Group	TechnicView_Node2	(All)	
+Group	TechnicView_Node3	(All)
+Group	TechnicView_Node4	(All)	
+Group	TechnicView_Node5	(All)	
+Group	TechnicView_Node6	(All)
+Group	TechnicView_Node7	(All)
+Group	TechnicView_Node8	(All)
+Group	TechnicView_Node9	(All)
+Group	TechnicView_Node10	(All)
+Group	TechnicView_Node11	(All)
+
+Group	Diagnostic	(All)
+
+Group	G_Health	(All)	
+Group	G_Network	(All)	
+
+Group	Graph_Temp_accoppiata_interno_esterno	(All)	
+Group	Graph_Consumi_accoppiata_prelievo_produzione	(All)	
+Group   Graph_Prelievo_produzione_Rate_Pannelli (All)
+Group	Graph_RatePannelli	(All)	
+Group 	Graph_Temperatura_Rele_Pannelli (All)
+Group	Graph_Temp_Termocamino_Boiler	(All)	
+Group	Graph_birra	(All)
+
+
+Group	G_Soggiorno	"Soggiorno"	<video>	(All)	
+Group	G_Tettoia	"Tettoia"	<video>	(All)	
+Group	G_Giardino	"Giardino"	<video>	(All)	
+Group	G_Temperature	"Temperatura - Umidità"	<temperature>	(All)	
+Group	G_TemperaturaSoggiorno	"Soggiorno"	<temperature>	(All)	
+Group	G_TemperaturaGiardino	"Giardino"	<temperature>	(All)	
+Group	G_Sitemap_Consumi	"Info Consumi"	<energy>	(All)	
+Group	G_Sitemap_Fotovoltaico	"Info Fotovoltaico"	<energy>	(All)
+Group	G_Sitemap_Riepilogo_Prelievo_Produzione	"Scherm.Unica"	<energy>	(All)
+
+Group	TermostatoSoggiorno	(All)
+Group	TermostatoPianoTerra	(All)
+
+Group	rientrocasa	(All)
+Group	gcalendar	(All)
+
+
+Number	Chart_Period	"Chart Period"
+Switch	Presence	<house>	(G_Network)	
+Switch	Tonino	"Tonino"	<house>	(G_Network)		{ nh="192.168.1.117" }
+Switch	Cristina	"Cristina"	<house>	(G_Network)		{ nh="192.168.1.116" }
+
+Number	Temperature_Soggiorno	"Temperatura Soggiorno [%.1f °C]"	<temperature>	(G_Temperature,G_TemperaturaSoggiorno,TechnicView_Node1,Graph_Temp_accoppiata_interno_esterno)		{ souliss="T52:1:0" }
+Number	Umidita_Soggiorno	"Umidità Soggiorno [%.1f %%]"	<temperature>	(G_Temperature,G_TemperaturaSoggiorno,TechnicView_Node1)		{ souliss="T53:1:2" }
+Number	Temperature_Soggiorno_Max	"Oggi massima [%.1f °C]"	<temperature>	(G_TemperaturaSoggiorno)	
+Number	Temperature_Soggiorno_Min	"Oggi minima [%.1f °C]"	<temperature>	(G_TemperaturaSoggiorno)	
+
+Number	Consumo_Soggiorno	"Consumo [%.1f W]"	<energy>	(G_Sitemap_Consumi,Graph_Consumi_accoppiata_prelievo_produzione,Graph_Prelievo_produzione_Rate_Pannelli,G_Sitemap_Riepilogo_Prelievo_Produzione, TechnicView_Node1)		{ souliss="T57:1:4" }
+Number	Consumo_Soggiorno_Max	"Oggi massimo [%.1f W]"	<energy>	(G_Sitemap_Consumi)	
+Number	Consumo_Soggiorno_Min	"Oggi minimo [%.1f W]"	<energy>	(G_Sitemap_Consumi)	
+Number	Consumo_medio_x_minuti	"Media 10 minuti [%.1f W]"	<energy>	(G_Sitemap_Consumi)
+
+Number	ProduzioneFotovoltaico	"Fotovoltaico [%.1f W]"	<sun>	(G_Sitemap_Fotovoltaico,Graph_Consumi_accoppiata_prelievo_produzione,Graph_Prelievo_produzione_Rate_Pannelli,G_Sitemap_Riepilogo_Prelievo_Produzione,TechnicView_Node4)		{ souliss="T57:4:0" }
+Number	ProduzioneFotovoltaico_Max	"Oggi massimo [%.1f W]"	<sun>	(G_Sitemap_Fotovoltaico)	
+Number	ProduzioneFotovoltaico_Min	"Oggi minimo [%.1f W]"	<sun>	(G_Sitemap_Fotovoltaico)	
+Number	ProduzioneFotovoltaico_medio_x_minuti	"Media 10 minuti [%.1f W]"	<sun>	(G_Sitemap_Fotovoltaico)
+Number	Pannelli_Gruppo1 	"Pannelli Gruppo 1 [%d %%]"	<sun>	(G_Sitemap_Fotovoltaico,Graph_RatePannelli,Graph_Prelievo_produzione_Rate_Pannelli,G_Sitemap_Riepilogo_Prelievo_Produzione,TechnicView_Node4)		{ souliss="T57:4:6" }
+Number	Pannelli_Gruppo2 	"Pannelli Gruppo 2 [%d %%]"	<sun>	(G_Sitemap_Fotovoltaico,Graph_RatePannelli,Graph_Prelievo_produzione_Rate_Pannelli,G_Sitemap_Riepilogo_Prelievo_Produzione, TechnicView_Node4)		{ souliss="T57:4:8" }
+Number	Temperatura_Rele_pannelli_gruppo1	"Relè pannelli gruppo 1 [%.1f °C]"	<temperature>	(G_Sitemap_Fotovoltaico,Graph_Temperatura_Rele_Pannelli,TechnicView_Node4)		{ souliss="T52:4:10" }
+Number	Temperatura_Rele_pannelli_gruppo2	"Relè pannelli gruppo 2 [%.1f °C]"	<temperature>	(G_Sitemap_Fotovoltaico,Graph_Temperatura_Rele_Pannelli,TechnicView_Node4)		{ souliss="T52:4:12" }
+
+Number	Temperature_GF_Giardino	"Temperatura Giardino [%.1f °C]"	<temperature>	(G_Giardino,G_TemperaturaGiardino, TechnicView_Node2,Graph_Temp_accoppiata_interno_esterno,G_Temperature)		{ souliss="T52:2:0" }
+Number	Umidita_GF_Giardino	"Umidità Giardino [%.1f %%]"	<temperature>	(G_Temperature,G_TemperaturaGiardino,G_Giardino,TechnicView_Node2)		{ souliss="T53:2:2" }
+Number	Temperature_GF_Giardino_Max	"Oggi massima [%.1f °C]"	<temperature>	(G_TemperaturaGiardino)	
+Number	Temperature_GF_Giardino_Min	"Oggi minima [%.1f °C]"	<temperature>	(G_TemperaturaGiardino)	
+Switch	Luce1_Giardino	"Luce 1"	(G_Giardino,TechnicView_Node2)		{ souliss="T11:2:4", autoupdate="false" }
+Switch	Luce2_Giardino	"Luce 2"	(G_Giardino,TechnicView_Node2)		{ souliss="T11:2:5", autoupdate="false" }
+
+Switch	SwitchPortoncino	"Portoncino"	(rientrocasa,G_Soggiorno,TechnicView_Node1)		{ souliss="T11:1:6", autoupdate="false" }
+Switch	SwitchCancello	"Cancello"	(rientrocasa,G_Soggiorno,TechnicView_Node1)		{ souliss="T11:1:7", autoupdate="false" }
+
+Number	Temperature_Boiler_Solare_Termico	"Solare [%.1f °C]"	<temperature>	(Graph_Temp_Termocamino_Boiler,TechnicView_Node3)		{ souliss="T52:3:0" }
+Number	Temperature_Termocamino	"Termocamino [%.1f °C]"	<temperature>	(Graph_Temp_Termocamino_Boiler,TechnicView_Node3)		{ souliss="T52:3:2" }
+Switch	SwitchTermocamino	"Acqua Termocamino"	(TechnicView_Node3)		{ souliss="T11:3:4", autoupdate="false" }
+Switch	Boiler_TC_Automode	"Auto: Boiler / Termocamino"	(TechnicView_Node3)		{ souliss="T11:3:6", autoupdate="false" }
+Switch	setasmeasured	"Set as measured"	<temperature>	(T31,TechnicView_Node3)		{ souliss="T31:3:7:setasmeasured" }
+Switch	setpoint65	"Set Point 65 °C"	<temperature>	(T31,TechnicView_Node3)	
+Switch	setpoint70	"Set Point 70 °C"	<temperature>	(T31,TechnicView_Node3)	
+Switch	setpoint80	"Set Point 80 °C"	<temperature>	(T31,TechnicView_Node3)	
+Number	Temperature_Termocamino_SetPoint	"Temp Set Point [%.1f °C]"	<temperature>	(TechnicView_Node3)		{ souliss="T31:3:7:setpoint" }
+Contact	riscaldamento_tutto	"Riscaldamento - Tutto"	(TechnicView_Node3)		{ souliss="T31:3:7:heating" }
+
+Number temperature_TermostatoSoggiorno 	"Temperatura [%.1f °C]"	<temperature> (TermostatoSoggiorno, TechnicView_Node6) {souliss="T31:6:0:measured"}
+Number temperature_Setpoint_TermostatoSoggiorno	"Setpoint [%.1f °C]" 	<temperature> (gcalendar, TermostatoSoggiorno, TechnicView_Node6) {souliss="T31:6:0:setpoint"}
+Switch setasmeasured_TermostatoSoggiorno "Set temp. attuale" <temperature> (TermostatoSoggiorno, TechnicView_Node6) {souliss="T31:6:0:setasmeasured"}
+Contact heating_TermostatoSoggiorno "Riscaldamento" (TermostatoSoggiorno, TechnicView_Node6) {souliss="T31:6:0:heating"}
+Switch heatingmodeSet_TermostatoSoggiorno "Power ON" (TermostatoSoggiorno, TechnicView_Node6) {souliss="T31:6:0:heatingcooling", autoupdate="false"}
+Switch power_TermostatoSoggiorno "Power OFF" (gcalendar, TermostatoSoggiorno, TechnicView_Node6) {souliss="T31:6:0:power"}
+Number	umidita_TermostatoSoggiorno	"Umidità [%.1f %%]"	<temperature>	(TermostatoSoggiorno,TechnicView_Node6)		{ souliss="T53:6:7" }
+Dimmer	displayBright_TermostatoSoggiorno	"Lumin.min. display" (TermostatoSoggiorno,TechnicView_Node6)		{ souliss="T19:6:9" }
+
+Number temperatureT52_TermostatoPianoTerra 	"Temperatura T52 [%.1f °C]"	<temperature> (TermostatoPianoTerra, TechnicView_Node7) {souliss="T52:7:5"}
+Number temperature_TermostatoPianoTerra 	"Temperatura [%.1f °C]"	<temperature> (TermostatoPianoTerra, TechnicView_Node7) {souliss="T31:7:0:measured"}
+Number temperature_Setpoint_TermostatoPianoTerra	"Setpoint [%.1f °C]" 	<temperature> (gcalendar, TermostatoPianoTerra, TechnicView_Node7) {souliss="T31:7:0:setpoint"}
+Switch setasmeasured_TermostatoPianoTerra "Set temp. attuale" <temperature> (TermostatoPianoTerra, TechnicView_Node7) {souliss="T31:7:0:setasmeasured"}
+Contact heating_TermostatoPianoTerra "Riscaldamento" (TermostatoPianoTerra, TechnicView_Node7) {souliss="T31:7:0:heating"}
+Switch heatingmodeSet_TermostatoPianoTerra "Power ON" (TermostatoPianoTerra, TechnicView_Node7) {souliss="T31:7:0:heatingcooling", autoupdate="false"}
+Switch power_TermostatoPianoTerra "Power OFF" (gcalendar, TermostatoPianoTerra, TechnicView_Node7) {souliss="T31:7:0:power"}
+Number	Umidita_TermostatoPianoTerra "Umidità [%.1f %%]"	<temperature>	(TermostatoPianoTerra,TechnicView_Node7)		{ souliss="T53:7:7" }
+Dimmer	DisplayBright_TermostatoPianoTerra	"Lumin.min. display" (TermostatoPianoTerra,TechnicView_Node7)		{ souliss="T19:7:9" }
+
+
+Switch	milight_switch	"Luci divano"	(Luci, G_Soggiorno)		{ milight="bridge1;0" }
+Dimmer	milight_brightness	"Luci divano - intensità"	<slider>	(Luci,G_Soggiorno)		{ milight="bridge1;0;brightness"}
+Number milight_brightness_scenes
+Switch	milight_NightMode	"Luci divano - night mode"	(Luci,G_Soggiorno)		{ milight="bridge1;0;nightMode"}
+Dimmer	milight_ColorTemp	"Luci divano - colore"	<slider>	(Luci,G_Soggiorno)		{ milight="bridge1;0;colorTemperature"}
+
+//Switch	milight_RGB_switch	"Luci tettoia"	(Luci,G_Tettoia,TechnicView_Node5)		{ milight="bridge1;6" }
+Switch	luciTettoia	"Luci tettoia"	(Luci,G_Tettoia,TechnicView_Node5)		{souliss="T11:5:0" }
+Dimmer	milight_RGB_brightness	"Luci tettoia - intensità"	<slider>	(Luci,G_Tettoia,TechnicView_Node5)		{ milight="bridge1;6;brightness"}
+Number milight_RBG_brightness_scenes
+Number Light_scene      "Colori"
+Color  milight_RGB_Color "Scene Selector"   <colorwheel> (G_Tettoia,MiLigh,TechnicView_Node5)    { milight="bridge1;6;rgb" }
+Switch	milight_RGB_NightMode	"Luci tettoia - night mode"	(Luci,G_Tettoia,TechnicView_Node5)		{ milight="bridge1;6;nightMode"}
+
+Switch	powerSwitch1	"Albero di Natale"	(TechnicView_Node10, gcalendar)		{ souliss="T11:10:0", autoupdate="false" }
+
+Color  LYT1 "LYT 1" <slider> (Luci, TechnicView_Node8)  {souliss="T16:8:0", autoupdate=false}
+
+//NODO 11
+Switch	N1_switch1	"Switch Boiler" <fire>	(TechnicView_Node11)		{ souliss="T11:11:0", autoupdate="false" }
+Number	Temperatura_1_exstore	"exStore sonda1 [%.1f °C]"	<temperature>	(G_Temperature, TechnicView_Node11, Graph_birra)		{ souliss="T52:11:1" }
+Number	Temperatura_2_exstore	"exStore sonda2 [%.1f °C]"	<temperature>	(G_Temperature, TechnicView_Node11, Graph_birra)		{ souliss="T52:11:3" }
+
+
+
+Number	HEALTHNodo1_GF_Servizio	"Health Nodo 1 - Soggiorno [%1d]"	<keyring>	(Diagnostic,TechnicView_Node1,G_Health)		{souliss="D98:1:998" }
+Number	HEALTHNodo2_GF_Servizio	"Health Nodo 2 - Giardino [%1d]"	<keyring>	(Diagnostic,TechnicView_Node2,G_Health)		{souliss="D98:2:998" }
+Number	HEALTHNodo3_GF_Servizio	"Health Nodo 3 - Termocamino [%1d]"	<keyring>	(Diagnostic,TechnicView_Node3,G_Health)		{souliss="D98:3:998" }
+Number	HEALTHNodo4_GF_Servizio	"Health Nodo 4 - Solare [%1d]"	<keyring>	(Diagnostic,TechnicView_Node4,G_Health)		{souliss="D98:4:998" }
+Number	HEALTHNodo5_GF_Servizio	"Health Nodo 5 - Luce Tettoia [%1d]"	<keyring>	(Diagnostic,TechnicView_Node5,G_Health)		{souliss="D98:5:998" }
+Number	HEALTHNodo6_GF_Servizio	"Health Nodo 6 - Term.Soggiorno [%1d]"	<keyring>	(Diagnostic,TechnicView_Node6,G_Health)		{souliss="D98:6:998" }
+Number	HEALTHNodo7_GF_Servizio	"Health Nodo 7 - Term.P.Terra [%1d]"	<keyring>	(Diagnostic,TechnicView_Node7,G_Health)		{souliss="D98:7:998" }
+Number	HEALTHNodo8_GF_Servizio	"Health Nodo 8 - LYT [%1d]"	<keyring>	(Diagnostic,TechnicView_Node8,G_Health)		{souliss="D98:8:998" }
+Number	HEALTHNodo9_GF_Servizio	"Health Nodo 9 - LYT [%1d]"	<keyring>	(Diagnostic,TechnicView_Node9,G_Health)		{souliss="D98:9:998" }
+Number	HEALTHNodo10_GF_Servizio	"Health Nodo 10 [%1d]"	<keyring>	(Diagnostic,TechnicView_Node10,G_Health)		{souliss="D98:10:998" }
+Number	HEALTHNodo11_GF_Servizio	"Health Nodo 11 - Birra [%1d]"	<keyring>	(Diagnostic,TechnicView_Node11,G_Health)		{souliss="D98:11:998" }
+
+
+String	TIMESTAMP_Nodo1_GF_Servizio	"Aggiorn.NodoSoggiorno [%1$td.%1$tm.%1$tY %1$tk:%1$tM:%1$tS]"	<keyring>	(Diagnostic,TechnicView_Node1, G_TemperaturaSoggiorno, G_Sitemap_Consumi, G_Sitemap_Riepilogo_Prelievo_Produzione)		{ souliss="D99:1:999" }
+String	TIMESTAMP_Nodo2_GF_Servizio	"Aggiorn.Nodo2 [%1$td.%1$tm.%1$tY %1$tk:%1$tM:%1$tS]"	<keyring>	(Diagnostic,TechnicView_Node2, G_TemperaturaGiardino)		{ souliss="D99:2:999" }
+String	TIMESTAMP_Nodo3_GF_Servizio	"Aggiorn.NodoTermocamino [%1$td.%1$tm.%1$tY %1$tk:%1$tM:%1$tS]"	<keyring>	(Diagnostic,TechnicView_Node3)		{ souliss="D99:3:999" }
+String	TIMESTAMP_Nodo4_GF_Servizio	"Aggiorn.NodoSolare [%1$td.%1$tm.%1$tY %1$tk:%1$tM:%1$tS]"	<keyring>	(Diagnostic,TechnicView_Node4, G_Sitemap_Fotovoltaico, G_Sitemap_Riepilogo_Prelievo_Produzione)		{ souliss="D99:4:999" }
+String	TIMESTAMP_Nodo5_GF_Servizio	"Aggiorn.Nodo5 [%1$td.%1$tm.%1$tY %1$tk:%1$tM:%1$tS]"	<keyring>	(Diagnostic, TechnicView_Node5)		{ souliss="D99:5:999" }
+String	TIMESTAMP_Nodo6_GF_Servizio	"Aggiorn.Nodo6 [%1$td.%1$tm.%1$tY %1$tk:%1$tM:%1$tS]"	<keyring>	(Diagnostic,TechnicView_Node6)		{ souliss="D99:6:999" }
+String	TIMESTAMP_Nodo7_GF_Servizio	"Aggiorn.Nodo7 [%1$td.%1$tm.%1$tY %1$tk:%1$tM:%1$tS]"	<keyring>	(Diagnostic,TechnicView_Node7)		{ souliss="D99:7:999" }
+String	TIMESTAMP_Nodo8_GF_Servizio	"Aggiorn.Nodo8 [%1$td.%1$tm.%1$tY %1$tk:%1$tM:%1$tS]"	<keyring>	(Diagnostic,TechnicView_Node8)		{ souliss="D99:8:999" }
+String	TIMESTAMP_Nodo9_GF_Servizio	"Aggiorn.Nodo9 [%1$td.%1$tm.%1$tY %1$tk:%1$tM:%1$tS]"	<keyring>	(Diagnostic,TechnicView_Node9)		{ souliss="D99:9:999" }
+String	TIMESTAMP_Nodo10_GF_Servizio "Aggiorn.Nodo10 [%1$td.%1$tm.%1$tY %1$tk:%1$tM:%1$tS]"	<keyring>	(Diagnostic,TechnicView_Node10)		{ souliss="D99:10:999" }
+String	TIMESTAMP_Nodo11_GF_Servizio "Aggiorn.Nodo11 [%1$td.%1$tm.%1$tY %1$tk:%1$tM:%1$tS]"	<keyring>	(Diagnostic,TechnicView_Node11)		{ souliss="D99:11:999" }

@@ -1,0 +1,7 @@
+/etc/openhab2
+/usr/share/openhab2
+/var/log/openhab2
+/var/lib/openhab2
+
+
+java -cp rrd4j-2.1.1.jar org.rrd4j.inspector.RrdInspector

@@ -37,22 +37,33 @@ sitemap default label="Tonino" {
 Text label="Consumi / Produzione" icon="energy" {
      Text item=consumo label="Consumo [%.1f W]"
     Text item=fotovoltaico label="Fotovoltaico [%.1f W]"
+    Text item=temperatura_pannelliGruppo1
     Text item=temperatura_pannelliGruppo2
-    Text item=temperatura_pannelliGruppo2
+    Default item=rele_pannelliGruppo1
+    Default item=rele_pannelliGruppo2
+    
  Text item=aggiornamentoNodo1
     Text item=aggiornamentoNodo4 
 
 Text label="Grafico" icon="chart" {
-	Switch item=Chart_Period label="" mappings=[0="4 Hour", 1="3 Days", 2="Week", 3="Month"] 
+	Switch item=Chart_Period label="" mappings=[0="4 Hours", 1= "1 Day", 2="3 Days", 3="Week", 4="Month"] 
 				Chart item=Grafico_energia period=4h refresh=6000 visibility=[Chart_Period==0, Chart_Period=="Uninitialized"]  
-				Chart item=Grafico_energia period=3D refresh=30000 visibility=[Chart_Period==1]  
-				Chart item=Grafico_energia period=W refresh=21600000 visibility=[Chart_Period==2]  
-				Chart item=Grafico_energia period=M refresh=21600000 visibility=[Chart_Period==3]  
+				Chart item=Grafico_energia period=D refresh=30000 visibility=[Chart_Period==1]  
+				Chart item=Grafico_energia period=3D refresh=21600000 visibility=[Chart_Period==2]  
+				Chart item=Grafico_energia period=W refresh=21600000 visibility=[Chart_Period==3]  
+                Chart item=Grafico_energia period=M refresh=21600000 visibility=[Chart_Period==4]  
 
                 Chart item=Grafico_temperatura_rele_pannelli period=4h refresh=6000 visibility=[Chart_Period==0, Chart_Period=="Uninitialized"]  
-				Chart item=Grafico_temperatura_rele_pannelli period=3D refresh=30000 visibility=[Chart_Period==1]  
-				Chart item=Grafico_temperatura_rele_pannelli period=W refresh=21600000 visibility=[Chart_Period==2]  
-				Chart item=Grafico_temperatura_rele_pannelli period=M refresh=21600000 visibility=[Chart_Period==3]  
+				Chart item=Grafico_temperatura_rele_pannelli period=D refresh=30000 visibility=[Chart_Period==1]  
+				Chart item=Grafico_temperatura_rele_pannelli period=3D refresh=21600000 visibility=[Chart_Period==2]  
+				Chart item=Grafico_temperatura_rele_pannelli period=W refresh=21600000 visibility=[Chart_Period==3]  
+                Chart item=Grafico_temperatura_rele_pannelli period=M refresh=21600000 visibility=[Chart_Period==4]  
+
+                Chart item=Grafico_rele_pannelli period=4h refresh=6000 visibility=[Chart_Period==0, Chart_Period=="Uninitialized"]  
+				Chart item=Grafico_rele_pannelli period=D refresh=30000 visibility=[Chart_Period==1]  
+				Chart item=Grafico_rele_pannelli period=3D refresh=21600000 visibility=[Chart_Period==2]  
+				Chart item=Grafico_rele_pannelli period=W refresh=21600000 visibility=[Chart_Period==3] 
+                Chart item=Grafico_rele_pannelli period=M refresh=21600000 visibility=[Chart_Period==4] 
 }
 
     }
@@ -61,17 +72,19 @@ Text label="Grafico" icon="chart" {
             Default item=termostatosoggiorno_umidita label="Umidità"
             Default item=termostatoSoggiorno_aggiornamento icon="icon16x16"
             Text label="Grafico" icon="chart" {
-            Switch item=Chart_Period label="Temperatura Soggiorno" mappings=[0="8 Hour", 1="3 Days", 2="Week", 3="Month"] 
+            Switch item=Chart_Period label="Temperatura Soggiorno" mappings=[0="8 Hours", 1= "1 Day", 2="3 Days", 3="Week", 4="Month"] 
 				Chart item=termostatosoggiorno_temperatura period=8h refresh=6000 visibility=[Chart_Period==0, Chart_Period=="Uninitialized"]  
-				Chart item=termostatosoggiorno_temperatura period=3D refresh=30000 visibility=[Chart_Period==1]  
-				Chart item=termostatosoggiorno_temperatura period=W refresh=21600000 visibility=[Chart_Period==2]  
-				Chart item=termostatosoggiorno_temperatura period=M refresh=21600000 visibility=[Chart_Period==3]  
+				Chart item=termostatosoggiorno_temperatura period=D refresh=30000 visibility=[Chart_Period==1]  
+				Chart item=termostatosoggiorno_temperatura period=3D refresh=21600000 visibility=[Chart_Period==2]  
+				Chart item=termostatosoggiorno_temperatura period=W refresh=21600000 visibility=[Chart_Period==3]  
+                Chart item=termostatosoggiorno_temperatura period=M refresh=21600000 visibility=[Chart_Period==4] 
             
-            Switch item=Chart_Period label="Umidità Soggiorno" mappings=[0="8 Hour", 1="3 Days", 2="Week", 3="Month"] 
+            Switch item=Chart_Period label="Umidità Soggiorno" mappings=[0="8 Hours", 1= "1 Day", 2="3 Days", 3="Week", 4="Month"] 
 				Chart item=termostatosoggiorno_umidita period=8h refresh=6000 visibility=[Chart_Period==0, Chart_Period=="Uninitialized"]  
-				Chart item=termostatosoggiorno_umidita period=3D refresh=30000 visibility=[Chart_Period==1]  
-				Chart item=termostatosoggiorno_umidita period=W refresh=21600000 visibility=[Chart_Period==2]  
-				Chart item=termostatosoggiorno_umidita period=M refresh=21600000 visibility=[Chart_Period==3]  
+				Chart item=termostatosoggiorno_umidita period=D refresh=30000 visibility=[Chart_Period==1]  
+                Chart item=termostatosoggiorno_umidita period=3D refresh=30000 visibility=[Chart_Period==2]  
+				Chart item=termostatosoggiorno_umidita period=W refresh=21600000 visibility=[Chart_Period==3]  
+				Chart item=termostatosoggiorno_umidita period=M refresh=21600000 visibility=[Chart_Period==4]  
             }
         }
 
@@ -103,11 +116,12 @@ Text label="Termocamino / Solare" icon="temperature" {
 		}
           
          
-        Switch item=Chart_Period label="Termocamino / Solare" mappings=[0="4 Hour", 1="3 Days", 2="Week", 3="Month"] 
+        Switch item=Chart_Period label="Termocamino / Solare" mappings=[0="4 Hours", 1= "1 Day", 2="3 Days", 3="Week", 4="Month"] 
 				Chart item=Grafico_temperatura_acqua period=4h refresh=6000 visibility=[Chart_Period==0, Chart_Period=="Uninitialized"]  
-				Chart item=Grafico_temperatura_acqua period=3D refresh=30000 visibility=[Chart_Period==1]  
-				Chart item=Grafico_temperatura_acqua period=W refresh=21600000 visibility=[Chart_Period==2]  
-				Chart item=Grafico_temperatura_acqua period=M refresh=21600000 visibility=[Chart_Period==3]  
+				Chart item=Grafico_temperatura_acqua period=D refresh=30000 visibility=[Chart_Period==1]  
+                Chart item=Grafico_temperatura_acqua period=3D refresh=30000 visibility=[Chart_Period==2]  
+				Chart item=Grafico_temperatura_acqua period=W refresh=21600000 visibility=[Chart_Period==3]  
+				Chart item=Grafico_temperatura_acqua period=M refresh=21600000 visibility=[Chart_Period==4]  
                   
 }
         Group item=Birra

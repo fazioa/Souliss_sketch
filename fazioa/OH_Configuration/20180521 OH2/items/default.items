@@ -12,6 +12,7 @@ Group    Birra                       (Home)
 Group Grafico_energia
 Group Grafico_temperatura_acqua
 Group Grafico_temperatura_rele_pannelli
+Group Grafico_rele_pannelli
 
 Number	Chart_Period	"Chart Period"
 
@@ -26,8 +27,10 @@ Number   consumo      "Consumo [%.1f W]"       <energy>      (FamilyRoom, Elettr
 Number   fotovoltaico      "Fotovoltaico [%.1f W]"       <solarplant>      (FamilyRoom, Elettricita, Grafico_energia)                     {channel="souliss:t57:105:4-0:value"}
 String	aggiornamentoNodo1	"Agg.Consumi [%1$td.%1$tm.%1$tY %1$tk:%1$tM:%1$tS]"	<keyring> (FamilyRoom, Elettricita, Diagnostic)  {channel="souliss:t57:105:1-4:lastStatusStored"}
 String	aggiornamentoNodo4	"Agg.Fotovoltaico [%1$td.%1$tm.%1$tY %1$tk:%1$tM:%1$tS]"	<keyring> (FamilyRoom, Elettricita, Diagnostic)  {channel="souliss:t57:105:4-0:lastStatusStored"}
-Number   temperatura_pannelliGruppo1      "Pannelli gruppo 1 [%.1f °C]"       <temperature>      (FamilyRoom, Elettricita, Grafico_temperatura_rele_pannelli)  {channel="souliss:t52:105:4-10:value"}
-Number   temperatura_pannelliGruppo2      "Pannelli gruppo 2 [%.1f °C]"       <temperature>      (FamilyRoom, Elettricita, Grafico_temperatura_rele_pannelli)  {channel="souliss:t52:105:4-12:value"}
+Number   temperatura_pannelliGruppo1      "Temp.Pannelli gruppo 1 [%.1f °C]"       <temperature>      (FamilyRoom, Elettricita, Grafico_temperatura_rele_pannelli)  {channel="souliss:t52:105:4-10:value"}
+Number   temperatura_pannelliGruppo2      "Temp.Pannelli gruppo 2 [%.1f °C]"       <temperature>      (FamilyRoom, Elettricita, Grafico_temperatura_rele_pannelli)  {channel="souliss:t52:105:4-12:value"}
+Number   rele_pannelliGruppo1      "Relé gruppo 1 [%d %%]"       <temperature>      (FamilyRoom, Elettricita, Grafico_rele_pannelli)  {channel="souliss:t51:105:4-6:value"}
+Number   rele_pannelliGruppo2      "Relé gruppo 2 [%d %%]"       <temperature>      (FamilyRoom, Elettricita, Grafico_rele_pannelli)  {channel="souliss:t51:105:4-8:value"}
                                   
 Switch divano "Divano" <light> (FamilyRoom, Divano ) ["Switchable"] {autoupdate="false", channel="souliss:t11:105:12-0:onoff"}
 String divano_aggiornamento	"Agg. [%1$td.%1$tm.%1$tY %1$tk:%1$tM:%1$tS]"	<keyring> (FamilyRoom, Divano, Diagnostic)  {channel="souliss:t11:105:12-0:lastStatusStored"}
