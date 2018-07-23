@@ -58,7 +58,7 @@ end
 
 rule "Acqua dal Solare"
 when
-	Item SwitchTermocamino received command OFF 
+	Item termocaminoBoilerSolare_SwitchAcquaTermocamino received command OFF 
 then	
 	sendNotification("fazioa@gmail.com", "Acqua calda dal solare")
 	sendTelegram("bot1", "Acqua calda dal solare")
@@ -66,8 +66,22 @@ end
 
 rule "Acqua dal Termocamino"
 when
-	Item SwitchTermocamino received command ON 
+	Item termocaminoBoilerSolare_SwitchAcquaTermocamino received command ON 
 then	
 	sendNotification("fazioa@gmail.com", "Acqua calda dal termocamino")
 	sendTelegram("bot1", "Acqua calda dal termocamino")
+end
+
+rule "Acqua Termocamino/Solare automatica ON"
+when
+	Item termocaminoBoilerSolare_Boiler_TC_Automode received command ON 
+then	
+	sendTelegram("bot1", "Acqua Termocamino/Solare in automatico")
+end
+
+rule "Acqua Termocamino/Solare automatica OFF"
+when
+	Item termocaminoBoilerSolare_Boiler_TC_Automode received command OFF 
+then	
+	sendTelegram("bot1", "Acqua Termocamino/Solare in manuale")
 end
