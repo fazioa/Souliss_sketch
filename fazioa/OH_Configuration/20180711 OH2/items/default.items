@@ -2,6 +2,7 @@ Group    Home                 "Tonino"        <house>
 
 Group    FamilyRoom           "Soggiorno"     <parents_2_4>   (Home)
 Group    Divano               "Divano"        (Home)
+Group    Cucina               "Cucina"        (Home)
 Group    Outside              "Esterno"   <garden>   (Home)
 Group    LGTV                   "TV"   <television>   (Home)
 Group    Elettricita     (Home)
@@ -40,6 +41,12 @@ Dimmer colore "Temperatura Lampade Divano" <light> (FamilyRoom, Divano) ["Lighti
 
 Number divano_WIFI_DB "WiFi Decibel [%d db]" <network> (FamilyRoom, Divano, Diagnostic) {channel="souliss:t51:105:12-1:value"}
 Number divano_WIFI "WiFi Segnale [%.0f / 5]" <qualityofservice> (FamilyRoom, Diagnostic, Divano) {channel="souliss:t51:105:12-3:value"}
+
+Switch cucina "Cucina" <light> (FamilyRoom, Cucina ) ["Switchable"] {autoupdate="false", channel="souliss:t11:105:13-0:onoff"}
+String cucina_aggiornamento	"Agg. [%1$td.%1$tm.%1$tY %1$tk:%1$tM:%1$tS]"	<keyring> (FamilyRoom, Cucina, Diagnostic)  {channel="souliss:t11:105:13-0:lastStatusStored"}
+Number cucina_healty	"Salute [%1d]"	<keyring> (FamilyRoom, Cucina, Diagnostic)  {channel="souliss:t11:105:13-0:healty"}
+Number cucina_WIFI_DB "WiFi Decibel [%d db]" <network> (FamilyRoom, Cucina, Diagnostic) {channel="souliss:t51:105:13-1:value"}
+Number cucina_WIFI "WiFi Segnale [%.0f / 5]" <qualityofservice> (FamilyRoom, Diagnostic, Cucina) {channel="souliss:t51:105:13-3:value"}
 
 
 Switch TV_ON_WOL (FamilyRoom) { wol="192.168.1.255#38-8C-50-90-08-AD" }

@@ -25,6 +25,10 @@ Thing t11 12-0 "Divano"@"Soggiorno" [sleep=10]
 Thing t51 12-1 "divanoWifiDb"@"Soggiorno"
 Thing t51 12-3 "divanoWifiBar"@"Soggiorno"
 
+Thing t11 13-0 "Cucina"@"Soggiorno" [sleep=10] 
+Thing t51 13-1 "cucinaWifiDb"@"Soggiorno"
+Thing t51 13-3 "cucinaWifiBar"@"Soggiorno"
+
 Thing t16 8-0 "LYT1"
 
 Thing t11 10-0 "Albero di Natale"
