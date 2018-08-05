@@ -1,12 +1,29 @@
 /**************************************************************************
+  Interruttore luce divano
+  Funziona con switch collegato al pin 14
+
   Sketch: POWER SOCKET - VER.2 - Souliss - Static Configuration
   Author: Tonino Fazio
 
   ESP Core 2.3.0
   This example is only supported on ESP8266.
   Programm it with "Generic ESP8266 Module with 4M (1M SPIFFS)
+
+  parametri upload Arduino IDE:
+  – ESP8266 Generic
+  – Flash Mode: DIO
+  – Crystal Frequency: 26 MHz (non presente su IDE 1.6.12)
+  – Flash Frequency 80 MHz
+  – CPU frequency 160 MHz
+  – Flash Size 1 MB (256K SPIFFS)
 ***************************************************************************/
+
 //#define SERIAL_DEBUG
+
+// RESET OGNI 20 MIN SE NON E' COLLEGATO AL GATEWAY
+#define  VNET_RESETTIME_INSKETCH
+#define VNET_RESETTIME      0x00042F7 // ((20 Min*60)*1000)/70ms = 17143 => 42F7
+#define VNET_HARDRESET      ESP.reset()
 
 #include "SoulissFramework.h"
 #include <ESP8266mDNS.h>
@@ -64,12 +81,10 @@ void setup()
 
   digitalWrite(PIN_LED, LOW);
 
-
-  //delay 10 seconds
-  delay(10000);
+  delay(31000); // Ritardo di setup per permettere al router di effettuare il boot
   Initialize();
   GetIPAddress();
-
+  digitalWrite(PIN_LED, LOW);
   SetAddress(peer_address, myvNet_subnet, myvNet_supern);          // Address on the wireless interface
 
   //*************************************************************************
@@ -118,55 +133,85 @@ void loop()
       Read_T51(T_WIFI_STR);
     }
 
-    FAST_PeerComms();
-  }
+    FAST_91110ms() {
+      //verifica ogni 90 sec (fast 91110) che la ESP sia collegata alla rete Wifi (5 tentativi al 6^fa hard reset)
+      int tent = 0;
+#ifdef SERIAL_DEBUG
+      Serial.println("Verifico connessione)
+#endif
+                     while ((WiFi.status() != WL_CONNECTED) && tent < 4)
+                     {
+                     WiFi.disconnect();
+                     WiFi.mode(WIFI_STA);
+                     WiFi.begin(WiFi_SSID , WiFi_Password);
+                     int ritardo = 0;
+                     while ((WiFi.status() != WL_CONNECTED) && ritardo < 20)
+                     {
+                     delay(500);
+                     ritardo += 1;
+#ifdef SERIAL_DEBUG
+                     Serial.println(ritardo);
+#endif
+                   }
 
-  EXECUTESLOW() {
-    UPDATESLOW();
-    SLOW_10s() {  // Process the timer every 10 seconds
-      Timer_SimpleLight(SLOT_POWERSOCKET);
-       check_wifi_signal();
-    }
-  }
+                     if (WiFi.status() != WL_CONNECTED )
+                     delay(2000);
+                     tent += 1;
+                   }
+#ifdef SERIAL_DEBUG
+                     if (tent > 4)Serial.println("tentativo non riuscito");
+#endif
+                   }
 
-  // Look for a new sketch to update over the air
-  ArduinoOTA.handle();
-}
+                     FAST_PeerComms();
+                   }
 
-void check_wifi_signal() {
-  long rssi = WiFi.RSSI();
-  int bars = 0;
+                     EXECUTESLOW() {
+                     UPDATESLOW();
+                     SLOW_10s() {  // Process the timer every 10 seconds
+                     Timer_SimpleLight(SLOT_POWERSOCKET);
+                     check_wifi_signal();
+                   }
+                   }
 
-  if (rssi > -55) {
-    bars = 5;
-  }
-  else if (rssi < -55 & rssi > -65) {
-    bars = 4;
-  }
-  else if (rssi < -65 & rssi > -70) {
-    bars = 3;
-  }
-  else if (rssi < -70 & rssi > -78) {
-    bars = 2;
-  }
-  else if (rssi < -78 & rssi > -82) {
-    bars = 1;
-  }
-  else {
-    bars = 0;
-  }
-  float f_rssi = (float)rssi;
-  float f_bars = (float)bars;
-  ImportAnalog(T_WIFI_STRDB, &f_rssi);
-  ImportAnalog(T_WIFI_STR, &f_bars);
+                     // Look for a new sketch to update over the air
+                     ArduinoOTA.handle();
+                   }
+
+                     void check_wifi_signal() {
+                     long rssi = WiFi.RSSI();
+                     int bars = 0;
+
+                     if (rssi > -55) {
+                     bars = 5;
+                   }
+                     else if (rssi < -55 & rssi > -65) {
+                     bars = 4;
+                   }
+                     else if (rssi < -65 & rssi > -70) {
+                     bars = 3;
+                   }
+                     else if (rssi < -70 & rssi > -78) {
+                     bars = 2;
+                   }
+                     else if (rssi < -78 & rssi > -82) {
+                     bars = 1;
+                   }
+                     else {
+                     bars = 0;
+                   }
+                     float f_rssi = (float)rssi;
+                     float f_bars = (float)bars;
+                     ImportAnalog(T_WIFI_STRDB, &f_rssi);
+                     ImportAnalog(T_WIFI_STR, &f_bars);
 
 #ifdef SERIAL_DEBUG
-  Serial.print("wifi rssi:");
-  Serial.println(f_rssi);
-  Serial.print("wifi bars:");
-  Serial.println(f_bars);
+                     Serial.print("wifi rssi: ");
+                     Serial.println(f_rssi);
+                     Serial.print("wifi bars: ");
+                     Serial.println(f_bars);
 #endif
-}
+                   }
 
 
 
