@@ -36,15 +36,15 @@
 #include "bconf/MCU_ESP8266.h"              // Load the code directly on the ESP8266
 #include "conf/IPBroadcast.h"
 
-// **** Define the WiFi name and password ****
-#define WIFICONF_INSKETCH
-#define WiFi_SSID               "asterix"
-#define WiFi_Password           "ttony2013"
+#include "credenziali.h"
+// **** creare un file di testo chiamato credenziali.h con il seguente contenuto personalizzato ****
+//#define WIFICONF_INSKETCH
+//#define WiFi_SSID               "SSID"
+//#define WiFi_Password           "PWD"
 
 // **** Define Telegram parameters ****
 //#define   BOTTOKEN "XXXXXXXXX:XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"  // your Bot Token (Get from Botfather)
-#define   BOTTOKEN "276333395:AAFIgSUpTI5F68c6Ei7I-LXBCJVrkWVnCvs"
-#define  CHAT_ID "48121590"
+//#define  CHAT_ID "chat ID number"  
 
 
 // Include framework code and libraries

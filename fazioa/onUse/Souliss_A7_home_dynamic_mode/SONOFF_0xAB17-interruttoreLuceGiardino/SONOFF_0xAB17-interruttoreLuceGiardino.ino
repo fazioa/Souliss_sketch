@@ -1,10 +1,10 @@
 /**************************************************************************
-Interruttore luce cucina
-Funziona con switch collegato al pin 14
+  Interruttore luce cucina
+  Funziona con switch collegato al pin 14
 
   Sketch: POWER SOCKET - VER.2 - Souliss - Static Configuration
   Author: Tonino Fazio
-  
+
   ESP Core 2.3.0
   This example is only supported on ESP8266.
   Programm it with "Generic ESP8266 Module with 4M (1M SPIFFS)
@@ -16,8 +16,12 @@ Funziona con switch collegato al pin 14
   – Flash Frequency 80 MHz
   – CPU frequency 160 MHz
   – Flash Size 1 MB (256K SPIFFS)
+
+      This sketch require libreries:
+  - UniversalTelegramBot (stable release)
+  - ArduinoJson
 ***************************************************************************/
-//#define SERIAL_DEBUG
+#define SERIAL_DEBUG
 
 // RESET OGNI 20 MIN SE NON E' COLLEGATO AL GATEWAY
 #define  VNET_RESETTIME_INSKETCH
@@ -30,10 +34,12 @@ Funziona con switch collegato al pin 14
 #include <WiFiUdp.h>
 #include <ArduinoOTA.h>
 
-#define HOSTNAME "souliss-SONOFF-cucina"
+#define HOSTNAME "souliss-SONOFF-giardino"
 
 #include "bconf/MCU_ESP8266.h"              // Load the code directly on the ESP8266
 #include "conf/IPBroadcast.h"
+
+#include <UniversalTelegramBot.h>
 
 #include "credenziali.h"
 // **** creare un file di testo chiamato credenziali.h con il seguente contenuto personalizzato ****
@@ -46,14 +52,15 @@ Funziona con switch collegato al pin 14
 //#define  CHAT_ID "chat ID number"  
 
 // Include framework code and libraries
+
 #include "Souliss.h"
-#include <UniversalTelegramBot.h>
+
 
 
 //*************************************************************************
 // Define the network configuration according to your router settingsuration according to your router settings
 // and the other on the wireless oneless one
-#define peer_address  0xAB16
+#define peer_address  0xAB17
 #define myvNet_subnet 0xFF00
 #define myvNet_supern 0xAB10
 //*************************************************************************
@@ -74,7 +81,7 @@ boolean bLedState = false;
 void setup()
 {
 #ifdef SERIAL_DEBUG
-  Serial.begin(115200);
+  Serial.begin(9600);
   Serial.println("Node Starting");
 #endif
 
@@ -113,6 +120,7 @@ void setup()
   Serial.println(WiFi.subnetMask());
   Serial.print("Gateway: ");
   Serial.println("Node Initialized");
+
 #endif
 
 NotificaTelegram();
@@ -140,86 +148,85 @@ void loop()
       Read_T51(T_WIFI_STR);
     }
 
-    FAST_91110ms() {
+    FAST_PeerComms();
+  }
+
+  EXECUTESLOW() {
+    UPDATESLOW();
+    SLOW_10s() {  // Process the timer every 10 seconds
+      Timer_SimpleLight(SLOT_POWERSOCKET);
+      check_wifi_signal();
+    }
+    
+     SLOW_50s() {
       //verifica ogni 90 sec (fast 91110) che la ESP sia collegata alla rete Wifi (5 tentativi al 6^fa hard reset)
       int tent = 0;
 #ifdef SERIAL_DEBUG
-      Serial.println("Verifico connessione)
+      Serial.println("Verifico connessione");
 #endif
-                     while ((WiFi.status() != WL_CONNECTED) && tent < 4)
-                     {
-                     WiFi.disconnect();
-                     WiFi.mode(WIFI_STA);
-                     WiFi.begin(WiFi_SSID , WiFi_Password);
-                     int ritardo = 0;
-                     while ((WiFi.status() != WL_CONNECTED) && ritardo < 20)
-                     {
-                     delay(500);
-                     ritardo += 1;
+      while ((WiFi.status() != WL_CONNECTED) && tent < 4)
+      {
+        WiFi.disconnect();
+        WiFi.mode(WIFI_STA);
+        WiFi.begin(WiFi_SSID , WiFi_Password);
+        int ritardo = 0;
+        while ((WiFi.status() != WL_CONNECTED) && ritardo < 20)
+        {
+          delay(500);
+          ritardo += 1;
 #ifdef SERIAL_DEBUG
-                     Serial.println(ritardo);
+          Serial.println(ritardo);
 #endif
-                   }
+        }
 
-                     if (WiFi.status() != WL_CONNECTED )
-                     delay(2000);
-                     tent += 1;
-                   }
+        if (WiFi.status() != WL_CONNECTED )
+          delay(2000);
+        tent += 1;
+      }
 #ifdef SERIAL_DEBUG
-                     if (tent > 4)Serial.println("tentativo non riuscito");
+      if (tent > 4)Serial.println("tentativo non riuscito");
 #endif
-                   }
+    }
+  }
 
-                     FAST_PeerComms();
-                   }
+  // Look for a new sketch to update over the air
+  ArduinoOTA.handle();
+}
 
-                     EXECUTESLOW() {
-                     UPDATESLOW();
-                     SLOW_10s() {  // Process the timer every 10 seconds
-                     Timer_SimpleLight(SLOT_POWERSOCKET);
-                     check_wifi_signal();
-                   }
-                   }
+void check_wifi_signal() {
+  long rssi = WiFi.RSSI();
+  int bars = 0;
 
-                     // Look for a new sketch to update over the air
-                     ArduinoOTA.handle();
-                   }
-
-                     void check_wifi_signal() {
-                     long rssi = WiFi.RSSI();
-                     int bars = 0;
-
-                     if (rssi > -55) {
-                     bars = 5;
-                   }
-                     else if (rssi < -55 & rssi > -65) {
-                     bars = 4;
-                   }
-                     else if (rssi < -65 & rssi > -70) {
-                     bars = 3;
-                   }
-                     else if (rssi < -70 & rssi > -78) {
-                     bars = 2;
-                   }
-                     else if (rssi < -78 & rssi > -82) {
-                     bars = 1;
-                   }
-                     else {
-                     bars = 0;
-                   }
-                     float f_rssi = (float)rssi;
-                     float f_bars = (float)bars;
-                     ImportAnalog(T_WIFI_STRDB, &f_rssi);
-                     ImportAnalog(T_WIFI_STR, &f_bars);
+  if (rssi > -55) {
+    bars = 5;
+  }
+  else if (rssi < -55 & rssi > -65) {
+    bars = 4;
+  }
+  else if (rssi < -65 & rssi > -70) {
+    bars = 3;
+  }
+  else if (rssi < -70 & rssi > -78) {
+    bars = 2;
+  }
+  else if (rssi < -78 & rssi > -82) {
+    bars = 1;
+  }
+  else {
+    bars = 0;
+  }
+  float f_rssi = (float)rssi;
+  float f_bars = (float)bars;
+  ImportAnalog(T_WIFI_STRDB, &f_rssi);
+  ImportAnalog(T_WIFI_STR, &f_bars);
 
 #ifdef SERIAL_DEBUG
-                     Serial.print("wifi rssi: ");
-                     Serial.println(f_rssi);
-                     Serial.print("wifi bars: ");
-                     Serial.println(f_bars);
+  Serial.print("wifi rssi: ");
+  Serial.println(f_rssi);
+  Serial.print("wifi bars: ");
+  Serial.println(f_bars);
 #endif
-                   }
-
+}
 
 //telegram
 void sendToTelegram(String choose, String text ) {
