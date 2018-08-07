@@ -39,10 +39,15 @@ Funziona con switch collegato al pin 14
 #define WIFICONF_INSKETCH
 #define WiFi_SSID               "asterix"
 #define WiFi_Password           "ttony2013"
+
+// **** Define Telegram parameters ****
+//#define   BOTTOKEN "XXXXXXXXX:XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"  // your Bot Token (Get from Botfather)
+#define   BOTTOKEN "276333395:AAFIgSUpTI5F68c6Ei7I-LXBCJVrkWVnCvs"
+#define  CHAT_ID "48121590"
+
 // Include framework code and libraries
-
 #include "Souliss.h"
-
+#include <UniversalTelegramBot.h>
 
 
 //*************************************************************************
@@ -109,6 +114,8 @@ void setup()
   Serial.print("Gateway: ");
   Serial.println("Node Initialized");
 #endif
+
+NotificaTelegram();
 }
 
 void loop()
@@ -214,4 +221,20 @@ void loop()
                    }
 
 
+//telegram
+void sendToTelegram(String choose, String text ) {
+  WiFiClientSecure botclient;
+  UniversalTelegramBot bot(BOTTOKEN, botclient);
+  if (bot.sendMessage(choose, text, "")) {
+    Serial.println("TELEGRAM Successfully sent");
+  }
+  botclient.stop();
+}
+
+void NotificaTelegram(){
+  Serial.println("Invio messaggio su Telegram");
+  sendToTelegram(CHAT_ID, "Nodo \"" + (String) HOSTNAME + "\" avviato" + " - IP: " + WiFi.localIP().toString());
+  Serial.print(" ...ok");
+}
+//end telegram
 

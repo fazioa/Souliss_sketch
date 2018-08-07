@@ -9,6 +9,9 @@ QC_GATEWAYTYPE			0x00
 DHT_SENSOR				0x01
 DHT on PIN 2
 ***************************************************************************/
+// Let the IDE point to the Souliss framework
+#include "SoulissFramework.h"
+
 // Configure the framework
 #include "bconf/Chibiduino_v1.h"			// Use a Chibiduino 2.4 GHz wireless board
 
