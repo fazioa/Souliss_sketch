@@ -1,0 +1,48 @@
+import org.openhab.core.library.types.*
+import org.openhab.core.persistence.*
+import org.openhab.model.script.actions.*
+val string apikey = "aab865b2ea7bfc8342941894837b621b"
+
+rule "Emoncms-Consumo"
+       when
+               Item consumo changed 
+       then
+        sendHttpGetRequest("http://emoncms.org/input/post.json?json=%7BConsumo_Soggiorno:" + consumo.state + "%7D&apikey=" + apikey) 
+  end
+
+  rule "Emoncms-ProduzioneFotovoltaico"
+       when
+               Item fotovoltaico changed
+       then
+               sendHttpGetRequest("http://emoncms.org/input/post.json?json=%7BProduzioneFotovoltaico:" + fotovoltaico.state + "%7D&apikey=" + apikey) 
+end
+
+rule "Emoncms-ProduzioneFotovoltaico_Pannelli_Gruppo1"
+       when
+               Item rele_pannelliGruppo1 changed
+       then
+               sendHttpGetRequest("http://emoncms.org/input/post.json?json=%7BPannelli_Gruppo1:" + rele_pannelliGruppo1.state + "%7D&apikey=" + apikey) 
+end
+
+rule "Emoncms-ProduzioneFotovoltaico_Pannelli_Gruppo2"
+       when
+               Item rele_pannelliGruppo2 changed
+       then
+               sendHttpGetRequest("http://emoncms.org/input/post.json?json=%7BPannelli_Gruppo2:" + rele_pannelliGruppo2.state + "%7D&apikey=" + apikey) 
+end
+
+rule "Emoncms-Temperature_Boiler_Solare_Termico"
+       when
+               Item termocaminoBoilerSolare_temperaturaBoilerSolare changed or 
+				Time cron "0 */30 * * * ?"  // every 30 minutes
+       then
+               sendHttpGetRequest("http://emoncms.org/input/post.json?json=%7BTemperature_Boiler_Solare_Termico:" + termocaminoBoilerSolare_temperaturaBoilerSolare.state + "%7D&apikey=" + apikey) 
+end
+
+rule "Emoncms-Temperature_Termocamino"
+       when
+               Item termocaminoBoilerSolare_temperaturaTermocamino changed or 
+				Time cron "0 */30 * * * ?"  // every 30 minutes
+       then
+               sendHttpGetRequest("http://emoncms.org/input/post.json?json=%7BTemperature_Termocamino:" + termocaminoBoilerSolare_temperaturaTermocamino.state + "%7D&apikey=" + apikey) 
+end

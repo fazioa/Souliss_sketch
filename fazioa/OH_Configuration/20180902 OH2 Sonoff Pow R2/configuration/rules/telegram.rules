@@ -1,0 +1,94 @@
+rule "Apertura Cancello"
+when
+	Item cancello received command ON 
+then	
+	sendNotification("fazioa@gmail.com", "Ricevuto. Apertura cancello...")
+	sendNotification("cristinapucci@gmail.com", "Ricevuto. Apertura cancello...")
+	sendTelegram("bot1", "Ricevuto. Apertura cancello...")
+end
+
+rule "Apertura Portoncino"
+when
+	Item portoncino received command ON 
+then	
+	sendNotification("fazioa@gmail.com", "Ricevuto. Apertura portoncino...")
+	sendNotification("cristinapucci@gmail.com", "Ricevuto. Apertura portoncino...")
+	sendTelegram("bot1", "Ricevuto. Apertura portoncino...")
+end
+
+rule "Set Point 65"
+when
+	Item termocaminoBoilerSolare_setpoint65 received command ON
+then
+	sendCommand(termocaminoBoilerSolare_Allarme_Termocamino_SetPoint, 65)
+    sendTelegram("bot1", "Termocamino. Set temperatura allarme a 65°C")
+end
+
+rule "Set Point 70"
+when
+	Item termocaminoBoilerSolare_setpoint70 received command ON
+then
+	sendCommand(termocaminoBoilerSolare_Allarme_Termocamino_SetPoint, 70)
+    sendTelegram("bot1", "Termocamino. Set temperatura allarme a 70°C")
+end
+
+rule "Set Point 80"
+when
+	Item termocaminoBoilerSolare_setpoint80 received command ON
+then
+	sendCommand(termocaminoBoilerSolare_Allarme_Termocamino_SetPoint, 80)
+    sendTelegram("bot1", "Termocamino. Set temperatura allarme a 80°C")
+end
+
+rule "Riscaldamento - Tutto"
+when
+	Item termocaminoBoilerSolare_riscaldamento_tutto received update ON 
+then	
+	sendNotification("fazioa@gmail.com", "Termocamino. Allarme temperatura - Apertura tutte valvole di zona")
+    sendTelegram("bot1", "Termocamino. Allarme temperatura - Apertura tutte valvole di zona")
+end
+
+rule "Riscaldamento - Ripristino valvole zona"
+when
+	Item termocaminoBoilerSolare_riscaldamento_tutto received update OFF 
+then	
+	sendNotification("fazioa@gmail.com", "Termocamino. Allarme temperatura cessato - Ripristino valvole di zona")
+    sendTelegram("bot1", "Termocamino. Allarme temperatura cessato - Ripristino valvole di zona")
+end
+
+rule "Acqua dal Solare"
+when
+	Item termocaminoBoilerSolare_SwitchAcquaTermocamino received command OFF 
+then	
+	sendNotification("fazioa@gmail.com", "Acqua calda dal solare")
+	sendTelegram("bot1", "Acqua calda dal solare")
+end
+
+rule "Acqua dal Termocamino"
+when
+	Item termocaminoBoilerSolare_SwitchAcquaTermocamino received command ON 
+then	
+	sendNotification("fazioa@gmail.com", "Acqua calda dal termocamino")
+	sendTelegram("bot1", "Acqua calda dal termocamino")
+end
+
+rule "Acqua Termocamino/Solare automatica ON"
+when
+	Item termocaminoBoilerSolare_Boiler_TC_Automode received command ON 
+then	
+	sendTelegram("bot1", "Acqua Termocamino/Solare in automatico")
+end
+
+rule "Acqua Termocamino/Solare automatica OFF"
+when
+	Item termocaminoBoilerSolare_Boiler_TC_Automode received command OFF 
+then	
+	sendTelegram("bot1", "Acqua Termocamino/Solare in manuale")
+end
+
+rule "test telegram"
+when 
+Item testTelegram received command ON
+then
+sendTelegram("bot1", "Test Telegram")
+end
