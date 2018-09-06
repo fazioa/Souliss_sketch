@@ -69,6 +69,17 @@ Text label="Grafico" icon="chart" {
 }
 
     }
+
+Text label="Frigo + Microonde" icon="energy" {
+    Group item=Sonoff_FrigoMicroonde label="Dati"
+    Switch item=Chart_Period label="Frigo + Microonde" mappings=[0="4 Hours", 1= "1 Day", 2="3 Days", 3="Week", 4="Month"] 
+				Chart item=Grafico_Sonoff_FrigoMicroonde period=4h refresh=60000 visibility=[Chart_Period==0, Chart_Period=="Uninitialized"]  
+				Chart item=Grafico_Sonoff_FrigoMicroonde period=D refresh=60000 visibility=[Chart_Period==1]  
+                Chart item=Grafico_Sonoff_FrigoMicroonde period=3D refresh=60000 visibility=[Chart_Period==2]  
+				Chart item=Grafico_Sonoff_FrigoMicroonde period=W refresh=21600000 visibility=[Chart_Period==3]  
+				Chart item=Grafico_Sonoff_FrigoMicroonde period=M refresh=21600000 visibility=[Chart_Period==4] 
+}
+
         Text label="Temperatura e umidità" icon="temperature" {
             Default item=termostatosoggiorno_temperatura label="Temperatura"
             Default item=termostatosoggiorno_umidita label="Umidità"
@@ -129,7 +140,6 @@ Text label="Termocamino / Solare" icon="temperature" {
                   
 }
         Group item=Birra
-        Group item=SONOFF icon="Sonoff Pow R2"
         
 Text label="Astro" icon="sun" {
     Group item=Astro

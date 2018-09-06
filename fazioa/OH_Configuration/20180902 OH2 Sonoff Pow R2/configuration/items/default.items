@@ -16,7 +16,8 @@ Group Grafico_temperatura_rele_pannelli
 Group Grafico_rele_pannelli
 Group    Astro                       (Home)
 Group    Grafico_Astro                       (Home)
-Group SONOFF                       (Home)
+Group Sonoff_FrigoMicroonde                       (Home)
+Group Grafico_Sonoff_FrigoMicroonde                       (Home)
 
 Number	Chart_Period	"Chart Period"
 
@@ -114,17 +115,20 @@ Number   Elevation          "Elevation"                     (Astro, Grafico_Astr
 Switch testTelegram
 
 
-Number pow_RSSI "RSSI [%d %%]" (SONOFF)     { mqtt="<[mqttcontainer:tele/SonoffPowR2-test/STATE:state:JSONPATH($.Wifi.RSSI)]" }
-Switch pow_Reachable "Pow: reachable " (SONOFF) { mqtt="<[mqttcontainer:tele/SonoffPowR2-test/LWT:state:MAP(reachable.map)]" }
-String pow_Verbose "Sonoff pow: MQTT return message [%s]" (SONOFF)  { mqtt="<[mqttcontainer:tele/SonoffPowR2-test/INFO1:state:default], <[mqttcontainer:stat/SonoffPowR2-test/STATUS2:state:default], <[mqttcontainer:stat/SonoffPowR2-test/RESULT:state:default]" }
-String pow_Verbose_Sensors "Sonoff pow sensors: [%s]" (SONOFF) { mqtt="<[mqttcontainer:tele/SonoffPowR2-test/SENSOR:state:default]"}
+//String pow_Verbose "Sonoff pow: MQTT return message [%s]" (SONOFF)  { mqtt="<[mqttcontainer:tele/SonoffPowR2-microonde/INFO1:state:default], <[mqttcontainer:stat/SonoffPowR2-microonde/STATUS2:state:default], <[mqttcontainer:stat/SonoffPowR2-microonde/RESULT:state:default]" }
+//String pow_Verbose_Sensors "Sonoff pow sensors: [%s]" (SONOFF) { mqtt="<[mqttcontainer:tele/SonoffPowR2-microonde/SENSOR:state:default]"}
 
-Number pow_Total "Total [%.1f W]" (SONOFF)     { mqtt="<[mqttcontainer:tele/SonoffPowR2-test/SENSOR:state:JSONPATH($.ENERGY.Total)]" }
-Number pow_Yesterday "Yesterday [%d ]" (SONOFF)     { mqtt="<[mqttcontainer:tele/SonoffPowR2-test/SENSOR:state:JSONPATH($.ENERGY.Yesterday)]" }
-Number pow_Today "Today [%d ]" (SONOFF)     { mqtt="<[mqttcontainer:tele/SonoffPowR2-test/SENSOR:state:JSONPATH($.ENERGY.Today)]" }
-Number pow_Period "Period [%d ]" (SONOFF)     { mqtt="<[mqttcontainer:tele/SonoffPowR2-test/SENSOR:state:JSONPATH($.ENERGY.Period)]" }
-Number pow_Power "Power [%.1f W ]" (SONOFF)     { mqtt="<[mqttcontainer:tele/SonoffPowR2-test/SENSOR:state:JSONPATH($.ENERGY.Power)]" }
-Number pow_Factor "Factor [%.1f W ]" (SONOFF)     { mqtt="<[mqttcontainer:tele/SonoffPowR2-test/SENSOR:state:JSONPATH($.ENERGY.Factor)]" }
-Number pow_Voltage "Voltage [%.1f V ]" (SONOFF)     { mqtt="<[mqttcontainer:tele/SonoffPowR2-test/SENSOR:state:JSONPATH($.ENERGY.Voltage)]" }
-Number pow_Current "Current [%.2f A ]" (SONOFF)     { mqtt="<[mqttcontainer:tele/SonoffPowR2-test/SENSOR:state:JSONPATH($.ENERGY.Current)]" }
-Switch pow_Light "Living Room Light" <light> (SONOFF) {autoupdate="false", mqtt=">[mqttcontainer:cmnd/SonoffPowR2-test/POWER:command:*:default], <[mqttcontainer:stat/SonoffPowR2-test/POWER:state:default]" }
+Number pow_Power "Power [%.1f W ]" (Sonoff_FrigoMicroonde, Grafico_Sonoff_FrigoMicroonde)     { mqtt="<[mqttcontainer:tele/SonoffPowR2-microonde/SENSOR:state:JSONPATH($.ENERGY.Power)]" }
+Number pow_Today "Oggi [%.2f kWh]" (Sonoff_FrigoMicroonde, Grafico_Sonoff_FrigoMicroonde)     { mqtt="<[mqttcontainer:tele/SonoffPowR2-microonde/SENSOR:state:JSONPATH($.ENERGY.Today)]" }
+Number pow_Yesterday "Ieri [%.2f kWh]" (Sonoff_FrigoMicroonde)     { mqtt="<[mqttcontainer:tele/SonoffPowR2-microonde/SENSOR:state:JSONPATH($.ENERGY.Yesterday)]" }
+//Number pow_Period "Periodo [%.2f Wh]" (Sonoff_FrigoMicroonde)     { mqtt="<[mqttcontainer:tele/SonoffPowR2-microonde/SENSOR:state:JSONPATH($.ENERGY.Period)]" }
+Number pow_Total "Totale [%.2f kWh]" (Sonoff_FrigoMicroonde)     { mqtt="<[mqttcontainer:tele/SonoffPowR2-microonde/SENSOR:state:JSONPATH($.ENERGY.Total)]" }
+
+//Number pow_Factor "Factor [%.1f W ]" (Sonoff_FrigoMicroonde)     { mqtt="<[mqttcontainer:tele/SonoffPowR2-microonde/SENSOR:state:JSONPATH($.ENERGY.Factor)]" }
+Number pow_Voltage "Tensione [%.1f V ]" (Sonoff_FrigoMicroonde)     { mqtt="<[mqttcontainer:tele/SonoffPowR2-microonde/SENSOR:state:JSONPATH($.ENERGY.Voltage)]" }
+
+Number pow_RSSI "RSSI [%d %%]" (Sonoff_FrigoMicroonde)     { mqtt="<[mqttcontainer:tele/SonoffPowR2-microonde/STATE:state:JSONPATH($.Wifi.RSSI)]" }
+Switch pow_Reachable "Modulo in rete " (Sonoff_FrigoMicroonde) {autoupdate="false", mqtt="<[mqttcontainer:tele/SonoffPowR2-microonde/LWT:state:MAP(reachable.map)]" }
+
+//Number pow_Current "Coorente [%.2f A ]" (Sonoff_FrigoMicroonde)     { mqtt="<[mqttcontainer:tele/SonoffPowR2-microonde/SENSOR:state:JSONPATH($.ENERGY.Current)]" }
+//Switch pow_Light "Living Room Light" <light> (Sonoff_FrigoMicroonde) {autoupdate="false", mqtt=">[mqttcontainer:cmnd/SonoffPowR2-microonde/POWER:command:*:default], <[mqttcontainer:stat/SonoffPowR2-microonde/POWER:state:default]" }

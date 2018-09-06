@@ -22,4 +22,5 @@ Items {
 	Grafico_temperatura_acqua*  : strategy = everyChange, every30minutes, restoreOnStartup
 	Grafico_temperatura_rele_pannelli* : strategy = everyChange, every30minutes, restoreOnStartup
 	Grafico_rele_pannelli* : strategy = everyChange, every30minutes, restoreOnStartup
+	Grafico_Sonoff_FrigoMicroonde* : strategy = everyChange, every30minutes, restoreOnStartup
 }
