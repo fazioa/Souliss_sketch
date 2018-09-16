@@ -1,3 +1,7 @@
+//  COMPILA CON
+//Scheda: Arduino Pro or Pro Mini
+//Processore: ATmega 328P (3.3V 8MHz)
+
 // Let the IDE point to the Souliss framework
 #include "SoulissFramework.h"
 
@@ -212,29 +216,33 @@ void loop()
       //non noto peggioramenti nel funzionamento facendo lavorare i due relè in modo simmetrico
       iPWM_Val_1 = Output ;
       iPWM_Val_2 = Output ;
-      fPannelliGruppo1_percento = (int) ((iPWM_Val_1 / 255) * 100); //trasformo il valore in percentuale per passarlo al tipico di Souliss. E' più semplice rappresentare il dato in percentuale
-      fPannelliGruppo2_percento = (int) ((iPWM_Val_2 / 255) * 100);
-
-
-      //      Serial.print("fPannelliGruppo1_percento: "); Serial.println(fPannelliGruppo1_percento);
-      //      Serial.print("fPannelliGruppo2_percento: "); Serial.println(fPannelliGruppo2_percento);
 
       //invio valore PWM al pin
       //********************************
       //********************************
+      //se la temperatura supera i 55 gradi la percentuale viene abbassata
+      if (temperature_rele_1 > 65) {
+        iPWM_Val_1 /= 3;
+      } else if (temperature_rele_1 > 55){
+         iPWM_Val_1 /= 2;
+      }
+       if (temperature_rele_2 > 65) {
+        iPWM_Val_2 /= 3;
+      } else if (temperature_rele_2 > 55){
+         iPWM_Val_2 /= 2;
+      }
+     
 
-      //se la temperatura supera i novanta gradi la percentuale viene dimezzata
-      if (temperature_rele_1 > 90) {
-        iPWM_Val_1 /= 2;
-      }
-      if (temperature_rele_2 > 90) {
-        iPWM_Val_2 /= 2;
-      }
       analogWrite(PIN_RELE_GROUP_1, iPWM_Val_1);
       analogWrite(PIN_RELE_GROUP_2, iPWM_Val_2);
-
+      fPannelliGruppo1_percento = (int) ((iPWM_Val_1 / 255) * 100); //trasformo il valore in percentuale per passarlo al tipico di Souliss. E' più semplice rappresentare il dato in percentuale
+      fPannelliGruppo2_percento = (int) ((iPWM_Val_2 / 255) * 100);
+      
       //      Serial.print("iPWM_Val_1: "); Serial.println(iPWM_Val_1);
       //      Serial.print("iPWM_Val_2: "); Serial.println(iPWM_Val_2);
+      //      Serial.print("fPannelliGruppo1_percento: "); Serial.println(fPannelliGruppo1_percento);
+      //      Serial.print("fPannelliGruppo2_percento: "); Serial.println(fPannelliGruppo2_percento);
+
     }
 
 
