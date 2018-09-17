@@ -143,12 +143,13 @@ Text label="Termocamino / Solare" icon="temperature" {
         
 Text label="Astro" icon="sun" {
     Group item=Astro
-    Switch item=Chart_Period label="Astro" mappings=[0="4 Hours", 1= "1 Day", 2="3 Days", 3="Week", 4="Month"] 
+    Switch item=Chart_Period label="Astro" mappings=[0="4 Hours", 1="12 Hours", 2= "1 Day", 3="3 Days", 4="Week", 5="Month"] 
 				Chart item=Grafico_Astro period=4h refresh=60000 visibility=[Chart_Period==0, Chart_Period=="Uninitialized"]  
-				Chart item=Grafico_Astro period=D refresh=60000 visibility=[Chart_Period==1]  
-                Chart item=Grafico_Astro period=3D refresh=60000 visibility=[Chart_Period==2]  
-				Chart item=Grafico_Astro period=W refresh=21600000 visibility=[Chart_Period==3]  
-				Chart item=Grafico_Astro period=M refresh=21600000 visibility=[Chart_Period==4] 
+				Chart item=Grafico_Astro period=12h refresh=60000 visibility=[Chart_Period==1]  
+                Chart item=Grafico_Astro period=D refresh=60000 visibility=[Chart_Period==2]  
+                Chart item=Grafico_Astro period=3D refresh=60000 visibility=[Chart_Period==3]  
+				Chart item=Grafico_Astro period=W refresh=21600000 visibility=[Chart_Period==4]  
+				Chart item=Grafico_Astro period=M refresh=21600000 visibility=[Chart_Period==5] 
 }
         
     }
