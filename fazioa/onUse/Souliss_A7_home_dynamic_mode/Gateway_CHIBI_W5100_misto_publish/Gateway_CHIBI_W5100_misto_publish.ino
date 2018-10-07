@@ -50,7 +50,6 @@ uint8_t ip_gateway[4]  = {192, 168, 1, 1};
 #define peer_wifi_address_termostato_soggiorno  0xAB20 //termostato soggiorno
 #define peer_wifi_address_termostato_piano_terra  0xAB21 //termostato piano terra
 #define peer_wifi_address_ex_store_birra  0xAB22 //nodo controllo temperatura birra
-#define peer_wifi_address_ESP_consumo_variabile  0xAB23 //nodo consumo esubero solare
 
 
 #define PIN_RESET A0
