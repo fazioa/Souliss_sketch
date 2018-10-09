@@ -17,9 +17,9 @@ Thing t11 3-4 "Acqua da Termocamino"
 Thing t11 3-6 "Auto: Boiler / Termocamino"	
 Thing t31 3-7  "Gestione valvole - allarme  Termocamino"	
 
-Thing t31 6-0 "Termostato Soggiorno"@"Riscaldamento"
-Thing t53 6-7 "Umidità"@"Soggiorno"
-Thing t19 6-9 "Termostato Soggiorno - Luminosità"@"Riscaldamento"
+Thing t31 6-0 "Termostato Soggiorno"@"Termostato"
+Thing t53 6-7 "Umidità"@"Termostato"
+Thing t19 6-9 "Termostato Soggiorno - Luminosità"@"Termostato"
 
 Thing t11 2-4 "Luce_Giardino"@"Giardino"
 Thing t11 5-0 "Luce_Tettoia"@"Giardino"

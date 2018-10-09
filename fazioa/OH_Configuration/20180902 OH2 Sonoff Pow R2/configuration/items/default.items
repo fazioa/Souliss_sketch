@@ -7,7 +7,7 @@ Group    Outside              "Esterno"   <garden>   (Home)
 Group    LGTV                   "TV"   <television>   (Home)
 Group    Elettricita     (Home)
 Group    Diagnostic      (Home)
-Group    TermostatoSoggiorno         (Home)
+Group    TermostatoSoggiorno         (Home) ["Thermostat"]
 Group    TermocaminoBoilerSolare     (Home)
 Group    Birra                       (Home)
 Group Grafico_energia
@@ -73,10 +73,10 @@ Player LG_TV0_Player    "Play TV"   <cinema>  (FamilyRoom, LGTV)  ["Switchable"]
 	
 
 Number termostatosoggiorno_temperatura  "Temperatura [%.1f °C]" <temperature> (TermostatoSoggiorno) ["CurrentTemperature"] {channel="souliss:t31:105:6-0:measured"}
-Number termostatosoggiorno_umidita "Umidità [%.1f %%]" <humidity>   (TermostatoSoggiorno)       {channel="souliss:t53:105:6-7:value" }
-Number termostatosoggiorno_setpoint "Setpoint [%.1f °C]"    <heating> (TermostatoSoggiorno) ["Thermostat"] {channel="souliss:t31:105:6-0:setpoint"}
+Number termostatosoggiorno_umidita "Umidità [%.1f %%]" <humidity>   (TermostatoSoggiorno)     ["CurrentHumidity"]  {channel="souliss:t53:105:6-7:value" }
+Number termostatosoggiorno_setpoint "Setpoint [%.1f °C]"    <heating> (TermostatoSoggiorno) ["TargetTemperature"] {channel="souliss:t31:105:6-0:setpoint"}
 Switch termostatosoggiorno_setasmeasured "Set temp. attuale" <heating> (TermostatoSoggiorno) {autoupdate="false", channel="souliss:t31:105:6-0:setAsMeasured"}
-String termostatosoggiorno_modo "Modo" (TermostatoSoggiorno) {autoupdate="false", channel="souliss:t31:105:6-0:mode"}
+String termostatosoggiorno_modo "Modo" (TermostatoSoggiorno) ["homekit:HeatingCoolingMode"] {autoupdate="false", channel="souliss:t31:105:6-0:mode"}
 Contact termostatosoggiorno_stato "Stato" (TermostatoSoggiorno) {channel="souliss:t31:105:6-0:status"}
 
 Dimmer  termostatoSoggiorno_displayBright   "Lumin.min. display" (TermostatoSoggiorno)      {channel="souliss:t19:105:6-9" }
