@@ -47,6 +47,7 @@ uint8_t ip_gateway[4]  = {192, 168, 1, 1};
 #define peer_wifi_address_SONOFF_Divano  0xAB15 //SONOFF Smart Socket - Divano
 #define peer_wifi_address_SONOFF_Cucina  0xAB16 //SONOFF Smart Socket - Cucina
 #define peer_wifi_address_SONOFF_Giardino  0xAB18 //SONOFF Smart Socket - Giardino
+#define peer_wifi_address_SDM220_soggiorno  0xAB19 //SONOFF SDM220 Modbus
 #define peer_wifi_address_termostato_soggiorno  0xAB20 //termostato soggiorno
 #define peer_wifi_address_termostato_piano_terra  0xAB21 //termostato piano terra
 #define peer_wifi_address_ex_store_birra  0xAB22 //nodo controllo temperatura birra
@@ -91,6 +92,8 @@ void setup()
   SetAsPeerNode(peer_wifi_address_SONOFF_Divano, 12);
   SetAsPeerNode(peer_wifi_address_SONOFF_Cucina, 13);
   SetAsPeerNode(peer_wifi_address_SONOFF_Giardino, 14);
+  SetAsPeerNode(peer_wifi_address_SDM220_soggiorno, 15);
+  
 
   
 
