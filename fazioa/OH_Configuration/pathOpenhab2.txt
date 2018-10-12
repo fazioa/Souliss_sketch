@@ -5,3 +5,13 @@
 
 
 java -cp rrd4j-2.1.1.jar org.rrd4j.inspector.RrdInspector
+
+
+AVVIO 
+### NOT starting on installation, please execute the following statements to configure openHAB to start automatically using systemd
+ sudo /bin/systemctl daemon-reload
+ sudo /bin/systemctl enable openhab2.service
+### You can start openhab2 by executing
+ sudo /bin/systemctl start openhab2.service
+
+
