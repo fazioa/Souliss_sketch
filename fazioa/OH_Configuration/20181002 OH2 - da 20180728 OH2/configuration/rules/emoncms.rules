@@ -10,25 +10,11 @@ rule "Emoncms-Consumo"
         sendHttpGetRequest("http://emoncms.org/input/post.json?json=%7BConsumo_Soggiorno:" + consumo.state + "%7D&apikey=" + apikey) 
   end
 
-  rule "Emoncms-ProduzioneFotovoltaico"
+rule "Emoncms-Produzione_Fotovoltaico"
        when
                Item fotovoltaico changed
        then
                sendHttpGetRequest("http://emoncms.org/input/post.json?json=%7BProduzione_Fotovoltaico:" + fotovoltaico.state + "%7D&apikey=" + apikey) 
-end
-
-rule "Emoncms-ProduzioneFotovoltaico_Pannelli_Gruppo1"
-       when
-               Item rele_pannelliGruppo1 changed
-       then
-               sendHttpGetRequest("http://emoncms.org/input/post.json?json=%7BPannelli_Gruppo1:" + rele_pannelliGruppo1.state + "%7D&apikey=" + apikey) 
-end
-
-rule "Emoncms-ProduzioneFotovoltaico_Pannelli_Gruppo2"
-       when
-               Item rele_pannelliGruppo2 changed
-       then
-               sendHttpGetRequest("http://emoncms.org/input/post.json?json=%7BPannelli_Gruppo2:" + rele_pannelliGruppo2.state + "%7D&apikey=" + apikey) 
 end
 
 rule "Emoncms-Temperature_Boiler_Solare_Termico"
