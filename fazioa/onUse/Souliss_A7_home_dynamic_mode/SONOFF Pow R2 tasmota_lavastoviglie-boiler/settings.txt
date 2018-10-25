@@ -1,0 +1,9 @@
+SetOption21 - Enable reporting Energy usage while power off
+
+Comando da dare:
+stat/SonoffPowR2-lavastoviglie-boiler/SetOption21 ON
+
+
+Led state 3
+Lampeggia ad ogni pubblicazione MQTT
+Impostato da TasmoAdmin

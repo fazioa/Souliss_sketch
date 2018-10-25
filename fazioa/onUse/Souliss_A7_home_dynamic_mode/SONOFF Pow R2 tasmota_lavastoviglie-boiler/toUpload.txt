@@ -1,0 +1,1 @@
+C:\Users\fazio\OneDrive\Documenti\ArduinoData\packages\esp8266\tools\esptool\0.4.13/esptool.exe -vv -cd ck -cb 115200 -cp COM3 -ca 0x0 -cz 0x100000 -ca 0x00000 -cf C:\sonoff.ino.bin 
