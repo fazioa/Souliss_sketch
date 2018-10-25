@@ -1,0 +1,29 @@
+// Persistence strategies have a name and a definition and are referred to in the "Items" section
+Strategies {
+	everyMinute	: "0 * * * * ?"
+	every30minutes  : "0/30 * * * * ?"
+	everyHour   : "0 0 * * * ?"
+	everyDay    : "0 0 0 * * ?"
+		
+	// If no strategy is specified for an item entry below, the default list will be used.
+	default = everyHour 
+}
+
+/*
+ * Each line in this section defines for which item(s) which strategy(ies) should be applied.
+ * You can list single items, use "*" for all items or "groupitem*" for all members of a group
+ * item (excl. the group item itself).
+ */
+Items {
+	Grafico_energia* : strategy = everyChange, everyMinute, restoreOnStartup
+	termostatosoggiorno_temperatura : strategy = everyChange, every30minutes, restoreOnStartup
+	termostatosoggiorno_umidita : strategy = everyChange, every30minutes, restoreOnStartup
+
+	Grafico_temperatura_acqua*  : strategy = everyChange, every30minutes, restoreOnStartup
+	Grafico_temperatura_rele_pannelli* : strategy = everyChange, every30minutes, restoreOnStartup
+	Grafico_rele_pannelli* : strategy = everyChange, every30minutes, restoreOnStartup
+	Grafico_Sonoff_FrigoMicroonde* : strategy = everyChange, every30minutes, restoreOnStartup
+	Grafico_Sonoff_lavastoviglie* : strategy = everyChange, every30minutes, restoreOnStartup
+	Grafico_Astro* : strategy = everyChange, every30minutes, restoreOnStartup
+	Grafico_consumo_giornaliero* : strategy = everyChange, restoreOnStartup
+}
