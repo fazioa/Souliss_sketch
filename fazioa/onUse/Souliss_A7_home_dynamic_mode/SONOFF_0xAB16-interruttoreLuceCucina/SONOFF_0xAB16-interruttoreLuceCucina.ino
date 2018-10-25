@@ -7,8 +7,7 @@ Funziona con switch collegato al pin 14
   
   ESP Core 2.3.0
   This example is only supported on ESP8266.
-  Programm it with "Generic ESP8266 Module with 4M (1M SPIFFS)
-
+  
   parametri upload Arduino IDE:
   – ESP8266 Generic
   – Flash Mode: DIO
