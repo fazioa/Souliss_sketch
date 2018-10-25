@@ -34,7 +34,7 @@
 #include <WiFiUdp.h>
 #include <ArduinoOTA.h>
 
-#define HOSTNAME "souliss-GEEKCREIT_2CH-giardino"
+#define HOSTNAME "souliss-GEEKCREIT_2CH-forno-giardino"
 
 #include "bconf/MCU_ESP8266.h"              // Load the code directly on the ESP8266
 #include "conf/IPBroadcast.h"
@@ -57,8 +57,6 @@
 #include "topics.h"
 uint8_t mypayload_len = 0;
 U8 mypayload;
-
-
 
 //*************************************************************************
 // Define the network configuration according to your router settingsuration according to your router settings
@@ -149,11 +147,11 @@ void loop()
     UPDATEFAST();
 
     FAST_50ms() {
-      DigIn2State(PIN_LEFT_BUTTON_0, Souliss_T1n_OnCoil, Souliss_T1n_OffCoil, SLOT_RELE1);
+      DigIn(PIN_LEFT_BUTTON_0, Souliss_T1n_ToggleCmd, SLOT_RELE1);
       Logic_SimpleLight(SLOT_RELE1);
       DigOut(PIN_RELE1, Souliss_T1n_Coil, SLOT_RELE1);
 
-      DigIn2State(PIN_MIDDLE_BUTTON_9, Souliss_T1n_OnCoil, Souliss_T1n_OffCoil, SLOT_RELE2);
+      DigIn(PIN_MIDDLE_BUTTON_9, Souliss_T1n_ToggleCmd, SLOT_RELE2);
       Logic_SimpleLight(SLOT_RELE2);
       DigOut(PIN_RELE2, Souliss_T1n_Coil, SLOT_RELE2);
     }
@@ -280,11 +278,11 @@ void subcription_ON_OFF() {
       mOutput(SLOT_RELE1) = Souliss_T1n_OffCoil;
   }
 
-if (sbscrbdata(FORNO_ONOFF, &mypayload, &mypayload_len)) {
+  if (sbscrbdata(FORNO_ONOFF, &mypayload, &mypayload_len)) {
     if (mypayload == LIGHT_ON)
       mOutput(SLOT_RELE2) = Souliss_T1n_OnCoil;
     else if (mypayload == LIGHT_OFF)
       mOutput(SLOT_RELE2) = Souliss_T1n_OffCoil;
   }
-  
+
 }
