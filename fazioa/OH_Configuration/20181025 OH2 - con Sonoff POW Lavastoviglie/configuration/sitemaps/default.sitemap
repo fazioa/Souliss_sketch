@@ -49,8 +49,8 @@ Text label="Consumi / Produzione" icon="energy" {
 
 Text label="Grafico consumi" icon="chart" {
 	Switch item=Chart_Period label="" mappings=[0="4 Hours", 1= "1 Day", 2="3 Days", 3="Week", 4="Month"] 
-				Chart item=Grafico_energia period=4h refresh=6000 visibility=[Chart_Period==0, Chart_Period=="Uninitialized"]  
-				Chart item=Grafico_energia period=D refresh=30000 visibility=[Chart_Period==1]  
+				Chart item=Grafico_energia period=4h refresh=60000 visibility=[Chart_Period==0, Chart_Period=="Uninitialized"]  
+				Chart item=Grafico_energia period=D refresh=3600000 visibility=[Chart_Period==1]  
 				Chart item=Grafico_energia period=3D refresh=21600000 visibility=[Chart_Period==2]  
 				Chart item=Grafico_energia period=W refresh=21600000 visibility=[Chart_Period==3]  
                 Chart item=Grafico_energia period=M refresh=21600000 visibility=[Chart_Period==4]  
@@ -58,7 +58,7 @@ Text label="Grafico consumi" icon="chart" {
 
 Text label="Grafico giornalieri" icon="chart" {
 	Switch item=Chart_Period label="" mappings=[2="3 Days", 3="Week", 4="Month"] 
-				Chart item=Grafico_consumo_giornaliero period=3D refresh=21600000 visibility=[Chart_Period==2]  
+				Chart item=Grafico_consumo_giornaliero period=3D refresh=21600000 visibility=[Chart_Period==2, Chart_Period=="Uninitialized"]  
 				Chart item=Grafico_consumo_giornaliero period=W refresh=21600000 visibility=[Chart_Period==3]  
                 Chart item=Grafico_consumo_giornaliero period=M refresh=21600000 visibility=[Chart_Period==4]  
 }
@@ -69,8 +69,8 @@ Text label="Frigo + Microonde" icon="energy" {
     Group item=Sonoff_FrigoMicroonde label="Dati"
     Switch item=Chart_Period label="Frigo + Microonde" mappings=[0="4 Hours", 1= "1 Day", 2="3 Days", 3="Week", 4="Month"] 
 				Chart item=Grafico_Sonoff_FrigoMicroonde period=4h refresh=60000 visibility=[Chart_Period==0, Chart_Period=="Uninitialized"]  
-				Chart item=Grafico_Sonoff_FrigoMicroonde period=D refresh=60000 visibility=[Chart_Period==1]  
-                Chart item=Grafico_Sonoff_FrigoMicroonde period=3D refresh=60000 visibility=[Chart_Period==2]  
+				Chart item=Grafico_Sonoff_FrigoMicroonde period=D refresh=3600000 visibility=[Chart_Period==1]  
+                Chart item=Grafico_Sonoff_FrigoMicroonde period=3D refresh=21600000 visibility=[Chart_Period==2]  
 				Chart item=Grafico_Sonoff_FrigoMicroonde period=W refresh=21600000 visibility=[Chart_Period==3]  
 				Chart item=Grafico_Sonoff_FrigoMicroonde period=M refresh=21600000 visibility=[Chart_Period==4] 
 }
@@ -80,8 +80,8 @@ Text label="Fotovoltaico" icon="energy" {
     Group item=Sonoff_fotovoltaico label="Dati"
     Switch item=Chart_Period label="Fotovoltaico" mappings=[0="4 Hours", 1= "1 Day", 2="3 Days", 3="Week", 4="Month"] 
 				Chart item=Grafico_Sonoff_fotovoltaico period=4h refresh=60000 visibility=[Chart_Period==0, Chart_Period=="Uninitialized"]  
-				Chart item=Grafico_Sonoff_fotovoltaico period=D refresh=60000 visibility=[Chart_Period==1]  
-                Chart item=Grafico_Sonoff_fotovoltaico period=3D refresh=60000 visibility=[Chart_Period==2]  
+				Chart item=Grafico_Sonoff_fotovoltaico period=D refresh=3600000 visibility=[Chart_Period==1]  
+                Chart item=Grafico_Sonoff_fotovoltaico period=3D refresh=21600000 visibility=[Chart_Period==2]  
 				Chart item=Grafico_Sonoff_fotovoltaico period=W refresh=21600000 visibility=[Chart_Period==3]  
 				Chart item=Grafico_Sonoff_fotovoltaico period=M refresh=21600000 visibility=[Chart_Period==4] 
 }
@@ -90,8 +90,8 @@ Text label="Lavastoviglie + Boiler" icon="energy" {
     Group item=Sonoff_lavastoviglie label="Dati"
     Switch item=Chart_Period label="Lavastoviglie + Boiler" mappings=[0="4 Hours", 1= "1 Day", 2="3 Days", 3="Week", 4="Month"] 
 				Chart item=Grafico_Sonoff_lavastoviglie period=4h refresh=60000 visibility=[Chart_Period==0, Chart_Period=="Uninitialized"]  
-				Chart item=Grafico_Sonoff_lavastoviglie period=D refresh=60000 visibility=[Chart_Period==1]  
-                Chart item=Grafico_Sonoff_lavastoviglie period=3D refresh=60000 visibility=[Chart_Period==2]  
+				Chart item=Grafico_Sonoff_lavastoviglie period=D refresh=3600000 visibility=[Chart_Period==1]  
+                Chart item=Grafico_Sonoff_lavastoviglie period=3D refresh=21600000 visibility=[Chart_Period==2]  
 				Chart item=Grafico_Sonoff_lavastoviglie period=W refresh=21600000 visibility=[Chart_Period==3]  
 				Chart item=Grafico_Sonoff_lavastoviglie period=M refresh=21600000 visibility=[Chart_Period==4] 
 }
@@ -102,16 +102,16 @@ Text label="Lavastoviglie + Boiler" icon="energy" {
             Default item=termostatoSoggiorno_aggiornamento icon="icon16x16"
             Text label="Grafico" icon="chart" {
             Switch item=Chart_Period label="Temperatura Soggiorno" mappings=[0="8 Hours", 1= "1 Day", 2="3 Days", 3="Week", 4="Month"] 
-				Chart item=termostatosoggiorno_temperatura period=8h refresh=6000 visibility=[Chart_Period==0, Chart_Period=="Uninitialized"]  
-				Chart item=termostatosoggiorno_temperatura period=D refresh=30000 visibility=[Chart_Period==1]  
+				Chart item=termostatosoggiorno_temperatura period=8h refresh=60000 visibility=[Chart_Period==0, Chart_Period=="Uninitialized"]  
+				Chart item=termostatosoggiorno_temperatura period=D refresh=3600000 visibility=[Chart_Period==1]  
 				Chart item=termostatosoggiorno_temperatura period=3D refresh=21600000 visibility=[Chart_Period==2]  
 				Chart item=termostatosoggiorno_temperatura period=W refresh=21600000 visibility=[Chart_Period==3]  
                 Chart item=termostatosoggiorno_temperatura period=M refresh=21600000 visibility=[Chart_Period==4] 
             
             Switch item=Chart_Period label="Umidità Soggiorno" mappings=[0="8 Hours", 1= "1 Day", 2="3 Days", 3="Week", 4="Month"] 
-				Chart item=termostatosoggiorno_umidita period=8h refresh=6000 visibility=[Chart_Period==0, Chart_Period=="Uninitialized"]  
-				Chart item=termostatosoggiorno_umidita period=D refresh=30000 visibility=[Chart_Period==1]  
-                Chart item=termostatosoggiorno_umidita period=3D refresh=30000 visibility=[Chart_Period==2]  
+				Chart item=termostatosoggiorno_umidita period=8h refresh=60000 visibility=[Chart_Period==0, Chart_Period=="Uninitialized"]  
+				Chart item=termostatosoggiorno_umidita period=D refresh=3600000 visibility=[Chart_Period==1]  
+                Chart item=termostatosoggiorno_umidita period=3D refresh=21600000 visibility=[Chart_Period==2]  
 				Chart item=termostatosoggiorno_umidita period=W refresh=21600000 visibility=[Chart_Period==3]  
 				Chart item=termostatosoggiorno_umidita period=M refresh=21600000 visibility=[Chart_Period==4]  
             }
@@ -148,9 +148,9 @@ Text label="Termocamino / Solare" icon="temperature" {
           
          
         Switch item=Chart_Period label="Termocamino / Solare" mappings=[0="4 Hours", 1= "1 Day", 2="3 Days", 3="Week", 4="Month"] 
-				Chart item=Grafico_temperatura_acqua period=4h refresh=6000 visibility=[Chart_Period==0, Chart_Period=="Uninitialized"]  
-				Chart item=Grafico_temperatura_acqua period=D refresh=30000 visibility=[Chart_Period==1]  
-                Chart item=Grafico_temperatura_acqua period=3D refresh=30000 visibility=[Chart_Period==2]  
+				Chart item=Grafico_temperatura_acqua period=4h refresh=60000 visibility=[Chart_Period==0, Chart_Period=="Uninitialized"]  
+				Chart item=Grafico_temperatura_acqua period=D refresh=3600000 visibility=[Chart_Period==1]  
+                Chart item=Grafico_temperatura_acqua period=3D refresh=21600000 visibility=[Chart_Period==2]  
 				Chart item=Grafico_temperatura_acqua period=W refresh=21600000 visibility=[Chart_Period==3]  
 				Chart item=Grafico_temperatura_acqua period=M refresh=21600000 visibility=[Chart_Period==4]  
                   
@@ -161,9 +161,9 @@ Text label="Astro" icon="sun" {
     Group item=Astro
     Switch item=Chart_Period label="Astro" mappings=[0="4 Hours", 1="12 Hours", 2= "1 Day", 3="3 Days", 4="Week", 5="Month"] 
 				Chart item=Grafico_Astro period=4h refresh=60000 visibility=[Chart_Period==0, Chart_Period=="Uninitialized"]  
-				Chart item=Grafico_Astro period=12h refresh=60000 visibility=[Chart_Period==1]  
-                Chart item=Grafico_Astro period=D refresh=60000 visibility=[Chart_Period==2]  
-                Chart item=Grafico_Astro period=3D refresh=60000 visibility=[Chart_Period==3]  
+				Chart item=Grafico_Astro period=12h refresh=3600000 visibility=[Chart_Period==1]  
+                Chart item=Grafico_Astro period=D refresh=3600000 visibility=[Chart_Period==2]  
+                Chart item=Grafico_Astro period=3D refresh=21600000 visibility=[Chart_Period==3]  
 				Chart item=Grafico_Astro period=W refresh=21600000 visibility=[Chart_Period==4]  
 				Chart item=Grafico_Astro period=M refresh=21600000 visibility=[Chart_Period==5] 
 }
