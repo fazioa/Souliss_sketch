@@ -10,9 +10,11 @@ Group Diagnostic      (Home)
 Group TermostatoSoggiorno         (Home)
 Group TermocaminoBoilerSolare     (Home)
 Group Birra                       (Home)
-Group Grafico_energia
-Group Grafico_temperatura_acqua
-Group Grafico_rele_pannelli
+Group Grafico_energia   (Home)
+Group Grafico_temperatura_acqua (Home)
+Group Grafico_rele_pannelli (Home)
+Group Grafico_consumo_giornaliero  (Home)
+
 Group Astro                       (Home)
 Group Grafico_Astro                       (Home)
 
@@ -28,6 +30,7 @@ Group Grafico_Sonoff_lavastoviglie                       (Home)
 
 
 Number	Chart_Period	"Chart Period"
+Number	Chart_Period_giornaliero	"Chart Period - giornaliero"
 
 Switch   luce_tettoia  "Luce Tettoia"  <light>    (Esterno)   ["Switchable"]   {autoupdate="false", channel="souliss:t11:105:5-0:onoff"}
 String	 tettoia_aggiornamento	"Agg [%1$td.%1$tm.%1$tY %1$tk:%1$tM:%1$tS]"	<keyring> (Esterno, Diagnostic)  {channel="souliss:t11:105:5-0:lastStatusStored"}
@@ -142,8 +145,8 @@ Switch frigo_microonde_Reachable "Modulo in rete" (Sonoff_FrigoMicroonde) {autou
 
 //FOTOVOLTAICO SONOFF TASMOTA MQTT
 Number fotovoltaico_Power "Produz. [%.1f W]" (Sonoff_fotovoltaico, Grafico_Sonoff_fotovoltaico, Grafico_energia)     { mqtt="<[mqttcontainer:tele/SonoffPowR2-fotovoltaico/SENSOR:state:JSONPATH($.ENERGY.Power)]" }
-Number fotovoltaico_Today "Oggi [%.2f kWh]" (Sonoff_fotovoltaico, Grafico_Sonoff_fotovoltaico)     { mqtt="<[mqttcontainer:tele/SonoffPowR2-fotovoltaico/SENSOR:state:JSONPATH($.ENERGY.Today)]" }
-Number fotovoltaico_Yesterday "Ieri [%.2f kWh]" (Sonoff_fotovoltaico)     { mqtt="<[mqttcontainer:tele/SonoffPowR2-fotovoltaico/SENSOR:state:JSONPATH($.ENERGY.Yesterday)]" }
+Number fotovoltaico_Today "Oggi [%.2f kWh]" (Sonoff_fotovoltaico)     { mqtt="<[mqttcontainer:tele/SonoffPowR2-fotovoltaico/SENSOR:state:JSONPATH($.ENERGY.Today)]" }
+Number fotovoltaico_Yesterday "Ieri [%.2f kWh]" (Sonoff_fotovoltaico, Grafico_consumo_giornaliero)     { mqtt="<[mqttcontainer:tele/SonoffPowR2-fotovoltaico/SENSOR:state:JSONPATH($.ENERGY.Yesterday)]" }
 Number fotovoltaico_Total "Totale [%.2f kWh]" (Sonoff_fotovoltaico)     { mqtt="<[mqttcontainer:tele/SonoffPowR2-fotovoltaico/SENSOR:state:JSONPATH($.ENERGY.Total)]" }
 Number fotovoltaico_Voltage "Tensione [%.1f V]" (Sonoff_fotovoltaico)     { mqtt="<[mqttcontainer:tele/SonoffPowR2-fotovoltaico/SENSOR:state:JSONPATH($.ENERGY.Voltage)]" }
 Number fotovoltaico_RSSI "RSSI [%d %%]" (Sonoff_fotovoltaico)     { mqtt="<[mqttcontainer:tele/SonoffPowR2-fotovoltaico/STATE:state:JSONPATH($.Wifi.RSSI)]" }

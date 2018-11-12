@@ -1,6 +1,6 @@
 rule "Apertura Cancello"
 when
-	Item portoncino received command ON 
+	Item cancello  received command ON 
 then	
 	sendNotification("fazioa@gmail.com", "Ricevuto. Apertura cancello...")
 	sendNotification("cristinapucci@gmail.com", "Ricevuto. Apertura cancello...")
@@ -9,7 +9,7 @@ end
 
 rule "Apertura Portoncino"
 when
-	Item cancello received command ON 
+	Item portoncino received command ON 
 then	
 	sendNotification("fazioa@gmail.com", "Ricevuto. Apertura portoncino...")
 	sendNotification("cristinapucci@gmail.com", "Ricevuto. Apertura portoncino...")

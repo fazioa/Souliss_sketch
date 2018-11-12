@@ -57,10 +57,10 @@ Text label="Grafico consumi" icon="chart" {
 }
 
 Text label="Grafico giornalieri" icon="chart" {
-	Switch item=Chart_Period label="" mappings=[2="3 Days", 3="Week", 4="Month"] 
-				Chart item=Grafico_consumo_giornaliero period=3D refresh=21600000 visibility=[Chart_Period==2, Chart_Period=="Uninitialized"]  
-				Chart item=Grafico_consumo_giornaliero period=W refresh=21600000 visibility=[Chart_Period==3]  
-                Chart item=Grafico_consumo_giornaliero period=M refresh=21600000 visibility=[Chart_Period==4]  
+	Switch item=Chart_Period_giornaliero label="" mappings=[0="3 Days", 1="Week", 2="Month"]
+				Chart item=Grafico_consumo_giornaliero period=3D refresh=21600000 visibility=[Chart_Period_giornaliero==0, Chart_Period_giornaliero=="Uninitialized"]  
+				Chart item=Grafico_consumo_giornaliero period=W refresh=21600000 visibility=[Chart_Period_giornaliero==1]  
+                Chart item=Grafico_consumo_giornaliero period=M refresh=21600000 visibility=[Chart_Period_giornaliero==2]  
 }
 
     }
