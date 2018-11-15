@@ -10,7 +10,7 @@ sitemap default label="Tonino" {
     
  
         Text label="TV" icon="screen" {
-		   Switch item=LG_TV0_Power
+		Switch item=LG_TV0_Power
         Switch item=LG_TV0_Mute
         Text item=LG_TV0_Volume
         Switch item=LG_TV0_VolDummy  mappings=[1="▲", 0="▼"]

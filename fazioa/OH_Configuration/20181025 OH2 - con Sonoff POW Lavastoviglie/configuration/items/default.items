@@ -13,7 +13,7 @@ Group Birra                       (Home)
 Group Grafico_energia   (Home)
 Group Grafico_temperatura_acqua (Home)
 Group Grafico_rele_pannelli (Home)
-Group Grafico_consumo_giornaliero  (Home)
+Group Grafico_consumo_giornaliero (Home)
 
 Group Astro                       (Home)
 Group Grafico_Astro                       (Home)
@@ -29,8 +29,8 @@ Group Grafico_Sonoff_lavastoviglie                       (Home)
 
 
 
-Number	Chart_Period	"Chart Period"
-Number	Chart_Period_giornaliero	"Chart Period - giornaliero"
+Number	Chart_Period "Chart Period"
+Number	Chart_Period_giornaliero "Chart Period"
 
 Switch   luce_tettoia  "Luce Tettoia"  <light>    (Esterno)   ["Switchable"]   {autoupdate="false", channel="souliss:t11:105:5-0:onoff"}
 String	 tettoia_aggiornamento	"Agg [%1$td.%1$tm.%1$tY %1$tk:%1$tM:%1$tS]"	<keyring> (Esterno, Diagnostic)  {channel="souliss:t11:105:5-0:lastStatusStored"}
@@ -39,7 +39,7 @@ Dimmer   lampade_tettoia "Luminosità Lampade Tettoia" <light> (Esterno) ["Light
 Color    lampade_tettoia_colore "Colore Lampade Tettoia" <light> (Esterno) {channel="milight:rgbLed:ACCF2339A3EA:0:ledcolor"}
 Switch   lampade_tettoia_whitemode  "Lampade Tettoia Bianco"  <light>    (Esterno)   ["Switchable"]   { channel="milight:rgbLed:ACCF2339A3EA:0:ledwhitemode"}
 
-Switch   luce_giardino  "Luce Giardino"  <light>    (Esterno)   ["Switchable"] {autoupdate="false", channel="souliss:t11:105:14-0:onoff"}
+Switch   luce_muro  "Luce Muro"  <light>    (Esterno)   ["Switchable"] {autoupdate="false", channel="souliss:t11:105:14-0:onoff"}
 Switch   luce_forno  "Luce Forno"  <light>    (Esterno)   ["Switchable"]   {autoupdate="false", channel="souliss:t11:105:14-1:onoff"}
 Number   nodo_forno_giardino_WIFI_DB "WiFi Decibel [%d db]" <network> (Esterno, Diagnostic) {channel="souliss:t51:105:14-2:value"}
 Number   nodo_forno_giardino_WIFI "WiFi Segnale [%.0f / 5]" <qualityofservice> (Esterno, Diagnostic) {channel="souliss:t51:105:14-4:value"}
@@ -129,8 +129,8 @@ Number birra_WIFI "WiFi Segnale [%.0f / 5]" <qualityofservice> (Birra, Diagnosti
 
 DateTime Sunrise_Time       "Alba [%1$tH:%1$tM]"        (Astro)           { channel="astro:sun:home:rise#start" }
 DateTime Sunset_Time        "Tramonto [%1$tH:%1$tM]"         (Astro)           { channel="astro:sun:home:set#start" }
-DateTime night_start      "Notte - inizio [%1$tH:%1$tM]"        (Astro)           { channel="astro:sun:home:night#start" }
-DateTime night_end       "Notte - fine [%1$tH:%1$tM]"        (Astro)           { channel="astro:sun:home:night#end" }
+//DateTime night_start      "Notte - inizio [%1$tH:%1$tM]"        (Astro)           { channel="astro:sun:home:night#start" }
+//DateTime night_end       "Notte - fine [%1$tH:%1$tM]"        (Astro)           { channel="astro:sun:home:night#end" }
 Number   Azimuth            "Azimuth"                       (Astro, Grafico_Astro)          { channel="astro:sun:home:position#azimuth" }
 Number   Elevation          "Elevation"                     (Astro, Grafico_Astro)          { channel="astro:sun:home:position#elevation" }
 

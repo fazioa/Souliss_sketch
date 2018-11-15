@@ -22,7 +22,6 @@ Items {
 	Grafico_temperatura_acqua*  : strategy = everyChange, every30minutes, restoreOnStartup
 	Grafico_Sonoff_FrigoMicroonde* : strategy = everyChange, every30minutes, restoreOnStartup
 	Grafico_Sonoff_lavastoviglie* : strategy = everyChange, every30minutes, restoreOnStartup
-	Grafico_consumo_giornaliero* : strategy = everyChange, everyDay, restoreOnStartup
-
+	Grafico_consumo_giornaliero* : strategy = everyChange, every30minutes, restoreOnStartup
 	Grafico_Astro* : strategy = everyChange, every30minutes, restoreOnStartup
 	}
