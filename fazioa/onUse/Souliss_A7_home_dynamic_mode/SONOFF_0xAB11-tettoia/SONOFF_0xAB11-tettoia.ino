@@ -1,6 +1,6 @@
 /**************************************************************************
   Interruttore luce tettoia
-  Invia messaggi di accensione e spegnimento al nodo forno giardino
+  Invia messaggi di accensione e spegnimento al luce tettoia e luce muro e forno
   Funziona con switch collegato al pin 14
 
   Sketch: POWER SOCKET - VER.2 - Souliss - Static Configuration
@@ -9,15 +9,9 @@
   ESP Core 2.4.2
   This example is only supported on ESP8266.
 
-  parametri upload Arduino IDE:
-  – ESP8266 Generic
-  – Flash Mode: DIO
-  – Crystal Frequency: 26 MHz (non presente su IDE 1.6.12)
-  – Flash Frequency 80 MHz
-  – CPU frequency 80 MHz
-  – Flash Size 1 MB (256K SPIFFS)
+
 ***************************************************************************/
-#define SERIAL_DEBUG
+//#define SERIAL_DEBUG
 
 // RESET OGNI 20 MIN SE NON E' COLLEGATO AL GATEWAY
 #define  VNET_RESETTIME_INSKETCH
@@ -30,14 +24,16 @@
 #include <ESP8266mDNS.h>
 #include <ESP8266WiFi.h>
 #include <WiFiUdp.h>
-#include <ArduinoOTA.h>
+#include <ESP8266WebServer.h>
+#include <ESP8266mDNS.h>
+//#include <ArduinoOTA.h>
+#include <ESP8266HTTPUpdateServer.h>
 
-#define HOSTNAME "souliss-SONOFF-tettoia (msg forno-giardino)"
+#define HOSTNAME "souliss-SONOFF-tettoia-cmd-forno-muro"
 
 // Configure the framework
 #include "bconf/MCU_ESP8266.h"              // Load the code directly on the ESP8266
 #include "conf/IPBroadcast.h"
-#include <UniversalTelegramBot.h>
 
 #include "credenziali.h"
 // **** creare un file di testo chiamato credenziali.h con il seguente contenuto personalizzato ****
@@ -50,10 +46,8 @@
 //#define  CHAT_ID "chat ID number"
 
 #include "MultiPress.h"
+#include <UniversalTelegramBot.h>
 #include "Souliss.h"
-#include "topics.h"
-uint8_t mypayload_len = 0;
-U8 mypayload;
 
 //*************************************************************************
 // Define the network configuration according to your router settingsuration according to your router settings
@@ -64,27 +58,26 @@ U8 mypayload;
 //*************************************************************************
 
 #define SLOT_RELAY 0
-
 #define SLOT_LOCALE_X_RELAY_REMOTO_0  1
-#define SLOT_RELAY_REMOTO_0  0
 #define SLOT_LOCALE_X_RELAY_REMOTO_1  2
+
+#define SLOT_RELAY_REMOTO_0  0
 #define SLOT_RELAY_REMOTO_1  1
+
 #define REMOTE_ADDRESS 0xAB17
 
 #define PIN_RELAY 12
 #define PIN_LED 13
 #define PIN_BUTTON_0 0
 #define PIN_BUTTON_14 14
-#define BUTTON_TEST 3
 #define LEDPIN 13
+
 //Variable to Handle WiFio Signal
 long rssi = 0;
 int bars = 0;
 #define T_WIFI_STRDB  1 //It takes 2 slots
 #define T_WIFI_STR    3 //It takes 2 slots
 
-const boolean ON = true;
-const boolean OFF = false;
 boolean bLedState = false;
 
 void B_ButtonActions(const int value);
@@ -92,16 +85,8 @@ SimplePress pushButtonSwitches[] = {
   {PIN_BUTTON_14, 700, B_ButtonActions}
 };
 
-class CoilState {
-  public:
-    boolean toDoCmd = true;
-    U8 stato;
-};
-
-CoilState coilTettoia ;
-CoilState coilForno;
-CoilState coilMuro ;
-CoilState coilsState;
+ESP8266WebServer httpServer(80);
+ESP8266HTTPUpdateServer httpUpdater;
 
 void setup()
 {
@@ -110,7 +95,6 @@ void setup()
   Serial.println("Node Starting");
 #endif
 
-  Serial.println(SimplePress::getCount());
   SimplePress::beginAll();
   SimplePress::setDebounceAll(200);
 
@@ -118,13 +102,15 @@ void setup()
   pinMode(PIN_RELAY, OUTPUT);    // Relè
   pinMode(PIN_LED, OUTPUT);
   pinMode(PIN_BUTTON_14, INPUT_PULLUP);
-  pinMode(BUTTON_TEST, INPUT_PULLUP);
 
+
+  digitalWrite(PIN_LED, HIGH);
   //delay 11 seconds
-  // delay(11000);
-
+  delay(11000);
+  digitalWrite(PIN_LED, LOW);
   Initialize();
 
+  digitalWrite(PIN_LED, HIGH);
   // Connect to the WiFi network and get an address from DHCP
   GetIPAddress();
   digitalWrite(PIN_LED, LOW);
@@ -133,9 +119,6 @@ void setup()
   SetAddress(peer_address, myvNet_subnet, myvNet_supern);          // Address on the wireless interface
 
   Set_SimpleLight(SLOT_RELAY);
-  mOutput(SLOT_RELAY) = Souliss_T1n_OnCoil;
-
-
   Set_SimpleLight(SLOT_LOCALE_X_RELAY_REMOTO_0);
   Set_SimpleLight(SLOT_LOCALE_X_RELAY_REMOTO_1);
 
@@ -143,8 +126,8 @@ void setup()
   Set_T51(T_WIFI_STR); //Imposto il tipico per contenere il segnale del Wifi in barre da 1 a 5
 
   // Init the OTA
-  ArduinoOTA.setHostname(HOSTNAME);
-  ArduinoOTA.begin();
+  // ArduinoOTA.setHostname(HOSTNAME);
+  // ArduinoOTA.begin();
 
 #ifdef SERIAL_DEBUG
   Serial.print("MAC: ");
@@ -157,14 +140,21 @@ void setup()
   Serial.println("Node Initialized");
 #endif
 
-
   NotificaTelegram();
 
+  MDNS.begin(HOSTNAME);
 
+  httpUpdater.setup(&httpServer);
+  httpServer.begin();
+
+  MDNS.addService("http", "tcp", 80);
 }
 
 void loop()
 {
+  httpServer.handleClient();
+
+  //ArduinoOTA.handle();
   SimplePress::update();
 
   EXECUTEFAST() {
@@ -174,58 +164,45 @@ void loop()
       //led attività
       bLedState = !bLedState;
       digitalWrite(PIN_LED, bLedState);
+
+
     }
 
-    SHIFT_110ms(0) {
-      //    if (coilMuro) {      //invia al nodo forno-giardino il messaggio di accensione
-
-      //  publishMuroState_ON_OFF(ON);
-      //    } else {
-      //invia al nodo forno-giardino il messaggio di spegnimento
-      // publishMuroState_ON_OFF(OFF);
-      //     }
+    SHIFT_1110ms(0) {
+      //recupera i valore su REMOTE_ADDRESS e li copia sugli slot locali
+      PullData(REMOTE_ADDRESS, SLOT_LOCALE_X_RELAY_REMOTO_1, SLOT_RELAY_REMOTO_1, 1);
     }
-    SHIFT_110ms(1) {
-      //  if (coilForno) {      //invia al nodo forno-giardino il messaggio di accensione
-      // publishFornoState_ON_OFF(ON);
-      //  } else {
-      //invia al nodo forno-giardino il messaggio di spegnimento
-      //publishFornoState_ON_OFF(OFF);
-      //  }
+    SHIFT_1110ms(1) {
+      PullData(REMOTE_ADDRESS, SLOT_LOCALE_X_RELAY_REMOTO_0, SLOT_RELAY_REMOTO_0, 1);
     }
-
 
     FAST_11110ms() {
       //Processa le logiche per il segnale WiFi
       Read_T51(T_WIFI_STRDB);
       Read_T51(T_WIFI_STR);
-
-
     }
 
     FAST_50ms() {
+      //il pulsante di ingresso è gestito dalla libreria multipress, non da Souliss, quindi elimino la riga DigIn
       //DigIn2State(PIN_SWITCH, Souliss_T1n_ToggleCmd, Souliss_T1n_ToggleCmd, SLOT_RELAY);
-      // DigIn(PIN_BUTTON_14, Souliss_T1n_ToggleCmd, SLOT_RELAY);
+     // DigIn(PIN_BUTTON_14, Souliss_T1n_ToggleCmd, SLOT_RELAY);
+
       Logic_SimpleLight(SLOT_RELAY);
-      // DigOut(coilTettoia, Souliss_T1n_Coil, SLOT_RELAY);
-
-      //RemoteDigIn(BUTTON_TEST, Souliss_T1n_ToggleCmd, 0xAB17, 0);
-      // Send(0xAB17, 0, Souliss_T1n_OnCmd);
-      //      - leggere lo stato del nodo remoto
-      //      - confronto se comando locale sia diverso (ignora se è indeterminato)
-      //      - se è diverso invio comando remoto
-      //      - cambio stato comando locale
-
-
-      //recupera i valore su REMOTE_ADDRESS e li copia sugli slot locali
-      PullData(REMOTE_ADDRESS, SLOT_LOCALE_X_RELAY_REMOTO_1, SLOT_RELAY_REMOTO_1, 1);
-      PullData(REMOTE_ADDRESS, SLOT_LOCALE_X_RELAY_REMOTO_0, SLOT_RELAY_REMOTO_0, 1);
-
+      DigOut(PIN_RELAY, Souliss_T1n_Coil, SLOT_RELAY);
     }
 
+    FAST_PeerComms();
+  }
 
 
-    FAST_91110ms() {
+  EXECUTESLOW() {
+    UPDATESLOW();
+    SLOW_50s() {  // Process the timer every 10 seconds
+      Timer_SimpleLight(SLOT_RELAY);
+      check_wifi_signal();
+    }
+
+    SLOW_110s() {
       //verifica ogni 90 sec (fast 91110) che la ESP sia collegata alla rete Wifi (5 tentativi al 6^fa hard reset)
       int tent = 0;
 #ifdef SERIAL_DEBUG
@@ -255,19 +232,9 @@ void loop()
 #endif
     }
 
-
-    FAST_PeerComms();
-  }
-  EXECUTESLOW() {
-    UPDATESLOW();
-    SLOW_10s() {  // Process the timer every 10 seconds
-      Timer_SimpleLight(SLOT_RELAY);
-      check_wifi_signal();
-    }
   }
 
-  // Look for a new sketch to update over the air
-  ArduinoOTA.handle();
+
 }
 
 void check_wifi_signal() {
@@ -310,47 +277,29 @@ void sendToTelegram(String choose, String text ) {
   WiFiClientSecure botclient;
   UniversalTelegramBot bot(BOTTOKEN, botclient);
   if (bot.sendMessage(choose, text, "")) {
+#ifdef SERIAL_DEBUG
     Serial.println("TELEGRAM Successfully sent");
+#endif
   }
   botclient.stop();
 }
 
 void NotificaTelegram() {
+#ifdef SERIAL_DEBUG
   Serial.println("Invio messaggio su Telegram");
+#endif
   sendToTelegram(CHAT_ID, "Nodo \"" + (String) HOSTNAME + "\" avviato" + " - IP: " + WiFi.localIP().toString());
+#ifdef SERIAL_DEBUG
   Serial.print(" ...ok");
+#endif
 }
 //end telegram
 
-
-
-boolean bGiardinoState = OFF;
-//void publishMuroState_ON_OFF(boolean _bState) {
-//  if (_bState != bGiardinoState)
-//  { if (_bState)
-//      pblshdata(GIARDINO_ONOFF, &LIGHT_ON, 1);
-//    else
-//      pblshdata(GIARDINO_ONOFF, &LIGHT_OFF, 1);
-//
-//    bGiardinoState = _bState;
-//  }
-//}
-//
-//boolean bFornoState = OFF;
-//void publishFornoState_ON_OFF(boolean _bState) {
-//  if (_bState != bFornoState)
-//  { if (_bState)
-//      pblshdata(FORNO_ONOFF, &LIGHT_ON, 1);
-//    else
-//      pblshdata(FORNO_ONOFF, &LIGHT_OFF, 1);
-//
-//    bFornoState = _bState;
-//  }
-//}
-
 void B_ButtonActions(const int value)  // example of registering Multi-Presses
 {
+#ifdef SERIAL_DEBUG
   Serial.print(F("Button:\t"));
+#endif
   switch (value)
   {
     case -1:
@@ -370,108 +319,58 @@ void B_ButtonActions(const int value)  // example of registering Multi-Presses
       tripleClick();
       break;
     default:
+#ifdef SERIAL_DEBUG
       Serial.println(F("Whole Lotta Presses"));
+#endif
       break;
   }
 }
 
-#define ON "Acceso"
-#define OFF "Spento"
 //========================= S I N G O L O   C L I C K ============================================
 void click() {
-  if (coilTettoia.stato != Souliss_T1n_OnCoil ) {
-    coilTettoia.stato = Souliss_T1n_OnCoil;
-  } else {
-    coilTettoia.stato = Souliss_T1n_OffCoil;
-  }
-
 #ifdef SERIAL_DEBUG
   Serial.println("Single click" );
-  Serial.print("Tettoia: ");
-  Serial.println(coilTettoia.stato);
-
 #endif
-
+  mInput(SLOT_RELAY) = Souliss_T1n_ToggleCmd;
 } // click
 
 //========================= D O P P I O   C L I C K ============================================
 void doubleClick() {
-//  if (coilMuro.stato != Souliss_T1n_OnCoil) {
-//    coilMuro.stato = Souliss_T1n_OnCoil;
-//  } else {
-//    coilMuro.stato = Souliss_T1n_OffCoil;
-//  }
-
 #ifdef SERIAL_DEBUG
   Serial.print("Doppio click - " );
   Serial.println("Muro");
- // Serial.println(coilMuro.stato);
 #endif
+  Send(REMOTE_ADDRESS, SLOT_RELAY_REMOTO_0, Souliss_T1n_ToggleCmd);
 
-//  if (mInput(SLOT_LOCALE_X_RELAY_REMOTO_0) != coilMuro.stato ) {
-    //se lo stato remoto è diverso allora invio lo stato impostato localmente
-  //   Serial.println("Muro - Invio comando");
-    Send(REMOTE_ADDRESS, SLOT_RELAY_REMOTO_0, Souliss_T1n_ToggleCmd);
-  //} else {
-//    coilMuro.stato = mInput(SLOT_LOCALE_X_RELAY_REMOTO_0);
- // }
 } // doubleclick
 
 //========================= T R I P L O   C L I C K ============================================
 // this function will be called when the button was pressed 3 times in a short timeframe.
 void tripleClick() {
-//  if (coilForno.stato !=  Souliss_T1n_OnCoil) {
-//    coilForno.stato = Souliss_T1n_OnCoil;
-//  } else {
-//    coilForno.stato = Souliss_T1n_OffCoil;
-//  }
-  
 #ifdef SERIAL_DEBUG
   Serial.print("Triplo click - " );
   Serial.println("Forno");
-  //Serial.println(coilForno.stato);
 #endif
-
-//  if (mInput(SLOT_LOCALE_X_RELAY_REMOTO_1) != coilForno.stato ) {
-    //se lo stato remoto è diverso allora invio lo stato impostato localmente
- //   Serial.println("Forno - Invio comando");
-    Send(REMOTE_ADDRESS, SLOT_RELAY_REMOTO_1, Souliss_T1n_ToggleCmd);
-  //} else {
-   // coilForno.stato = mInput(SLOT_LOCALE_X_RELAY_REMOTO_1);
- // }
-
+  Send(REMOTE_ADDRESS, SLOT_RELAY_REMOTO_1, Souliss_T1n_ToggleCmd);
 } // tripleclick
 
 //========================= L O N G   C L I C K ============================================
 void longPress() {
-  //if (!(coilTettoia.stato == Souliss_T1n_OnCoil | coilForno.stato == Souliss_T1n_OnCoil | coilMuro.stato == Souliss_T1n_OnCoil) ) { //se le luci sono tutte spente
+
+  //se almeno una delle luci è accesa allora spongo tutto, altrimenti accendo tutto
+  if ((mInput(SLOT_LOCALE_X_RELAY_REMOTO_0) == Souliss_T1n_Coil) || (mInput(SLOT_LOCALE_X_RELAY_REMOTO_1) == Souliss_T1n_Coil) || (mOutput(SLOT_RELAY) == Souliss_T1n_OnCoil)) {
+#ifdef SERIAL_DEBUG
+    Serial.println("LongPress - Qualche luce è accesa, dunque spengo tutto" );
+#endif
+    Send(REMOTE_ADDRESS, SLOT_RELAY_REMOTO_0, Souliss_T1n_OffCmd);
+    Send(REMOTE_ADDRESS, SLOT_RELAY_REMOTO_1, Souliss_T1n_OffCmd);
+    mOutput(SLOT_RELAY) = Souliss_T1n_OffCoil;
+  } else {
 #ifdef SERIAL_DEBUG
     Serial.println("LongPress - Tutte le luci sono spente, dunque accendo tutto" );
 #endif
-  //  coilsState.stato = Souliss_T1n_OnCoil;
- // } else {
-#ifdef SERIAL_DEBUG
-  //  Serial.println("LongPress - almeno una luce è accesa, dunque spengo tutto" );
-#endif
-   // coilsState.stato = Souliss_T1n_OffCoil;
- // }
- // coilsState.toDoCmd = true;
-
-//  if (coilsState.toDoCmd && coilsState.stato == Souliss_T1n_OffCoil) {
-//    Serial.println("Spegnimento di tutte le luci" );
-//    coilTettoia.stato = Souliss_T1n_OffCoil;
-//    coilForno.stato = Souliss_T1n_OffCoil;
-//    coilMuro.stato = Souliss_T1n_OffCoil;
-//  } else if (coilsState.toDoCmd && coilsState.stato == Souliss_T1n_OnCoil) {
-//    Serial.println("Accensione di tutte le luci" );
-//    coilTettoia.stato = Souliss_T1n_OnCoil;
-//    coilForno.stato = Souliss_T1n_OnCoil;
-//    coilMuro.stato = Souliss_T1n_OnCoil;
-//  }
-//
-//  if (coilsState.toDoCmd) {
-//    Send(REMOTE_ADDRESS, SLOT_RELAY_REMOTO_0, coilMuro.stato);
-//    Send(REMOTE_ADDRESS, SLOT_RELAY_REMOTO_1, coilForno.stato);
-//    coilsState.toDoCmd = false;
-//  }
+    Send(REMOTE_ADDRESS, SLOT_RELAY_REMOTO_0, Souliss_T1n_OnCmd);
+    Send(REMOTE_ADDRESS, SLOT_RELAY_REMOTO_1, Souliss_T1n_OnCmd);
+    mOutput(SLOT_RELAY) = Souliss_T1n_OnCoil ;
+  }
 } // tripleclick
