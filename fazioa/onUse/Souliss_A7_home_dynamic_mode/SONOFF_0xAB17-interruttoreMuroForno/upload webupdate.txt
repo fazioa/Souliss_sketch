@@ -1,0 +1,5 @@
+webupdate
+
+http://souliss-sonoff_dual-forno-giardino.local/update
+
+oppure http://ip/update
