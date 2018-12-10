@@ -1,0 +1,37 @@
+// this assumes you also have the wake on lan binding configured.
+rule "Power on TV via Wake on LAN"
+when
+Item LG_TV0_Power received command ON
+then
+    sendCommand( TV_ON_WOL, ON)
+end
+
+// for relative volume changes
+rule "VolumeUpDown"
+when Item LG_TV0_VolDummy received command
+then
+    switch receivedCommand{
+        case 0: LG_TV0_Volume.sendCommand(DECREASE)
+        case 1: LG_TV0_Volume.sendCommand(INCREASE)
+    }
+end
+
+// for relative channel changes
+rule "ChannelUpDown"
+when Item LG_TV0_ChannelDummy received command
+then
+    switch receivedCommand{
+        case 0: LG_TV0_ChannelNo.sendCommand(DECREASE)
+        case 1: LG_TV0_ChannelNo.sendCommand(INCREASE)
+    }
+end
+
+rule "SST Google Home"
+when Item powerSST changed
+then  
+    if (powerSST==ON) {
+        termostatosoggiorno_modo.HEATING_MODE=ON
+    else
+        termostatosoggiorno_modo.POWEREDOFF_MODE=ON
+    }
+end

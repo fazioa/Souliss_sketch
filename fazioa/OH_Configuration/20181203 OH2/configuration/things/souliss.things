@@ -1,0 +1,51 @@
+Bridge souliss:gateway:105 "Souliss Gateway - 105" [GATEWAY_IP_ADDRESS="192.168.1.105", GATEWAY_PORT_NUMBER=230, PREFERRED_LOCAL_PORT_NUMBER=0, PING_INTERVAL=30, SUBSCRIBTION_INTERVAL=2, HEALTHY_INTERVAL=38, USER_INDEX=72, NODE_INDEX=38]
+{  
+Thing t14 1-6 "Portoncino"@"Rientro"
+Thing t14 1-7 "Cancello"@"Rientro"
+Thing t57 1-4 "Consumo"@"Soggiorno"
+
+
+Thing t57 4-0 "Fotovoltaico"@"Soggiorno"
+Thing t51 4-6 "Pannelli Gruppo 1"@"Soggiorno"
+Thing t51 4-8 "Pannelli Gruppo 2"@"Soggiorno"
+Thing t52 4-10 "Temp.Pannelli Gruppo 1"@"Soggiorno"
+Thing t52 4-12 "Temp.Pannelli Gruppo 2"@"Soggiorno"
+
+Thing t52 3-0 "Temperatura Boiler Solare Termico"
+Thing t52 3-2 "Temperatura Termocamino"
+Thing t11 3-4 "Acqua da Termocamino"
+Thing t11 3-6 "Auto: Boiler / Termocamino"	
+Thing t31 3-7  "Gestione valvole - allarme  Termocamino"	
+
+Thing t31 6-0 "Termostato Soggiorno"@"Termostato"
+Thing t53 6-7 "Umidità"@"Termostato"
+Thing t19 6-9 "Termostato Soggiorno - Luminosità"@"Termostato"
+Thing t51 6-12 "Termostato Wifi Db"@"Termostato"
+Thing t51 6-14 "Termostato Wifi Sign"@"Termostato"
+
+Thing t11 5-0 "Luce_Tettoia"@"Giardino"
+
+Thing t11 14-0 "Luce_Forno"@"Giardino"
+Thing t11 14-1 "Luce_Giardino"@"Giardino"
+Thing t51 14-2 "GiardinoWifiDb"@"Giardino"
+Thing t51 14-4 "GiardinoWifiBar"@"Giardino"
+
+Thing t11 12-0 "Divano"@"Soggiorno" [sleep=10] 
+Thing t51 12-1 "divanoWifiDb"@"Soggiorno"
+Thing t51 12-3 "divanoWifiBar"@"Soggiorno"
+
+Thing t11 13-0 "Cucina"@"Soggiorno" [sleep=10] 
+Thing t51 13-1 "cucinaWifiDb"@"Soggiorno"
+Thing t51 13-3 "cucinaWifiBar"@"Soggiorno"
+
+Thing t16 8-0 "LYT1"
+
+Thing t11 10-0 "Albero di Natale"
+
+Thing t11 11-0 "Birra"@"Soppalco"
+Thing t52 11-1 "Birra - Temp 1"@"Soppalco"
+Thing t52 11-3 "Birra - Temp 2"@"Soppalco"
+Thing t51 11-5 "BirraWifiDb"@"Soppalco"
+Thing t51 11-7 "BirraWifiBar"@"Soppalco"
+
+}
