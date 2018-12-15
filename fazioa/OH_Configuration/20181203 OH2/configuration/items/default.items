@@ -128,6 +128,8 @@ Number  birra_healty "Salute [%1d]" <keyring> (Birra, Diagnostic )  {channel="so
 Number birra_WIFI_DB "WiFi Decibel [%d db]" <network> (Birra, Diagnostic) {channel="souliss:t51:105:11-5:value"}
 Number birra_WIFI "WiFi Segnale [%.0f / 5]" <qualityofservice> (Birra, Diagnostic) {channel="souliss:t51:105:11-7:value"}
 
+Switch	alberoNatale	"Albero di Natale" (Soggiorno)	["Switchable"]	{channel="souliss:t11:105:10-0:onoff", autoupdate="false" }
+
 DateTime Sunrise_Time       "Alba [%1$tH:%1$tM]"        (Astro)           { channel="astro:sun:home:rise#start" }
 DateTime Sunset_Time        "Tramonto [%1$tH:%1$tM]"         (Astro)           { channel="astro:sun:home:set#start" }
 //DateTime night_start      "Notte - inizio [%1$tH:%1$tM]"        (Astro)           { channel="astro:sun:home:night#start" }
@@ -137,6 +139,7 @@ Number   Elevation          "Elevation"                     (Astro, Grafico_Astr
 
 //FRIGO - MICROONDE SONOFF TASMOTA MQTT
 Number frigo_microonde_Power "Frigo [%.1f W]" (Sonoff_FrigoMicroonde, Grafico_Sonoff_FrigoMicroonde, Grafico_energia)     { mqtt="<[mqttcontainer:tele/SonoffPowR2-frigo-microonde/SENSOR:state:JSONPATH($.ENERGY.Power)]" }
+DateTime frigo_microonde_Time "Time [%1$td/%1$tm - %1$tH:%1$tM:%1$tS]" <clock> (Sonoff_FrigoMicroonde)     { mqtt="<[mqttcontainer:tele/SonoffPowR2-frigo-microonde/SENSOR:state:JSONPATH($.Time)]" }
 Number frigo_microonde_Today "Oggi [%.1f kWh]" (Sonoff_FrigoMicroonde)     { mqtt="<[mqttcontainer:tele/SonoffPowR2-frigo-microonde/SENSOR:state:JSONPATH($.ENERGY.Today)]" }
 Number frigo_microonde_Yesterday "Ieri [%.1f kWh]" (Sonoff_FrigoMicroonde, Grafico_consumo_giornaliero)     { mqtt="<[mqttcontainer:tele/SonoffPowR2-frigo-microonde/SENSOR:state:JSONPATH($.ENERGY.Yesterday)]" }
 Number frigo_microonde_Total "Totale [%.1f kWh]" (Sonoff_FrigoMicroonde)     { mqtt="<[mqttcontainer:tele/SonoffPowR2-frigo-microonde/SENSOR:state:JSONPATH($.ENERGY.Total)]" }
@@ -146,6 +149,7 @@ Switch frigo_microonde_Reachable "Modulo in rete" (Sonoff_FrigoMicroonde) {autou
 
 //FOTOVOLTAICO SONOFF TASMOTA MQTT
 Number fotovoltaico_Power "Produz. [%.1f W]" (Sonoff_fotovoltaico, Grafico_Sonoff_fotovoltaico, Grafico_energia)     { mqtt="<[mqttcontainer:tele/SonoffPowR2-fotovoltaico/SENSOR:state:JSONPATH($.ENERGY.Power)]" }
+DateTime fotovoltaico_Time "Time [%1$td/%1$tm - %1$tH:%1$tM:%1$tS]" <clock> (Sonoff_fotovoltaico)     { mqtt="<[mqttcontainer:tele/SonoffPowR2-fotovoltaico/SENSOR:state:JSONPATH($.Time)]" }
 Number fotovoltaico_Today "Oggi [%.1f kWh]" (Sonoff_fotovoltaico)     { mqtt="<[mqttcontainer:tele/SonoffPowR2-fotovoltaico/SENSOR:state:JSONPATH($.ENERGY.Today)]" }
 Number fotovoltaico_Yesterday "Ieri [%.1f kWh]" (Sonoff_fotovoltaico, Grafico_consumo_giornaliero)     { mqtt="<[mqttcontainer:tele/SonoffPowR2-fotovoltaico/SENSOR:state:JSONPATH($.ENERGY.Yesterday)]" }
 Number fotovoltaico_Total "Totale [%.1f kWh]" (Sonoff_fotovoltaico)     { mqtt="<[mqttcontainer:tele/SonoffPowR2-fotovoltaico/SENSOR:state:JSONPATH($.ENERGY.Total)]" }
@@ -155,6 +159,7 @@ Switch fotovoltaico_Reachable "Modulo in rete" (Sonoff_fotovoltaico) {autoupdate
 
 //LAVASTOVIGLIE - BOILER SONOFF TASMOTA MQTT
 Number lavastoviglie_boiler_Power "Lavast. [%.1f W]" (Sonoff_lavastoviglie, Grafico_Sonoff_lavastoviglie, Grafico_energia)     { mqtt="<[mqttcontainer:tele/SonoffPowR2-lavastoviglie-boiler/SENSOR:state:JSONPATH($.ENERGY.Power)]" }
+DateTime lavastoviglie_boiler_Time "Time [%1$td/%1$tm - %1$tH:%1$tM:%1$tS]" <clock> (Sonoff_lavastoviglie)     { mqtt="<[mqttcontainer:tele/SonoffPowR2-lavastoviglie-boiler/SENSOR:state:JSONPATH($.Time)]" }
 Number lavastoviglie_boiler_Today "Oggi [%.1f kWh]" (Sonoff_lavastoviglie)     { mqtt="<[mqttcontainer:tele/SonoffPowR2-lavastoviglie-boiler/SENSOR:state:JSONPATH($.ENERGY.Today)]" }
 Number lavastoviglie_boiler_Yesterday "Ieri [%.1f kWh]" (Sonoff_lavastoviglie, Grafico_consumo_giornaliero)     { mqtt="<[mqttcontainer:tele/SonoffPowR2-lavastoviglie-boiler/SENSOR:state:JSONPATH($.ENERGY.Yesterday)]" }
 Number lavastoviglie_boiler_Total "Totale [%.1f kWh]" (Sonoff_lavastoviglie)     { mqtt="<[mqttcontainer:tele/SonoffPowR2-lavastoviglie-boiler/SENSOR:state:JSONPATH($.ENERGY.Total)]" }

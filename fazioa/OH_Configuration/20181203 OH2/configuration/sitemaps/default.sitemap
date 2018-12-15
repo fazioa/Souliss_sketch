@@ -35,6 +35,11 @@ sitemap default label="Tonino" {
     Group item=Divano icon="office"
     
     Group item=Cucina icon="kitchen"
+
+    Text label="Albero di Natale" icon="albero" {
+		Switch item=alberoNatale label="Albero di Natale"
+	}
+	
     
 Text label="Consumi / Produzione" icon="energy" {
      Text item=consumo label="Consumo [%.1f W]"
@@ -67,6 +72,7 @@ Text label="Grafico giornalieri" icon="chart" {
 
 Text label="Frigo + Microonde" icon="energy" {
     Group item=Sonoff_FrigoMicroonde label="Dati"
+    Text label="Grafici" icon="chart"{
     Switch item=Chart_Period label="Frigo + Microonde" mappings=[0="4 Hours", 1= "1 Day", 2="3 Days", 3="Week", 4="Month"] 
 				Chart item=Grafico_Sonoff_FrigoMicroonde period=4h refresh=60000 visibility=[Chart_Period==0, Chart_Period=="Uninitialized"]  
 				Chart item=Grafico_Sonoff_FrigoMicroonde period=D refresh=3600000 visibility=[Chart_Period==1]  
@@ -74,10 +80,12 @@ Text label="Frigo + Microonde" icon="energy" {
 				Chart item=Grafico_Sonoff_FrigoMicroonde period=W refresh=21600000 visibility=[Chart_Period==3]  
 				Chart item=Grafico_Sonoff_FrigoMicroonde period=M refresh=21600000 visibility=[Chart_Period==4] 
 }
+}
 
 
 Text label="Fotovoltaico" icon="energy" {
     Group item=Sonoff_fotovoltaico label="Dati"
+        Text label="Grafici" icon="chart"{
     Switch item=Chart_Period label="Fotovoltaico" mappings=[0="4 Hours", 1= "1 Day", 2="3 Days", 3="Week", 4="Month"] 
 				Chart item=Grafico_Sonoff_fotovoltaico period=4h refresh=60000 visibility=[Chart_Period==0, Chart_Period=="Uninitialized"]  
 				Chart item=Grafico_Sonoff_fotovoltaico period=D refresh=3600000 visibility=[Chart_Period==1]  
@@ -85,15 +93,18 @@ Text label="Fotovoltaico" icon="energy" {
 				Chart item=Grafico_Sonoff_fotovoltaico period=W refresh=21600000 visibility=[Chart_Period==3]  
 				Chart item=Grafico_Sonoff_fotovoltaico period=M refresh=21600000 visibility=[Chart_Period==4] 
 }
+}
 
 Text label="Lavastoviglie + Boiler" icon="energy" {
     Group item=Sonoff_lavastoviglie label="Dati"
+        Text label="Grafici" icon="chart"{
     Switch item=Chart_Period label="Lavastoviglie + Boiler" mappings=[0="4 Hours", 1= "1 Day", 2="3 Days", 3="Week", 4="Month"] 
 				Chart item=Grafico_Sonoff_lavastoviglie period=4h refresh=60000 visibility=[Chart_Period==0, Chart_Period=="Uninitialized"]  
 				Chart item=Grafico_Sonoff_lavastoviglie period=D refresh=3600000 visibility=[Chart_Period==1]  
                 Chart item=Grafico_Sonoff_lavastoviglie period=3D refresh=21600000 visibility=[Chart_Period==2]  
 				Chart item=Grafico_Sonoff_lavastoviglie period=W refresh=21600000 visibility=[Chart_Period==3]  
 				Chart item=Grafico_Sonoff_lavastoviglie period=M refresh=21600000 visibility=[Chart_Period==4] 
+}
 }
 
         Text label="Temperatura e umidità" icon="temperature" {
