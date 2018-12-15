@@ -82,7 +82,7 @@ boolean bLedState = false;
 
 void B_ButtonActions(const int value);
 SimplePress pushButtonSwitches[] = {
-  {PIN_BUTTON_14, 700, B_ButtonActions}
+  {PIN_BUTTON_14, 400, B_ButtonActions}
 };
 
 ESP8266WebServer httpServer(80);
@@ -94,9 +94,6 @@ void setup()
   Serial.begin(115200);
   Serial.println("Node Starting");
 #endif
-
-  SimplePress::beginAll();
-  SimplePress::setDebounceAll(200);
 
   // Define output pins
   pinMode(PIN_RELAY, OUTPUT);    // Relè
@@ -143,18 +140,19 @@ void setup()
   NotificaTelegram();
 
   MDNS.begin(HOSTNAME);
-
   httpUpdater.setup(&httpServer);
   httpServer.begin();
-
   MDNS.addService("http", "tcp", 80);
+  
+  SimplePress::beginAll();
+  SimplePress::setDebounceAll(200);
 }
 
 void loop()
 {
   httpServer.handleClient();
 
-  //ArduinoOTA.handle();
+ //ArduinoOTA.handle();
   SimplePress::update();
 
   EXECUTEFAST() {
@@ -164,15 +162,13 @@ void loop()
       //led attività
       bLedState = !bLedState;
       digitalWrite(PIN_LED, bLedState);
-
-
     }
 
-    SHIFT_1110ms(0) {
+    SHIFT_2110ms(10) {
       //recupera i valore su REMOTE_ADDRESS e li copia sugli slot locali
       PullData(REMOTE_ADDRESS, SLOT_LOCALE_X_RELAY_REMOTO_1, SLOT_RELAY_REMOTO_1, 1);
     }
-    SHIFT_1110ms(1) {
+    SHIFT_2110ms(100) {
       PullData(REMOTE_ADDRESS, SLOT_LOCALE_X_RELAY_REMOTO_0, SLOT_RELAY_REMOTO_0, 1);
     }
 
