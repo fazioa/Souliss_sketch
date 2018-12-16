@@ -2,12 +2,27 @@
   Interruttore luce tettoia
   Invia messaggi di accensione e spegnimento al luce tettoia e luce muro e forno
   Funziona con switch collegato al pin 14
+  Singolo click comanda rele onboard
+  Dobbio click invia messaggio accensiona a REMOTE_ADDRESS 0xAB17 SLOT 0
+  Triplo click invia messaggio accensiona a REMOTE_ADDRESS 0xAB17 SLOT 0
+  Pressione lunga invia entrambi i messaggi e spegne/accende rele onboard
 
-  Sketch: POWER SOCKET - VER.2 - Souliss - Static Configuration
   Author: Tonino Fazio
 
   ESP Core 2.4.2
   This example is only supported on ESP8266.
+
+  Arduino IDE 1.8.8
+
+SONOFF Basic
+Compile:
+Generic ESP8266 Module
+CPU Frequency: 80MHz
+Crystal Frequency: 26MHz
+Flash Size: 1Mb (no SPIFFS) 
+Flash Mode: DIO
+Flash Frequency 40 MHz
+Other: Default
 
 
 ***************************************************************************/
@@ -52,7 +67,7 @@
 //*************************************************************************
 // Define the network configuration according to your router settingsuration according to your router settings
 // and the other on the wireless oneless one
-#define peer_address  0xAB12
+#define peer_address  0xAB11
 #define myvNet_subnet 0xFF00
 #define myvNet_supern    0xAB10 //gateway
 //*************************************************************************
