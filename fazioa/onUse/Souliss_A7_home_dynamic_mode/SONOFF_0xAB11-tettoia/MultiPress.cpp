@@ -27,7 +27,7 @@ bool SimplePress::begin()
 {
   pinMode(pin, INPUT_PULLUP);
   lastState = HIGH;
-  Serial.println(pin);
+  //Serial.println(pin);
   return true;
 }
 
