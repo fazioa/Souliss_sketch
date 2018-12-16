@@ -58,7 +58,7 @@ Other: Default
 //#define   BOTTOKEN "XXXXXXXXX:XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"  // your Bot Token (Get from Botfather)
 //#define  CHAT_ID "chat ID number"
 
-#include "MultiPress.h"
+#include "ClickButton.h"
 #include <UniversalTelegramBot.h>
 #include "Souliss.h"
 
@@ -84,8 +84,7 @@ Other: Default
 #define PIN_BUTTON_0 0
 #define PIN_BUTTON_14 14
 
-#define PIN_RELAY_ON 12
-#define PIN_RELAY_OFF 13
+ClickButton button1(PIN_BUTTON_14, LOW, CLICKBTN_PULLUP);
 
 
 //Variable to Handle WiFio Signal
@@ -95,11 +94,6 @@ int bars = 0;
 #define T_WIFI_STR    3 //It takes 2 slots
 
 boolean bLedState = false;
-
-void B_ButtonActions(const int value);
-SimplePress pushButtonSwitches[] = {
-  {PIN_BUTTON_14, 700, B_ButtonActions}
-};
 
 ESP8266WebServer httpServer(80);
 ESP8266HTTPUpdateServer httpUpdater;
@@ -159,15 +153,24 @@ void setup()
   httpServer.begin();
   MDNS.addService("http", "tcp", 80);
   
-  SimplePress::beginAll();
+ button1.debounceTime   = 20;   // Debounce timer in ms
+  button1.multiclickTime = 250;  // Time limit for multi clicks
+  button1.longClickTime  = 1000; // time until "held-down clicks" register
 }
 
 void loop()
 {
   httpServer.handleClient();
 
- //ArduinoOTA.handle();
-  SimplePress::update();
+  // Update button state
+  button1.Update();
+
+if(button1.clicks == 1) buttonActions(1);
+else if(button1.clicks == 2) buttonActions(2);
+else if(button1.clicks == 3) buttonActions(3);
+//long press
+else if(button1.clicks <= -1) buttonActions(-1);
+
 
   EXECUTEFAST() {
     UPDATEFAST();
@@ -305,7 +308,7 @@ void NotificaTelegram() {
 }
 //end telegram
 
-void B_ButtonActions(const int value)  // example of registering Multi-Presses
+void buttonActions(const int value)  // example of registering Multi-Presses
 {
 #ifdef SERIAL_DEBUG
   Serial.print(F("Button:\t"));
