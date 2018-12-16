@@ -14,7 +14,7 @@
 
   Arduino IDE 1.8.8
 
-SONOFF Basic
+Scheda Ex-Store V3
 Compile:
 Generic ESP8266 Module
 CPU Frequency: 80MHz
@@ -82,10 +82,13 @@ Other: Default
 #define REMOTE_ADDRESS 0xAB17
 
 #define PIN_RELAY 12
-#define PIN_LED 13
+//#define PIN_LED 13
 #define PIN_BUTTON_0 0
 #define PIN_BUTTON_14 14
-#define LEDPIN 13
+
+#define PIN_RELAY_ON 12
+#define PIN_RELAY_OFF 13
+
 
 //Variable to Handle WiFio Signal
 long rssi = 0;
@@ -112,20 +115,26 @@ void setup()
 
   // Define output pins
   pinMode(PIN_RELAY, OUTPUT);    // Relè
-  pinMode(PIN_LED, OUTPUT);
+ // pinMode(PIN_LED, OUTPUT);
   pinMode(PIN_BUTTON_14, INPUT_PULLUP);
 
+  digitalWrite(PIN_RELAY_ON, LOW);
+  pinMode(PIN_RELAY_ON, OUTPUT);    // Relay ON
 
-  digitalWrite(PIN_LED, HIGH);
+  digitalWrite(PIN_RELAY_OFF, LOW);
+  pinMode(PIN_RELAY_OFF, OUTPUT);    // Relay OFF
+
+  
+  //digitalWrite(PIN_LED, HIGH);
   //delay 11 seconds
   delay(11000);
-  digitalWrite(PIN_LED, LOW);
+  //digitalWrite(PIN_LED, LOW);
   Initialize();
 
-  digitalWrite(PIN_LED, HIGH);
+ // digitalWrite(PIN_LED, HIGH);
   // Connect to the WiFi network and get an address from DHCP
   GetIPAddress();
-  digitalWrite(PIN_LED, LOW);
+  //digitalWrite(PIN_LED, LOW);
   // This is the vNet address for this node, used to communicate with other
   // nodes in your Souliss network
   SetAddress(peer_address, myvNet_subnet, myvNet_supern);          // Address on the wireless interface
@@ -176,7 +185,7 @@ void loop()
     FAST_1110ms() {
       //led attività
       bLedState = !bLedState;
-      digitalWrite(PIN_LED, bLedState);
+     // digitalWrite(PIN_LED, bLedState);
     }
 
     SHIFT_2110ms(10) {
@@ -199,7 +208,9 @@ void loop()
      // DigIn(PIN_BUTTON_14, Souliss_T1n_ToggleCmd, SLOT_RELAY);
 
       Logic_SimpleLight(SLOT_RELAY);
-      DigOut(PIN_RELAY, Souliss_T1n_Coil, SLOT_RELAY);
+     // DigOut(PIN_RELAY, Souliss_T1n_Coil, SLOT_RELAY);
+        PulseLowDigOut(PIN_RELAY_ON, Souliss_T1n_OnCoil, SLOT_RELAY);
+      PulseLowDigOut(PIN_RELAY_OFF, Souliss_T1n_OffCoil, SLOT_RELAY);
     }
 
     FAST_PeerComms();
