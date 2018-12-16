@@ -28,7 +28,7 @@ uint8_t static_ip_gateway[4]  = {STATIC_IP_GW};
   Serial.println("Address received"); \
   /** This is the vNet address for this node, used to communicate with other */ \
   /** nodes in your Souliss network*/ \
-  SetAddress(peer_address, myvNet_subnet, wifi_bridge_address);          /* Address on the wireless interface*/ \
+  SetAddress(peer_address, myvNet_subnet, wifi_bridge_address);          /* Address on the wireless interface*/ 
   
 #define STATIC_CONNECTION_Init_STATICIP()              \
   Serial.println("start STATIC_CONNECTION_Init_STATICIP"); \

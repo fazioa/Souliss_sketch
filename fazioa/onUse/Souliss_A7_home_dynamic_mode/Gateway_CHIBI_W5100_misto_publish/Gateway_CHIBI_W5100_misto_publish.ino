@@ -40,13 +40,14 @@ uint8_t ip_gateway[4]  = {192, 168, 1, 1};
 #define peer_chibi_address_giardino	0x6513 //giardino
 #define peer_chibi_address_fotovoltaico	0x6514 //fotovoltaico
 #define peer_eth_address_soggiorno  0x0010 //soggiorno
-#define peer_wifi_address_luceTettoia  0xAB11 //soggiorno
+#define peer_wifi_address_SONOFF_Giardino_Tettoia  0xAB11 //soggiorno
 #define peer_wifi_address_PowerSocket  0xAB12 //soggiorno
 #define peer_wifi_address_LYT1  0xAB13 //LYT
 #define peer_wifi_address_LYT2  0xAB14 //LYT
 #define peer_wifi_address_SONOFF_Divano  0xAB15 //SONOFF Smart Socket - Divano
 #define peer_wifi_address_SONOFF_Cucina  0xAB16 //SONOFF Smart Socket - Cucina
-#define peer_wifi_address_SONOFF_Giardino  0xAB18 //SONOFF Smart Socket - Giardino
+#define peer_wifi_address_SONOFF_Giardino_Muro_Forno  0xAB17 //SONOFF Smart Socket - Giardino
+//#define peer_wifi_address_SONOFF_Giardino_Tettoia  0xAB18 //SONOFF Smart Socket - Giardino
 #define peer_wifi_address_SDM220_soggiorno  0xAB19 //SONOFF SDM220 Modbus
 #define peer_wifi_address_termostato_soggiorno  0xAB20 //termostato soggiorno
 #define peer_wifi_address_termostato_piano_terra  0xAB21 //termostato piano terra
@@ -82,7 +83,7 @@ void setup()
   SetAsPeerNode(peer_chibi_address_giardino, 2);
   SetAsPeerNode(peer_chibi_address_termocamino, 3);
   SetAsPeerNode(peer_chibi_address_fotovoltaico, 4);
-  SetAsPeerNode(peer_wifi_address_luceTettoia, 5);
+  SetAsPeerNode(peer_wifi_address_SONOFF_Giardino_Tettoia, 5);
   SetAsPeerNode(peer_wifi_address_termostato_soggiorno, 6);
   SetAsPeerNode(peer_wifi_address_termostato_piano_terra, 7);
   SetAsPeerNode(peer_wifi_address_LYT1, 8);
@@ -91,8 +92,10 @@ void setup()
   SetAsPeerNode(peer_wifi_address_ex_store_birra, 11);
   SetAsPeerNode(peer_wifi_address_SONOFF_Divano, 12);
   SetAsPeerNode(peer_wifi_address_SONOFF_Cucina, 13);
-  SetAsPeerNode(peer_wifi_address_SONOFF_Giardino, 14);
+  //SetAsPeerNode(peer_wifi_address_SONOFF_Giardino_Tettoia, 14);
   SetAsPeerNode(peer_wifi_address_SDM220_soggiorno, 15);
+  SetAsPeerNode(peer_wifi_address_SONOFF_Giardino_Muro_Forno, 16);
+  
   
 
   

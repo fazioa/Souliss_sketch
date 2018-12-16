@@ -1,5 +1,5 @@
-#define DEBUG_DEV 0
-#define DEBUG 0
+#define DEBUG_DEV 1
+#define DEBUG 1
 /**************************************************************************
   Wi-Fi Smart Thermostat based on Souliss IoT Framework
     -Olimex ESP8266-EVB
@@ -10,17 +10,29 @@
   This example is only supported on ESP8266.
   Developed by mcbittech & fazioa
 
-SPIFFS Data, info here:
+  Compiled with Arduino IDE 1.6.8
+  ESP core 2.3.0
+  Flash mode DIO
+  Flash Size 2M (1M SPIFFS) for Olimex
+  Frequency 160MHz
+
+  SPIFFS Data, info here:
   https://github.com/esp8266/Arduino/blob/master/doc/filesystem.md
 ***************************************************************************/
+
+// RESET OGNI 20 MIN SE NON E' COLLEGATO AL GATEWAY
+#define  VNET_RESETTIME_INSKETCH
+#define VNET_RESETTIME      0x00042F7 // ((20 Min*60)*1000)/70ms = 17143 => 42F7
+#define VNET_HARDRESET      ESP.reset()
+
 // Let the IDE point to the Souliss framework
 #include "SoulissFramework.h"
 
 //new customs Souliss_T3n_DeadBand and Souliss_T3n_Hysteresis
 #define T3N_DEADBAND_INSKETCH
-	#define Souliss_T3n_DeadBand      0.1     // Degrees Deadband
+#define Souliss_T3n_DeadBand      0.1     // Degrees Deadband
 #define T3N_HYSTERESIS_INSKETCH
-	#define Souliss_T3n_Hysteresis      0.1     // Degrees Hysteresis
+#define Souliss_T3n_Hysteresis      0.1     // Degrees Hysteresis
 
 #include <ESP8266WiFi.h>
 #include <ESP8266mDNS.h>
@@ -79,6 +91,12 @@ float fVal = 0;
 float setpoint = 0;
 float encoderValue_prec = 0;
 
+
+//Variable to Handle WiFio Signal
+long rssi = 0;
+int bars = 0;
+
+
 //DISPLAY
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #include <SPI.h>
@@ -114,16 +132,16 @@ AsyncEventSource events("/events");
 File fsUploadFile;
 uint8_t buff{};
 
-String S_temperature_WBS="22.3";
-String S_setpoint_WBS="22.4";
-bool S_relestatus_WBS=0;
-String S_humidity_WBS="58.8";
+String S_temperature_WBS = "22.3";
+String S_setpoint_WBS = "22.4";
+bool S_relestatus_WBS = 0;
+String S_humidity_WBS = "58.8";
 String S_nextstep_WBS;
 String S_filena_WBS;
-bool B_away_WBS=0;
-bool B_powerfull_WBS=0;
-bool B_is_away_WBS=0;
-bool B_is_powerfull_WBS=0;
+bool B_away_WBS = 0;
+bool B_powerfull_WBS = 0;
+bool B_is_away_WBS = 0;
+bool B_is_powerfull_WBS = 0;
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -133,20 +151,20 @@ void setup()
   Serial.begin(115200);
   Serial.setDebugOutput(true);  //debug WBServer
 #endif
-  
+
   //SPIFFS
   /////////////////////////////////////////////////////////////////////////////////////////////////////////
   SPIFFS.begin();
   File  sst_spiffs_verifica = SPIFFS.open("/sst_settings.json", "r");
   if (!sst_spiffs_verifica) {
-    #ifdef DEBUG
-      Serial.println(" ");
-      Serial.println("Non riesco a leggere sst_settings.json! formatto la SPIFFS...");
-    #endif
+#ifdef DEBUG
+    Serial.println(" ");
+    Serial.println("Non riesco a leggere sst_settings.json! formatto la SPIFFS...");
+#endif
     SPIFFS.format();
-    #ifdef DEBUG || DEBUG_DEV
-      Serial.println("Spiffs formatted");
-    #endif
+#ifdef DEBUG || DEBUG_DEV
+    Serial.println("Spiffs formatted");
+#endif
     ReadAllSettingsFromPreferences();
     ReadCronoMatrixSPIFFS();
   }
@@ -225,13 +243,16 @@ void setup()
   initMenu();
   myMenu = getMenu();
 
-  
-  //OTA-WBServer  
+  Set_T51(T_WIFI_STRDB); //Imposto il tipico per contenere il segnale del Wifi in decibel
+  Set_T51(T_WIFI_STR); //Imposto il tipico per contenere il segnale del Wifi in barre da 1 a 5
+
+  //OTA-WBServer
   setup_OTA_WBServer();
-  
+
   setStartSetpoint(SETPOINT_START);
   // Init HomeScreen
   initScreen();
+
 }
 
 void loop()
@@ -289,16 +310,16 @@ void loop()
             //SETPOINT PAGE ////////////////////////////////////////////////////////////////
 
             if (getLayout1()) {
-              #ifdef DEBUG || DEBUG_DEV
-                Serial.println("display_setpointPage - layout 1");
-              #endif
+#ifdef DEBUG || DEBUG_DEV
+              Serial.println("display_setpointPage - layout 1");
+#endif
               display_layout1_background(ucg, arrotonda(getEncoderValue()) - arrotonda(setpoint));
               display_layout1_setpointPage(ucg, getEncoderValue(), Souliss_SinglePrecisionFloating(memory_map + MaCaco_OUT_s + SLOT_THERMOSTAT + 1), humidity, getSoulissSystemState());
             }
             else if (getLayout2()) {
-              #ifdef DEBUG || DEBUG_DEV
-                Serial.println("display_setpointPage - layout 2");
-              #endif
+#ifdef DEBUG || DEBUG_DEV
+              Serial.println("display_setpointPage - layout 2");
+#endif
               display_layout2_Setpoint(ucg, getEncoderValue(), getSoulissSystemState(), bChildLock);
             }
           }
@@ -327,7 +348,7 @@ void loop()
           setSoulissDataChanged();
         }
       }
-      S_setpoint_WBS=setpoint;
+      S_setpoint_WBS = setpoint;
     }
 
 
@@ -336,19 +357,19 @@ void loop()
       //Al click in base al valore attuale di SSTPage, si imposta la pagina successiva
 
       int b = checkButton(ENCODER_SWITCH);
-      if (b == 2){
-        #ifdef DEBUG || DEBUG_DEV 
-          Serial.println("Double Click");
-        #endif
+      if (b == 2) {
+#ifdef DEBUG || DEBUG_DEV
+        Serial.println("Double Click");
+#endif
       }
       if (b == 3) {
-        #ifdef DEBUG || DEBUG_DEV
-          Serial.println("Hold");
-        #endif
+#ifdef DEBUG || DEBUG_DEV
+        Serial.println("Hold");
+#endif
         bChildLock = !bChildLock;
-        #ifdef DEBUG || DEBUG_DEV
-          Serial.print("Child Lock: "); Serial.println(bChildLock);
-        #endif
+#ifdef DEBUG || DEBUG_DEV
+        Serial.print("Child Lock: "); Serial.println(bChildLock);
+#endif
         ucg.clearScreen();
         setUIChanged();
         if (getLayout2()) {
@@ -356,72 +377,72 @@ void loop()
           initScreen();
         }
       }
-      if (b == 4){ 
-        #ifdef DEBUG || DEBUG_DEV  
-          Serial.println("Long Hold");
-        #endif
+      if (b == 4) {
+#ifdef DEBUG || DEBUG_DEV
+        Serial.println("Long Hold");
+#endif
       }
       if (b == 1) {
         switch (SSTPage.actualPage) {
           case PAGE_HOME:
             if (ACTIVATETOPICSPAGE > 0) {
-              #ifdef DEBUG || DEBUG_DEV
-                Serial.println("from PAGE_HOME to PAGE_TOPICS1");
-              #endif
+#ifdef DEBUG || DEBUG_DEV
+              Serial.println("from PAGE_HOME to PAGE_TOPICS1");
+#endif
               SSTPage.actualPage = PAGE_TOPICS1;
               setUIChanged();
             } else {
-              #ifdef DEBUG || DEBUG_DEV
-                Serial.println("from PAGE_HOME to PAGE_MENU");
-              #endif
+#ifdef DEBUG || DEBUG_DEV
+              Serial.println("from PAGE_HOME to PAGE_MENU");
+#endif
               SSTPage.actualPage = PAGE_MENU;
               setUIChanged();
               ucg.clearScreen();
               setMenuEnabled();
               //se system and UI changed
               setUIChanged();
-              #ifdef DEBUG || DEBUG_DEV
-                Serial.println("Print Menu");
-              #endif
+#ifdef DEBUG || DEBUG_DEV
+              Serial.println("Print Menu");
+#endif
               printMenu(ucg);
             }
             break;
           case PAGE_TOPICS1:
             if (TOPICSPAGESNUMBER == 1) {
-              #ifdef DEBUG || DEBUG_DEV  
-                Serial.println("from PAGE_TOPICS1 to PAGE_MENU");
-              #endif
+#ifdef DEBUG || DEBUG_DEV
+              Serial.println("from PAGE_TOPICS1 to PAGE_MENU");
+#endif
               SSTPage.actualPage = PAGE_MENU;
 
               setUIChanged();
               ucg.clearScreen();
               setMenuEnabled();
-              #ifdef DEBUG || DEBUG_DEV
-                Serial.println("Print Menu");
-              #endif
+#ifdef DEBUG || DEBUG_DEV
+              Serial.println("Print Menu");
+#endif
               printMenu(ucg);
             }
             else if (TOPICSPAGESNUMBER == 2) {
-              #ifdef DEBUG || DEBUG_DEV
-                Serial.println("from PAGE_TOPICS1 to PAGE_TOPICS2");
-              #endif
+#ifdef DEBUG || DEBUG_DEV
+              Serial.println("from PAGE_TOPICS1 to PAGE_TOPICS2");
+#endif
               SSTPage.actualPage = PAGE_TOPICS2;
               setUIChanged();
             }
             break;
           case PAGE_TOPICS2:
-            #ifdef DEBUG || DEBUG_DEV
-              Serial.println("from PAGE_TOPICS2 to PAGE_MENU");
-            #endif
+#ifdef DEBUG || DEBUG_DEV
+            Serial.println("from PAGE_TOPICS2 to PAGE_MENU");
+#endif
             SSTPage.actualPage = PAGE_MENU;
             setUIChanged();
             ucg.clearScreen();
             setMenuEnabled();
             //se system and UI changed
             setUIChanged();
-            #ifdef DEBUG || DEBUG_DEV
-              Serial.println("Print Menu");
-            #endif
+#ifdef DEBUG || DEBUG_DEV
+            Serial.println("Print Menu");
+#endif
             printMenu(ucg);
             break;
           case PAGE_MENU:
@@ -436,14 +457,14 @@ void loop()
         if (getProgCrono()) {
           SSTPage.actualPage = PAGE_CRONO;
           byte menu;
-          #ifdef DEBUG || DEBUG_DEV
-            Serial.println("Crono");
-          #endif
+#ifdef DEBUG || DEBUG_DEV
+          Serial.println("Crono");
+#endif
           ucg.clearScreen();
           drawCrono(ucg);
-          #ifdef DEBUG || DEBUG_DEV
-            Serial.println("drawCrono ok");
-          #endif
+#ifdef DEBUG || DEBUG_DEV
+          Serial.println("drawCrono ok");
+#endif
           menu = 1;
           //save encoder value before crono programmation
           setpoint = getEncoderValue();
@@ -453,15 +474,15 @@ void loop()
             setBoxes(ucg);
             if (exitmainmenu())
             {
-              #ifdef DEBUG || DEBUG_DEV
-                Serial.println("from PAGE_CRONO to PAGE_HOME");
-              #endif
+#ifdef DEBUG || DEBUG_DEV
+              Serial.println("from PAGE_CRONO to PAGE_HOME");
+#endif
               SSTPage.actualPage = PAGE_HOME;
               initScreen();
               setUIChanged();
               menu = 0;
             }
-          yield();  
+            yield();
           }
           //restore encoder value
           setEncoderValue(setpoint);
@@ -501,8 +522,8 @@ void loop()
       //*************************************************************************
       Logic_Thermostat(SLOT_THERMOSTAT);
       // Start the heater and the fans
-      nDigOut(RELE, Souliss_T3n_HeatingOn, SLOT_THERMOSTAT);    // Heater 
-      S_relestatus_WBS=(mOutput(SLOT_THERMOSTAT) & Souliss_T3n_HeatingOn);//to WBServer
+      nDigOut(RELE, Souliss_T3n_HeatingOn, SLOT_THERMOSTAT);    // Heater
+      S_relestatus_WBS = (mOutput(SLOT_THERMOSTAT) & Souliss_T3n_HeatingOn); //to WBServer
 
 
       // We are not handling the cooling mode, if enabled by the user, force it back
@@ -532,39 +553,46 @@ void loop()
         //EXIT MENU - Actions
         //write min bright on T19
         memory_map[MaCaco_OUT_s + SLOT_BRIGHT_DISPLAY + 1] = getDisplayBright();
-        #ifdef DEBUG || DEBUG_DEV
-          Serial.print("Set Display Bright: "); Serial.println(memory_map[MaCaco_OUT_s + SLOT_BRIGHT_DISPLAY + 1]);
-        #endif
+#ifdef DEBUG || DEBUG_DEV
+        Serial.print("Set Display Bright: "); Serial.println(memory_map[MaCaco_OUT_s + SLOT_BRIGHT_DISPLAY + 1]);
+#endif
 
         //write system ON/OFF
         if (getLocalSystem()) {
 
           //ON
-          #ifdef DEBUG || DEBUG_DEV
-            Serial.println("Set system ON ");
-          #endif
+#ifdef DEBUG || DEBUG_DEV
+          Serial.println("Set system ON ");
+#endif
           set_ThermostatModeOn(SLOT_THERMOSTAT);        // Set System On
 
         } else {
 
           //OFF
-          #ifdef DEBUG || DEBUG_DEV
-            Serial.println("Set system OFF ");
-          #endif
+#ifdef DEBUG || DEBUG_DEV
+          Serial.println("Set system OFF ");
+#endif
           set_ThermostatOff(SLOT_THERMOSTAT);
         }
         memory_map[MaCaco_IN_s + SLOT_THERMOSTAT] = Souliss_T3n_RstCmd;          // Reset
         // Trig the next change of the state
         setSoulissDataChanged();
-        #ifdef DEBUG || DEBUG_DEV
-          Serial.println("Init Screen");
-        #endif
+#ifdef DEBUG || DEBUG_DEV
+        Serial.println("Init Screen");
+#endif
         setUIChanged();
         initScreen();
 
         resetSystemChanged();
       }
     }
+
+    FAST_9110ms() {
+      //Processa le logiche per il segnale WiFi
+      Read_T51(T_WIFI_STRDB);
+      Read_T51(T_WIFI_STR);
+    }
+
 
     FAST_2110ms() {
 
@@ -658,7 +686,7 @@ void loop()
       }
     }
 
-    SHIFT_910ms(1) {
+    FAST_2110ms() {
       subscribeTopics();
       if (getDoSystemReset()) SST_Reset();
     }
@@ -667,6 +695,28 @@ void loop()
       //PUBLISH MESSAGE WHEN HEATING ON OR OFF
       publishHeating_ON_OFF();
     }
+
+    FAST_91110ms() {
+      //verifica ogni 90 sec (fast 91110) che la ESP sia collegata alla rete Wifi (5 tentativi al 6^fa hard reset)
+      int tent = 0;
+
+      while ((WiFi.status() != WL_CONNECTED) && tent < 4)
+      {
+        WiFi.disconnect();
+        WiFi.mode(WIFI_STA);
+        WiFi.begin(WiFi_SSID , WiFi_Password);
+        int ritardo = 0;
+        while ((WiFi.status() != WL_CONNECTED) && ritardo < 20)
+        {
+          delay(500);
+          ritardo += 1;
+        }
+        if (WiFi.status() != WL_CONNECTED )
+          delay(2000);
+        tent += 1;
+      }
+    }
+
 
 #if(DYNAMIC_CONNECTION)
     DYNAMIC_CONNECTION_fast();
@@ -677,7 +727,9 @@ void loop()
 
   EXECUTESLOW() {
     UPDATESLOW();
-
+    SLOW_10s() {  // Process the timer every 10 seconds
+      check_wifi_signal();
+    }
     SLOW_50s() {
       getTemp();
 
@@ -702,52 +754,52 @@ void loop()
 
           }
       }
-      if ((B_away_WBS==0 && B_powerfull_WBS==0)) {
+      if ((B_away_WBS == 0 && B_powerfull_WBS == 0)) {
         if (getCrono()) {
-          B_is_away_WBS=0;
-          B_is_powerfull_WBS=0;
-          mOutput(SLOT_AWAY)=Souliss_T1n_OffCmd;
-          #ifdef DEBUG || DEBUG_DEV
-            Serial.println("CRONO-> aggiornamento");
-          #endif
+          B_is_away_WBS = 0;
+          B_is_powerfull_WBS = 0;
+          mOutput(SLOT_AWAY) = Souliss_T1n_OffCmd;
+#ifdef DEBUG || DEBUG_DEV
+          Serial.println("CRONO-> aggiornamento");
+#endif
           setSetpoint(checkNTPcrono(ucg, setpoint));
           setEncoderValue(checkNTPcrono(ucg, setpoint));
-          #ifdef DEBUG || DEBUG_DEV
-            Serial.print("CRONO-> setpoint: "); Serial.println(setpoint);
-          #endif
+#ifdef DEBUG || DEBUG_DEV
+          Serial.print("CRONO-> setpoint: "); Serial.println(setpoint);
+#endif
         }
-      }else{
-        if (B_is_away_WBS==1 && memory_map[MaCaco_OUT_s + SLOT_AWAY]==0) {
-          B_away_WBS=0;
-          B_is_away_WBS=0;
-          mOutput(SLOT_AWAY)=Souliss_T1n_OffCmd;
-          #ifdef DEBUG || DEBUG_DEV
-            Serial.println("AWAY function OFF");
-          #endif
+      } else {
+        if (B_is_away_WBS == 1 && memory_map[MaCaco_OUT_s + SLOT_AWAY] == 0) {
+          B_away_WBS = 0;
+          B_is_away_WBS = 0;
+          mOutput(SLOT_AWAY) = Souliss_T1n_OffCmd;
+#ifdef DEBUG || DEBUG_DEV
+          Serial.println("AWAY function OFF");
+#endif
         }
-        if (B_away_WBS==1 || memory_map[MaCaco_OUT_s + SLOT_AWAY]==1) {
-          B_is_away_WBS=1;
-          B_powerfull_WBS=0;
-          B_is_powerfull_WBS=0;
-          mOutput(SLOT_AWAY)=Souliss_T1n_OnCmd;
+        if (B_away_WBS == 1 || memory_map[MaCaco_OUT_s + SLOT_AWAY] == 1) {
+          B_is_away_WBS = 1;
+          B_powerfull_WBS = 0;
+          B_is_powerfull_WBS = 0;
+          mOutput(SLOT_AWAY) = Souliss_T1n_OnCmd;
           setSetpoint(getAWAYtemperature());
           setEncoderValue(getAWAYtemperature());
-          #ifdef DEBUG || DEBUG_DEV
-            Serial.print("AWAY function ON, Setpoint to: ");Serial.println(setpoint);
-          #endif
+#ifdef DEBUG || DEBUG_DEV
+          Serial.print("AWAY function ON, Setpoint to: "); Serial.println(setpoint);
+#endif
         }
-        if (B_powerfull_WBS==1) {
-          B_away_WBS=0;
-          B_is_away_WBS=0;          
-          B_is_powerfull_WBS=1;
+        if (B_powerfull_WBS == 1) {
+          B_away_WBS = 0;
+          B_is_away_WBS = 0;
+          B_is_powerfull_WBS = 1;
           setSetpoint(getPOWERFULLtemperature());
-          setEncoderValue(getPOWERFULLtemperature());   
-          #ifdef DEBUG || DEBUG_DEV       
-            Serial.print("Powerfull function ON, Setpoint to: ");Serial.println(setpoint);
-          #endif
+          setEncoderValue(getPOWERFULLtemperature());
+#ifdef DEBUG || DEBUG_DEV
+          Serial.print("Powerfull function ON, Setpoint to: "); Serial.println(setpoint);
+#endif
         }
       }
-      
+
     }//end SLOW_50s
 
     SLOW_70s() {
@@ -764,13 +816,13 @@ void loop()
             }
           }
       }
-      
+
 
     }
 
-    SLOW_x10s(59){
+    SLOW_x10s(59) {
       //DATALOGGER
-      save_datalogger(setpoint,temperature,humidity,(mOutput(SLOT_THERMOSTAT) & Souliss_T3n_HeatingOn));
+      save_datalogger(setpoint, temperature, humidity, (mOutput(SLOT_THERMOSTAT) & Souliss_T3n_HeatingOn));
     }
 
     SLOW_15m() {
@@ -791,7 +843,7 @@ void loop()
 }
 
 
-void SST_Reset() {  
+void SST_Reset() {
   spiffs_Reset();
   ESP.reset();
 }
@@ -799,34 +851,34 @@ void SST_Reset() {
 void subscribeTopics() {
   if (sbscrbdata(TOPIC1, mypayload, &mypayload_len)) {
     float32((uint16_t*) mypayload,  &fTopic_C1_Output);
-    #ifdef DEBUG || DEBUG_DEV
-      Serial.print("TOPIC1: "); Serial.println(fTopic_C1_Output);
-    #endif  
+#ifdef DEBUG || DEBUG_DEV
+    Serial.print("TOPIC1: "); Serial.println(fTopic_C1_Output);
+#endif
   } else if (sbscrbdata(TOPIC2, mypayload, &mypayload_len)) {
     float32((uint16_t*) mypayload,  &fTopic_C2_Output);
-    #ifdef DEBUG || DEBUG_DEV
-      Serial.print("TOPIC2: "); Serial.println(fTopic_C2_Output);
-    #endif
+#ifdef DEBUG || DEBUG_DEV
+    Serial.print("TOPIC2: "); Serial.println(fTopic_C2_Output);
+#endif
   } else if (sbscrbdata(TOPIC3, mypayload, &mypayload_len)) {
     float32((uint16_t*) mypayload,  &fTopic_C3_Output);
-    #ifdef DEBUG || DEBUG_DEV
-      Serial.print("TOPIC3: "); Serial.println(fTopic_C3_Output);
-    #endif
+#ifdef DEBUG || DEBUG_DEV
+    Serial.print("TOPIC3: "); Serial.println(fTopic_C3_Output);
+#endif
   } else if (sbscrbdata(TOPIC4, mypayload, &mypayload_len)) {
     float32((uint16_t*) mypayload,  &fTopic_C4_Output);
-    #ifdef DEBUG || DEBUG_DEV
-      Serial.print("TOPIC4: "); Serial.println(fTopic_C4_Output);
-    #endif
+#ifdef DEBUG || DEBUG_DEV
+    Serial.print("TOPIC4: "); Serial.println(fTopic_C4_Output);
+#endif
   } else if (sbscrbdata(TOPIC5, mypayload, &mypayload_len)) {
     float32((uint16_t*) mypayload,  &fTopic_C5_Output);
-    #ifdef DEBUG || DEBUG_DEV
-      Serial.print("TOPIC5: "); Serial.println(fTopic_C5_Output);
-    #endif
+#ifdef DEBUG || DEBUG_DEV
+    Serial.print("TOPIC5: "); Serial.println(fTopic_C5_Output);
+#endif
   } else if (sbscrbdata(TOPIC6, mypayload, &mypayload_len)) {
     float32((uint16_t*) mypayload,  &fTopic_C6_Output);
-    #ifdef DEBUG || DEBUG_DEV
-      Serial.print("TOPIC6: "); Serial.println(fTopic_C6_Output);
-    #endif
+#ifdef DEBUG || DEBUG_DEV
+    Serial.print("TOPIC6: "); Serial.println(fTopic_C6_Output);
+#endif
   }
 }
 
@@ -838,9 +890,9 @@ void setSoulissDataChanged() {
 }
 
 void set_ThermostatModeOn(U8 slot) {
-  #ifdef DEBUG || DEBUG_DEV
-    Serial.println("set_ThermostatModeOn");
-  #endif
+#ifdef DEBUG || DEBUG_DEV
+  Serial.println("set_ThermostatModeOn");
+#endif
   memory_map[MaCaco_OUT_s + slot] |= Souliss_T3n_SystemOn;
   memory_map[MaCaco_OUT_s + slot] &= ~Souliss_T3n_HeatingMode;
 
@@ -872,28 +924,28 @@ boolean bFlagBegin = false;
 void getTemp() {
   // Read temperature value from DHT sensor and convert from single-precision to half-precision
   fVal = dht.readTemperature();
-  #ifdef DEBUG || DEBUG_DEV
-    Serial.print("acquisizione Temperature: "); Serial.println(fVal);
-  #endif
+#ifdef DEBUG || DEBUG_DEV
+  Serial.print("acquisizione Temperature: "); Serial.println(fVal);
+#endif
   if (!isnan(fVal)) {
     temperature = fVal; //memorizza temperatura se non è Not A Number
     //Import temperature into T31 Thermostat
     ImportAnalog(SLOT_THERMOSTAT + 1, &temperature);
     ImportAnalog(SLOT_TEMPERATURE, &temperature);
-    S_temperature_WBS=temperature;//to WBServer
+    S_temperature_WBS = temperature; //to WBServer
   } else {
     bFlagBegin = true;
   }
 
   // Read humidity value from DHT sensor and convert from single-precision to half-precision
   fVal = dht.readHumidity();
-  #ifdef DEBUG || DEBUG_DEV
-    Serial.print("acquisizione Humidity: "); Serial.println(fVal);
-  #endif
+#ifdef DEBUG || DEBUG_DEV
+  Serial.print("acquisizione Humidity: "); Serial.println(fVal);
+#endif
   if (!isnan(fVal)) {
     humidity = fVal;
     ImportAnalog(SLOT_HUMIDITY, &humidity);
-    S_humidity_WBS=humidity;//to WBServer
+    S_humidity_WBS = humidity; //to WBServer
   } else {
     bFlagBegin = true;
   }
@@ -902,9 +954,9 @@ void getTemp() {
     //if DHT fail then try to reinit
     yield();
     dht.begin();
-    #ifdef DEBUG || DEBUG_DEV
-      Serial.println(">>>>dht.begin();");
-    #endif
+#ifdef DEBUG || DEBUG_DEV
+    Serial.println(">>>>dht.begin();");
+#endif
     yield();
   }
 }
@@ -912,21 +964,21 @@ void getTemp() {
 
 void initScreen() {
   ucg.clearScreen();
-  #ifdef DEBUG || DEBUG_DEV
-    Serial.println("clearScreen ok");
-  #endif
+#ifdef DEBUG || DEBUG_DEV
+  Serial.println("clearScreen ok");
+#endif
   if (getLayout1()) {
-    #ifdef DEBUG || DEBUG_DEV
-      Serial.println("HomeScreen Layout 1");
-    #endif
-    
+#ifdef DEBUG || DEBUG_DEV
+    Serial.println("HomeScreen Layout 1");
+#endif
+
     display_layout1_HomeScreen(ucg, temperature, humidity, setpoint, getSoulissSystemState(), bChildLock);
     getTemp();
   }
   else if (getLayout2()) {
-    #ifdef DEBUG || DEBUG_DEV
-      Serial.println("HomeScreen Layout 2");
-    #endif
+#ifdef DEBUG || DEBUG_DEV
+    Serial.println("HomeScreen Layout 2");
+#endif
     getTemp();
     display_layout2_HomeScreen(ucg, temperature, humidity, setpoint);
     display_layout2_print_circle_white(ucg);
@@ -949,7 +1001,7 @@ void setStartSetpoint(float l_setpoint) {
   setpoint = l_setpoint;
   setEncoderValue(setpoint);
   setSetpoint(setpoint);
-  
+
 }
 
 void bright(int lum) {
@@ -971,69 +1023,69 @@ void publishHeating_ON_OFF() {
 
 //WBServer
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
-void onWsEvent(AsyncWebSocket * server, AsyncWebSocketClient * client, AwsEventType type, void * arg, uint8_t *data, size_t len){
-  if(type == WS_EVT_CONNECT){
+void onWsEvent(AsyncWebSocket * server, AsyncWebSocketClient * client, AwsEventType type, void * arg, uint8_t *data, size_t len) {
+  if (type == WS_EVT_CONNECT) {
     Serial.printf("ws[%s][%u] connect\n", server->url(), client->id());
     client->printf("Hello Client %u :)", client->id());
     client->ping();
-  } else if(type == WS_EVT_DISCONNECT){
+  } else if (type == WS_EVT_DISCONNECT) {
     Serial.printf("ws[%s][%u] disconnect: %u\n", server->url(), client->id());
-  } else if(type == WS_EVT_ERROR){
+  } else if (type == WS_EVT_ERROR) {
     Serial.printf("ws[%s][%u] error(%u): %s\n", server->url(), client->id(), *((uint16_t*)arg), (char*)data);
-  } else if(type == WS_EVT_PONG){
-    Serial.printf("ws[%s][%u] pong[%u]: %s\n", server->url(), client->id(), len, (len)?(char*)data:"");
-  } else if(type == WS_EVT_DATA){
+  } else if (type == WS_EVT_PONG) {
+    Serial.printf("ws[%s][%u] pong[%u]: %s\n", server->url(), client->id(), len, (len) ? (char*)data : "");
+  } else if (type == WS_EVT_DATA) {
     AwsFrameInfo * info = (AwsFrameInfo*)arg;
     String msg = "";
-    if(info->final && info->index == 0 && info->len == len){
+    if (info->final && info->index == 0 && info->len == len) {
       //the whole message is in a single frame and we got all of it's data
-      Serial.printf("ws[%s][%u] %s-message[%llu]: ", server->url(), client->id(), (info->opcode == WS_TEXT)?"text":"binary", info->len);
+      Serial.printf("ws[%s][%u] %s-message[%llu]: ", server->url(), client->id(), (info->opcode == WS_TEXT) ? "text" : "binary", info->len);
 
-      if(info->opcode == WS_TEXT){
-        for(size_t i=0; i < info->len; i++) {
+      if (info->opcode == WS_TEXT) {
+        for (size_t i = 0; i < info->len; i++) {
           msg += (char) data[i];
         }
       } else {
         char buff[3];
-        for(size_t i=0; i < info->len; i++) {
+        for (size_t i = 0; i < info->len; i++) {
           sprintf(buff, "%02x ", (uint8_t) data[i]);
           msg += buff ;
         }
       }
-      Serial.printf("%s\n",msg.c_str());
+      Serial.printf("%s\n", msg.c_str());
 
-      if(info->opcode == WS_TEXT)
+      if (info->opcode == WS_TEXT)
         client->text("I got your text message");
       else
         client->binary("I got your binary message");
     } else {
       //message is comprised of multiple frames or the frame is split into multiple packets
-      if(info->index == 0){
-        if(info->num == 0)
-          Serial.printf("ws[%s][%u] %s-message start\n", server->url(), client->id(), (info->message_opcode == WS_TEXT)?"text":"binary");
+      if (info->index == 0) {
+        if (info->num == 0)
+          Serial.printf("ws[%s][%u] %s-message start\n", server->url(), client->id(), (info->message_opcode == WS_TEXT) ? "text" : "binary");
         Serial.printf("ws[%s][%u] frame[%u] start[%llu]\n", server->url(), client->id(), info->num, info->len);
       }
 
-      Serial.printf("ws[%s][%u] frame[%u] %s[%llu - %llu]: ", server->url(), client->id(), info->num, (info->message_opcode == WS_TEXT)?"text":"binary", info->index, info->index + len);
+      Serial.printf("ws[%s][%u] frame[%u] %s[%llu - %llu]: ", server->url(), client->id(), info->num, (info->message_opcode == WS_TEXT) ? "text" : "binary", info->index, info->index + len);
 
-      if(info->opcode == WS_TEXT){
-        for(size_t i=0; i < info->len; i++) {
+      if (info->opcode == WS_TEXT) {
+        for (size_t i = 0; i < info->len; i++) {
           msg += (char) data[i];
         }
       } else {
         char buff[3];
-        for(size_t i=0; i < info->len; i++) {
+        for (size_t i = 0; i < info->len; i++) {
           sprintf(buff, "%02x ", (uint8_t) data[i]);
           msg += buff ;
         }
       }
-      Serial.printf("%s\n",msg.c_str());
+      Serial.printf("%s\n", msg.c_str());
 
-      if((info->index + len) == info->len){
+      if ((info->index + len) == info->len) {
         Serial.printf("ws[%s][%u] frame[%u] end[%llu]\n", server->url(), client->id(), info->num, info->len);
-        if(info->final){
-          Serial.printf("ws[%s][%u] %s-message end\n", server->url(), client->id(), (info->message_opcode == WS_TEXT)?"text":"binary");
-          if(info->message_opcode == WS_TEXT)
+        if (info->final) {
+          Serial.printf("ws[%s][%u] %s-message end\n", server->url(), client->id(), (info->message_opcode == WS_TEXT) ? "text" : "binary");
+          if (info->message_opcode == WS_TEXT)
             client->text("I got your text message");
           else
             client->binary("I got your binary message");
@@ -1042,18 +1094,53 @@ void onWsEvent(AsyncWebSocket * server, AsyncWebSocketClient * client, AwsEventT
     }
   }
 }
-void handleBody(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total){
-    Serial.printf("Void HandleBody:");
-  if(!index){
+void handleBody(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total) {
+  Serial.printf("Void HandleBody:");
+  if (!index) {
     Serial.printf("BodyStart: %u B\n", total);
   }
-  for(size_t i=0; i<len; i++){
+  for (size_t i = 0; i < len; i++) {
     Serial.write(data[i]);
   }
-  if(index + len == total){
+  if (index + len == total) {
     Serial.printf("BodyEnd: %u B\n", total);
   }
   yield();
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void check_wifi_signal() {
+  long rssi = WiFi.RSSI();
+  int bars = 0;
+
+  if (rssi > -55) {
+    bars = 5;
+  }
+  else if (rssi < -55 & rssi > -65) {
+    bars = 4;
+  }
+  else if (rssi < -65 & rssi > -70) {
+    bars = 3;
+  }
+  else if (rssi < -70 & rssi > -78) {
+    bars = 2;
+  }
+  else if (rssi < -78 & rssi > -82) {
+    bars = 1;
+  }
+  else {
+    bars = 0;
+  }
+  float f_rssi = (float)rssi;
+  float f_bars = (float)bars;
+  ImportAnalog(T_WIFI_STRDB, &f_rssi);
+  ImportAnalog(T_WIFI_STR, &f_bars);
+
+#ifdef SERIAL_DEBUG
+  Serial.print("wifi rssi: ");
+  Serial.println(f_rssi);
+  Serial.print("wifi bars: ");
+  Serial.println(f_bars);
+#endif
+}
 

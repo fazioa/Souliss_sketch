@@ -2,27 +2,12 @@
   Interruttore luce tettoia
   Invia messaggi di accensione e spegnimento al luce tettoia e luce muro e forno
   Funziona con switch collegato al pin 14
-  Singolo click comanda rele onboard
-  Dobbio click invia messaggio accensiona a REMOTE_ADDRESS 0xAB17 SLOT 0
-  Triplo click invia messaggio accensiona a REMOTE_ADDRESS 0xAB17 SLOT 0
-  Pressione lunga invia entrambi i messaggi e spegne/accende rele onboard
 
+  Sketch: POWER SOCKET - VER.2 - Souliss - Static Configuration
   Author: Tonino Fazio
 
   ESP Core 2.4.2
   This example is only supported on ESP8266.
-
-  Arduino IDE 1.8.8
-
-Scheda Ex-Store V3
-Compile:
-Generic ESP8266 Module
-CPU Frequency: 80MHz
-Crystal Frequency: 26MHz
-Flash Size: 1Mb (no SPIFFS) 
-Flash Mode: DIO
-Flash Frequency 40 MHz
-Other: Default
 
 
 ***************************************************************************/
@@ -67,7 +52,7 @@ Other: Default
 //*************************************************************************
 // Define the network configuration according to your router settingsuration according to your router settings
 // and the other on the wireless oneless one
-#define peer_address  0xAB11
+#define peer_address  0xAB12
 #define myvNet_subnet 0xFF00
 #define myvNet_supern    0xAB10 //gateway
 //*************************************************************************
@@ -121,6 +106,7 @@ void setup()
   digitalWrite(PIN_RELAY_ON, LOW);
   pinMode(PIN_RELAY_ON, OUTPUT);    // Relay ON
 
+  digitalWrite(PIN_LED, HIGH);
   digitalWrite(PIN_RELAY_OFF, LOW);
   pinMode(PIN_RELAY_OFF, OUTPUT);    // Relay OFF
 
@@ -128,12 +114,15 @@ void setup()
   //digitalWrite(PIN_LED, HIGH);
   //delay 11 seconds
   delay(11000);
+  digitalWrite(PIN_LED, LOW);
   //digitalWrite(PIN_LED, LOW);
   Initialize();
 
+  digitalWrite(PIN_LED, HIGH);
  // digitalWrite(PIN_LED, HIGH);
   // Connect to the WiFi network and get an address from DHCP
   GetIPAddress();
+  digitalWrite(PIN_LED, LOW);
   //digitalWrite(PIN_LED, LOW);
   // This is the vNet address for this node, used to communicate with other
   // nodes in your Souliss network
@@ -208,6 +197,7 @@ void loop()
      // DigIn(PIN_BUTTON_14, Souliss_T1n_ToggleCmd, SLOT_RELAY);
 
       Logic_SimpleLight(SLOT_RELAY);
+      DigOut(PIN_RELAY, Souliss_T1n_Coil, SLOT_RELAY);
      // DigOut(PIN_RELAY, Souliss_T1n_Coil, SLOT_RELAY);
         PulseLowDigOut(PIN_RELAY_ON, Souliss_T1n_OnCoil, SLOT_RELAY);
       PulseLowDigOut(PIN_RELAY_OFF, Souliss_T1n_OffCoil, SLOT_RELAY);

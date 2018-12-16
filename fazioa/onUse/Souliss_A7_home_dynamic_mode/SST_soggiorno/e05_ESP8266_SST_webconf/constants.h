@@ -2,7 +2,7 @@
 #include <ESP8266WiFi.h>
 
 #define VERSION "v 1.26"
-#define HOSTNAME "SST-Soggiorno-OTA-" ///< Hostename. The setup function adds the Chip ID at the end.
+#define HOSTNAME "SST-Soggiorno " ///< Hostename. The setup function adds the Chip ID at the end.
 //DHT22
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #define DHTPIN 12
@@ -26,6 +26,8 @@
 #define SLOT_HUMIDITY           7     // This is the memory slot used for the execution of the logic
 #define SLOT_BRIGHT_DISPLAY     9
 #define SLOT_AWAY               11
+#define T_WIFI_STRDB  12 //It takes 2 slots
+#define T_WIFI_STR    14 //It takes 2 slots
 
 
 //T31 Commands
