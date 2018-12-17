@@ -32,13 +32,13 @@ Other: Default
 #define VNET_HARDRESET      ESP.reset()
 
 
-// Let the IDE point to the Souliss framework
+// Let the IDE point to the Souliss
+ framework
 #include "SoulissFramework.h"
 #include <ESP8266mDNS.h>
 #include <ESP8266WiFi.h>
 #include <WiFiUdp.h>
 #include <ESP8266WebServer.h>
-#include <ESP8266mDNS.h>
 //#include <ArduinoOTA.h>
 #include <ESP8266HTTPUpdateServer.h>
 
