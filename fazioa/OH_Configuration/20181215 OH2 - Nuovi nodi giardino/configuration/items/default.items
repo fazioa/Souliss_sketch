@@ -30,17 +30,17 @@ Group Grafico_Sonoff_lavastoviglie                       (Home)
 Number	Chart_Period "Chart Period"
 Number	Chart_Period_giornaliero "Chart Period"
 
-Switch   luce_tettoia  "Luce Tettoia"  <light>    (Esterno)   ["Switchable"]   {autoupdate="false", channel="souliss:t11:105:10-0:onoff"}
-String	 tettoia_aggiornamento	"Agg [%1$td.%1$tm.%1$tY %1$tk:%1$tM:%1$tS]"	<keyring> (Esterno, Diagnostic)  {channel="souliss:t11:105:10-0:lastStatusStored"}
+Switch   luce_tettoia  "Luce Tettoia"  <light>    (Esterno)   ["Switchable"]   {autoupdate="false", channel="souliss:t11:105:5-0:onoff"}
+String	 tettoia_aggiornamento	"Agg [%1$td.%1$tm.%1$tY %1$tk:%1$tM:%1$tS]"	<keyring> (Esterno, Diagnostic)  {channel="souliss:t11:105:5-0:lastStatusStored"}
 
 Dimmer   lampade_tettoia "Luminosità Lampade Tettoia" <light> (Esterno) ["Lighting"] {channel="milight:rgbLed:ACCF2339A3EA:0:ledbrightness"}
 Color    lampade_tettoia_colore "Colore Lampade Tettoia" <light> (Esterno) {channel="milight:rgbLed:ACCF2339A3EA:0:ledcolor"}
 Switch   lampade_tettoia_whitemode  "Lampade Tettoia Bianco"  <light>    (Esterno)   ["Switchable"]   { channel="milight:rgbLed:ACCF2339A3EA:0:ledwhitemode"}
 
-Switch   luce_muro  "Luce Muro"  <light>    (Esterno)   ["Switchable"] {autoupdate="false", channel="souliss:t11:105:14-0:onoff"}
-Switch   luce_forno  "Luce Forno"  <light>    (Esterno)   ["Switchable"]   {autoupdate="false", channel="souliss:t11:105:14-1:onoff"}
-Number   nodo_forno_giardino_WIFI_DB "WiFi Decibel [%d db]" <network> (Esterno, Diagnostic) {channel="souliss:t51:105:14-2:value"}
-Number   nodo_forno_giardino_WIFI "WiFi Segnale [%.0f / 5]" <qualityofservice> (Esterno, Diagnostic) {channel="souliss:t51:105:14-4:value"}
+Switch   luce_muro  "Luce Muro"  <light>    (Esterno)   ["Switchable"] {autoupdate="false", channel="souliss:t11:105:16-0:onoff"}
+Switch   luce_forno  "Luce Forno"  <light>    (Esterno)   ["Switchable"]   {autoupdate="false", channel="souliss:t11:105:16-1:onoff"}
+Number   nodo_forno_giardino_WIFI_DB "WiFi Decibel [%d db]" <network> (Esterno, Diagnostic) {channel="souliss:t51:105:16-2:value"}
+Number   nodo_forno_giardino_WIFI "WiFi Segnale [%.0f / 5]" <qualityofservice> (Esterno, Diagnostic) {channel="souliss:t51:105:16-4:value"}
 String	 nodo_forno_giardino	"Agg [%1$td.%1$tm.%1$tY %1$tk:%1$tM:%1$tS]"	<keyring> (Esterno, Diagnostic)  {channel="souliss:t11:105:14-0:lastStatusStored"}
 
 
@@ -52,10 +52,6 @@ Number   consumo      "Consumo [%.1f W]"       <energy>      (Soggiorno, Elettri
 Number   fotovoltaico      "Fotovoltaico [%.1f W]"       <solarplant>      (Soggiorno, Elettricita, Grafico_energia)                     {channel="souliss:t57:105:4-0:value"}
 String	 aggiornamentoNodo1	"Agg.Consumi [%1$td.%1$tm.%1$tY %1$tk:%1$tM:%1$tS]"	<keyring> (Soggiorno, Elettricita, Diagnostic)  {channel="souliss:t57:105:1-4:lastStatusStored"}
 String   aggiornamentoNodo4	"Agg.Fotovoltaico [%1$td.%1$tm.%1$tY %1$tk:%1$tM:%1$tS]"	<keyring> (Soggiorno, Elettricita, Diagnostic)  {channel="souliss:t57:105:4-0:lastStatusStored"}
-Number   temperatura_pannelliGruppo1      "Temp.Pannelli gruppo 1 [%.1f °C]"       <temperature>      (Soggiorno, Elettricita)  {channel="souliss:t52:105:4-10:value"}
-Number   temperatura_pannelliGruppo2      "Temp.Pannelli gruppo 2 [%.1f °C]"       <temperature>      (Soggiorno, Elettricita)  {channel="souliss:t52:105:4-12:value"}
-Number   rele_pannelliGruppo1      "Relé gruppo 1 [%d %%]"       <temperature>      (Soggiorno, Elettricita, Grafico_rele_pannelli)  {channel="souliss:t51:105:4-6:value"}
-Number   rele_pannelliGruppo2      "Relé gruppo 2 [%d %%]"       <temperature>      (Soggiorno, Elettricita, Grafico_rele_pannelli)  {channel="souliss:t51:105:4-8:value"}
                                   
 Switch luce_divano "Luce Divano" <light> (Soggiorno, Divano ) ["Switchable"] {autoupdate="false", channel="souliss:t11:105:12-0:onoff"}
 Switch luce_divano20min "Divano 20 minuti" <light> (Soggiorno, Divano ) {autoupdate="false", channel="souliss:t11:105:12-0:sleep"}

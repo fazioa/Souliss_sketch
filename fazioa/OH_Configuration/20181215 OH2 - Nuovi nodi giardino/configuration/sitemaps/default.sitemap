@@ -36,7 +36,7 @@ sitemap default label="Tonino" {
     
     Group item=Cucina icon="kitchen"
 
-    Text label="Albero di Natale" icon="albero" {
+    Text label="Albero di Natale" icon="alberoNatale" {
 		Switch item=alberoNatale label="Albero di Natale"
 	}
 	
@@ -44,11 +44,7 @@ sitemap default label="Tonino" {
 Text label="Consumi / Produzione" icon="energy" {
      Text item=consumo label="Consumo [%.1f W]"
     Text item=fotovoltaico label="Fotovoltaico [%.1f W]"
-    Text item=temperatura_pannelliGruppo1
-    Text item=temperatura_pannelliGruppo2
-    Default item=rele_pannelliGruppo1
-    Default item=rele_pannelliGruppo2
-    
+
  Text item=aggiornamentoNodo1
     Text item=aggiornamentoNodo4 
 

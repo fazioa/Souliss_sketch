@@ -31,7 +31,7 @@ when Item powerSST changed
 then  
     if (powerSST==ON) {
         termostatosoggiorno_modo.HEATING_MODE=ON
-    else
+    else {
         termostatosoggiorno_modo.POWEREDOFF_MODE=ON
     }
 end
