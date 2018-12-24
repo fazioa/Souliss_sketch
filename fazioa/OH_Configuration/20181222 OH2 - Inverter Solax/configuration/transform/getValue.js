@@ -1,1 +1,1 @@
-JSON.parse(input)['Data']
+JSON.parse(input).read(Data[10]);

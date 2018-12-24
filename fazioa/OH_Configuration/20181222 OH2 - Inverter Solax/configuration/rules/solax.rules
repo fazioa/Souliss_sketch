@@ -1,0 +1,15 @@
+rule "solax"
+       when
+               Item raw_solax changed 
+       then
+       //try {
+       var _consumo = transform("JSONPATH", "$.Data[10]", (raw_solax.state).toString) 
+       var _produzione = transform("JSONPATH", "$.Data[11]", (raw_solax.state).toString)
+
+       consumo_solax.postUpdate(_consumo)
+       produzione_solax.postUpdate(_produzione)
+      // }
+//catch(TransformationException e) {
+    //logError("Error", "Trasformazione stringa JSON Inverter SOLAX: " + e.getMessage)
+//}
+  end

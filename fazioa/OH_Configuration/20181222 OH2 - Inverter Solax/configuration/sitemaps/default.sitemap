@@ -42,10 +42,10 @@ sitemap default label="Tonino" {
 	
     
 Text label="Consumi / Produzione" icon="energy" {
+    Text item=raw_solax label="Raw [%s]"
      Text item=consumo_solax label="Consumo [%s]"
 //Text item=consumo2 label="Consumo [%s]" 
-
-        Text item=fotovoltaico_solax label="Fotovoltaico [%s]"
+        Text item=produzione_solax label="Fotovoltaico [%s]"
     
 Text label="Grafico consumi" icon="chart" {
 	Switch item=Chart_Period label="" mappings=[0="4 Hours", 1= "1 Day", 2="3 Days", 3="Week", 4="Month"] 

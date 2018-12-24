@@ -48,8 +48,12 @@ Switch   portoncino         "Portoncino"          <light>         (Soggiorno)   
 Switch   cancello         "Cancello"          <light>         (Soggiorno)         ["Switchable"]   {autoupdate="false",channel="souliss:t14:105:1-7:pulse"}
  
 //String   consumo      "Consumo"       <energy>      (Soggiorno, Elettricita, Grafico_energia) { http="<[http://192.168.1.36/api/realTimeData.htm:30000:JS(getValue.js)]"}
-Number   consumo_solax    "Grid"       <energy>      (Soggiorno, Elettricita, Grafico_energia) { http="<[http://192.168.1.36/api/realTimeData.htm:30000:JSONPATH($.Data[10])]"}
-Number   fotovoltaico_solax     "Solar"       <energy>      (Soggiorno, Elettricita, Grafico_energia) { http="<[http://192.168.1.36/api/realTimeData.htm:30000:JSONPATH($.Data[11])]"}
+String raw_solax  { http="<[http://192.168.1.36/api/realTimeData.htm:10000:REGEX((.*))]"}
+Number   consumo_solax "Grid"  <energy>      (Soggiorno, Elettricita, Grafico_energia)
+Number   produzione_solax  "Solar"  <energy>      (Soggiorno, Elettricita, Grafico_energia)
+
+//Number   consumo_solax    "Grid"       <energy>      (Soggiorno, Elettricita, Grafico_energia) { http="<[http://192.168.1.36/api/realTimeData.htm:30000:JSONPATH($.Data[10])]"}
+//Number   produzione_solax     "Solar"       <energy>      (Soggiorno, Elettricita, Grafico_energia) { http="<[http://192.168.1.36/api/realTimeData.htm:30000:JSONPATH($.Data[11])]"}
 String	 aggiornamentoNodo1	"Agg.Consumi [%1$td.%1$tm.%1$tY %1$tk:%1$tM:%1$tS]"	<keyring> (Soggiorno, Elettricita, Diagnostic)  {channel="souliss:t57:105:1-4:lastStatusStored"}
 String   aggiornamentoNodo4	"Agg.Fotovoltaico [%1$td.%1$tm.%1$tY %1$tk:%1$tM:%1$tS]"	<keyring> (Soggiorno, Elettricita, Diagnostic)  {channel="souliss:t57:105:4-0:lastStatusStored"}
 Number   temperatura_pannelliGruppo1      "Temp.Pannelli gruppo 1 [%.1f °C]"       <temperature>      (Soggiorno, Elettricita)  {channel="souliss:t52:105:4-10:value"}
