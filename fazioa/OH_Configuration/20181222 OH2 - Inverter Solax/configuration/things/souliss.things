@@ -17,10 +17,10 @@ Thing t51 6-14 "Termostato Wifi Sign"@"Termostato"
 
 Thing t11 5-0 "Luce_Tettoia"@"Giardino"
 
-Thing t11 14-0 "Luce_Forno"@"Giardino"
-Thing t11 14-1 "Luce_Giardino"@"Giardino"
-Thing t51 14-2 "GiardinoWifiDb"@"Giardino"
-Thing t51 14-4 "GiardinoWifiBar"@"Giardino"
+Thing t11 16-0 "Luce_Forno"@"Giardino"
+Thing t11 16-1 "Luce_Giardino"@"Giardino"
+Thing t51 16-2 "GiardinoWifiDb"@"Giardino"
+Thing t51 16-4 "GiardinoWifiBar"@"Giardino"
 
 Thing t11 12-0 "Divano"@"Soggiorno" [sleep=10] 
 Thing t51 12-1 "divanoWifiDb"@"Soggiorno"

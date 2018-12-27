@@ -38,11 +38,11 @@ Dimmer   lampade_tettoia "Luminosità Lampade Tettoia" <light> (Esterno) ["Light
 Color    lampade_tettoia_colore "Colore Lampade Tettoia" <light> (Esterno) {channel="milight:rgbLed:ACCF2339A3EA:0:ledcolor"}
 Switch   lampade_tettoia_whitemode  "Lampade Tettoia Bianco"  <light>    (Esterno)   ["Switchable"]   { channel="milight:rgbLed:ACCF2339A3EA:0:ledwhitemode"}
 
-Switch   luce_muro  "Luce Muro"  <light>    (Esterno)   ["Switchable"] {autoupdate="false", channel="souliss:t11:105:14-0:onoff"}
-Switch   luce_forno  "Luce Forno"  <light>    (Esterno)   ["Switchable"]   {autoupdate="false", channel="souliss:t11:105:14-1:onoff"}
-Number   nodo_forno_giardino_WIFI_DB "WiFi Decibel [%d db]" <network> (Esterno, Diagnostic) {channel="souliss:t51:105:14-2:value"}
-Number   nodo_forno_giardino_WIFI "WiFi Segnale [%.0f / 5]" <qualityofservice> (Esterno, Diagnostic) {channel="souliss:t51:105:14-4:value"}
-String	 nodo_forno_giardino	"Agg [%1$td.%1$tm.%1$tY %1$tk:%1$tM:%1$tS]"	<keyring> (Esterno, Diagnostic)  {channel="souliss:t11:105:14-0:lastStatusStored"}
+Switch   luce_muro  "Luce Muro"  <light>    (Esterno)   ["Switchable"] {autoupdate="false", channel="souliss:t11:105:16-0:onoff"}
+Switch   luce_forno  "Luce Forno"  <light>    (Esterno)   ["Switchable"]   {autoupdate="false", channel="souliss:t11:105:16-1:onoff"}
+Number   nodo_forno_giardino_WIFI_DB "WiFi Decibel [%d db]" <network> (Esterno, Diagnostic) {channel="souliss:t51:105:16-2:value"}
+Number   nodo_forno_giardino_WIFI "WiFi Segnale [%.0f / 5]" <qualityofservice> (Esterno, Diagnostic) {channel="souliss:t51:105:16-4:value"}
+String	 nodo_forno_giardino	"Agg [%1$td.%1$tm.%1$tY %1$tk:%1$tM:%1$tS]"	<keyring> (Esterno, Diagnostic)  {channel="souliss:t11:105:16-0:lastStatusStored"}
 
 
 Switch   portoncino         "Portoncino"          <light>         (Soggiorno)         ["Switchable"]   {autoupdate="false",channel="souliss:t14:105:1-6:pulse"}
