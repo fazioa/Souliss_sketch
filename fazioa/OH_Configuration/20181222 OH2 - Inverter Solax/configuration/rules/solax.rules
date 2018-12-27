@@ -2,14 +2,13 @@ rule "solax"
        when
                Item raw_solax changed 
        then
-       //try {
-       var _consumo = transform("JSONPATH", "$.Data[10]", (raw_solax.state).toString) 
-       var _produzione = transform("JSONPATH", "$.Data[11]", (raw_solax.state).toString)
+       var   _consumo = Float::parseFloat(transform("JSONPATH", "$.Data[10]", (raw_solax.state).toString))
+       var   _produzione = Float::parseFloat(transform("JSONPATH", "$.Data[11]", (raw_solax.state).toString))
+    var _produzione_oggi=Float::parseFloat(transform("JSONPATH", "$.Data[8]", (raw_solax.state).toString))
+     var _produzione_totale=Float::parseFloat(transform("JSONPATH", "$.Data[9]", (raw_solax.state).toString))
 
-       consumo_solax.postUpdate(_consumo)
-       produzione_solax.postUpdate(_produzione)
-      // }
-//catch(TransformationException e) {
-    //logError("Error", "Trasformazione stringa JSON Inverter SOLAX: " + e.getMessage)
-//}
+      consumo_solax.postUpdate(_consumo*-1)
+      produzione_solax.postUpdate(_produzione)
+      produzione_oggi_solax.postUpdate(_produzione_oggi)
+      produzione_totale_solax.postUpdate(_produzione_totale)
   end

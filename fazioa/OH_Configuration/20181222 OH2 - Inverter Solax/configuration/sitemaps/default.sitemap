@@ -42,10 +42,10 @@ sitemap default label="Tonino" {
 	
     
 Text label="Consumi / Produzione" icon="energy" {
-    Text item=raw_solax label="Raw [%s]"
      Text item=consumo_solax label="Consumo [%s]"
-//Text item=consumo2 label="Consumo [%s]" 
-        Text item=produzione_solax label="Fotovoltaico [%s]"
+     Text item=produzione_solax label="Fotovoltaico [%s]" 
+     Text item=produzione_oggi_solax label="Produzione oggi [%s]"
+     Text item=produzione_totale_solax label="Produzione totale [%s]"
     
 Text label="Grafico consumi" icon="chart" {
 	Switch item=Chart_Period label="" mappings=[0="4 Hours", 1= "1 Day", 2="3 Days", 3="Week", 4="Month"] 
@@ -74,19 +74,6 @@ Text label="Frigo + Microonde" icon="energy" {
                 Chart item=Grafico_Sonoff_FrigoMicroonde period=3D refresh=21600000 visibility=[Chart_Period==2]  
 				Chart item=Grafico_Sonoff_FrigoMicroonde period=W refresh=21600000 visibility=[Chart_Period==3]  
 				Chart item=Grafico_Sonoff_FrigoMicroonde period=M refresh=21600000 visibility=[Chart_Period==4] 
-}
-}
-
-
-Text label="Fotovoltaico" icon="energy" {
-    Group item=Sonoff_fotovoltaico label="Dati"
-        Text label="Grafici" icon="chart"{
-    Switch item=Chart_Period label="Fotovoltaico" mappings=[0="4 Hours", 1= "1 Day", 2="3 Days", 3="Week", 4="Month"] 
-				Chart item=Grafico_Sonoff_fotovoltaico period=4h refresh=60000 visibility=[Chart_Period==0, Chart_Period=="Uninitialized"]  
-				Chart item=Grafico_Sonoff_fotovoltaico period=D refresh=3600000 visibility=[Chart_Period==1]  
-                Chart item=Grafico_Sonoff_fotovoltaico period=3D refresh=21600000 visibility=[Chart_Period==2]  
-				Chart item=Grafico_Sonoff_fotovoltaico period=W refresh=21600000 visibility=[Chart_Period==3]  
-				Chart item=Grafico_Sonoff_fotovoltaico period=M refresh=21600000 visibility=[Chart_Period==4] 
 }
 }
 
@@ -128,9 +115,9 @@ Text label="Lavastoviglie + Boiler" icon="energy" {
             Default item=termostatosoggiorno_temperatura
             Default item=termostatosoggiorno_umidita
             Switch item=termostatosoggiorno_setasmeasured mappings=[ON="Set"]
-            Switch item=termostatosoggiorno_modo label="Power On" mappings=[HEATING_MODE="Set"] 
-            Switch item=termostatosoggiorno_modo label="Power Off" mappings=[POWEREDOFF_MODE="Set"] 
-            Default item=termostatosoggiorno_stato label="Stato"
+            Switch item=termostatosoggiorno_modo label="Heating Mode" mappings=[HEATING_MODE="Set"] 
+            Switch item=termostatosoggiorno_power label="Power On/Off"
+            Default item=termostatosoggiorno_fire label="Fire"
 			Text item=termostatoSoggiorno_aggiornamento label="Aggiornato: [%1$td.%1$tm.%1$tY %1$tk:%1$tM:%1$tS]" icon="icon16x16"
             Default item=termostatoSoggiorno_healty
             Text item=termostatoSoggiorno_WIFI_DB 
