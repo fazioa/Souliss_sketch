@@ -43,7 +43,16 @@ sitemap default label="Tonino" {
     
 Text label="Consumi / Produzione" icon="energy" {
      Text item=consumo_solax label="Consumo [%s]"
-     Text item=produzione_solax label="Fotovoltaico [%s]" 
+     Text item=produzione_powerNow_solax label="Power Now [%s]" 
+     Text item=produzione_potenza_batteria_solax label="Batteria [%s W]" 
+     
+     Text item=produzione_sommaStringhe_solax label="Fotovoltaico [%s]" 
+     Text item=produzione_stringa1_solax label="PV1 [%s]" 
+     Text item=produzione_stringa2_solax label="PV2 [%s]" 
+     
+     
+     Text item=produzione_livello_batteria_solax label="Livello Batteria [%s %%]" 
+     
      Text item=produzione_oggi_solax label="Produzione oggi [%s]"
      Text item=produzione_totale_solax label="Produzione totale [%s]"
     

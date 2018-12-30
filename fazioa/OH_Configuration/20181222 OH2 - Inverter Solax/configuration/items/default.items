@@ -51,7 +51,15 @@ Switch   cancello         "Cancello"          <light>         (Soggiorno)       
 //String   consumo      "Consumo"       <energy>      (Soggiorno, Elettricita, Grafico_energia) { http="<[http://192.168.1.36/api/realTimeData.htm:30000:JS(getValue.js)]"}
 String raw_solax  { http="<[http://192.168.1.36/api/realTimeData.htm:10000:REGEX((.*))]"}
 Number   consumo_solax "Grid"  <energy>      (Soggiorno, Elettricita, Grafico_energia)
-Number   produzione_solax  "Solar"  <energy>      (Soggiorno, Elettricita, Grafico_energia)
+Number   produzione_stringa1_solax  "PV1"  <energy>      (Soggiorno, Elettricita )
+Number   produzione_stringa2_solax  "PV2"  <energy>      (Soggiorno, Elettricita )
+Number   produzione_sommaStringhe_solax  "Solar"  <energy>      (Soggiorno, Elettricita, Grafico_energia)
+Number   produzione_powerNow_solax  "Solar Power Now (Grid Power)"  <energy>      (Soggiorno, Elettricita, Grafico_energia)
+Number   produzione_temperatura_solax  "Inner Temp"  <energy>      (Soggiorno, Elettricita)
+
+Number   produzione_livello_batteria_solax  "Livello Batteria"  <energy>      (Soggiorno, Elettricita)
+Number   produzione_potenza_batteria_solax  "Potenza Batteria"  <energy>      (Soggiorno, Elettricita)
+
 Number   produzione_oggi_solax  "Oggi"  <energy>      (Soggiorno, Elettricita, Grafico_produzione_solare_giornaliera)
 Number   produzione_totale_solax  "Totale"  <energy>      (Soggiorno, Elettricita)
 
