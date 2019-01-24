@@ -16,7 +16,7 @@ Strategies {
  */
 Items {
 	Grafico_energia* : strategy = everyChange, everyMinute, restoreOnStartup
-	Grafico_produzione_solare_giornaliera* : strategy = everyDay, restoreOnStartup
+	produzione_oggi_solax : strategy = everyDay, restoreOnStartup
 
 	termostatosoggiorno_temperatura : strategy = everyChange, every30minutes, restoreOnStartup
 	termostatosoggiorno_umidita : strategy = everyChange, every30minutes, restoreOnStartup
