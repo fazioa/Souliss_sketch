@@ -10,6 +10,7 @@ rule "solax"
 
        var   _battery_power = Float::parseFloat(transform("JSONPATH", "$.Data[15]", (raw_solax.state).toString))
         var   _battery_capacity = Float::parseFloat(transform("JSONPATH", "$.Data[17]", (raw_solax.state).toString))
+        var   _battery_temp = Float::parseFloat(transform("JSONPATH", "$.Data[16]", (raw_solax.state).toString))
 
        var _produzione_oggi=Float::parseFloat(transform("JSONPATH", "$.Data[8]", (raw_solax.state).toString))
        var _produzione_totale=Float::parseFloat(transform("JSONPATH", "$.Data[9]", (raw_solax.state).toString))
@@ -20,6 +21,7 @@ rule "solax"
       produzione_sommaStringhe_solax.postUpdate(_PV1+_PV2)
       produzione_powerNow_solax.postUpdate(_powerNow)
       produzione_temperatura_solax.postUpdate(_innerTemp)
+      temperatura_batteria_inverter.postUpdate(_battery_temp)
 
       produzione_potenza_batteria_solax.postUpdate(_battery_power)
       produzione_livello_batteria_solax.postUpdate(_battery_capacity)

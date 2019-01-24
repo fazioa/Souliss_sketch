@@ -16,7 +16,8 @@ Strategies {
  */
 Items {
 	Grafico_energia* : strategy = everyChange, everyMinute, restoreOnStartup
-	produzione_oggi_solax : strategy = everyDay, restoreOnStartup
+	produzione_oggi_solax : strategy = everyChange, everyDay, restoreOnStartup
+    Grafico_Temp_inverter* : strategy =  everyChange, every30minutes, restoreOnStartup
 
 	termostatosoggiorno_temperatura : strategy = everyChange, every30minutes, restoreOnStartup
 	termostatosoggiorno_umidita : strategy = everyChange, every30minutes, restoreOnStartup
@@ -25,5 +26,8 @@ Items {
 	Grafico_Sonoff_FrigoMicroonde* : strategy = everyChange, every30minutes, restoreOnStartup
 	Grafico_Sonoff_lavastoviglie* : strategy = everyChange, every30minutes, restoreOnStartup
 	Grafico_consumo_giornaliero* : strategy = everyChange, every30minutes, restoreOnStartup
+	Grafico_Produzione* : strategy = everyChange, every30minutes, restoreOnStartup
+
+
 	Grafico_Astro* : strategy = everyChange, every30minutes, restoreOnStartup
 	}

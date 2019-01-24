@@ -61,21 +61,37 @@ Text label="Consumi / Produzione" icon="energy" {
      Text item=produzione_oggi_solax label="Produzione oggi [%s]"
      Text item=produzione_totale_solax label="Produzione totale [%s]"
      Text item=produzione_temperatura_solax label="Temperatura Inverter [%.0f °C]"
+     Text item=temperatura_batteria_inverter label="Temperatura Batteria [%.0f °C]"
     
 Text label="Grafico consumi" icon="chart" {
-	Switch item=Chart_Period label="" mappings=[0="4 Hours", 1= "1 Day", 2="3 Days", 3="Week", 4="Month"] 
+	Switch item=Chart_Period label="Aggregati" mappings=[0="4 Hours", 1= "1 Day", 2="3 Days", 3="Week", 4="Month"] 
 				Chart item=Grafico_energia period=4h refresh=60000 visibility=[Chart_Period==0, Chart_Period=="Uninitialized"]  
 				Chart item=Grafico_energia period=D refresh=3600000 visibility=[Chart_Period==1]  
 				Chart item=Grafico_energia period=3D refresh=21600000 visibility=[Chart_Period==2]  
 				Chart item=Grafico_energia period=W refresh=21600000 visibility=[Chart_Period==3]  
                 Chart item=Grafico_energia period=M refresh=21600000 visibility=[Chart_Period==4]  
+
+	Switch item=Chart_Period label="Stringhe" mappings=[0="4 Hours", 1= "1 Day", 2="3 Days", 3="Week", 4="Month"] 
+				Chart item=Grafico_Produzione period=4h refresh=60000 visibility=[Chart_Period==0, Chart_Period=="Uninitialized"]  
+				Chart item=Grafico_Produzione period=D refresh=3600000 visibility=[Chart_Period==1]  
+				Chart item=Grafico_Produzione period=3D refresh=21600000 visibility=[Chart_Period==2]  
+				Chart item=Grafico_Produzione period=W refresh=21600000 visibility=[Chart_Period==3]  
+                Chart item=Grafico_Produzione period=M refresh=21600000 visibility=[Chart_Period==4]  
+
+
+	Switch item=Chart_Period label="Temperature" mappings=[0="4 Hours", 1= "1 Day", 2="3 Days", 3="Week", 4="Month"] 
+				Chart item=Grafico_Temp_inverter period=4h refresh=60000 visibility=[Chart_Period==0, Chart_Period=="Uninitialized"]  
+				Chart item=Grafico_Temp_inverter period=D refresh=3600000 visibility=[Chart_Period==1]  
+				Chart item=Grafico_Temp_inverter period=3D refresh=21600000 visibility=[Chart_Period==2]  
+				Chart item=Grafico_Temp_inverter period=W refresh=21600000 visibility=[Chart_Period==3]  
+                Chart item=Grafico_Temp_inverter period=M refresh=21600000 visibility=[Chart_Period==4]  
 }
 
 Text label="Grafico giornalieri" icon="chart" {
 	Switch item=Chart_Period_giornaliero label="" mappings=[0="3 Days", 1="Week", 2="Month"]
-				Chart item=Grafico_produzione_solare_giornaliera period=3D refresh=21600000 visibility=[Chart_Period_giornaliero==0, Chart_Period_giornaliero=="Uninitialized"]  
-				Chart item=Grafico_produzione_solare_giornaliera period=W refresh=21600000 visibility=[Chart_Period_giornaliero==1]  
-                Chart item=Grafico_produzione_solare_giornaliera period=M refresh=21600000 visibility=[Chart_Period_giornaliero==2]  
+				Chart item=Grafico_produzione_solare_giornaliera period=3D refresh=3600000 visibility=[Chart_Period==0, Chart_Period=="Uninitialized"]  
+				Chart item=Grafico_produzione_solare_giornaliera period=W refresh=3600000 visibility=[Chart_Period==1]  
+                Chart item=Grafico_produzione_solare_giornaliera period=M refresh=3600000 visibility=[Chart_Period==2]  
 }
 
     }

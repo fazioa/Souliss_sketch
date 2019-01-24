@@ -27,6 +27,8 @@ Group Grafico_Sonoff_fotovoltaico                       (Home)
 
 Group Sonoff_lavastoviglie                       (Home)
 Group Grafico_Sonoff_lavastoviglie                       (Home)
+Group Grafico_Temp_inverter (Home)
+Group Grafico_Produzione (Home)
 
 Number	Chart_Period "Chart Period"
 Number	Chart_Period_giornaliero "Chart Period"
@@ -52,11 +54,12 @@ Switch   cancello         "Cancello"          <light>         (Soggiorno)       
 String raw_solax "Raw Solax" { http="<[http://192.168.1.36/api/realTimeData.htm:10000:REGEX((.*))]"}
 Number consumo_solax "Grid [%s W]"  <energy>      (Elettricita, Grafico_energia)
 Number nInstantPower "Enel Info+ Instant Power [%.0f W]" <energy> (Elettricita) { http="<[http://192.168.1.29:11011/command.cgi?attr=2&param=0&param2=105:30000:JS(getHexValue.js)]"}
-Number   produzione_stringa1_solax  "PV1 [%s W] "  <solarplant>      (Elettricita )
-Number   produzione_stringa2_solax  "PV2 [%s W]"  <solarplant>      (Elettricita )
+Number   produzione_stringa1_solax  "PV1 [%s W] "  <solarplant>      (Elettricita, Grafico_Produzione)
+Number   produzione_stringa2_solax  "PV2 [%s W]"  <solarplant>      (Elettricita, Grafico_Produzione )
 Number   produzione_sommaStringhe_solax  "Solar [%s W]"  <solarplant>      (Elettricita, Grafico_energia)
 Number   produzione_powerNow_solax  "Solar Power Now (Grid Power) [%s W]"  <energy>      (Elettricita, Grafico_energia)
-Number   produzione_temperatura_solax  "Inner Temp [%.0f °C]"  <temperature>      (Elettricita)
+Number   produzione_temperatura_solax  "Inner Temp [%.0f °C]"  <temperature>      (Elettricita, Grafico_Temp_inverter)
+Number   temperatura_batteria_inverter "Battery Temp [%.0f °C]"  <temperature>      (Elettricita, Grafico_Temp_inverter)
 
 Number   produzione_livello_batteria_solax  "Livello Batteria [%s %%]"  <batterylevel>      (Elettricita)
 Number   produzione_potenza_batteria_solax  "Potenza Batteria [%s W]"  <energy>      (Elettricita)
