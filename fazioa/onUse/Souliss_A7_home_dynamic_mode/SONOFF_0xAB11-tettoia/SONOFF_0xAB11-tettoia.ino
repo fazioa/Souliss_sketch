@@ -32,8 +32,7 @@ Other: Default
 #define VNET_HARDRESET      ESP.reset()
 
 
-// Let the IDE point to the Souliss
- framework
+// Let the IDE point to the Souliss framework
 #include "SoulissFramework.h"
 #include <ESP8266mDNS.h>
 #include <ESP8266WiFi.h>
@@ -181,15 +180,15 @@ else if(button1.clicks <= -1) buttonActions(-1);
       digitalWrite(PIN_LED, bLedState);
     }
 
-    SHIFT_2110ms(10) {
+    SHIFT_11110ms(10) {
       //recupera i valore su REMOTE_ADDRESS e li copia sugli slot locali
       PullData(REMOTE_ADDRESS, SLOT_LOCALE_X_RELAY_REMOTO_1, SLOT_RELAY_REMOTO_1, 1);
     }
-    SHIFT_2110ms(100) {
+    SHIFT_11110ms(100) {
       PullData(REMOTE_ADDRESS, SLOT_LOCALE_X_RELAY_REMOTO_0, SLOT_RELAY_REMOTO_0, 1);
     }
 
-    FAST_11110ms() {
+    FAST_21110ms() {
       //Processa le logiche per il segnale WiFi
       Read_T51(T_WIFI_STRDB);
       Read_T51(T_WIFI_STR);
