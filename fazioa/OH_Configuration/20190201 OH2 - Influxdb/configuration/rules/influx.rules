@@ -28,7 +28,7 @@ then
  space = ","
  ]
  data = data + " " + ts
- logInfo("Save Energy into influxdb", data)
+ logInfo("Save Water Temperature into influxdb", data)
  sendHttpPostRequest("http://192.168.1.88:30700/write?db=openhab&u=openhab&p=openhab&precision=ms", "text/plain", data)
 end
 
@@ -45,7 +45,7 @@ then
  space = ","
  ]
  data = data + " " + ts
- logInfo("Save Energy into influxdb", data)
+ logInfo("Save Daily Energy into influxdb", data)
  sendHttpPostRequest("http://192.168.1.88:30700/write?db=openhab&u=openhab&p=openhab&precision=ms", "text/plain", data)
 end
 
@@ -62,6 +62,6 @@ then
  space = ","
  ]
  data = data + " " + ts
- logInfo("Save Energy into influxdb", data)
+ logInfo("Save Sun Position into influxdb", data)
  sendHttpPostRequest("http://192.168.1.88:30700/write?db=openhab&u=openhab&p=openhab&precision=ms", "text/plain", data)
 end

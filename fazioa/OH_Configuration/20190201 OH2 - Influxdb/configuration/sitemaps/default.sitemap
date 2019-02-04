@@ -46,6 +46,7 @@ Text label="Consumi / Produzione" icon="energy" {
      Text item=nInstantPower label="Enel info+ [%s W]"
      Text item=frigo_microonde_Power label="Frigo/Microonde [%s W]"
      Text item=lavastoviglie_boiler_Power label="Lavastov./Boiler [%s W]"
+       Text item=bagnoPT_Power label="Bagno piano terra [%s W]"
 
      
      Text item=produzione_powerNow_solax label="Power Now [%s W]" 
@@ -96,9 +97,15 @@ Text label="Grafico giornalieri" icon="chart" {
 
     }
 
-Text label="Frigo + Microonde" icon="energy" {
-    Group item=Sonoff_FrigoMicroonde label="Dati"
-    Text label="Grafici" icon="chart"{
+Text label="Utenze" icon="energy" {
+  Text item=frigo_microonde_Power label="Frigo/Microonde [%s W]"
+     Text item=lavastoviglie_boiler_Power label="Lavastov./Boiler [%s W]"
+       Text item=bagnoPT_Power label="Bagno piano terra [%s W]"
+    Group item=Sonoff_FrigoMicroonde label="Dati frigo microonde"
+    Group item=Sonoff_lavastoviglie label="Dati lavastoviglie boiler"
+    Group item=Sonoff_bagno_piano_terra label="Dati bagno piano terra"
+
+    Text label="Grafico frigo microonde" icon="chart"{
     Switch item=Chart_Period label="Frigo + Microonde" mappings=[0="4 Hours", 1= "1 Day", 2="3 Days", 3="Week", 4="Month"] 
 				Chart item=Grafico_Sonoff_FrigoMicroonde period=4h refresh=60000 visibility=[Chart_Period==0, Chart_Period=="Uninitialized"]  
 				Chart item=Grafico_Sonoff_FrigoMicroonde period=D refresh=3600000 visibility=[Chart_Period==1]  
@@ -106,17 +113,23 @@ Text label="Frigo + Microonde" icon="energy" {
 				Chart item=Grafico_Sonoff_FrigoMicroonde period=W refresh=21600000 visibility=[Chart_Period==3]  
 				Chart item=Grafico_Sonoff_FrigoMicroonde period=M refresh=21600000 visibility=[Chart_Period==4] 
 }
-}
 
-Text label="Lavastoviglie + Boiler" icon="energy" {
-    Group item=Sonoff_lavastoviglie label="Dati"
-        Text label="Grafici" icon="chart"{
+        Text label="Grafico lavastoviglie boiler" icon="chart"{
     Switch item=Chart_Period label="Lavastoviglie + Boiler" mappings=[0="4 Hours", 1= "1 Day", 2="3 Days", 3="Week", 4="Month"] 
 				Chart item=Grafico_Sonoff_lavastoviglie period=4h refresh=60000 visibility=[Chart_Period==0, Chart_Period=="Uninitialized"]  
 				Chart item=Grafico_Sonoff_lavastoviglie period=D refresh=3600000 visibility=[Chart_Period==1]  
                 Chart item=Grafico_Sonoff_lavastoviglie period=3D refresh=21600000 visibility=[Chart_Period==2]  
 				Chart item=Grafico_Sonoff_lavastoviglie period=W refresh=21600000 visibility=[Chart_Period==3]  
 				Chart item=Grafico_Sonoff_lavastoviglie period=M refresh=21600000 visibility=[Chart_Period==4] 
+}
+    
+        Text label="Grafico bagno piano terra" icon="chart"{
+    Switch item=Chart_Period label="Lavastoviglie + Boiler" mappings=[0="4 Hours", 1= "1 Day", 2="3 Days", 3="Week", 4="Month"] 
+				Chart item=Grafico_bagno_piano_terra period=4h refresh=60000 visibility=[Chart_Period==0, Chart_Period=="Uninitialized"]  
+				Chart item=Grafico_bagno_piano_terra period=D refresh=3600000 visibility=[Chart_Period==1]  
+                Chart item=Grafico_bagno_piano_terra period=3D refresh=21600000 visibility=[Chart_Period==2]  
+				Chart item=Grafico_bagno_piano_terra period=W refresh=21600000 visibility=[Chart_Period==3]  
+				Chart item=Grafico_bagno_piano_terra period=M refresh=21600000 visibility=[Chart_Period==4] 
 }
 }
 
