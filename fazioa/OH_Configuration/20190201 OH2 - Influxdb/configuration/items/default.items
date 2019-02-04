@@ -1,0 +1,180 @@
+Group Home                 "Tonino"        <house>
+
+Group Soggiorno           "Soggiorno"      (Home)
+Group Divano               "Divano"        (Home)
+Group Cucina               "Cucina"        (Home)
+Group Esterno              "Esterno"   <garden>   (Home)
+Group LGTV                   "TV"   <television>   (Home)
+Group Elettricita     (Home)
+Group Diagnostic      (Home)
+Group TermostatoSoggiorno    "Termostato"  [ "Thermostat" ]
+Group TermocaminoBoilerSolare     (Home)
+Group Birra                       (Home)
+Group Grafico_energia   (Home)
+Group Grafico_temperatura_acqua (Home)
+
+Group Grafico_consumo_giornaliero (Home)
+Group Grafico_produzione_solare_giornaliera (Home)
+
+Group Astro                       (Home)
+Group Grafico_Astro                       (Home)
+
+Group Sonoff_FrigoMicroonde                       (Home)
+Group Grafico_Sonoff_FrigoMicroonde                       (Home)
+
+Group Sonoff_fotovoltaico  (Home)
+Group Grafico_Sonoff_fotovoltaico                       (Home)
+
+Group Sonoff_lavastoviglie                       (Home)
+Group Grafico_Sonoff_lavastoviglie                       (Home)
+Group Grafico_Temp_inverter (Home)
+Group Grafico_Produzione (Home)
+
+Number	Chart_Period "Chart Period"
+Number	Chart_Period_giornaliero "Chart Period"
+
+Switch   luce_tettoia  "Luce Tettoia"  <light>    (Esterno)   ["Switchable"]   {autoupdate="false", channel="souliss:t11:105:5-0:onoff"}
+String	 tettoia_aggiornamento	"Agg [%1$td.%1$tm.%1$tY %1$tk:%1$tM:%1$tS]"	<keyring> (Esterno, Diagnostic)  {channel="souliss:t11:105:5-0:lastStatusStored"}
+
+Dimmer   lampade_tettoia "Luminosità Lampade Tettoia" <light> (Esterno) ["Lighting"] {channel="milight:rgbLed:ACCF2339A3EA:0:ledbrightness"}
+Color    lampade_tettoia_colore "Colore Lampade Tettoia" <light> (Esterno) {channel="milight:rgbLed:ACCF2339A3EA:0:ledcolor"}
+Switch   lampade_tettoia_whitemode  "Lampade Tettoia Bianco"  <light>    (Esterno)   ["Switchable"]   { channel="milight:rgbLed:ACCF2339A3EA:0:ledwhitemode"}
+
+Switch   luce_muro  "Luce Muro"  <light>    (Esterno)   ["Switchable"] {autoupdate="false", channel="souliss:t11:105:16-0:onoff"}
+Switch   luce_forno  "Luce Forno"  <light>    (Esterno)   ["Switchable"]   {autoupdate="false", channel="souliss:t11:105:16-1:onoff"}
+Number   nodo_forno_giardino_WIFI_DB "WiFi Decibel [%d db]" <network> (Esterno, Diagnostic) {channel="souliss:t51:105:16-2:value"}
+Number   nodo_forno_giardino_WIFI "WiFi Segnale [%.0f / 5]" <qualityofservice> (Esterno, Diagnostic) {channel="souliss:t51:105:16-4:value"}
+String	 nodo_forno_giardino	"Agg [%1$td.%1$tm.%1$tY %1$tk:%1$tM:%1$tS]"	<keyring> (Esterno, Diagnostic)  {channel="souliss:t11:105:16-0:lastStatusStored"}
+
+
+Switch   portoncino         "Portoncino"          <light>         (Soggiorno)         ["Switchable"]   {autoupdate="false",channel="souliss:t14:105:1-6:pulse"}
+Switch   cancello         "Cancello"          <light>         (Soggiorno)         ["Switchable"]   {autoupdate="false",channel="souliss:t14:105:1-7:pulse"}
+ 
+//String   consumo      "Consumo"       <energy>      (Soggiorno, Elettricita, Grafico_energia) { http="<[http://192.168.1.36/api/realTimeData.htm:30000:JS(getValue.js)]"}
+String raw_solax "Raw Solax" { http="<[http://192.168.1.36/api/realTimeData.htm:10000:REGEX((.*))]"}
+Number consumo_solax "Grid [%s W]"  <energy>      (Elettricita, Grafico_energia)
+Number nInstantPower "Enel Info+ Instant Power [%.0f W]" <energy> (Elettricita) { http="<[http://192.168.1.29:11011/command.cgi?attr=2&param=0&param2=105:30000:JS(getHexValue.js)]"}
+Number   produzione_stringa1_solax  "PV1 [%s W] "  <solarplant>      (Elettricita, Grafico_Produzione)
+Number   produzione_stringa2_solax  "PV2 [%s W]"  <solarplant>      (Elettricita, Grafico_Produzione )
+Number   produzione_sommaStringhe_solax  "Solar [%s W]"  <solarplant>      (Elettricita, Grafico_energia)
+Number   produzione_powerNow_solax  "Solar Power Now (Grid Power) [%s W]"  <energy>      (Elettricita, Grafico_energia)
+Number   produzione_temperatura_solax  "Inner Temp [%.0f °C]"  <temperature>      (Elettricita, Grafico_Temp_inverter)
+Number   temperatura_batteria_inverter "Battery Temp [%.0f °C]"  <temperature>      (Elettricita, Grafico_Temp_inverter)
+
+Number   produzione_livello_batteria_solax  "Livello Batteria [%s %%]"  <batterylevel>      (Elettricita, Grafico_energia)
+Number   produzione_potenza_batteria_solax  "Potenza Batteria [%s W]"  <energy>      (Elettricita, Grafico_energia)
+
+Number   produzione_oggi_solax  "Oggi"  <energy>      (Elettricita, Grafico_produzione_solare_giornaliera)
+Number   produzione_totale_solax  "Totale"  <energy>      (Elettricita)
+
+
+
+//Number   consumo_solax    "Grid"       <energy>      (Soggiorno, Elettricita, Grafico_energia) { http="<[http://192.168.1.36/api/realTimeData.htm:30000:JSONPATH($.Data[10])]"}
+//Number   produzione_solax     "Solar"       <energy>      (Soggiorno, Elettricita, Grafico_energia) { http="<[http://192.168.1.36/api/realTimeData.htm:30000:JSONPATH($.Data[11])]"}
+                                  
+Switch luce_divano "Luce Divano" <light> (Soggiorno, Divano ) ["Switchable"] {autoupdate="false", channel="souliss:t11:105:12-0:onoff"}
+Switch luce_divano20min "Divano 20 minuti" <light> (Soggiorno, Divano ) {autoupdate="false", channel="souliss:t11:105:12-0:sleep"}
+String luce_divano_aggiornamento	"Agg. [%1$td.%1$tm.%1$tY %1$tk:%1$tM:%1$tS]"	<keyring> (Soggiorno, Divano, Diagnostic)  {channel="souliss:t11:105:12-0:lastStatusStored"}
+Number luce_divano_healty	"Salute [%1d]"	<keyring> (Soggiorno, Divano, Diagnostic)  {channel="souliss:t11:105:12-0:healty"}
+Dimmer lampade_divano "Luminosità Lampade Divano" <light> (Soggiorno, Divano) ["Lighting"] {channel="milight:whiteLed:ACCF2339A3EA:0:ledbrightness"}
+Dimmer lampade_divano_colore "Colore Lampade Divano" <light> (Soggiorno, Divano) ["Lighting"] {channel="milight:whiteLed:ACCF2339A3EA:0:ledtemperature"}
+
+Number luce_divano_WIFI_DB "WiFi Decibel [%d db]" <network> (Soggiorno, Divano, Diagnostic) {channel="souliss:t51:105:12-1:value"}
+Number luce_divano_WIFI "WiFi Segnale [%.0f / 5]" <qualityofservice> (Soggiorno, Diagnostic, Divano) {channel="souliss:t51:105:12-3:value"}
+
+Switch luce_cucina "Luce Cucina" <light> (Soggiorno, Cucina ) ["Switchable"] {autoupdate="false", channel="souliss:t11:105:13-0:onoff"}
+Switch luce_cucina20min "Cucina 20 minuti" <light> (Soggiorno, Cucina ) {autoupdate="false", channel="souliss:t11:105:13-0:sleep"}
+String luce_cucina_aggiornamento	"Agg. [%1$td.%1$tm.%1$tY %1$tk:%1$tM:%1$tS]"	<keyring> (Soggiorno, Cucina, Diagnostic)  {channel="souliss:t11:105:13-0:lastStatusStored"}
+Number luce_cucina_healty	"Salute [%1d]"	<keyring> (Soggiorno, Cucina, Diagnostic)  {channel="souliss:t11:105:13-0:healty"}
+Number luce_cucina_WIFI_DB "WiFi Decibel [%d db]" <network> (Soggiorno, Cucina, Diagnostic) {channel="souliss:t51:105:13-1:value"}
+Number luce_cucina_WIFI "WiFi Segnale [%.0f / 5]" <qualityofservice> (Soggiorno, Diagnostic, Cucina) {channel="souliss:t51:105:13-3:value"}
+
+
+
+Switch TV_ON_WOL "TV Wake online" (Soggiorno) { wol="192.168.1.255#38-8C-50-90-08-AD" }
+
+Switch LG_TV0_Power "TV" <screen> (Soggiorno, LGTV) ["Switchable"] { autoupdate="false", channel="lgwebos:WebOSTV:tv1:power" }
+Switch LG_TV0_Mute  "silenzia TV"    <soundvolume>  (Soggiorno, LGTV)        ["Switchable"]  { channel="lgwebos:WebOSTV:tv1:mute"}
+Dimmer LG_TV0_Volume "Audio TV [%S]"   <soundvolume>  (Soggiorno, LGTV)      ["Lighting"] { channel="lgwebos:WebOSTV:tv1:volume" }
+Number LG_TV0_VolDummy "VolumeUpDown" <soundvolume>(Soggiorno,LGTV )
+Number LG_TV0_ChannelNo "Canale [%d]"   <text>   (Soggiorno, LGTV) { channel="lgwebos:WebOSTV:tv1:channel" }
+Number LG_TV0_ChannelDummy "CanaleSuGiu" <movecontrol> (Soggiorno, LGTV)
+String LG_TV0_Channel "Canale [%S]"   <text>    (Soggiorno, LGTV)  { channel="lgwebos:WebOSTV:tv1:channelName"}
+String LG_TV0_Toast              <screen>      (Soggiorno, LGTV)      { channel="lgwebos:WebOSTV:tv1:toast"}
+Switch LG_TV0_Stop "Stop TV"   <mediacontrol>  (Soggiorno, LGTV) ["Switchable"]               { autoupdate="false", channel="lgwebos:WebOSTV:tv1:mediaStop" }
+String LG_TV0_Application "Application [%s]"  <mediacontrol> (Soggiorno, LGTV) { channel="lgwebos:WebOSTV:tv1:appLauncher"}
+Player LG_TV0_Player    "Play TV"   <cinema>  (Soggiorno, LGTV) { channel="lgwebos:WebOSTV:tv1:mediaPlayer"}
+	
+Number termostatosoggiorno_temperatura  "Temperatura" <temperature> (TermostatoSoggiorno) [ "CurrentTemperature" ] {channel="souliss:t31:105:6-0:measured"}
+Number termostatosoggiorno_umidita "Umidità" <humidity>   (TermostatoSoggiorno) [ "CurrentHumidity" ] {channel="souliss:t53:105:6-7:value" }
+Number termostatosoggiorno_setpoint "Regola Set Point [%.1f °c]"    <heating> (TermostatoSoggiorno)[ "TargetTemperature" ] {autoupdate="false", channel="souliss:t31:105:6-0:setpoint"}
+Switch termostatosoggiorno_setasmeasured "Set temp. attuale" <heating> (TermostatoSoggiorno)  {channel="souliss:t31:105:6-0:setAsMeasured"}
+String termostatosoggiorno_modo "Modo" (TermostatoSoggiorno)  [ "homekit:HeatingCoolingMode" ] {autoupdate="false", channel="souliss:t31:105:6-0:mode"}
+Switch termostatosoggiorno_power "Termostato" <powerIcon> (TermostatoSoggiorno)  ["Switchable"]  {channel="souliss:t31:105:6-0:system"}
+Switch termostatosoggiorno_fire "Fire" <homeRed> (TermostatoSoggiorno) {channel="souliss:t31:105:6-0:fire"}
+
+Dimmer termostatoSoggiorno_displayBright   "Lumin.min. display" (TermostatoSoggiorno)      {channel="souliss:t19:105:6-9" }
+String termostatoSoggiorno_aggiornamento "Agg.[%1$td.%1$tm.%1$tY %1$tk:%1$tM:%1$tS]" <keyring> (TermostatoSoggiorno, Diagnostic)  {channel="souliss:t31:105:6-0:lastStatusStored"}
+Number termostatoSoggiorno_healty "Salute [%1d]" <keyring> (TermostatoSoggiorno, Diagnostic )  {channel="souliss:t31:105:6-0:healty"}
+Number termostatoSoggiorno_WIFI_DB "WiFi Decibel [%d db]" <network> (TermostatoSoggiorno, Diagnostic) {channel="souliss:t51:105:6-12:value"}
+Number termostatoSoggiorno_WIFI "WiFi Segnale [%.0f / 5]" <qualityofservice> (TermostatoSoggiorno, Diagnostic) {channel="souliss:t51:105:6-14:value"}
+
+Number	termocaminoBoilerSolare_temperaturaBoilerSolare	"Solare [%.1f °C]"	<temperature>	(TermocaminoBoilerSolare, Grafico_temperatura_acqua)		{channel="souliss:t52:105:3-0:value" }
+Number	termocaminoBoilerSolare_temperaturaTermocamino	"Termocamino [%.1f °C]"	<temperature>	(TermocaminoBoilerSolare, Grafico_temperatura_acqua)		{channel="souliss:t52:105:3-2:value" }
+Switch	termocaminoBoilerSolare_SwitchAcquaTermocamino	"Acqua dal Termocamino"	(TermocaminoBoilerSolare)		{ channel="souliss:t11:105:3-4:onoff", autoupdate="false" }
+Switch	termocaminoBoilerSolare_Boiler_TC_Automode	"Auto: Boiler / Termocamino"	(TermocaminoBoilerSolare)		{ channel="souliss:t11:105:3-6:onoff", autoupdate="false" }
+Switch	termocaminoBoilerSolare_setasmeasured	"Valvole - Allarme Termocamino - Set as measured"	<heating>	(TermocaminoBoilerSolare)		{ channel="souliss:t31:105:3-7:setAsMeasured" }
+Number	termocaminoBoilerSolare_Allarme_Termocamino_SetPoint	"Temp Set Point [%.1f °C]"	<heating>	(TermocaminoBoilerSolare)		{ souliss="souliss:t31:105:3-7:setpoint" }
+Switch	termocaminoBoilerSolare_setpoint65	"Set Point 65 °C"	<temperature>	(TermocaminoBoilerSolare)	
+Switch	termocaminoBoilerSolare_setpoint70	"Set Point 70 °C"	<temperature>	(TermocaminoBoilerSolare)	
+Switch	termocaminoBoilerSolare_setpoint80	"Set Point 80 °C"	<temperature>	(TermocaminoBoilerSolare)	
+Contact	termocaminoBoilerSolare_riscaldamento_tutto	"Riscaldamento - Tutto"	<fire> (TermocaminoBoilerSolare)		{ souliss="souliss:t31:105:3-7:status" }
+String termocaminoBoilerSolare_aggiornamento "Agg.[%1$td.%1$tm.%1$tY %1$tk:%1$tM:%1$tS]" <keyring> (TermocaminoBoilerSolare, Diagnostic)  {channel="souliss:t31:105:3-7:lastStatusStored"}
+Number termocaminoBoilerSolare_healty "Salute [%1d]" <keyring> (TermocaminoBoilerSolare, Diagnostic )  {channel="souliss:t31:105:3-7:healty"}
+
+Number	birra_sonda1	"Birra Sonda 1 [%.1f °C]"	<temperature>	(Birra)		{channel="souliss:t52:105:11-1:value"}
+Number	birra_sonda2	"Birra Sonda 2 [%.1f °C]"	<temperature>	(Birra)		{channel="souliss:t52:105:11-3:value"}
+Switch	birra_switch	"Birra - Switch"	<temperature>	(Birra)		{channel="souliss:t11:105:11-0:onoff"}
+String	birra_aggiornamento	"Agg.[%1$td.%1$tm.%1$tY %1$tk:%1$tM:%1$tS]" <keyring> (Birra, Diagnostic)	{channel="souliss:t52:105:11-1:lastStatusStored"}
+Number  birra_healty "Salute [%1d]" <keyring> (Birra, Diagnostic )  {channel="souliss:t52:105:11-1:healty"}
+Number birra_WIFI_DB "WiFi Decibel [%d db]" <network> (Birra, Diagnostic) {channel="souliss:t51:105:11-5:value"}
+Number birra_WIFI "WiFi Segnale [%.0f / 5]" <qualityofservice> (Birra, Diagnostic) {channel="souliss:t51:105:11-7:value"}
+
+Switch	alberoNatale	"Albero di Natale" (Soggiorno)	["Switchable"]	{channel="souliss:t11:105:10-0:onoff", autoupdate="false" }
+
+DateTime Sunrise_Time       "Alba [%1$tH:%1$tM]"        (Astro)           { channel="astro:sun:home:rise#start" }
+DateTime Sunset_Time        "Tramonto [%1$tH:%1$tM]"         (Astro)           { channel="astro:sun:home:set#start" }
+//DateTime night_start      "Notte - inizio [%1$tH:%1$tM]"        (Astro)           { channel="astro:sun:home:night#start" }
+//DateTime night_end       "Notte - fine [%1$tH:%1$tM]"        (Astro)           { channel="astro:sun:home:night#end" }
+Number   Azimuth            "Azimuth"                       (Astro, Grafico_Astro)          { channel="astro:sun:home:position#azimuth" }
+Number   Elevation          "Elevation"                     (Astro, Grafico_Astro)          { channel="astro:sun:home:position#elevation" }
+
+//FRIGO - MICROONDE SONOFF TASMOTA MQTT
+Number frigo_microonde_Power "Frigo [%.1f W]" <climate> (Sonoff_FrigoMicroonde, Grafico_Sonoff_FrigoMicroonde, Grafico_energia)     { mqtt="<[mqttcontainer:tele/SonoffPowR2-frigo-microonde/SENSOR:state:JSONPATH($.ENERGY.Power)]" }
+DateTime frigo_microonde_Time "Time [%1$td/%1$tm - %1$tH:%1$tM:%1$tS]" <clock> (Sonoff_FrigoMicroonde)     { mqtt="<[mqttcontainer:tele/SonoffPowR2-frigo-microonde/SENSOR:state:JSONPATH($.Time)]" }
+Number frigo_microonde_Today "Oggi [%.1f kWh]" (Sonoff_FrigoMicroonde)     { mqtt="<[mqttcontainer:tele/SonoffPowR2-frigo-microonde/SENSOR:state:JSONPATH($.ENERGY.Today)]" }
+Number frigo_microonde_Yesterday "Ieri [%.1f kWh]" (Sonoff_FrigoMicroonde, Grafico_consumo_giornaliero)     { mqtt="<[mqttcontainer:tele/SonoffPowR2-frigo-microonde/SENSOR:state:JSONPATH($.ENERGY.Yesterday)]" }
+Number frigo_microonde_Total "Totale [%.1f kWh]" (Sonoff_FrigoMicroonde)     { mqtt="<[mqttcontainer:tele/SonoffPowR2-frigo-microonde/SENSOR:state:JSONPATH($.ENERGY.Total)]" }
+Number frigo_microonde_Voltage "Tensione [%.1f V]" (Sonoff_FrigoMicroonde)     { mqtt="<[mqttcontainer:tele/SonoffPowR2-frigo-microonde/SENSOR:state:JSONPATH($.ENERGY.Voltage)]" }
+Number frigo_microonde_RSSI "RSSI [%d %%]" (Sonoff_FrigoMicroonde)     { mqtt="<[mqttcontainer:tele/SonoffPowR2-frigo-microonde/STATE:state:JSONPATH($.Wifi.RSSI)]" }
+Switch frigo_microonde_Reachable "Modulo in rete" (Sonoff_FrigoMicroonde) {autoupdate="false", mqtt="<[mqttcontainer:tele/SonoffPowR2-frigo-microonde/LWT:state:MAP(reachable.map)]" }
+
+//FOTOVOLTAICO SONOFF TASMOTA MQTT
+//Number fotovoltaico_Power "Produz. [%.1f W]" (Sonoff_fotovoltaico, Grafico_Sonoff_fotovoltaico, Grafico_energia)     { mqtt="<[mqttcontainer:tele/SonoffPowR2-fotovoltaico/SENSOR:state:JSONPATH($.ENERGY.Power)]" }
+//DateTime fotovoltaico_Time "Time [%1$td/%1$tm - %1$tH:%1$tM:%1$tS]" <clock> (Sonoff_fotovoltaico)     { mqtt="<[mqttcontainer:tele/SonoffPowR2-fotovoltaico/SENSOR:state:JSONPATH($.Time)]" }
+//Number fotovoltaico_Today "Oggi [%.1f kWh]" (Sonoff_fotovoltaico)     { mqtt="<[mqttcontainer:tele/SonoffPowR2-fotovoltaico/SENSOR:state:JSONPATH($.ENERGY.Today)]" }
+//Number fotovoltaico_Yesterday "Ieri [%.1f kWh]" (Sonoff_fotovoltaico, Grafico_consumo_giornaliero)     { mqtt="<[mqttcontainer:tele/SonoffPowR2-fotovoltaico/SENSOR:state:JSONPATH($.ENERGY.Yesterday)]" }
+//Number fotovoltaico_Total "Totale [%.1f kWh]" (Sonoff_fotovoltaico)     { mqtt="<[mqttcontainer:tele/SonoffPowR2-fotovoltaico/SENSOR:state:JSONPATH($.ENERGY.Total)]" }
+//Number fotovoltaico_Voltage "Tensione [%.1f V]" (Sonoff_fotovoltaico)     { mqtt="<[mqttcontainer:tele/SonoffPowR2-fotovoltaico/SENSOR:state:JSONPATH($.ENERGY.Voltage)]" }
+//Number fotovoltaico_RSSI "RSSI [%d %%]" (Sonoff_fotovoltaico)     { mqtt="<[mqttcontainer:tele/SonoffPowR2-fotovoltaico/STATE:state:JSONPATH($.Wifi.RSSI)]" }
+//Switch fotovoltaico_Reachable "Modulo in rete" (Sonoff_fotovoltaico) {autoupdate="false", mqtt="<[mqttcontainer:tele/SonoffPowR2-fotovoltaico/LWT:state:MAP(reachable.map)]" }
+
+//LAVASTOVIGLIE - BOILER SONOFF TASMOTA MQTT
+Number lavastoviglie_boiler_Power "Lavast. [%.1f W]" <washingmachine> (Sonoff_lavastoviglie, Grafico_Sonoff_lavastoviglie, Grafico_energia)     { mqtt="<[mqttcontainer:tele/SonoffPowR2-lavastoviglie-boiler/SENSOR:state:JSONPATH($.ENERGY.Power)]" }
+DateTime lavastoviglie_boiler_Time "Time [%1$td/%1$tm - %1$tH:%1$tM:%1$tS]" <clock> (Sonoff_lavastoviglie)     { mqtt="<[mqttcontainer:tele/SonoffPowR2-lavastoviglie-boiler/SENSOR:state:JSONPATH($.Time)]" }
+Number lavastoviglie_boiler_Today "Oggi [%.1f kWh]" (Sonoff_lavastoviglie)     { mqtt="<[mqttcontainer:tele/SonoffPowR2-lavastoviglie-boiler/SENSOR:state:JSONPATH($.ENERGY.Today)]" }
+Number lavastoviglie_boiler_Yesterday "Ieri [%.1f kWh]" (Sonoff_lavastoviglie, Grafico_consumo_giornaliero)     { mqtt="<[mqttcontainer:tele/SonoffPowR2-lavastoviglie-boiler/SENSOR:state:JSONPATH($.ENERGY.Yesterday)]" }
+Number lavastoviglie_boiler_Total "Totale [%.1f kWh]" (Sonoff_lavastoviglie)     { mqtt="<[mqttcontainer:tele/SonoffPowR2-lavastoviglie-boiler/SENSOR:state:JSONPATH($.ENERGY.Total)]" }
+Number lavastoviglie_boiler_Voltage "Tensione [%.1f V]" (Sonoff_lavastoviglie)     { mqtt="<[mqttcontainer:tele/SonoffPowR2-lavastoviglie-boiler/SENSOR:state:JSONPATH($.ENERGY.Voltage)]" }
+Number lavastoviglie_boiler_RSSI "RSSI [%d %%]" (Sonoff_lavastoviglie)     { mqtt="<[mqttcontainer:tele/SonoffPowR2-lavastoviglie-boiler/STATE:state:JSONPATH($.Wifi.RSSI)]" }
+Switch lavastoviglie_boiler_Reachable "Modulo in rete" (Sonoff_lavastoviglie) {autoupdate="false", mqtt="<[mqttcontainer:tele/SonoffPowR2-lavastoviglie-boiler/LWT:state:MAP(reachable.map)]" }

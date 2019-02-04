@@ -1,0 +1,30 @@
+rule "solax"
+       when
+               Item raw_solax changed 
+       then
+       var   _consumo = Float::parseFloat(transform("JSONPATH", "$.Data[10]", (raw_solax.state).toString))
+       var   _PV1 = Float::parseFloat(transform("JSONPATH", "$.Data[11]", (raw_solax.state).toString))
+       var   _PV2 = Float::parseFloat(transform("JSONPATH", "$.Data[12]", (raw_solax.state).toString))
+       var   _powerNow = Float::parseFloat(transform("JSONPATH", "$.Data[6]", (raw_solax.state).toString))
+       var   _innerTemp = Float::parseFloat(transform("JSONPATH", "$.Data[7]", (raw_solax.state).toString))
+
+       var   _battery_power = Float::parseFloat(transform("JSONPATH", "$.Data[15]", (raw_solax.state).toString))
+        var   _battery_capacity = Float::parseFloat(transform("JSONPATH", "$.Data[17]", (raw_solax.state).toString))
+        var   _battery_temp = Float::parseFloat(transform("JSONPATH", "$.Data[16]", (raw_solax.state).toString))
+
+       var _produzione_oggi=Float::parseFloat(transform("JSONPATH", "$.Data[8]", (raw_solax.state).toString))
+       var _produzione_totale=Float::parseFloat(transform("JSONPATH", "$.Data[9]", (raw_solax.state).toString))
+
+      consumo_solax.postUpdate(_consumo*-1)
+      produzione_stringa1_solax.postUpdate(_PV1)
+      produzione_stringa2_solax.postUpdate(_PV2)
+      produzione_sommaStringhe_solax.postUpdate(_PV1+_PV2)
+      produzione_powerNow_solax.postUpdate(_powerNow)
+      produzione_temperatura_solax.postUpdate(_innerTemp)
+      temperatura_batteria_inverter.postUpdate(_battery_temp)
+
+      produzione_potenza_batteria_solax.postUpdate(_battery_power)
+      produzione_livello_batteria_solax.postUpdate(_battery_capacity)
+      produzione_oggi_solax.postUpdate(_produzione_oggi)
+      produzione_totale_solax.postUpdate(_produzione_totale)
+  end

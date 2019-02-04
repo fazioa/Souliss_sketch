@@ -1,0 +1,31 @@
+rule "Elevation"
+when
+    Item Elevation changed 
+then
+if ((Elevation.state as DecimalType) < 26) {
+//    sendTelegram("bot1", "Astro - test - Elevation < 26")
+}
+end
+
+rule "astro-notte-start"
+when
+    Channel 'astro:sun:home:night#event' triggered START 
+then
+  // sendTelegram("bot1", "Astro - Inizio evento notte")
+end
+
+rule "astro-notte-end"
+when
+    Channel 'astro:sun:home:night#event' triggered END
+then
+ //  sendTelegram("bot1", "Astro - Fine evento notte")
+end
+
+rule "Christmas Lights ON"
+when
+    Channel "astro:sun:local:civilDusk#event" triggered START
+then
+   sendTelegram("bot1", "Astro - Accensione Albero di Natale")
+   alberoNatale.sendCommand(ON)
+   logInfo("LIGHTS","Light the Christmas tree")
+end

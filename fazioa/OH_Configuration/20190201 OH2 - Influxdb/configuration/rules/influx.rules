@@ -1,0 +1,67 @@
+rule "Save Energy into influxdb"
+when
+ Time cron "10 0/1 * * * ?"
+then
+ var data = "Grafico_energia"
+ var ts = now.getMillis()
+ var space = " "
+ Grafico_energia?.members.forEach[s |
+ var value = s.state as DecimalType
+ data = data + space + s.name + "=" + value
+ space = ","
+ ]
+ data = data + " " + ts
+ logInfo("Save Energy into influxdb", data)
+ sendHttpPostRequest("http://192.168.1.88:30700/write?db=openhab&u=openhab&p=openhab&precision=ms", "text/plain", data)
+end
+
+rule "Save Water Temperature into influxdb"
+when
+ Time cron "10 0/1 * * * ?"
+then
+ var data = "Grafico_temperatura_acqua"
+ var ts = now.getMillis()
+ var space = " "
+ Grafico_temperatura_acqua?.members.forEach[s |
+ var value = s.state as DecimalType
+ data = data + space + s.name + "=" + value
+ space = ","
+ ]
+ data = data + " " + ts
+ logInfo("Save Energy into influxdb", data)
+ sendHttpPostRequest("http://192.168.1.88:30700/write?db=openhab&u=openhab&p=openhab&precision=ms", "text/plain", data)
+end
+
+rule "Save Daily Energy into influxdb"
+when
+ Time cron "10 0/1 * * * ?"
+then
+ var data = "Grafico_consumo_giornaliero"
+ var ts = now.getMillis()
+ var space = " "
+ Grafico_consumo_giornaliero?.members.forEach[s |
+ var value = s.state as DecimalType
+ data = data + space + s.name + "=" + value
+ space = ","
+ ]
+ data = data + " " + ts
+ logInfo("Save Energy into influxdb", data)
+ sendHttpPostRequest("http://192.168.1.88:30700/write?db=openhab&u=openhab&p=openhab&precision=ms", "text/plain", data)
+end
+
+rule "Save Sun Position into influxdb"
+when
+ Time cron "10 0/1 * * * ?"
+then
+ var data = "Grafico_Astro"
+ var ts = now.getMillis()
+ var space = " "
+ Grafico_Astro?.members.forEach[s |
+ var value = s.state as DecimalType
+ data = data + space + s.name + "=" + value
+ space = ","
+ ]
+ data = data + " " + ts
+ logInfo("Save Energy into influxdb", data)
+ sendHttpPostRequest("http://192.168.1.88:30700/write?db=openhab&u=openhab&p=openhab&precision=ms", "text/plain", data)
+end

@@ -1,0 +1,7 @@
+Bridge milight:bridgeV3:ACCF2339A3EA [ ADDR="192.168.1.123", ID="ACCF2339A3EA" ] {
+    Thing whiteLed 0 "Lampade divano"@"Soggiorno"
+    Thing rgbLed 0 "Lampade tettoia"@"Soggiorno"
+}
+
+
+
