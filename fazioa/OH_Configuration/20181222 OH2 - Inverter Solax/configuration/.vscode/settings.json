@@ -1,3 +1,0 @@
-{
-    "openhab.karafCommand": "ssh openhab@192.168.1.121 -p 8101"
- }

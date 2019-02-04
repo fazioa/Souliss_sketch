@@ -1,1 +1,0 @@
-parseInt(JSON.parse(input).hexvalue, 16);
