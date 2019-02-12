@@ -36,6 +36,7 @@ uint8_t ip_gateway[4]  = {192, 168, 1, 1};
 #define chibi_bridge_address    0x6511 //gateway
 #define wifi_bridge_address    0xAB10 //gateway
 
+#define peer_wifi_address_soggiorno	0x6511 //termocamino
 #define peer_chibi_address_termocamino	0x6512 //termocamino
 #define peer_chibi_address_giardino	0x6513 //giardino
 #define peer_chibi_address_fotovoltaico	0x6514 //fotovoltaico
@@ -79,7 +80,7 @@ void setup()
 
 
   // This node as gateway will get data from the Peer
-  SetAsPeerNode(peer_eth_address_soggiorno, 1);
+  SetAsPeerNode(peer_wifi_address_soggiorno, 1);
   SetAsPeerNode(peer_chibi_address_giardino, 2);
   SetAsPeerNode(peer_chibi_address_termocamino, 3);
   SetAsPeerNode(peer_chibi_address_fotovoltaico, 4);
