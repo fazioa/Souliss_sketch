@@ -21,7 +21,7 @@
   - UniversalTelegramBot (stable release)
   - ArduinoJson
 ***************************************************************************/
-//#define SERIAL_DEBUG
+#define SERIAL_DEBUG
 
 // RESET OGNI 20 MIN SE NON E' COLLEGATO AL GATEWAY
 #define  VNET_RESETTIME_INSKETCH
@@ -34,12 +34,12 @@
 #include <WiFiUdp.h>
 #include <ArduinoOTA.h>
 
-#define HOSTNAME "souliss-GEEKCREIT_2CH-porta-cancello"
+#define HOSTNAME "souliss-porta-cancello"
 
 #include "bconf/MCU_ESP8266.h"              // Load the code directly on the ESP8266
 #include "conf/IPBroadcast.h"
 
-#include <UniversalTelegramBot.h>
+
 
 #include "credenziali.h"
 // **** creare un file di testo chiamato credenziali.h con il seguente contenuto personalizzato ****
@@ -54,17 +54,18 @@
 // Include framework code and libraries
 
 #include "Souliss.h"
+#include <UniversalTelegramBot.h>
 
 //*************************************************************************
 // Define the network configuration according to your router settingsuration according to your router settings
 // and the other on the wireless oneless one
-#define peer_address  0xAB11
+#define peer_address  0xAB18
 #define myvNet_subnet 0xFF00
 #define myvNet_supern 0xAB10
 //*************************************************************************
 
-#define SLOT_REMOTE_CONTROLLER_RELE1                  6
-#define SLOT_APRIPORTA_RELE2                          7
+#define SLOT_REMOTE_CONTROLLER_RELE1                  0
+#define SLOT_APRIPORTA_RELE2                          1
 
 #define T_WIFI_STRDB  2 //It takes 2 slots
 #define T_WIFI_STR    4 //It takes 2 slots
@@ -91,20 +92,45 @@ void setup()
   Serial.println("Node Starting");
 #endif
 
+#ifdef SERIAL_DEBUG
+  Serial.println("Define Outputs Pins");
+#endif
   // Define output pins
-  pinMode(SLOT_REMOTE_CONTROLLER_RELE1, OUTPUT);    // Relè
-  pinMode(SLOT_APRIPORTA_RELE2, OUTPUT);    // Relè
+  pinMode(PIN_OUTPUT_REMOTE_CONTROLLER, OUTPUT);    // Relè
+  pinMode(PIN_OUTPUT_APRIPORTA, OUTPUT);    // Relè
   pinMode(PIN_LED, OUTPUT);
+  
+  #ifdef SERIAL_DEBUG
+  Serial.println("Define Inputs Pins");
+#endif
+
   pinMode(PIN_LEFT_BUTTON_0, INPUT_PULLUP);
   pinMode(PIN_MIDDLE_BUTTON_9, INPUT_PULLUP);
 
-
+#ifdef SERIAL_DEBUG
+  Serial.println("PIN_LED HIGH");
+#endif
   digitalWrite(PIN_LED, HIGH);
 
-  //delay(30000); // Ritardo di setup per permettere al router di effettuare il boot
+  delay(5000); // Ritardo di setup per permettere al router di effettuare il boot
 
+#ifdef SERIAL_DEBUG
+  Serial.println("Initialize");
+#endif
   Initialize();
+  
+  #ifdef SERIAL_DEBUG
+  Serial.println("GetIPAddress");
+#endif
   GetIPAddress();
+
+      #ifdef SERIAL_DEBUG
+  Serial.println("Ok");
+#endif
+
+#ifdef SERIAL_DEBUG
+  Serial.println("PIN_LED LOW");
+#endif
   digitalWrite(PIN_LED, LOW);
   SetAddress(peer_address, myvNet_subnet, myvNet_supern);          // Address on the wireless interface
 
@@ -116,6 +142,9 @@ void setup()
   Set_T51(T_WIFI_STRDB); //Imposto il tipico per contenere il segnale del Wifi in decibel
   Set_T51(T_WIFI_STR); //Imposto il tipico per contenere il segnale del Wifi in barre da 1 a 5
 
+    #ifdef SERIAL_DEBUG
+  Serial.println("Arduino OTA Begin");
+#endif
   // Init the OTA
   ArduinoOTA.setHostname(HOSTNAME);
   ArduinoOTA.begin();
@@ -125,17 +154,15 @@ void setup()
   Serial.println(WiFi.macAddress());
   Serial.print("IP:  ");
   Serial.println(WiFi.localIP());
-  Serial.print("Subnet: ");
-  Serial.println(WiFi.subnetMask());
-  Serial.print("Gateway: ");
   Serial.println("Node Initialized");
 
 #endif
 
+  delay(1000);
   NotificaTelegram();
 
-  mOutput(SLOT_REMOTE_CONTROLLER_RELE1) = Souliss_T1n_OnCoil;
-  mOutput(SLOT_APRIPORTA_RELE2) = Souliss_T1n_OnCoil;
+  //mOutput(SLOT_REMOTE_CONTROLLER_RELE1) = Souliss_T1n_OnCoil;
+ // mOutput(SLOT_APRIPORTA_RELE2) = Souliss_T1n_OnCoil;
 }
 
 void loop()
@@ -245,17 +272,24 @@ void check_wifi_signal() {
 
 //telegram
 void sendToTelegram(String choose, String text ) {
+      #ifdef SERIAL_DEBUG
+  Serial.print("Try to send: ");
+  Serial.println(text);
+
+#endif
   WiFiClientSecure botclient;
   UniversalTelegramBot bot(BOTTOKEN, botclient);
   if (bot.sendMessage(choose, text, "")) {
     Serial.println("TELEGRAM Successfully sent");
+  } else {
+    Serial.println("TELEGRAM NOT Successfully sent");
   }
+  
   botclient.stop();
 }
 
 void NotificaTelegram() {
   Serial.println("Invio messaggio su Telegram");
   sendToTelegram(CHAT_ID, "Nodo \"" + (String) HOSTNAME + "\" avviato" + " - IP: " + WiFi.localIP().toString());
-  Serial.print(" ...ok");
 }
 //end telegram
