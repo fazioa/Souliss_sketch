@@ -43,7 +43,9 @@
 #include "SDM.h"                                                                //import SDM library
 
 #define SDM_UART_BAUD                     9600
-SoftwareSerial swSerSDM(11, 6);                                               //config SoftwareSerial (rx->pin13 / tx->pin15)
+
+
+SoftwareSerial swSerSDM(1, 3);                                               //hardware TX - RX, pins 1, 3
 
 SDM sdm(swSerSDM, SDM_UART_BAUD, NOT_A_PIN);                                             //config SDM
 
@@ -66,7 +68,7 @@ SDM sdm(swSerSDM, SDM_UART_BAUD, NOT_A_PIN);                                    
 // Include framework code and libraries
 
 #include "Souliss.h"
-#include <UniversalTelegramBot.h>
+#include <UniversalTelegramBot.h>  //
 
 //*************************************************************************
 // Define the network configuration according to your router settingsuration according to your router settings
@@ -76,12 +78,13 @@ SDM sdm(swSerSDM, SDM_UART_BAUD, NOT_A_PIN);                                    
 #define myvNet_supern 0xAB10
 //*************************************************************************
 
-#define SLOT_REMOTE_CONTROLLER                  0
-#define SLOT_APRIPORTA                          1
+#define SLOT_APRIPORTA                          0
+#define SLOT_REMOTE_CONTROLLER                  1
 #define SLOT_POWER  2
 #define SLOT_TOTAL_IMPORTED_ENERGY  4
-#define T_WIFI_STRDB  6 //It takes 2 slots
-#define T_WIFI_STR    8 //It takes 2 slots
+#define SLOT_TOTAL_EXPORTED_ENERGY 6
+#define T_WIFI_STRDB  8 //It takes 2 slots
+#define T_WIFI_STR    10 //It takes 2 slots
 
 #define PIN_OUTPUT_REMOTE_CONTROLLER_RELE1 12
 #define PIN_OUTPUT_APRIPORTA_RELE2 14
@@ -101,6 +104,7 @@ float v;
 boolean bLedState = false;
 void setup()
 {
+
   sdm.begin();
 
 #ifdef SERIAL_DEBUG
@@ -157,7 +161,7 @@ void setup()
 
   Set_Power(SLOT_POWER);
   Set_Power(SLOT_TOTAL_IMPORTED_ENERGY);
-
+  Set_Power(SLOT_TOTAL_EXPORTED_ENERGY);
 
   Set_T51(T_WIFI_STRDB); //Imposto il tipico per contenere il segnale del Wifi in decibel
   Set_T51(T_WIFI_STR); //Imposto il tipico per contenere il segnale del Wifi in barre da 1 a 5
@@ -213,7 +217,7 @@ void loop()
 
 
     FAST_2110ms() {
-      
+
 
       v = sdm.readVal(SDM220T_POWER);
 #ifdef SERIAL_DEBUG
@@ -224,6 +228,7 @@ void loop()
 
       Souliss_Logic_T57(memory_map, SLOT_POWER, 0.02, &data_changed);
       Souliss_Logic_T57(memory_map, SLOT_TOTAL_IMPORTED_ENERGY, 0.02, &data_changed);
+      Souliss_Logic_T57(memory_map, SLOT_TOTAL_EXPORTED_ENERGY, 0.02, &data_changed);
     }
 
     FAST_21110ms() {
@@ -241,7 +246,8 @@ void loop()
       check_wifi_signal();
     }
     
-    SLOW_510s() {
+
+    SHIFT_SLOW_110s(0) {
       v = sdm.readVal(SDM220T_IMPORT_ACTIVE_ENERGY);
 #ifdef SERIAL_DEBUG
       Serial.print("Total Imported: ");
@@ -249,7 +255,18 @@ void loop()
 #endif
       ImportAnalog(SLOT_TOTAL_IMPORTED_ENERGY, &v);
     }
+    
 
+ SHIFT_SLOW_110s(55) {
+      v = sdm.readVal(SDM220T_EXPORT_ACTIVE_ENERGY);
+#ifdef SERIAL_DEBUG
+      Serial.print("Total Imported: ");
+      Serial.println(v);
+#endif
+      ImportAnalog(SLOT_TOTAL_EXPORTED_ENERGY, &v);
+    }
+
+    
 
     SLOW_50s() {
       //verifica ogni 90 sec (fast 91110) che la ESP sia collegata alla rete Wifi (5 tentativi al 6^fa hard reset)
