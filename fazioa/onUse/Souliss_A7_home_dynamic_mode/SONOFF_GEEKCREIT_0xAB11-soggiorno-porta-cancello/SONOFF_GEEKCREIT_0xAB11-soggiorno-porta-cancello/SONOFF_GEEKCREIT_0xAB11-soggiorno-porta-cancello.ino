@@ -13,17 +13,16 @@
   – ESP8266 Generic
   – Flash Mode: DOUT
   – Crystal Frequency: 26 MHz (non presente su IDE 1.6.12)
-  – Flash Frequency 80 MHz
+  – Flash Frequency 160 MHz
   – CPU frequency 80 MHz
-  – Flash Size 1 MB (256K SPIFFS)
+  – Flash Size 4 MB (no SPIFFS)
+  - lwIP Variant: v1.4 Higher Bandwidth
 
       This sketch require libreries:
   - UniversalTelegramBot (stable release)
   - ArduinoJson
 ***************************************************************************/
-#define SERIAL_DEBUG
-#define READSDMEVERY  2000                                                      //read sdm every 2000ms
-#define NBREG   6
+//#define SERIAL_DEBUG
 
 // RESET OGNI 20 MIN SE NON E' COLLEGATO AL GATEWAY
 #define  VNET_RESETTIME_INSKETCH
