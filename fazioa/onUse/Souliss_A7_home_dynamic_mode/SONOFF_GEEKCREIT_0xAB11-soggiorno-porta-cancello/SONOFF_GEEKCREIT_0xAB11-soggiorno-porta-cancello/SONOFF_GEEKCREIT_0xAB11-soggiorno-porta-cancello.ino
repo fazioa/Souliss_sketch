@@ -13,10 +13,10 @@
   – ESP8266 Generic
   – Flash Mode: DOUT
   – Crystal Frequency: 26 MHz (non presente su IDE 1.6.12)
-  – Flash Frequency 160 MHz
-  – CPU frequency 80 MHz
-  – Flash Size 4 MB (no SPIFFS)
-  - lwIP Variant: v1.4 Higher Bandwidth
+  – Flash Frequency 80 MHz
+  – CPU frequency 160 MHz
+  – Flash Size 1 MB (no SPIFFS)
+  - lwIP Variant: v2 Higher Bandwidth (no features)
 
       This sketch require libreries:
   - UniversalTelegramBot (stable release)
@@ -245,28 +245,24 @@ void loop()
     SLOW_10s() {  // Process the timer every 10 seconds
       check_wifi_signal();
     }
-    
 
-    SHIFT_SLOW_110s(0) {
+
+    SLOW_110s() {
       v = sdm.readVal(SDM220T_IMPORT_ACTIVE_ENERGY);
 #ifdef SERIAL_DEBUG
       Serial.print("Total Imported: ");
       Serial.println(v);
 #endif
       ImportAnalog(SLOT_TOTAL_IMPORTED_ENERGY, &v);
-    }
-    
 
- SHIFT_SLOW_110s(55) {
       v = sdm.readVal(SDM220T_EXPORT_ACTIVE_ENERGY);
 #ifdef SERIAL_DEBUG
-      Serial.print("Total Imported: ");
+      Serial.print("Total Exported: ");
       Serial.println(v);
 #endif
       ImportAnalog(SLOT_TOTAL_EXPORTED_ENERGY, &v);
     }
 
-    
 
     SLOW_50s() {
       //verifica ogni 90 sec (fast 91110) che la ESP sia collegata alla rete Wifi (5 tentativi al 6^fa hard reset)
