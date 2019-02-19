@@ -78,8 +78,8 @@ SDM sdm(swSerSDM, SDM_UART_BAUD, NOT_A_PIN);                                    
 #define myvNet_supern 0xAB10
 //*************************************************************************
 
-#define SLOT_APRIPORTA                          0
-#define SLOT_REMOTE_CONTROLLER                  1
+#define SLOT_REMOTE_CONTROLLER                          0
+#define SLOT_APRIPORTA                  1
 #define SLOT_POWER  2
 #define SLOT_TOTAL_IMPORTED_ENERGY  4
 #define SLOT_TOTAL_EXPORTED_ENERGY 6
