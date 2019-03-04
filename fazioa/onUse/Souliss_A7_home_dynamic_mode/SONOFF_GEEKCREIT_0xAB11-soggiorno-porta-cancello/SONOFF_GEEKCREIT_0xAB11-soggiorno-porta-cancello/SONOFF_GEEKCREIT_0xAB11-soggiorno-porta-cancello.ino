@@ -97,8 +97,6 @@ SDM sdm(swSerSDM, SDM_UART_BAUD, NOT_A_PIN);                                    
 long rssi = 0;
 int bars = 0;
 
-
-int iPIN = 1;
 float v;
 
 boolean bLedState = false;
@@ -217,8 +215,6 @@ void loop()
 
 
     FAST_2110ms() {
-
-
       v = sdm.readVal(SDM220T_POWER);
 #ifdef SERIAL_DEBUG
       Serial.print("Power: ");
