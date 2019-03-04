@@ -9,7 +9,7 @@
   PSF-B compatible ESP8266 built in
 
 
-  parametri upload Arduino IDE:
+  parametri upload Arduino IDE 1.8.19.0:
   – ESP8266 Generic
   – Flash Mode: DOUT
   – Crystal Frequency: 26 MHz (non presente su IDE 1.6.12)
