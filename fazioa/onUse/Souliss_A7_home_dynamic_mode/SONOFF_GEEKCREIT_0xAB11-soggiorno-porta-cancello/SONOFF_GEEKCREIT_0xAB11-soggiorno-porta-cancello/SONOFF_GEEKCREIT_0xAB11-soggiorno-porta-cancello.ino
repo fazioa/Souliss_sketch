@@ -1,10 +1,10 @@
 /**************************************************************************
-  Interruttore luce giardino
+  Interruttore Portoncino e Cancello e lettura dati misuratore energia SDM220
 
   Sketch: Porta - Cancello - GEEKCREIT 2 Channel modificato - VER.2 - Souliss - Static Configuration
   Author: Tonino Fazio
 
-  ESP Core 2.5.0
+  ESP Core 2.4.2
   This example for Geekcreit 2 Channel
   PSF-B compatible ESP8266 built in
 
@@ -15,8 +15,11 @@
   – Crystal Frequency: 26 MHz (non presente su IDE 1.6.12)
   – Flash Frequency 80 MHz
   – CPU frequency 160 MHz
-  – Flash Size 1 MB (no SPIFFS)
-  - lwIP Variant: v2 Higher Bandwidth (no features)
+  – Flash Size 1 MB (256K SPIFFS)
+  - lwIP Variant: v1.4 Higher Bandwidth
+
+Upload OTA ok il 04/03/2019
+
 
       This sketch require libreries:
   - UniversalTelegramBot (stable release)
@@ -197,6 +200,10 @@ void loop()
     FAST_50ms() {
       LowDigIn(PIN_LEFT_BUTTON_0, Souliss_T1n_OnCmd, SLOT_REMOTE_CONTROLLER);
       LowDigIn(PIN_MIDDLE_BUTTON_9, Souliss_T1n_OnCmd, SLOT_APRIPORTA);
+      
+      Souliss_Logic_T57(memory_map, SLOT_POWER, 0.02, &data_changed);
+      Souliss_Logic_T57(memory_map, SLOT_TOTAL_IMPORTED_ENERGY, 0.02, &data_changed);
+      Souliss_Logic_T57(memory_map, SLOT_TOTAL_EXPORTED_ENERGY, 0.02, &data_changed);
     }
 
     FAST_710ms() {
@@ -214,7 +221,7 @@ void loop()
     }
 
 
-    FAST_2110ms() {
+    FAST_7110ms() {
       v = sdm.readVal(SDM220T_POWER);
 #ifdef SERIAL_DEBUG
       Serial.print("Power: ");
@@ -222,9 +229,6 @@ void loop()
 #endif
       ImportAnalog(SLOT_POWER, &v);
 
-      Souliss_Logic_T57(memory_map, SLOT_POWER, 0.02, &data_changed);
-      Souliss_Logic_T57(memory_map, SLOT_TOTAL_IMPORTED_ENERGY, 0.02, &data_changed);
-      Souliss_Logic_T57(memory_map, SLOT_TOTAL_EXPORTED_ENERGY, 0.02, &data_changed);
     }
 
     FAST_21110ms() {
