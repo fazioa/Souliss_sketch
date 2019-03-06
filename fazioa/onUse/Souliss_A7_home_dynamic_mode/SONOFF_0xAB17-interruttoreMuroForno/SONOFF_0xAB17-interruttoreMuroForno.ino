@@ -4,19 +4,21 @@
   Sketch: POWER SOCKET - VER.2 - Souliss - Static Configuration
   Author: Tonino Fazio
 
-  ESP Core 2.3.0
-  This example for Geekcreit 2 Channel
+  ESP Core 2.4.2
+  This example for Sonoff Dual
   PSF-B compatible ESP8266 built in
 
 
   parametri upload Arduino IDE:
-  - ESP8285 Generic
   – ESP8266 Generic
   – Flash Mode: DOUT
   – Crystal Frequency: 26 MHz (non presente su IDE 1.6.12)
   – Flash Frequency 80 MHz
   – CPU frequency 80 MHz
   – Flash Size 1 MB (256K SPIFFS)
+  - lwIP Varian: 1.4v Higher Bandwidth
+
+UPLOAD OTA non funziona
 
       This sketch require libreries:
   - UniversalTelegramBot (stable release)
@@ -59,9 +61,6 @@
 // Include framework code and libraries
 
 #include "Souliss.h"
-#include "topics.h"
-//uint8_t mypayload_len = 0;
-//U8 mypayload;
 
 //*************************************************************************
 // Define the network configuration according to your router settingsuration according to your router settings
@@ -197,9 +196,12 @@ void loop()
 
   EXECUTESLOW() {
     UPDATESLOW();
-    SLOW_50s() {  // Process the timer every 10 seconds
+    SLOW_10s() {  // Process the timer every 10 seconds
       Timer_SimpleLight(SLOT_RELE1);
       Timer_SimpleLight(SLOT_RELE2);
+    }
+
+    SLOW_50s() {  
       check_wifi_signal();
     }
 
@@ -293,20 +295,3 @@ Serial.print(" ...ok");
 #endif
 }
 //end telegram
-
-
-//void subcription_ON_OFF() {
-//  if (sbscrbdata(GIARDINO_ONOFF, &mypayload, &mypayload_len)) {
-//    if (mypayload == LIGHT_ON)
-//      mOutput(SLOT_RELE1) = Souliss_T1n_OnCoil;
-//    else if (mypayload == LIGHT_OFF)
-//      mOutput(SLOT_RELE1) = Souliss_T1n_OffCoil;
-//  }
-//
-//  if (sbscrbdata(FORNO_ONOFF, &mypayload, &mypayload_len)) {
-//    if (mypayload == LIGHT_ON)
-//      mOutput(SLOT_RELE2) = Souliss_T1n_OnCoil;
-//    else if (mypayload == LIGHT_OFF)
-//      mOutput(SLOT_RELE2) = Souliss_T1n_OffCoil;
-//  }
-//}
