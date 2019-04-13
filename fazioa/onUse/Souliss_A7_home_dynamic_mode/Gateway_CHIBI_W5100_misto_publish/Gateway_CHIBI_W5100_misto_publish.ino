@@ -59,7 +59,7 @@ uint8_t ip_gateway[4]  = {192, 168, 1, 1};
 
 void setup()
 {
-  // Serial.begin(9600);
+   Serial.begin(9600);
 
   digitalWrite(PIN_RESET, HIGH);
   pinMode(PIN_RESET, INPUT); // to gnd for eeprom reset
@@ -97,10 +97,6 @@ void setup()
   SetAsPeerNode(peer_wifi_address_SDM220_soggiorno, 15);
   SetAsPeerNode(peer_wifi_address_SONOFF_Giardino_Muro_Forno, 16);
   
-  
-
-  
-
   // This node will serve all the others in the network providing an address
   SetAddressingServer();
 }
@@ -111,7 +107,7 @@ void setup()
 float valEnergy = 0;
 uint8_t valByteArray[2];
 uint8_t vNode_Energy = 1;
-uint8_t vNode_slotEnergy = 4;
+uint8_t vNode_slotEnergy = 2;
 
 float valSolar = 0;
 uint8_t vNode_Solar = 4;
@@ -142,14 +138,14 @@ void loop()
     }
 
     //Scelgo di fare pubblicare il valore direttamente dal nodo invece che dal GW
-    //    SHIFT_7110ms(0) {
-    //      float16(&output16, &valEnergy);
-    //      valByteArray[0] = C16TO8L(output16);
-    //      valByteArray[1] = C16TO8H(output16);
-    //      Serial.print("Float: "); Serial.print(valEnergy);
-    //      Serial.print(", Publish ENERGY_TOPIC: "); Serial.print( valByteArray[0]); Serial.print(" "); Serial.println( valByteArray[1]);
-    //      publishdata(ENERGY_TOPIC, valByteArray, 2);
-    //    }
+        SHIFT_7110ms(0) {
+          float16(&output16, &valEnergy);
+          valByteArray[0] = C16TO8L(output16);
+          valByteArray[1] = C16TO8H(output16);
+          Serial.print("Float: "); Serial.print(valEnergy);
+          Serial.print(", Publish ENERGY_TOPIC: "); Serial.print( valByteArray[0]); Serial.print(" "); Serial.println( valByteArray[1]);
+          pblshdata(ENERGY_TOPIC, valByteArray, 2);
+        }
 
     FAST_7110ms() {
       float16(&output16, &valSolar);
@@ -164,8 +160,8 @@ void loop()
       float16(&output16, &valTemp);
       valByteArray[0] = C16TO8L(output16);
       valByteArray[1] = C16TO8H(output16);
-      //      Serial.print("Float: "); Serial.print(valTemp);
-      //      Serial.print(", Publish TEMPERATURE_TOPIC: "); Serial.print( valByteArray[0]); Serial.print(" "); Serial.println( valByteArray[1]);
+            Serial.print("Float: "); Serial.print(valTemp);
+            Serial.print(", Publish TEMPERATURE_TOPIC: "); Serial.print( valByteArray[0]); Serial.print(" "); Serial.println( valByteArray[1]);
       pblshdata(TEMPERATURE_TOPIC, valByteArray, 2);
       // publish(Cloudy);
       //publish(Alarm);
