@@ -139,10 +139,11 @@ void loop()
 
     //Scelgo di fare pubblicare il valore direttamente dal nodo invece che dal GW
         SHIFT_7110ms(0) {
+          valEnergy=(int) valEnergy; //to int
           float16(&output16, &valEnergy);
           valByteArray[0] = C16TO8L(output16);
           valByteArray[1] = C16TO8H(output16);
-          Serial.print("Float: "); Serial.print(valEnergy);
+          Serial.print("Float: "); Serial.print( valEnergy);
           Serial.print(", Publish ENERGY_TOPIC: "); Serial.print( valByteArray[0]); Serial.print(" "); Serial.println( valByteArray[1]);
           pblshdata(ENERGY_TOPIC, valByteArray, 2);
         }
