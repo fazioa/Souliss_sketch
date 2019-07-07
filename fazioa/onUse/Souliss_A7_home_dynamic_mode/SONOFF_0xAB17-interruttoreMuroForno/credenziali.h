@@ -1,6 +1,6 @@
 #define WIFICONF_INSKETCH
-#define WiFi_SSID               "asterix"
-#define WiFi_Password           "ttony2013"
+#define WiFi_SSID               "****"
+#define WiFi_Password           "****"
 
-#define  BOTTOKEN "276333395:AAFIgSUpTI5F68c6Ei7I-LXBCJVrkWVnCvs"
-#define  CHAT_ID "48121590" 
+#define  BOTTOKEN "XXxxxx:XXXXXXXXXXX-XXXXXXX"
+#define  CHAT_ID "123450" 
