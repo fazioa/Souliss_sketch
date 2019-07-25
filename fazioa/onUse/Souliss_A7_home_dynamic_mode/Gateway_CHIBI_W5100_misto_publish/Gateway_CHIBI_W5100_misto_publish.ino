@@ -39,7 +39,7 @@ uint8_t ip_gateway[4]  = {192, 168, 1, 1};
 #define peer_wifi_address_GEEKCREIT_portoncino_cancello	0xAB18 //portoncino e cancello
 #define peer_chibi_address_termocamino	0x6512 //termocamino
 #define peer_chibi_address_giardino	0x6513 //giardino
-#define peer_chibi_address_fotovoltaico	0x6514 //fotovoltaico
+#define peer_wifii_address_tende	0xAB19 //tende
 #define peer_eth_address_soggiorno  0x0010 //soggiorno
 #define peer_wifi_address_SONOFF_Giardino_Tettoia  0xAB11 //soggiorno
 #define peer_wifi_address_PowerSocket  0xAB12 //soggiorno
@@ -83,7 +83,7 @@ void setup()
   SetAsPeerNode(peer_wifi_address_GEEKCREIT_portoncino_cancello, 1);
   SetAsPeerNode(peer_chibi_address_giardino, 2);
   SetAsPeerNode(peer_chibi_address_termocamino, 3);
-  SetAsPeerNode(peer_chibi_address_fotovoltaico, 4);
+  SetAsPeerNode(peer_wifii_address_tende, 4);
   SetAsPeerNode(peer_wifi_address_SONOFF_Giardino_Tettoia, 5);
   SetAsPeerNode(peer_wifi_address_termostato_soggiorno, 6);
   SetAsPeerNode(peer_wifi_address_termostato_piano_terra, 7);
