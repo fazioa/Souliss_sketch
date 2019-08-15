@@ -2,7 +2,7 @@
   Sketch: Tende - Souliss - Static Configuration
   Author: Tonino Fazio
 
-  ESP Core 2.5.2
+  ESP Core 2.3.0
   Funziona su Sonoff 4CH R2
 
   parametri upload Arduino IDE:
@@ -68,6 +68,7 @@
 #define PIN_LED_L4 15
 #define PIN_LED_WIFI 13
 
+#define Souliss_T2n_Timer_Val=Souliss_T2n_Timer_Off+0x14;
 
 //Variable to Handle WiFio Signal
 long rssi = 0;
@@ -93,7 +94,7 @@ void setup()
   pinMode(PIN_LED_L4, OUTPUT);
   pinMode(PIN_LED_WIFI, OUTPUT);
 
-  delay(25000); // Ritardo di setup per permettere al router di effettuare il boot
+  delay(5000); // Ritardo di setup per permettere al router di effettuare il boot
 
   Initialize();
   GetIPAddress();
@@ -140,8 +141,10 @@ void loop()
       DigIn(PIN_BUTTON_L3, Souliss_T2n_OpenCmd_Local,  SLOT_TENDA2);
       DigIn(PIN_BUTTON_L4, Souliss_T2n_CloseCmd_Local ,  SLOT_TENDA2);
 
-      Logic_Windows(SLOT_TENDA1);
-      Logic_Windows(SLOT_TENDA2);
+      Souliss_Logic_T22(memory_map, SLOT_TENDA1, &data_changed, Souliss_T2n_Timer_Off+0x32);
+      Souliss_Logic_T22(memory_map, SLOT_TENDA2, &data_changed, Souliss_T2n_Timer_Off+0x10);
+      //Logic_Windows(SLOT_TENDA2);
+
 
       DigOut(PIN_LED_L1, Souliss_T2n_Coil_Open, SLOT_TENDA1);
       DigOut(PIN_LED_L2, Souliss_T2n_Coil_Close, SLOT_TENDA1);
@@ -154,11 +157,13 @@ void loop()
       digitalWrite(PIN_LED_WIFI, bLedState);
     }
 
-    FAST_710ms() {
-      Timer_Windows(SLOT_TENDA1);
-      Timer_Windows(SLOT_TENDA2);
-    }
-
+        // Define the hold time of the outputs, by default the timer hold the relays for 16 times, so:
+        // 221x10x16ms that is about 35 seconds. Change the parameter inside FAST_x10ms() to change this time.
+        FAST_x10ms(40) {                 
+            Timer_T22(SLOT_TENDA1);
+             Timer_T22(SLOT_TENDA2);
+        }
+    
 
     FAST_21110ms() {
       //Processa le logiche per il segnale WiFi
