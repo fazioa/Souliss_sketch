@@ -11,8 +11,8 @@
 #include "topics.h"
 #include "bconf/Chibiduino_v1.h"			// Use a Chibiduino 2.4 GHz wireless board
 #include "conf/ethW5100.h"                  // Ethernet through Wiznet W5100
-//#include "conf/Gateway.h"                   // The main node is the Gateway, we have just one node
-#include "conf/Gateway_wLastin.h"
+#include "conf/Gateway.h"                   // The main node is the Gateway, we have just one node
+//#include "conf/Gateway_wLastin.h"
 //#include "conf/Webhook.h"                   // Enable DHCP and DNS
 
 //#include "conf/DynamicAddressing.h"         // Use dynamic address
@@ -36,9 +36,9 @@ uint8_t ip_gateway[4]  = {192, 168, 1, 1};
 #define chibi_bridge_address    0x6511 //gateway
 #define wifi_bridge_address    0xAB10 //gateway
 
-#define peer_wifi_address_GEEKCREIT_portoncino_cancello	0xAB18 //portoncino e cancello
+#define peer_wifi_address_GEEKCREIT_portoncino_cancello_SDM220	0xAB18 //portoncino e cancello e SDM220 Modbus
 #define peer_chibi_address_termocamino	0x6512 //termocamino
-#define peer_chibi_address_giardino	0x6513 //giardino
+#define peer_chibi_address_TEST	0xAB23 //giardino
 #define peer_wifii_address_tende	0xAB19 //tende
 #define peer_eth_address_soggiorno  0x0010 //soggiorno
 #define peer_wifi_address_SONOFF_Giardino_Tettoia  0xAB11 //soggiorno
@@ -48,8 +48,7 @@ uint8_t ip_gateway[4]  = {192, 168, 1, 1};
 #define peer_wifi_address_SONOFF_Divano  0xAB15 //SONOFF Smart Socket - Divano
 #define peer_wifi_address_SONOFF_Cucina  0xAB16 //SONOFF Smart Socket - Cucina
 #define peer_wifi_address_SONOFF_Giardino_Muro_Forno  0xAB17 //SONOFF Smart Socket - Giardino
-//#define peer_wifi_address_SONOFF_Giardino_Tettoia  0xAB18 //SONOFF Smart Socket - Giardino
-#define peer_wifi_address_SDM220_soggiorno  0xAB19 //SONOFF SDM220 Modbus
+
 #define peer_wifi_address_termostato_soggiorno  0xAB20 //termostato soggiorno
 #define peer_wifi_address_termostato_piano_terra  0xAB21 //termostato piano terra
 #define peer_wifi_address_ex_store_birra  0xAB22 //nodo controllo temperatura birra
@@ -59,7 +58,7 @@ uint8_t ip_gateway[4]  = {192, 168, 1, 1};
 
 void setup()
 {
-   Serial.begin(9600);
+  Serial.begin(9600);
 
   digitalWrite(PIN_RESET, HIGH);
   pinMode(PIN_RESET, INPUT); // to gnd for eeprom reset
@@ -80,8 +79,8 @@ void setup()
 
 
   // This node as gateway will get data from the Peer
-  SetAsPeerNode(peer_wifi_address_GEEKCREIT_portoncino_cancello, 1);
-  SetAsPeerNode(peer_chibi_address_giardino, 2);
+  SetAsPeerNode(peer_wifi_address_GEEKCREIT_portoncino_cancello_SDM220, 1);
+  SetAsPeerNode(peer_chibi_address_TEST, 2);
   SetAsPeerNode(peer_chibi_address_termocamino, 3);
   SetAsPeerNode(peer_wifii_address_tende, 4);
   SetAsPeerNode(peer_wifi_address_SONOFF_Giardino_Tettoia, 5);
@@ -94,9 +93,8 @@ void setup()
   SetAsPeerNode(peer_wifi_address_SONOFF_Divano, 12);
   SetAsPeerNode(peer_wifi_address_SONOFF_Cucina, 13);
   //SetAsPeerNode(peer_wifi_address_SONOFF_Giardino_Tettoia, 14);
-  SetAsPeerNode(peer_wifi_address_SDM220_soggiorno, 15);
   SetAsPeerNode(peer_wifi_address_SONOFF_Giardino_Muro_Forno, 16);
-  
+
   // This node will serve all the others in the network providing an address
   SetAddressingServer();
 }
@@ -104,20 +102,20 @@ void setup()
 // Sender
 
 //lastin configuration
-float valEnergy = 0;
-uint8_t valByteArray[2];
-uint8_t vNode_Energy = 1;
-uint8_t vNode_slotEnergy = 2;
-
-float valSolar = 0;
-uint8_t vNode_Solar = 4;
-uint8_t vNode_slotSolar = 0;
-
-float valTemp = 0;
-uint8_t vNode_Temp = 3;
-uint8_t vNode_slotTemp = 0;
-
-uint16_t output16;
+//float valEnergy = 0;
+//uint8_t valByteArray[2];
+//uint8_t vNode_Energy = 1;
+//uint8_t vNode_slotEnergy = 2;
+//
+//float valSolar = 0;
+//uint8_t vNode_Solar = 4;
+//uint8_t vNode_slotSolar = 0;
+//
+//float valTemp = 0;
+//uint8_t vNode_Temp = 3;
+//uint8_t vNode_slotTemp = 0;
+//
+//uint16_t output16;
 
 void loop()
 {
@@ -125,47 +123,47 @@ void loop()
     UPDATEFAST();
 
     FAST_90ms() {
-      if (LastIn_IsData(vNode_Energy)) {
-        valEnergy = LastIn_GetAnalog(vNode_Energy, vNode_slotEnergy);
-        LastIn_ClearData(1);
-      } else if (LastIn_IsData(vNode_Solar)) {
-        valSolar = LastIn_GetAnalog(vNode_Solar, vNode_slotSolar);
-        LastIn_ClearData(1);
-      } else if (LastIn_IsData(vNode_Temp)) {
-        valTemp = LastIn_GetAnalog(vNode_Temp, vNode_slotTemp);
-        LastIn_ClearData(1);
-      }
+//      if (LastIn_IsData(vNode_Energy)) {
+//        valEnergy = LastIn_GetAnalog(vNode_Energy, vNode_slotEnergy);
+//        LastIn_ClearData(1);
+//      } else if (LastIn_IsData(vNode_Solar)) {
+//        valSolar = LastIn_GetAnalog(vNode_Solar, vNode_slotSolar);
+//        LastIn_ClearData(1);
+//      } else if (LastIn_IsData(vNode_Temp)) {
+//        valTemp = LastIn_GetAnalog(vNode_Temp, vNode_slotTemp);
+//        LastIn_ClearData(1);
+//      }
     }
 
     //Scelgo di fare pubblicare il valore direttamente dal nodo invece che dal GW
-        SHIFT_7110ms(0) {
-          valEnergy=(int) valEnergy; //to int
-          float16(&output16, &valEnergy);
-          valByteArray[0] = C16TO8L(output16);
-          valByteArray[1] = C16TO8H(output16);
-          Serial.print("Float: "); Serial.print( valEnergy);
-          Serial.print(", Publish ENERGY_TOPIC: "); Serial.print( valByteArray[0]); Serial.print(" "); Serial.println( valByteArray[1]);
-          pblshdata(ENERGY_TOPIC, valByteArray, 2);
-        }
+    SHIFT_7110ms(0) {
+//      valEnergy = (int) valEnergy; //to int
+//      float16(&output16, &valEnergy);
+//      valByteArray[0] = C16TO8L(output16);
+//      valByteArray[1] = C16TO8H(output16);
+//      Serial.print("Float: "); Serial.print( valEnergy);
+//      Serial.print(", Publish ENERGY_TOPIC: "); Serial.print( valByteArray[0]); Serial.print(" "); Serial.println( valByteArray[1]);
+//      pblshdata(ENERGY_TOPIC, valByteArray, 2);
+    }
 
     FAST_7110ms() {
-      float16(&output16, &valSolar);
-      valByteArray[0] = C16TO8L(output16);
-      valByteArray[1] = C16TO8H(output16);
-      //      Serial.print("Float: "); Serial.print(valSolar);
-      //      Serial.print(", Publish SOLAR_TOPIC: "); Serial.print( valByteArray[0]); Serial.print(" "); Serial.println( valByteArray[1]);
-      pblshdata(SOLAR_TOPIC, valByteArray, 2);
+//      float16(&output16, &valSolar);
+//      valByteArray[0] = C16TO8L(output16);
+//      valByteArray[1] = C16TO8H(output16);
+//      //      Serial.print("Float: "); Serial.print(valSolar);
+//      //      Serial.print(", Publish SOLAR_TOPIC: "); Serial.print( valByteArray[0]); Serial.print(" "); Serial.println( valByteArray[1]);
+//      pblshdata(SOLAR_TOPIC, valByteArray, 2);
     }
 
     FAST_21110ms() {
-      float16(&output16, &valTemp);
-      valByteArray[0] = C16TO8L(output16);
-      valByteArray[1] = C16TO8H(output16);
-            Serial.print("Float: "); Serial.print(valTemp);
-            Serial.print(", Publish TEMPERATURE_TOPIC: "); Serial.print( valByteArray[0]); Serial.print(" "); Serial.println( valByteArray[1]);
-      pblshdata(TEMPERATURE_TOPIC, valByteArray, 2);
-      // publish(Cloudy);
-      //publish(Alarm);
+//      float16(&output16, &valTemp);
+//      valByteArray[0] = C16TO8L(output16);
+//      valByteArray[1] = C16TO8H(output16);
+//      Serial.print("Float: "); Serial.print(valTemp);
+//      Serial.print(", Publish TEMPERATURE_TOPIC: "); Serial.print( valByteArray[0]); Serial.print(" "); Serial.println( valByteArray[1]);
+//      pblshdata(TEMPERATURE_TOPIC, valByteArray, 2);
+//      // publish(Cloudy);
+//      //publish(Alarm);
     }
 
     // This node does just networking, bridging the Peer node to the Ethernet network

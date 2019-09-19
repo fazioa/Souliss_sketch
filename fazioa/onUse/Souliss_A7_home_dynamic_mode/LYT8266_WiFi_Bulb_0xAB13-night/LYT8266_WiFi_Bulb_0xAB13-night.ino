@@ -47,7 +47,7 @@
 
 
 // Define logic slots, multicolor lights use four slots
-#define LIGHT1  0
+#define AUTOLIGHT1  0
 #define LYTLIGHT1           1
 
 #define RED_STARTUP         0x20
@@ -73,7 +73,7 @@ SetColor(LYTLIGHT1, RED_STARTUP, GREEN_STARTUP, BLUE_STARTUP);
   SetLYTLamps(LYTLIGHT1);
   
 
-  Set_SimpleLight(LIGHT1);
+  Set_SimpleLight(AUTOLIGHT1);
   // Init the OTA
   ArduinoOTA.setHostname("souliss-LYT");
   ArduinoOTA.begin();
@@ -84,9 +84,9 @@ void loop()
   EXECUTEFAST() {
     UPDATEFAST();
     ProcessCommunication();
-    Logic_SimpleLight(LIGHT1);
+    Logic_SimpleLight(AUTOLIGHT1);
     //la lampada RGB funziona solo se lo switch allo slot 0 è ON, altrimenti funziona con l'automatismo notte
-    if (mOutput(LIGHT1) == Souliss_T1n_OnCoil)
+    if (mOutput(AUTOLIGHT1) == Souliss_T1n_OnCoil)
     {
       LogicLYTLamps(LYTLIGHT1);
     } else {
