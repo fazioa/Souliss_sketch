@@ -24,7 +24,7 @@
 
 
 // Define the network configuration according to your router settings
-uint8_t ip_address[4]  = {192, 168, 1, 105};
+uint8_t ip_address[4]  = {192, 168, 1, 205};
 uint8_t subnet_mask[4] = {255, 255, 255, 0};
 uint8_t ip_gateway[4]  = {192, 168, 1, 1};
 
