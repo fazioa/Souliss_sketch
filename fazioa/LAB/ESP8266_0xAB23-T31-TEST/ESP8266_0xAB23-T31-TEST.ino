@@ -130,11 +130,14 @@ void loop()
       stato = mOutput(SLOT_T31);
             
       //temperatura rilevata
-      temp_ambiente = mOutputAsFloat(SLOT_T31+1);
+    //  temp_ambiente = mOutputAsFloat(SLOT_T31+1);
             
       //temperatura setpoint
       temp_setpoint = mOutputAsFloat(SLOT_T31+3);
-    //  ImportAnalog(SLOT_T31, &temp_ambiente);
+
+//TEST - INCREMENTA LA TEMPERATURA
+      temp_ambiente=temp_ambiente+0.1;
+      ImportAnalog(SLOT_T31+1, &temp_ambiente);
 
       Serial.print("STATO: ");
       Serial.print(stato);
