@@ -8,9 +8,4 @@
 /************************* INFO NODE *********************************/
 #define HOSTNAME "souliss-TEST_MQTT"
 
-//#define HOMIE_VERSION "4.0"
-#define HOMIE_NODEID "NodoSoulissProva" //
-#define HOMIE_NODES "luce1"
-
-
-#define HOMIE_NODEROOT HOMIE_ROOT "/luce1_noderoot"
+#define HOMIE_NODEID "NodoSoulissProva"
