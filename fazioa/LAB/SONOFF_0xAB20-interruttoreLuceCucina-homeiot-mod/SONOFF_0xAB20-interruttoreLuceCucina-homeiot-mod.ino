@@ -58,7 +58,11 @@ WiFiClient client;
 #define myvNet_supern 0xAB10
 //*************************************************************************
 
-#define SLOT_POWERSOCKET 0
+#define SLOT_POWERSOCKET1 0
+#define SLOT_POWERSOCKET2 1
+#define SLOT_POWERSOCKET3 2
+#define SLOT_POWERSOCKET4 3
+
 #define PIN_POWERSOCKET 12
 #define PIN_BUTTON_0 0
 #define PIN_BUTTON_14 14
@@ -66,8 +70,8 @@ WiFiClient client;
 //Variable to Handle WiFio Signal
 long rssi = 0;
 int bars = 0;
-#define T_WIFI_STRDB  1 //It takes 2 slots
-#define T_WIFI_STR    3 //It takes 2 slots
+#define T_WIFI_STRDB  4 //It takes 2 slots
+#define T_WIFI_STR    6 //It takes 2 slots
 
 boolean bLedState = false;
 void setup()
@@ -91,12 +95,7 @@ void setup()
   digitalWrite(LED_BUILTIN, LOW);
   SetAddress(peer_address, myvNet_subnet, myvNet_supern);          // Address on the wireless interface
 
-  //*************************************************************************
-  //*************************************************************************
-  Set_SimpleLight(SLOT_POWERSOCKET);
-  Set_SimpleLight_mqtt_homie(SLOT_POWERSOCKET, "lucecucina", "Luce Cucina");
-
-  mOutput(SLOT_POWERSOCKET) = Souliss_T1n_OnCoil;
+  mOutput(SLOT_POWERSOCKET1) = Souliss_T1n_OnCoil;
 
   Set_T51(T_WIFI_STRDB); //Imposto il tipico per contenere il segnale del Wifi in decibel
   Set_T51(T_WIFI_STR); //Imposto il tipico per contenere il segnale del Wifi in barre da 1 a 5
@@ -120,8 +119,7 @@ void setup()
 
   digitalWrite(LED_BUILTIN, HIGH);   // turn the LED on (HIGH is the voltage level)
 
-//PUBLISH MESSAGE MQTT - DEVICE READY
-//Homie_device_ready();
+
 }
 
 int i = 0;
@@ -133,13 +131,6 @@ void loop()
   EXECUTEFAST() {
     UPDATEFAST();
 
-    FAST_9110ms() {
-      // Ensure the connection to the MQTT server is alive (this will make the first
-      // connection and automatically reconnect when disconnected).  See the MQTT_connect
-      // function definition further below.
-      MQTT_connect();
-    }
-
     FAST_2110ms() {
       //Processa le logiche per il segnale WiFi
       Read_T51(T_WIFI_STRDB);
@@ -149,9 +140,9 @@ void loop()
 
 
     FAST_50ms() {
-      DigIn2State(PIN_BUTTON_14, Souliss_T1n_ToggleCmd, Souliss_T1n_ToggleCmd, SLOT_POWERSOCKET);
-      Logic_SimpleLight(SLOT_POWERSOCKET);
-      DigOut(PIN_POWERSOCKET, Souliss_T1n_Coil, SLOT_POWERSOCKET);
+      DigIn2State(PIN_BUTTON_14, Souliss_T1n_ToggleCmd, Souliss_T1n_ToggleCmd, SLOT_POWERSOCKET1);
+      Logic_SimpleLight(SLOT_POWERSOCKET1);
+      DigOut(PIN_POWERSOCKET, Souliss_T1n_Coil, SLOT_POWERSOCKET1);
     }
 
     FAST_1110ms() {
@@ -200,10 +191,19 @@ void loop()
   EXECUTESLOW() {
     UPDATESLOW();
     SLOW_10s() {  // Process the timer every 10 seconds
-      Timer_SimpleLight(SLOT_POWERSOCKET);
+      Timer_SimpleLight(SLOT_POWERSOCKET1);
     }
     SLOW_70s() {
       Homie_init();
+      //*************************************************************************
+      // MQTT HOMIE
+      Homie_declare_nodes("lucepianoterra,lucepianoprimo,Piantana1,Piantana2"); //ELENCO DEI TIPICI SEPARATI DA VIRGOLA, SENZA SPAZI
+      Set_SimpleLight_mqtt_homie(SLOT_POWERSOCKET1, "lucepianoterra", "Terra");
+      Set_SimpleLight_mqtt_homie(SLOT_POWERSOCKET2, "lucepianoprimo", "Primo");
+      Set_SimpleLight_mqtt_homie(SLOT_POWERSOCKET3, "Piantana1", "Piantana Soggiorno");
+      Set_SimpleLight_mqtt_homie(SLOT_POWERSOCKET4, "Piantana2", "Piantana Camera");
+      //PUBLISH MESSAGE MQTT - DEVICE READY
+      Homie_device_ready();
     }
   }
 
