@@ -142,12 +142,12 @@ void loop()
     FAST_50ms() {
       DigIn2State(PIN_BUTTON_14, Souliss_T1n_ToggleCmd, Souliss_T1n_ToggleCmd, SLOT_POWERSOCKET1);
       Logic_SimpleLight_mqtt_homie(SLOT_POWERSOCKET1, "lucepianoterra");
-      DigOut(PIN_POWERSOCKET, Souliss_T1n_Coil, SLOT_POWERSOCKET1);
+      DigOut(LED_BUILTIN, Souliss_T1n_Coil, SLOT_POWERSOCKET1);
     }
 
     FAST_1110ms() {
-      bLedState = !bLedState;
-      digitalWrite(LED_BUILTIN, bLedState);
+    //  bLedState = !bLedState;
+     // digitalWrite(LED_BUILTIN, bLedState);
     }
 
     FAST_2110ms() {
