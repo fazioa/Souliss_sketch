@@ -88,6 +88,7 @@ Adafruit_MQTT_Publish MQTTsendTemp = Adafruit_MQTT_Publish(&mqtt, HOMIE_NODEROOT
 //#define  CHAT_ID "chat ID number"  
 
 // Include framework code and libraries
+#include "Homie.h"
 #include "Souliss.h"
 #include <UniversalTelegramBot.h>
 
