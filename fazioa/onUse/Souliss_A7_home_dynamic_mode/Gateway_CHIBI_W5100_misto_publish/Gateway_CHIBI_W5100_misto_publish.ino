@@ -38,7 +38,7 @@ uint8_t ip_gateway[4]  = {192, 168, 1, 1};
 
 #define peer_wifi_address_GEEKCREIT_portoncino_cancello_SDM220	0xAB18 //portoncino e cancello e SDM220 Modbus
 #define peer_chibi_address_termocamino	0x6512 //termocamino
-#define peer_chibi_address_TEST	0xAB23 //giardino
+#define peer_address_TEST	0xAB23 //NODO TEST
 #define peer_wifii_address_tende	0xAB19 //tende
 #define peer_eth_address_soggiorno  0x0010 //soggiorno
 #define peer_wifi_address_SONOFF_Giardino_Tettoia  0xAB11 //soggiorno
@@ -80,7 +80,7 @@ void setup()
 
   // This node as gateway will get data from the Peer
   SetAsPeerNode(peer_wifi_address_GEEKCREIT_portoncino_cancello_SDM220, 1);
-  SetAsPeerNode(peer_chibi_address_TEST, 2);
+  SetAsPeerNode(peer_address_TEST, 2);
   SetAsPeerNode(peer_chibi_address_termocamino, 3);
   SetAsPeerNode(peer_wifii_address_tende, 4);
   SetAsPeerNode(peer_wifi_address_SONOFF_Giardino_Tettoia, 5);
