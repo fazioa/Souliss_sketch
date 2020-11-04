@@ -1,3 +1,10 @@
+/*
+ * Parte di codice modificata
+ * Author: Tonino Fazio
+ 
+
+*/
+
 // BROBOT EVO 2 by JJROBOTS
 // SELF BALANCE ARDUINO ROBOT WITH STEPPER MOTORS CONTROLLED WITH YOUR SMARTPHONE
 // JJROBOTS BROBOT KIT: (Arduino Leonardo + BROBOT ELECTRONIC BRAIN SHIELD + STEPPER MOTOR drivers)
@@ -261,7 +268,7 @@ void setup()
   ESPsendCommand("AT+CWQAP", "OK", 3);
   ESPsendCommand("AT+CWMODE=2", "OK", 3); // Soft AP mode
   // Generate Soft AP. SSID=JJROBOTS, PASS=87654321
-  char *cmd =  "AT+CWSAP=\"JJROBOTS_XX\",\"87654321\",5,3";
+  char *cmd =  "AT+CWSAP=\"JJROBOTS_XX_MARCO\",\"87654321\",5,3";
   // Update XX characters with MAC address (last 2 characters)
   cmd[19] = MAC[10];
   cmd[20] = MAC[11];
@@ -593,4 +600,3 @@ void loop()
 #endif
   }  // End of slow loop
 }
-

@@ -74,6 +74,7 @@ int bars = 0;
 #define T_WIFI_STR    6 //It takes 2 slots
 
 boolean bLedState = false;
+
 void setup()
 {
 
