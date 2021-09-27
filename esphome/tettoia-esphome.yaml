@@ -1,0 +1,196 @@
+esphome:
+  name: tettoia-esphome
+  platform: ESP8266
+  board: esp01_1m
+  
+
+wifi:
+ networks:
+  - ssid: "obelix"
+    password: "ttony2013"
+  - ssid: "asterix"
+    password: "ttony2013"
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+ ap:
+    ssid: "nodo-tettoia"
+    password: "nodo-tettoia"
+
+captive_portal:
+
+# Enable logging
+logger:
+  baud_rate: 0
+
+# Enable Home Assistant API
+api:
+
+ota:
+
+# modulo WEBSERVER
+web_server:
+ port: 80
+
+# modulo HTTP
+http_request:
+ useragent: esphome/device
+
+# Example configuration entry
+#mqtt:
+#  broker: 192.168.1.111
+ # discovery: True
+ # topic_prefix: "tettoia"
+
+output:
+  - platform: gpio
+    id: relay
+    pin: GPIO12
+    
+  - platform: gpio
+    id: led
+    pin:
+      number: GPIO13
+      inverted: True
+      
+light:
+  - platform: binary
+    name: "Luce Tettoia"
+    id: luceTettoia
+    output: relay
+    on_turn_on: 
+     - switch.turn_on: fakebutton
+    on_turn_off: 
+     - switch.turn_off: fakebutton
+
+binary_sensor:
+  - platform: gpio
+    pin:
+      number: GPIO14
+      mode: INPUT_PULLUP
+      inverted: True
+    name: "Button"
+    filters:
+      - delayed_on: 15ms
+    #on_click:
+   #   - switch.toggle: fakebutton
+
+    on_multi_click:
+    - timing:
+    # primo click
+        - ON for at most 0.15s
+        - OFF for at most 0.15s
+    # secondo click
+        - ON for at most 0.15s
+        - OFF for at most 0.15s
+    # ultimo click
+        - ON for at most 0.15s
+        - OFF for at least 0.3s
+      then:
+        - logger.log: "Triple Clicked"
+        - http_request.post: http://forno-muro-esphome.local/light/luce_muro/toggle
+        
+    - timing:
+    # primo click
+        - ON for at most 0.15s
+        - OFF for at most 0.15s
+    # ultimo click
+        - ON for at most 0.15s
+        - OFF for at least 0.3s
+      then:
+        - logger.log: "Double Clicked"
+        - http_request.post: http://forno-muro-esphome.local/light/luce_forno/toggle
+        
+    - timing:
+        - ON for at least 0.3s
+      then:
+        - logger.log: "Single Long Clicked"
+        - script.execute: toggleGiardino
+
+
+    - timing:
+        - ON for at most 0.15s
+        - OFF for at least 0.3s
+      then:
+        - logger.log: "Single Short Clicked"
+        - light.toggle: luceTettoia
+        
+####################################
+  - platform: status
+    name: "Stato"
+
+switch:
+  - platform: template
+    name: "fakebutton"
+    internal: true
+    optimistic: true
+    id: fakebutton
+    turn_on_action:
+    - output.turn_on: relay
+    - output.turn_on: led
+    turn_off_action:
+    - output.turn_off: relay
+    - output.turn_off: led
+  
+  - platform: template
+    name: "Stato Luce Muro"
+    id: lucemuro
+    optimistic: true
+
+  - platform: template  
+    name: "Stato Luce Forno"
+    id: luceforno
+    optimistic: true
+
+sensor:
+  - platform: wifi_signal
+    name: "WiFi Signal"
+    update_interval: 60s
+  - platform: uptime
+    name: "Uptime"
+    unit_of_measurement: minutes
+    filters:
+      - lambda: return x / 60.0;
+
+text_sensor:
+  - platform: version
+    name: "Version"
+    
+# Riporta informazioni dettagliate sul wifi, può essere commentato
+  - platform: wifi_info
+    ip_address:
+      name: IP Address
+# Alcune informazioni Wi-Fi aggiuntive che normalmente non sono necessarie
+    ssid:
+      name: SSID connesso
+    bssid:
+      name: BSSID connesso
+
+script:
+  # il click lungo, spegne tutto se almeno una luce è accesa
+  # accende tutto se tutte le luci sono spente
+  - id: toggleGiardino
+    then:
+     - if:
+        condition:
+          or:
+        # Same syntax for is_off
+           - light.is_on: luceTettoia
+           - switch.is_on: lucemuro
+           - switch.is_on: luceforno
+        then:
+         - http_request.post: http://forno-muro-esphome.local/light/luce_muro/turn_off
+         - http_request.post: http://forno-muro-esphome.local/light/luce_forno/turn_off
+         - light.turn_off: luceTettoia
+        else:   
+         - if:
+            condition:
+              and:
+            # Same syntax for is_off
+               - light.is_off: luceTettoia
+               - switch.is_off: lucemuro
+               - switch.is_off: luceforno
+            then:
+             - http_request.post: http://forno-muro-esphome.local/light/luce_muro/turn_on
+             - http_request.post: http://forno-muro-esphome.local/light/luce_forno/turn_on
+             - light.turn_on: luceTettoia
+         

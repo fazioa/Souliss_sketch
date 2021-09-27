@@ -1,0 +1,107 @@
+esphome:
+  name: forno-muro-esphome
+  platform: ESP8266
+  board: espduino
+
+wifi:
+ networks:
+ - ssid: "asterix"
+   password: "ttony2013"
+ - ssid: "obelix"
+   password: "ttony2013"
+ 
+   # Enable fallback hotspot (captive portal) in case wifi connection fails
+ ap:
+   ssid: "fornomuro-esphome"
+   password: "fornomuro-esphome"
+
+captive_portal:
+
+ota: 
+
+# Example configuration entry
+web_server:
+  port: 80
+
+# modulo HTTP
+http_request:
+ useragent: esphome/device
+ 
+# Example configuration entry
+#mqtt:
+ #broker: 192.168.1.111
+# discovery: True
+# topic_prefix: "forno-muro"
+
+
+
+# Enable logging
+logger:
+  baud_rate: 0
+
+# Enable Home Assistant API
+api:
+
+
+
+light:
+  - platform: binary
+    name: "Luce Forno"
+    id: luceForno
+    output: relay1
+    on_turn_on:
+     - http_request.post: http://tettoia-esphome.local/switch/stato_luce_forno/turn_on
+    on_turn_off:
+     - http_request.post: http://tettoia-esphome.local/switch/stato_luce_forno/turn_off
+    
+    
+  - platform: binary
+    name: "Luce Muro"
+    id: luceMuro
+    output: relay2
+    on_turn_on:
+     - http_request.post: http://tettoia-esphome.local/switch/stato_luce_muro/turn_on
+    on_turn_off:
+     - http_request.post: http://tettoia-esphome.local/switch/stato_luce_muro/turn_off
+
+output:
+  - platform: gpio
+    id: relay1
+    pin: GPIO05
+  - platform: gpio
+    id: relay2
+    pin: GPIO12
+  
+  - platform: gpio
+    id: led
+    pin:
+      number: GPIO13
+      inverted: True
+
+sensor:
+  - platform: wifi_signal
+    name: "WiFi Signal"
+    update_interval: 60s
+  - platform: uptime
+    name: "Uptime"
+    unit_of_measurement: minutes
+    filters:
+      - lambda: return x / 60.0;
+ 
+binary_sensor:   
+  - platform: status
+    name: "Stato"
+    
+text_sensor:
+  - platform: version
+    name: "Version"
+    
+# Riporta informazioni dettagliate sul wifi, può essere commentato
+  - platform: wifi_info
+    ip_address:
+      name: IP Address
+# Alcune informazioni Wi-Fi aggiuntive che normalmente non sono necessarie
+    ssid:
+      name: SSID connesso
+    bssid:
+      name: BSSID connesso
