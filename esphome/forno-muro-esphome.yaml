@@ -33,16 +33,12 @@ http_request:
 # discovery: True
 # topic_prefix: "forno-muro"
 
-
-
 # Enable logging
 logger:
   baud_rate: 0
 
 # Enable Home Assistant API
 api:
-
-
 
 light:
   - platform: binary
@@ -87,15 +83,20 @@ sensor:
     unit_of_measurement: minutes
     filters:
       - lambda: return x / 60.0;
- 
+####################################
 binary_sensor:   
   - platform: status
     name: "Stato"
-    
+
+time:
+  - platform: sntp
+    id: my_time
+    timezone: Europe/Rome  
+
 text_sensor:
   - platform: version
     name: "Version"
-    
+    hide_timestamp: false
 # Riporta informazioni dettagliate sul wifi, può essere commentato
   - platform: wifi_info
     ip_address:
@@ -105,3 +106,5 @@ text_sensor:
       name: SSID connesso
     bssid:
       name: BSSID connesso
+
+
