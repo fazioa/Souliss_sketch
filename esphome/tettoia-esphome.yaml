@@ -3,6 +3,7 @@ esphome:
   platform: ESP8266
   board: esp01_1m
   
+
 wifi:
  networks:
   - ssid: "obelix"
@@ -76,25 +77,25 @@ binary_sensor:
     on_multi_click:
     - timing:
     # primo click
-        - ON for at most 0.20s
-        - OFF for at most 0.20s
+        - ON for at most 0.15s
+        - OFF for at most 0.15s
     # secondo click
-        - ON for at most 0.20s
-        - OFF for at most 0.20s
+        - ON for at most 0.15s
+        - OFF for at most 0.15s
     # ultimo click
-        - ON for at most 0.20s
-        - OFF for at least 0.40s
+        - ON for at most 0.15s
+        - OFF for at least 0.3s
       then:
         - logger.log: "Triple Clicked"
         - http_request.post: http://forno-muro-esphome.local/light/luce_muro/toggle
         
     - timing:
     # primo click
-        - ON for at most 0.20s
-        - OFF for at most 0.20s
+        - ON for at most 0.15s
+        - OFF for at most 0.15s
     # ultimo click
-        - ON for at most 0.20s
-        - OFF for at least 0.4s
+        - ON for at most 0.15s
+        - OFF for at least 0.3s
       then:
         - logger.log: "Double Clicked"
         - http_request.post: http://forno-muro-esphome.local/light/luce_forno/toggle
@@ -107,8 +108,8 @@ binary_sensor:
 
 
     - timing:
-        - ON for at most 0.20s
-        - OFF for at least 0.4s
+        - ON for at most 0.15s
+        - OFF for at least 0.3s
       then:
         - logger.log: "Single Short Clicked"
         - light.toggle: luceTettoia
@@ -116,26 +117,6 @@ binary_sensor:
 ####################################
   - platform: status
     name: "Stato"
-    
-time:
-  - platform: sntp
-    id: my_time
-    timezone: Europe/Rome
-
-text_sensor:
-  - platform: version
-    name: "Version"
-    hide_timestamp: false
-# Riporta informazioni dettagliate sul wifi, può essere commentato
-  - platform: wifi_info
-    ip_address:
-      name: IP Address
-# Alcune informazioni Wi-Fi aggiuntive che normalmente non sono necessarie
-    ssid:
-      name: SSID connesso
-    bssid:
-      name: BSSID connesso
-####################################
 
 switch:
   - platform: template
@@ -170,7 +151,19 @@ sensor:
     filters:
       - lambda: return x / 60.0;
 
-
+text_sensor:
+  - platform: version
+    name: "Version"
+    
+# Riporta informazioni dettagliate sul wifi, può essere commentato
+  - platform: wifi_info
+    ip_address:
+      name: IP Address
+# Alcune informazioni Wi-Fi aggiuntive che normalmente non sono necessarie
+    ssid:
+      name: SSID connesso
+    bssid:
+      name: BSSID connesso
 
 script:
   # il click lungo, spegne tutto se almeno una luce è accesa

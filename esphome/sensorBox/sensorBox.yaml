@@ -1,0 +1,52 @@
+esphome:
+  name: sensorbox
+
+  includes:
+      - arduino_port_expander.h
+
+esp8266:
+  board: esp01_1m
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+
+ota:
+  password: "7cc438c124a09dddb28bec0933911dd8"
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Sensorbox Fallback Hotspot"
+    password: "7yc5ifAtiYAQ"
+
+captive_portal:
+
+i2c:
+  id: i2c_component
+  
+custom_component:
+  - id: ape
+    lambda: |-
+      auto ape_component = new ArduinoPortExpander(i2c_component, 0x08);
+      return {ape_component};
+
+sensor:
+  - platform: custom
+    lambda: |-
+      return {ape_analog_input(ape, 1),  // 1 = A1
+              ape_analog_input(ape, 2)};
+    sensors:
+      - name: Analog A1
+        id: analog_a1
+        filters:
+          - throttle: 1s
+      - name: Analog A2
+        id: analog_a2
+        filters:
+          - throttle: 2s
